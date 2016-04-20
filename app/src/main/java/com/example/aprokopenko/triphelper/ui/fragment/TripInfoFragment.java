@@ -86,7 +86,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Route>                  routes;
     private ArrayList<String>                 speedValues;
 
-    public TripInfoFragment() {    }
+    public TripInfoFragment() {
+    }
 
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float fuelConsumed, float fuelSpent,
@@ -97,11 +98,13 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<String> longitudeArray = new ArrayList<>();
         ArrayList<String> speedArray     = new ArrayList<>();
         for (Route tmpRoute : routes) {
-            // FIXME: 12.04.2016 ToString?? :(
-            LatLng tempLatLang = tmpRoute.getRoutePoints();
-            latitudeArray.add(String.valueOf(tempLatLang.latitude));
-            longitudeArray.add(String.valueOf(tempLatLang.longitude));
-            speedArray.add(String.valueOf(tmpRoute.getSpeed()));
+            if (tmpRoute != null) {
+                // FIXME: 12.04.2016 ToString?? :(
+                LatLng tempLatLang = tmpRoute.getRoutePoints();
+                latitudeArray.add(String.valueOf(tempLatLang.latitude));
+                longitudeArray.add(String.valueOf(tempLatLang.longitude));
+                speedArray.add(String.valueOf(tmpRoute.getSpeed()));
+            }
         }
 
         args.putString(ARG_PARAM1, tripDate);
@@ -160,9 +163,13 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         setDataToInfoFragmentFields();
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     @Override public void onDetach() {
         super.onDetach();
-        ButterKnife.unbind(this);
         mListener = null;
         context = null;
     }

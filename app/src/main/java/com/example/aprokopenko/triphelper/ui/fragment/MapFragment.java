@@ -79,9 +79,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         this.googleMap = googleMap;
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     @Override public void onDetach() {
         super.onDetach();
-        ButterKnife.unbind(this);
         context = null;
     }
 

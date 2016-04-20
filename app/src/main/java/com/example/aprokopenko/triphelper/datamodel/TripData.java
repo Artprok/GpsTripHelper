@@ -15,10 +15,19 @@ public class TripData {
     private float           avgSpeed;
     private float           timeSpentOnTrips;
     private ArrayList<Trip> trips;
+    private float           gasTank=0;
 
     public TripData() {
         // TODO: 31.03.2016 maybe testCode, maybe no. Not clear now
         trips = new ArrayList<>();
+    }
+
+    public float getGasTank() {
+        return gasTank;
+    }
+
+    public void setGasTank(float gasTank) {
+        this.gasTank = gasTank;
     }
 
     public float getTimeSpentOnTrips() {

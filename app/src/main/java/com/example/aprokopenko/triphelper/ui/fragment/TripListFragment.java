@@ -93,9 +93,13 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         avgSpeedView.setText(avgSpeed);
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     @Override public void onDetach() {
         super.onDetach();
-        ButterKnife.unbind(this);
         onListFragmentInteractionListener = null;
         tripData = null;
         trips = null;

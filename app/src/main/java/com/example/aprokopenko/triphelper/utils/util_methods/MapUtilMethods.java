@@ -43,8 +43,15 @@ public class MapUtilMethods {
     public static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;
         int    routeSize = routes.size();
-        lastPoint = routes.get(routeSize - 1).getRoutePoints();
-        return lastPoint;
+        int index = routeSize - 1;
+        if(index>0){
+            lastPoint = routes.get(routeSize - 1).getRoutePoints();
+            return lastPoint;
+        }
+        else {
+            // FIXME: 20.04.2016 change on something more appropriate
+            return new LatLng(0,0);
+        }
     }
 
     public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {

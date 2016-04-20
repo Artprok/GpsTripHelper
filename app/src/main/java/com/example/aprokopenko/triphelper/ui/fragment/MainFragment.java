@@ -24,6 +24,8 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.DialogFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.FuelFillDialog;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -58,12 +60,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     ImageButton    startButton;
     @Bind(R.id.eraseButton)
     ImageButton    eraseButton;
+    @Bind(R.id.fillButton)
+    ImageButton    fillButton;
     @Bind(R.id.stopButton)
     ImageButton    stopButton;
     @Bind(R.id.maxSpeed)
     TextView       maxSpeed;
     @Bind(R.id.avgSpeed)
     TextView       avgSpeed;
+    @Bind(R.id.fuelLeftView)
+    TextView fuelLeft;
 
     private static final String LOG_TAG = "MainFragment";
     private Subscriber<Location> locationSubscriber;
@@ -104,6 +110,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupStartButton();
         setupStopButton();
         setupTripListButton();
+        setupFillButton();
         if (ConstantValues.DEBUG_MODE) {
             setupEraseButton();
         }
@@ -136,10 +143,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     @Override public void onDetach() {
         super.onDetach();
         getActivity().unbindService(serviceConnection);
-        ButterKnife.unbind(this);
         context = null;
         locationService = null;
         mapFragment = null;
@@ -212,6 +223,25 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return statusImage.getBackground() != greenSatellite;
     }
 
+    private void fillGasTank(float fuel) {
+        tripProcessor.fillGasTank(fuel);
+        tripProcessor.writeTripDataToFile(context);
+        fuelLeft.setText(tripProcessor.getFuelLeft());
+    }
+
+    private void setupFillButton() {
+        fillButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                FuelFillDialog dialog = new FuelFillDialog();
+                dialog.setDialogFragmentInteractionListener(new DialogFragmentInteractionListener() {
+                    @Override public void fuelFilled(float fuel) {
+                        fillGasTank(fuel);
+                    }
+                });
+                dialog.show(getChildFragmentManager(), "DIALOG");
+            }
+        });
+    }
 
     private void saveState() {
         state = new Bundle();
@@ -306,6 +336,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         // FIXME: 18.04.2016 mock in fuelConsumption (add fuelConsumption calculation)
         tripData.setAvgFuelConsumption(ConstantValues.FUEL_CONSUMPTION);
         tripData.setFuelSpent(fuelSpent);
+        tripData.setGasTank(tripData.getGasTank()-fuelSpent);
         // FIXME: 18.04.2016 mock in fuelFilled. Create a button to "fill fuel functionality"
         tripData.setFuelFilled(65.7f);
         tripData.setMoneyOnFuelSpent(fuelSpent * ConstantValues.FUEL_COST);
@@ -348,6 +379,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
         tripProcessor = new TripProcessor(context);
+        fuelLeft.setText(tripProcessor.getFuelLeft());
         configureMapFragment();
         setupSubscribers();
         setSubscribersToGpsHandler(gpsHandler);
@@ -453,22 +485,22 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setupSpeedSubscriber() {
-            speedSubscriber = new Subscriber<Float>() {
-                @Override public void onCompleted() {
+        speedSubscriber = new Subscriber<Float>() {
+            @Override public void onCompleted() {
 
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(Float speed) {
+                if (ConstantValues.DEBUG_MODE) {
+                    Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
-
-                @Override public void onError(Throwable e) {
-
-                }
-
-                @Override public void onNext(Float speed) {
-                    if (ConstantValues.DEBUG_MODE) {
-                        Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
-                    }
-                    updateSpeed(speed);
-                }
-            };
+                updateSpeed(speed);
+            }
+        };
     }
 
     private void setupSubscribers() {
@@ -529,7 +561,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             @Override public void onClick(View v) {
                 TripData         tripData         = tripProcessor.getTripData();
                 TripListFragment tripListFragment = TripListFragment.newInstance();
-                if(tripData!=null){
+                if (tripData != null) {
                     if (!tripData.getTrips().isEmpty()) {
                         saveState();
                         tripListFragment.setTripData(tripData);
