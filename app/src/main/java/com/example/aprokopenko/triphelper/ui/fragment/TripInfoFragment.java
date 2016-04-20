@@ -44,7 +44,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     TextView tripTimeSpentView;
     @Bind(R.id.tripAvgSpeed)
     TextView tripAvgSpeedView;
-    @Bind(R.id.moneyOntripFuelSpent)
+    @Bind(R.id.moneyOnTripFuelSpent)
     TextView moneySpentView;
     @Bind(R.id.tripDate)
     TextView tripDateView;

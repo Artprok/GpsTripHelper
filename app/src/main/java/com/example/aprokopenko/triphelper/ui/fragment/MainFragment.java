@@ -226,7 +226,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
         tripProcessor.writeTripDataToFile(context);
-        Log.d(LOG_TAG, "fillGasTank: FUELE"+fuel);
         fuelLeft.setText(tripProcessor.getFuelLeft());
     }
 
@@ -338,7 +337,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         tripData.setAvgFuelConsumption(ConstantValues.FUEL_CONSUMPTION);
         tripData.setFuelSpent(fuelSpent);
         tripData.setGasTank(tripData.getGasTank() - fuelSpent);
-        // FIXME: 18.04.2016 mock in fuelFilled. Create a button to "fill fuel functionality"
+        // FIXME: 18.04.2016 mock in fuelFilled. Create a button to "fill fuel functionality" maybe remove this field. Useless
         tripData.setFuelFilled(65.7f);
         tripData.setMoneyOnFuelSpent(fuelSpent * ConstantValues.FUEL_COST);
     }

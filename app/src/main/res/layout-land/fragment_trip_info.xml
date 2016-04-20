@@ -159,7 +159,7 @@
         </TextView>
 
         <TextView
-            android:id="@+id/moneyOnTripfuelSpentLabel"
+            android:id="@+id/moneyOnTripFuelSpentLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/fuelSpentLabel"
@@ -168,11 +168,11 @@
         </TextView>
 
         <TextView
-            android:id="@+id/moneyOntripFuelSpent"
+            android:id="@+id/moneyOnTripFuelSpent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/moneyOnTripfuelSpentLabel"
-            android:layout_toEndOf="@id/moneyOnTripfuelSpentLabel">
+            android:layout_alignBottom="@+id/moneyOnTripFuelSpentLabel"
+            android:layout_toEndOf="@id/moneyOnTripFuelSpentLabel">
         </TextView>
 
 
@@ -180,7 +180,7 @@
             android:id="@+id/tripIdLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/moneyOnTripfuelSpentLabel"
+            android:layout_below="@id/moneyOnTripFuelSpentLabel"
             android:layout_marginTop="5dp"
             android:text="@string/tripId">
         </TextView>

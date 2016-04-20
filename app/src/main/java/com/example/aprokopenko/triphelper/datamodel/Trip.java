@@ -34,7 +34,7 @@ public class Trip {
         this.moneyOnFuelSpent = moneyOnFuelSpent;
     }
 
-    public void setTimeSpentInMotion(float timeSpentInMotion) {
+    private void setTimeSpentInMotion(float timeSpentInMotion) {
         this.timeSpentInMotion = timeSpentInMotion;
     }
 
@@ -50,11 +50,11 @@ public class Trip {
         this.fuelSpent = fuelSpent;
     }
 
-    public void setTripDate(String tripDate) {
+    private void setTripDate(String tripDate) {
         this.tripDate = tripDate;
     }
 
-    public void setTripID(int tripID) {
+    private void setTripID(int tripID) {
         this.tripID = tripID;
     }
 
