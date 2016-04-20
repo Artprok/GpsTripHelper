@@ -226,7 +226,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
         tripProcessor.writeTripDataToFile(context);
-        fuelLeft.setText(tripProcessor.getFuelLeft());
+        fuelLeft.setText(UtilMethods.formatFloat00(tripProcessor.getFuelLeft()));
     }
 
     private void setupFillButton() {
@@ -379,7 +379,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
         tripProcessor = new TripProcessor(context);
-        fuelLeft.setText(tripProcessor.getFuelLeft());
+        fuelLeft.setText(UtilMethods.formatFloat00(tripProcessor.getFuelLeft()));
         configureMapFragment();
         setupSubscribers();
         setSubscribersToGpsHandler(gpsHandler);
@@ -522,7 +522,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void updateSpeedTextField(float speed) {
         String tmpString      = speedometerTextView.getText().toString();
-        String formattedSpeed = UtilMethods.formatFloat(speed);
+        String formattedSpeed = UtilMethods.formatFloat0(speed);
         int    initialValue   = Integer.valueOf(tmpString);
         int    finalValue     = Integer.valueOf(formattedSpeed);
         UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
@@ -535,7 +535,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateAverageSpeed(float speed) {
-        String tmpString  = UtilMethods.formatFloat(speed);
+        String tmpString  = UtilMethods.formatFloat0(speed);
         int    initialVal = Integer.valueOf(tmpString);
         int    finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, avgSpeed);
@@ -543,7 +543,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateMaxSpeed(float speed) {
-        String tmpString  = UtilMethods.formatFloat(speed);
+        String tmpString  = UtilMethods.formatFloat0(speed);
         int    initialVal = Integer.valueOf(tmpString);
         int    finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);

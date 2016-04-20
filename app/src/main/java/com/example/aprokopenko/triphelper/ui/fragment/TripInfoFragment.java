@@ -206,11 +206,11 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setDataToInfoFragmentFields() {
-        String distance         = UtilMethods.formatFloat(distTravelled) + " " + getString(R.string.distance_prefix);
-        String avgFuelCons      = UtilMethods.formatFloat(fuelConsumed) + " " + getString(R.string.fuel_prefix);
-        String fuelSpent        = UtilMethods.formatFloat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
-        String avgSpeed         = UtilMethods.formatFloat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
-        String moneyOnFuelSpent = UtilMethods.formatFloat(this.moneySpent) + " " + getString(R.string.currency_prefix);
+        String distance         = UtilMethods.formatFloat00(distTravelled) + " " + getString(R.string.distance_prefix);
+        String avgFuelCons      = UtilMethods.formatFloat00(fuelConsumed) + " " + getString(R.string.fuel_prefix);
+        String fuelSpent        = UtilMethods.formatFloat00(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
+        String avgSpeed         = UtilMethods.formatFloat00(this.avgSpeed) + " " + getString(R.string.speed_prefix);
+        String moneyOnFuelSpent = UtilMethods.formatFloat00(this.moneySpent) + " " + getString(R.string.currency_prefix);
 
         for (String value : speedValues) {
             if (Float.valueOf(value) == 0) {

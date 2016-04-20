@@ -60,16 +60,15 @@ public class TripProcessor {
         route.add(routePoint);
     }
 
-    public String getFuelLeft() {
-        if(tripData!=null){
-            Log.d(LOG_TAG, "getFuelLeft: "+tripData.getGasTank());
-            String tmpString = String.valueOf(tripData.getGasTank());
-            if(tmpString==null){
-                tmpString = "Fill!";
-            }
-            return tmpString;
+    public float getFuelLeft() {
+        if (tripData != null) {
+            Log.d(LOG_TAG, "getFuelLeft: " + tripData.getGasTank());
+
+            return tripData.getGasTank();
         }
-        else return "error";
+        else {
+            return 0;
+        }
     }
 
     public void startNewTrip() {

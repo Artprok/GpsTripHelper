@@ -49,8 +49,18 @@ public class UtilMethods {
         return sdf.format(dateString);
     }
 
-    public static String formatFloat(float speed) {
+    public static String formatFloat0(float speed) {
         DecimalFormat df = new DecimalFormat("0");
+        return df.format(speed);
+    }
+    public static String formatFloat00(float speed) {
+        DecimalFormat df;
+        if(speed>100){
+            df = new DecimalFormat("000.0");
+        }
+        else{
+            df = new DecimalFormat("00.0");
+        }
         return df.format(speed);
     }
 
