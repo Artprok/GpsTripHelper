@@ -1,5 +1,8 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
+import android.util.Log;
+
+import com.example.aprokopenko.triphelper.Route;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ObjectOutputStream;
@@ -8,16 +11,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Trip {
-    private float             timeSpentInMotion;
-    private float             distanceTravelled;
-    private float             fuelConsumption;
-    private float             timeSpentOnStop;
-    private float             fuelSpent;
-    private float             timeSpent;
-    private String            tripDate;
-    private float             avgSpeed;
-    private int               tripID;
-    private ArrayList<LatLng> route;
+    private float            timeSpentInMotion;
+    private float            distanceTravelled;
+    private float            fuelConsumption;
+    private float            timeSpentOnStop;
+    private float            fuelSpent;
+    private float            timeSpent;
+    private String           tripDate;
+    private float            avgSpeed;
+    private int              tripID;
+    private ArrayList<Route> route;
 
     public Trip() {
 
@@ -64,7 +67,7 @@ public class Trip {
         this.distanceTravelled = distanceTravelled;
     }
 
-    public ArrayList<LatLng> getRoute() {
+    public ArrayList<Route> getRoute() {
         return route;
     }
 
@@ -104,16 +107,19 @@ public class Trip {
         return avgSpeed;
     }
 
-    public void setRoute(ArrayList<LatLng> route) {
-        this.route = route;
+    public void setRoute(ArrayList<Route> routes) {
+        this.route = routes;
     }
 
     public void writeTrip(ObjectOutputStream os) {
         try {
             os.writeInt(route.size());
-            for (LatLng routePoint : route) {
-                os.writeDouble(routePoint.latitude);
-                os.writeDouble(routePoint.longitude);
+            for (Route routePoint : route) {
+                LatLng tmpRoutePoint = routePoint.getRoutePoints();
+                os.writeDouble(tmpRoutePoint.latitude);
+                os.writeDouble(tmpRoutePoint.longitude);
+                os.writeFloat(routePoint.getSpeed());
+                Log.d("LOG_TAG", "writeTrip: " + routePoint.getSpeed());
             }
             os.writeFloat(timeSpentInMotion);
             os.writeFloat(distanceTravelled);
@@ -129,15 +135,18 @@ public class Trip {
     }
 
     public Trip readTrip(ObjectInputStream is) {
-        ArrayList<LatLng> route = new ArrayList<>();
-        int               routeSize;
-        Trip              trip  = new Trip();
+        ArrayList<Route> route = new ArrayList<>();
+        int              routeSize;
+        Trip             trip  = new Trip();
         try {
             routeSize = is.readInt();
             for (int i = 0; i < routeSize; i++) {
                 double tmpLatitude  = is.readDouble();
                 double tmpLongitude = is.readDouble();
-                route.add(new LatLng(tmpLatitude, tmpLongitude));
+                float  tmpSpeed     = is.readFloat();
+
+                Route tmpRoutePoint = new Route(new LatLng(tmpLatitude, tmpLongitude), tmpSpeed);
+                route.add(tmpRoutePoint);
             }
             float  timeSpentInMotion = is.readFloat();
             float  distanceTravelled = is.readFloat();
@@ -155,7 +164,7 @@ public class Trip {
         return trip;
     }
 
-    private Trip createTripFromData(String date, Trip trip, ArrayList<LatLng> route, float timeSpentInMotion, float distanceTravelled,
+    private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
                                     float fuelSpent, float timeSpent, int tripID, float avgSpeed) {
         trip.setTripDate(date);
         trip.setRoute(route);

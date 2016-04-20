@@ -24,7 +24,9 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
+import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
@@ -286,12 +288,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setMetricFieldsToTripData() {
-        TripData        tripData  = tripProcessor.getTripData();
-        float           fuelSpent = 0;
-        float           timeSpent = 0;
-        float           avgSpeed  = 0;
-        ArrayList<Trip> allTrips  = tripData.getTrips();
-        int tripQuantity = allTrips.size();
+        TripData        tripData     = tripProcessor.getTripData();
+        float           fuelSpent    = 0;
+        float           timeSpent    = 0;
+        float           avgSpeed     = 0;
+        ArrayList<Trip> allTrips     = tripData.getTrips();
+        int             tripQuantity = allTrips.size();
         for (Trip t : allTrips) {
             fuelSpent = fuelSpent + t.getFuelSpent();
             timeSpent = timeSpent + t.getTimeSpent();
@@ -381,9 +383,18 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         GpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
     }
 
-    private void addPointToRouteList(Location location) {
-        LatLng route = new LatLng(location.getLatitude(), location.getLongitude());
-        tripProcessor.addRoutePoint(route);
+    private void addPointToRouteList(Location location, @Nullable Float speed) {
+        LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
+        // FIXME: 20.04.2016 REMOVE 17!
+        if (ConstantValues.DEBUG_MODE) {
+            speed = 99f;
+        }
+        else {
+            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+        }
+
+        Route routePoint = new Route(routePoints, speed);
+        tripProcessor.addRoutePoint(routePoint);
     }
 
     private void setupLocationSubscriber() {
@@ -399,8 +410,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             @Override public void onNext(Location location) {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: Location added to route list");
+                    addPointToRouteList(location, null);
                 }
-                addPointToRouteList(location);
+                else {
+                    float speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+                    updateSpeed(speed);
+                    addPointToRouteList(location, speed);
+                }
             }
         };
     }
@@ -457,7 +473,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setupSubscribers() {
-        setupSpeedSubscriber();
+        if (ConstantValues.DEBUG_MODE) {
+            setupSpeedSubscriber();
+        }
         setupLocationSubscriber();
         setupAvgSpeedSubscriber();
         setupMaxSpeedSubscriber();
@@ -502,8 +520,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setRouteToMapFragment() {
-        if (tripProcessor.getRoute() != null) {
-            mapFragment.setRoute(tripProcessor.getRoute());
+        if (tripProcessor.getRoutes() != null) {
+            mapFragment.setRoute(tripProcessor.getRoutes());
         }
     }
 

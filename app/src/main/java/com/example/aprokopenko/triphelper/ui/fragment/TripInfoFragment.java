@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.content.Context;
 import android.widget.TextView;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.view.View;
 import android.os.Bundle;
 
+import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -61,6 +64,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String ARG_PARAM9  = "TripId";
     private static final String ARG_PARAM10 = "LatitudeArray";
     private static final String ARG_PARAM11 = "LongitudeArray";
+    private static final String ARG_PARAM12 = "SpeedArray";
 
     private float  timeSpentInMotion;
     private float  timeSpentOnStop;
@@ -75,22 +79,25 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private OnListFragmentInteractionListener mListener;
     private GoogleMap                         googleMap;
     private Context                           context;
-    private ArrayList<LatLng>                 routes;
+    private ArrayList<Route>                  routes;
 
     public TripInfoFragment() {
     }
 
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float fuelConsumed, float fuelSpent,
-                                               int tripId, ArrayList<LatLng> routes) {
+                                               int tripId, ArrayList<Route> routes) {
         TripInfoFragment  fragment       = new TripInfoFragment();
         Bundle            args           = new Bundle();
         ArrayList<String> latitudeArray  = new ArrayList<>();
         ArrayList<String> longitudeArray = new ArrayList<>();
-        for (LatLng tmpLatLang : routes) {
+        ArrayList<String> speedArray     = new ArrayList<>();
+        for (Route tmpRoute : routes) {
             // FIXME: 12.04.2016 ToString?? :(
-            latitudeArray.add(String.valueOf(tmpLatLang.latitude));
-            longitudeArray.add(String.valueOf(tmpLatLang.longitude));
+            LatLng tempLatLang = tmpRoute.getRoutePoints();
+            latitudeArray.add(String.valueOf(tempLatLang.latitude));
+            longitudeArray.add(String.valueOf(tempLatLang.longitude));
+            speedArray.add(String.valueOf(tmpRoute.getSpeed()));
         }
 
         args.putString(ARG_PARAM1, tripDate);
@@ -104,6 +111,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         args.putInt(ARG_PARAM9, tripId);
         args.putStringArrayList(ARG_PARAM10, latitudeArray);
         args.putStringArrayList(ARG_PARAM11, longitudeArray);
+        args.putStringArrayList(ARG_PARAM12, speedArray);
 
         fragment.setArguments(args);
         return fragment;
@@ -125,8 +133,10 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
             ArrayList<String> latitudeArray  = getArguments().getStringArrayList(ARG_PARAM10);
             ArrayList<String> longitudeArray = getArguments().getStringArrayList(ARG_PARAM11);
+            ArrayList<String> speedArray     = getArguments().getStringArrayList(ARG_PARAM12);
 
-            routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray);
+
+            routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray, speedArray);
         }
     }
 
@@ -167,10 +177,10 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private LatLng getPreviousLocation(int size, int currentIndex) {
         LatLng previousLocation;
         if (size > 1 && currentIndex > 1) {
-            previousLocation = (routes.get(currentIndex - 1));
+            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
         }
         else {
-            previousLocation = (routes.get(currentIndex));
+            previousLocation = (routes.get(currentIndex).getRoutePoints());
         }
         return previousLocation;
     }
@@ -203,9 +213,12 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private void drawPathFromData() {
         if (routes != null) {
             for (int i = 0; i < routes.size(); i++) {
-                LatLng currentLocation      = (routes.get(i));
+                LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = getPreviousLocation(routes.size(), i);
-                MapUtilMethods.addPolyline(googleMap, tempPreviousLocation, currentLocation);
+                if (ConstantValues.DEBUG_MODE) {
+                    Log.d(LOG_TAG, "drawPathFromData: +" + routes.get(i).getSpeed());
+                }
+                MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
             }
             LatLng positionToAnimate = MapUtilMethods.getPositionForCamera(routes);
             MapUtilMethods.animateCamera(null, positionToAnimate, googleMap);

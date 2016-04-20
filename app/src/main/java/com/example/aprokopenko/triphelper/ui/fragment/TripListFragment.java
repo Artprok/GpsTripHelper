@@ -9,6 +9,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
@@ -103,16 +104,16 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     }
 
     @Override public void onListFragmentInteraction(Trip trip) {
-        float             distTravelled     = trip.getDistanceTravelled();
-        float             timeSpentInMotion = trip.getTimeSpentInMotion();
-        float             fuelConsumed      = trip.getFuelConsumption();
-        float             timeSpentOnStop   = trip.getTimeSpentOnStop();
-        float             fuelSpent         = trip.getFuelSpent();
-        float             timeSpent         = trip.getTimeSpent();
-        String            tripDate          = trip.getTripDate();
-        float             avgSpeed          = trip.getAvgSpeed();
-        int               tripId            = trip.getTripID();
-        ArrayList<LatLng> routes            = trip.getRoute();
+        float            distTravelled     = trip.getDistanceTravelled();
+        float            timeSpentInMotion = trip.getTimeSpentInMotion();
+        float            fuelConsumed      = trip.getFuelConsumption();
+        float            timeSpentOnStop   = trip.getTimeSpentOnStop();
+        float            fuelSpent         = trip.getFuelSpent();
+        float            timeSpent         = trip.getTimeSpent();
+        String           tripDate          = trip.getTripDate();
+        float            avgSpeed          = trip.getAvgSpeed();
+        int              tripId            = trip.getTripID();
+        ArrayList<Route> routes            = trip.getRoute();
 
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,

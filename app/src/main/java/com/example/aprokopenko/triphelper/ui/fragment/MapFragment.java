@@ -10,7 +10,9 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
+import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
@@ -22,6 +24,8 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 
+import javax.crypto.spec.DESedeKeySpec;
+
 import butterknife.ButterKnife;
 import rx.Subscriber;
 
@@ -32,9 +36,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LatLng               previousLocation;
     private ArrayList<Location>  locationList;
     private boolean fragmentVisible = false;
-    private GoogleMap         googleMap;
-    private Context           context;
-    private ArrayList<LatLng> route;
+    private GoogleMap        googleMap;
+    private Context          context;
+    private ArrayList<Route> route;
 
     public MapFragment() {
         // Required empty public constructor
@@ -83,7 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         context = null;
     }
 
-    public void setRoute(ArrayList<LatLng> route) {
+    public void setRoute(ArrayList<Route> route) {
         this.route = route;
     }
 
@@ -105,10 +109,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LatLng getPreviousLocation(int size, int currentIndex) {
         LatLng previousLocation;
         if (size > 1 && currentIndex > 1) {
-            previousLocation = (route.get(currentIndex - 1));
+            previousLocation = (route.get(currentIndex - 1).getRoutePoints());
         }
         else {
-            previousLocation = (route.get(currentIndex));
+            previousLocation = (route.get(currentIndex).getRoutePoints());
         }
         return previousLocation;
     }
@@ -141,19 +145,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 locationList.add(location);
                 if (fragmentVisible) {
                     UtilMethods.checkPermission(context);
-                    locationTracking(googleMap, location);
+                    // FIXME: 20.04.2016 DEBUG 101f
+                    if (ConstantValues.DEBUG_MODE) {
+                        locationTracking(googleMap, location, 101f);
+                    }
+                    else {
+                        float speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+                        locationTracking(googleMap, location, speed);
+                    }
                     MapUtilMethods.animateCamera(location, null, googleMap);
                 }
             }
         };
     }
 
-    private void locationTracking(GoogleMap googleMap, Location location) {
+    private void locationTracking(GoogleMap googleMap, Location location, @Nullable Float speed) {
         drawPathFromData();
         LatLng tempPreviousLocation = getStartingPosition(location);
         LatLng tempLocation         = new LatLng(location.getLatitude(), location.getLongitude());
         previousLocation = tempLocation;
-        MapUtilMethods.addPolyline(googleMap, tempPreviousLocation, tempLocation);
+        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, tempLocation, speed);
     }
 
     private void drawPathFromData() {
@@ -162,10 +173,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Log.d(LOG_TAG, "drawPathFromData: DrawFromData");
             }
             for (int i = 0; i < route.size(); i++) {
-                LatLng currentLocation      = (route.get(i));
+                LatLng currentLocation = (route.get(i).getRoutePoints());
+                Log.d(LOG_TAG, "drawPathFromData: AAAAA" + route.get(0).getSpeed());
+                // FIXME: 20.04.2016 colorHereChange
                 LatLng tempPreviousLocation = getPreviousLocation(route.size(), i);
                 previousLocationFromData = currentLocation;
-                MapUtilMethods.addPolyline(googleMap, tempPreviousLocation, currentLocation);
+                if (ConstantValues.DEBUG_MODE) {
+                    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, route.get(i).getSpeed());
+                }
+                else {
+                    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, route.get(i).getSpeed());
+                }
             }
             route = null;
         }

@@ -2,11 +2,20 @@ package com.example.aprokopenko.triphelper;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-
 public class Route {
-    private ArrayList<LatLng> routePoints;
-    private float speed;
+    private LatLng routePoints;
+    private float  speed;
 
+    public Route(LatLng routePoints, float speed) {
+        this.routePoints = routePoints;
+        this.speed = speed;
+    }
 
+    public LatLng getRoutePoints() {
+        return routePoints;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
 }

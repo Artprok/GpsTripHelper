@@ -23,13 +23,13 @@ import java.io.File;
 
 public class TripProcessor {
     private static final String LOG_TAG = "TripProcessor";
-    private final int               currentFuelConsumption;
-    private final Calendar          calendar;
-    private final ArrayList<LatLng> route;
-    private       long              tripStartTime;
-    private       int               currentTripId;
-    private       float             averageSpeed;
-    private       TripData          tripData;
+    private final int              currentFuelConsumption;
+    private final Calendar         calendar;
+    private final ArrayList<Route> route;
+    private       long             tripStartTime;
+    private       int              currentTripId;
+    private       float            averageSpeed;
+    private       TripData         tripData;
 
     public TripProcessor(Context context) {
         if (ConstantValues.DEBUG_MODE) {
@@ -50,11 +50,11 @@ public class TripProcessor {
         return tripData;
     }
 
-    public ArrayList<LatLng> getRoute() {
+    public ArrayList<Route> getRoutes() {
         return route;
     }
 
-    public void addRoutePoint(LatLng routePoint) {
+    public void addRoutePoint(Route routePoint) {
         Trip trip = tripData.getTrip(currentTripId);
         trip.setRoute(route);
         route.add(routePoint);
@@ -260,8 +260,8 @@ public class TripProcessor {
 
     private void getTripDataFieldsValues() {
         float distanceTravelled = 0;
-        float fuelSpent           = 0;
-        float fuelConsumption    = ConstantValues.FUEL_CONSUMPTION;
+        float fuelSpent         = 0;
+        float fuelConsumption   = ConstantValues.FUEL_CONSUMPTION;
         for (Trip trip : tripData.getTrips()) {
             distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
             fuelSpent = fuelSpent + trip.getFuelSpent();

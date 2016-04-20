@@ -2,7 +2,9 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.location.Location;
+import android.widget.Switch;
 
+import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -15,8 +17,13 @@ import java.util.ArrayList;
 public class MapUtilMethods {
 
     public static void addPolyline(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc) {
-        googleMap.addPolyline(
-                new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(GoogleMapsSettings.polylineColor));
+        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth)
+                .color(GoogleMapsSettings.polylineColorCity));
+    }
+
+    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, float speed) {
+        int color = choseColorDependOnSpeed(speed);
+        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
     }
 
     public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
@@ -40,19 +47,37 @@ public class MapUtilMethods {
         }
     }
 
-    public static LatLng getPositionForCamera(ArrayList<LatLng> routes) {
+    public static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;
         int    routeSize = routes.size();
-        lastPoint = routes.get(routeSize-1);
+        lastPoint = routes.get(routeSize - 1).getRoutePoints();
         return lastPoint;
     }
 
-    public static ArrayList<LatLng> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes) {
-        ArrayList<LatLng> route = new ArrayList<>();
+    public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
+        ArrayList<Route> route = new ArrayList<>();
+        Float            speed;
+        Route            routePoint;
         for (int i = 0; i < latitudes.size(); i++) {
             LatLng routePointCoordinates = new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i)));
-            route.add(routePointCoordinates);
+            speed = Float.valueOf(speedArr.get(i));
+            routePoint = new Route(routePointCoordinates, speed);
+            route.add(routePoint);
         }
         return route;
+    }
+
+    private static int choseColorDependOnSpeed(float speed) {
+        int color = 0;
+        if (speed > 0 && speed < 80) {
+            color = GoogleMapsSettings.polylineColorCity;
+        }
+        else if (speed > 80 && speed < 110) {
+            color = GoogleMapsSettings.polylineColorOutOfCity;
+        }
+        else if (speed > 110) {
+            color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowedINT;
+        }
+        return color;
     }
 }
