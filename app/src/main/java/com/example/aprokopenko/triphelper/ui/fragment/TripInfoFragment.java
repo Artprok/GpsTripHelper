@@ -44,6 +44,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     TextView tripTimeSpentView;
     @Bind(R.id.tripAvgSpeed)
     TextView tripAvgSpeedView;
+    @Bind(R.id.moneyOntripFuelSpent)
+    TextView moneySpentView;
     @Bind(R.id.tripDate)
     TextView tripDateView;
     @Bind(R.id.tripId)
@@ -65,11 +67,13 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String ARG_PARAM10 = "LatitudeArray";
     private static final String ARG_PARAM11 = "LongitudeArray";
     private static final String ARG_PARAM12 = "SpeedArray";
+    private static final String ARG_PARAM13 = "MoneySpent";
 
     private float  timeSpentInMotion;
     private float  timeSpentOnStop;
     private float  distTravelled;
     private float  fuelConsumed;
+    private float  moneySpent;
     private float  fuelSpent;
     private float  timeSpent;
     private String tripDate;
@@ -80,13 +84,14 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap                         googleMap;
     private Context                           context;
     private ArrayList<Route>                  routes;
+    private ArrayList<String>                 speedValues;
 
     public TripInfoFragment() {
     }
 
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float fuelConsumed, float fuelSpent,
-                                               int tripId, ArrayList<Route> routes) {
+                                               int tripId, ArrayList<Route> routes, Float moneySpent) {
         TripInfoFragment  fragment       = new TripInfoFragment();
         Bundle            args           = new Bundle();
         ArrayList<String> latitudeArray  = new ArrayList<>();
@@ -112,6 +117,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         args.putStringArrayList(ARG_PARAM10, latitudeArray);
         args.putStringArrayList(ARG_PARAM11, longitudeArray);
         args.putStringArrayList(ARG_PARAM12, speedArray);
+        args.putFloat(ARG_PARAM13, moneySpent);
 
         fragment.setArguments(args);
         return fragment;
@@ -134,6 +140,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             ArrayList<String> latitudeArray  = getArguments().getStringArrayList(ARG_PARAM10);
             ArrayList<String> longitudeArray = getArguments().getStringArrayList(ARG_PARAM11);
             ArrayList<String> speedArray     = getArguments().getStringArrayList(ARG_PARAM12);
+            moneySpent = getArguments().getFloat(ARG_PARAM13);
+            speedValues = speedArray;
 
             routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray, speedArray);
         }
@@ -193,20 +201,35 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setDataToInfoFragmentFields() {
-        String distance    = (UtilMethods.formatFloat(distTravelled) + " " + getString(R.string.distance_prefix));
-        String avgFuelCons = UtilMethods.formatFloat((fuelConsumed)) + " " + getString(R.string.fuel_prefix);
-        String fuelSpent   = UtilMethods.formatFloat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
-        String avgSpeed    = UtilMethods.formatFloat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
+        String distance         = UtilMethods.formatFloat(distTravelled) + " " + getString(R.string.distance_prefix);
+        String avgFuelCons      = UtilMethods.formatFloat(fuelConsumed) + " " + getString(R.string.fuel_prefix);
+        String fuelSpent        = UtilMethods.formatFloat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
+        String avgSpeed         = UtilMethods.formatFloat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
+        String moneyOnFuelSpent = UtilMethods.formatFloat(this.moneySpent) + " " + getString(R.string.currency_prefix);
+
+        for (String value : speedValues) {
+            if (Float.valueOf(value) == 0) {
+                timeSpentOnStop++;
+            }
+        }
+        timeSpentInMotion = timeSpent - timeSpentOnStop;
+
+        if (ConstantValues.DEBUG_MODE) {
+            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
+            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);
+            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + timeSpentOnStop);
+        }
 
         tripDistanceTravelledView.setText(distance);
         tripDateView.setText(tripDate);
         tripAvgFuelConsumptionView.setText(avgFuelCons);
-        tripAvgSpeedView.setText(String.valueOf(avgSpeed));
+        tripAvgSpeedView.setText(avgSpeed);
         tripFuelSpentView.setText(fuelSpent);
         tripIdView.setText(String.valueOf(tripId));
-        tripTimeSpentInMotionView.setText(String.valueOf(timeSpentInMotion));
-        tripTimeSpentOnStopView.setText(String.valueOf(timeSpentOnStop));
+        tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(timeSpentInMotion));
+        tripTimeSpentOnStopView.setText(MathUtils.getTimeInNormalFormat(timeSpentOnStop));
         tripTimeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpent));
+        moneySpentView.setText(moneyOnFuelSpent);
     }
 
     private void drawPathFromData() {

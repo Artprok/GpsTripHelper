@@ -89,7 +89,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         fuelFilledView.setText(fuelFilled);
         fuelSpentView.setText(fuelSpent);
         timeSpentView.setText(MathUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips()));
-        timeSpentView.setText(MathUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips()));
 
         avgSpeedView.setText(avgSpeed);
     }
@@ -105,6 +104,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     @Override public void onListFragmentInteraction(Trip trip) {
         float            distTravelled     = trip.getDistanceTravelled();
         float            timeSpentInMotion = trip.getTimeSpentInMotion();
+        float            moneyOnFuelSpent  = trip.getMoneyOnFuelSpent();
         float            fuelConsumed      = trip.getFuelConsumption();
         float            timeSpentOnStop   = trip.getTimeSpentOnStop();
         float            fuelSpent         = trip.getFuelSpent();
@@ -116,7 +116,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
 
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
-                        tripId, routes);
+                        tripId, routes,moneyOnFuelSpent);
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

@@ -69,24 +69,6 @@
 
 
         <TextView
-            android:id="@+id/tripIdLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fuelSpentLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/tripId">
-        </TextView>
-
-        <TextView
-            android:id="@+id/tripId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tripIdLabel"
-            android:layout_toEndOf="@id/tripIdLabel">
-        </TextView>
-
-
-        <TextView
             android:id="@+id/avgSpeedLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -174,6 +156,41 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/fuelSpentLabel"
             android:layout_toEndOf="@id/fuelSpentLabel">
+        </TextView>
+
+        <TextView
+            android:id="@+id/moneyOnTripfuelSpentLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fuelSpentLabel"
+            android:layout_marginTop="5dp"
+            android:text="@string/money_on_fuel_spent">
+        </TextView>
+
+        <TextView
+            android:id="@+id/moneyOntripFuelSpent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/moneyOnTripfuelSpentLabel"
+            android:layout_toEndOf="@id/moneyOnTripfuelSpentLabel">
+        </TextView>
+
+
+        <TextView
+            android:id="@+id/tripIdLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/moneyOnTripfuelSpentLabel"
+            android:layout_marginTop="5dp"
+            android:text="@string/tripId">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tripId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tripIdLabel"
+            android:layout_toEndOf="@id/tripIdLabel">
         </TextView>
     </RelativeLayout>
 

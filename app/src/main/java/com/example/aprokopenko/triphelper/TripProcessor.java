@@ -3,11 +3,11 @@ package com.example.aprokopenko.triphelper;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 
 import java.io.ObjectOutputStream;
@@ -23,7 +23,7 @@ import java.io.File;
 
 public class TripProcessor {
     private static final String LOG_TAG = "TripProcessor";
-    private final int              currentFuelConsumption;
+    private final float            currentFuelConsumption;
     private final Calendar         calendar;
     private final ArrayList<Route> route;
     private       long             tripStartTime;
@@ -82,13 +82,17 @@ public class TripProcessor {
 
     public void endTrip() {
         Log.d(LOG_TAG, "endTrip: end called");
-        Trip trip      = getCurrentTrip();
-        long timeSpent = calcTimeInTrip();
-        Log.d(LOG_TAG, "endTrip: TIME SPENT" + timeSpent);
+
+        Trip  trip             = getCurrentTrip();
+        long  timeSpent        = calcTimeInTrip();
         float distanceTraveled = setDistanceCovered(trip, timeSpent);
-        Log.d(LOG_TAG, "endTrip: DISTANCE" + distanceTraveled);
+        float fuelSpent        = distanceTraveled * (ConstantValues.FUEL_CONSUMPTION / 100);
+        float moneySpent       = fuelSpent * ConstantValues.FUEL_COST;
+        Log.d(LOG_TAG, "endTrip: " + fuelSpent);
+
+        trip.setMoneyOnFuelSpent(moneySpent);
+        trip.setFuelSpent(fuelSpent);
         trip.setDistanceTravelled(distanceTraveled);
-        Log.d(LOG_TAG, "endTrip: " + averageSpeed);
         trip.setAvgSpeed(averageSpeed);
         trip.setTimeSpent(timeSpent);
         trip.setRoute(route);
@@ -267,6 +271,9 @@ public class TripProcessor {
             fuelSpent = fuelSpent + trip.getFuelSpent();
             fuelConsumption = fuelConsumption + trip.getFuelConsumption();
         }
+        float moneySpent = fuelSpent * ConstantValues.FUEL_COST;
+
+        tripData.setMoneyOnFuelSpent(moneySpent);
         tripData.setDistanceTravelled(distanceTravelled);
         tripData.setFuelSpent(fuelSpent);
         tripData.setAvgFuelConsumption(fuelConsumption);

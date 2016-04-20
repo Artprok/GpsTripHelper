@@ -20,7 +20,7 @@ public class ConstantValues {
     public static final int              START_VALUE                   = -1;
     public static final int              AVG_SPEED_UPDATE_FREQUENCY    = 2;
     public static final int              FUEL_TANK_CAPACITY            = 60;
-    public static final int              FUEL_CONSUMPTION              = 11;
+    public static final float            FUEL_CONSUMPTION              = 11;
     public static final int              MIN_UPDATE_DISTANCE           = 0;
     public static final int              MIN_UPDATE_TIME               = 1;
 

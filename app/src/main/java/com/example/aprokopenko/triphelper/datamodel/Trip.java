@@ -18,11 +18,20 @@ public class Trip {
     private float            timeSpent;
     private String           tripDate;
     private float            avgSpeed;
+    private float            moneyOnFuelSpent;
     private int              tripID;
     private ArrayList<Route> route;
 
     public Trip() {
 
+    }
+
+    public float getMoneyOnFuelSpent() {
+        return moneyOnFuelSpent;
+    }
+
+    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
+        this.moneyOnFuelSpent = moneyOnFuelSpent;
     }
 
     public void setTimeSpentInMotion(float timeSpentInMotion) {
@@ -127,6 +136,7 @@ public class Trip {
             os.writeInt(tripID);
             os.writeObject(tripDate);
             os.writeFloat(avgSpeed);
+            os.writeFloat(moneyOnFuelSpent);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -154,8 +164,10 @@ public class Trip {
             int    tripID            = is.readInt();
             String date              = (String) is.readObject();
             float  avgSpeed          = is.readFloat();
+            float  moneySpent        = is.readFloat();
 
-            trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed);
+            trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed,
+                    moneySpent);
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -164,7 +176,7 @@ public class Trip {
     }
 
     private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
-                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed) {
+                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed,float moneySpent) {
         trip.setTripDate(date);
         trip.setRoute(route);
         trip.setDistanceTravelled(distanceTravelled);
@@ -173,6 +185,7 @@ public class Trip {
         trip.setTripID(tripID);
         trip.setFuelSpent(fuelSpent);
         trip.setAvgSpeed(avgSpeed);
+        trip.setMoneyOnFuelSpent(moneySpent);
         return trip;
     }
 
