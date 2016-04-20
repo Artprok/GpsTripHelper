@@ -24,7 +24,6 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -34,6 +33,7 @@ import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.google.android.gms.maps.model.LatLng;
@@ -384,7 +384,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
-        // FIXME: 20.04.2016 REMOVE 17!
+        // FIXME: 20.04.2016 REMOVE 99f!
         Float speed;
         if (ConstantValues.DEBUG_MODE) {
             speed = 99f;
@@ -454,22 +454,22 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setupSpeedSubscriber() {
-        speedSubscriber = new Subscriber<Float>() {
-            @Override public void onCompleted() {
+            speedSubscriber = new Subscriber<Float>() {
+                @Override public void onCompleted() {
 
-            }
-
-            @Override public void onError(Throwable e) {
-
-            }
-
-            @Override public void onNext(Float speed) {
-                if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
-                updateSpeed(speed);
-            }
-        };
+
+                @Override public void onError(Throwable e) {
+
+                }
+
+                @Override public void onNext(Float speed) {
+                    if (ConstantValues.DEBUG_MODE) {
+                        Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
+                    }
+                    updateSpeed(speed);
+                }
+            };
     }
 
     private void setupSubscribers() {
