@@ -71,17 +71,9 @@ public class TripProcessor {
 
     }
 
-    public void updateTrip() {
-        Log.d(LOG_TAG, "updateTrip: called");
-        Trip trip = getCurrentTrip();
-        trip.setAvgSpeed(averageSpeed);
-        if (route != null) {
-            trip.setRoute(route);
-        }
-    }
-
     public void endTrip() {
         Log.d(LOG_TAG, "endTrip: end called");
+        updateTrip();
 
         Trip  trip             = getCurrentTrip();
         long  timeSpent        = calcTimeInTrip();
@@ -167,7 +159,6 @@ public class TripProcessor {
         trip.setAvgSpeed(averageSpeed);
     }
 
-
     private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
                                     float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent) {
         TripData tripData = new TripData();
@@ -181,6 +172,7 @@ public class TripProcessor {
         tripData.setTimeSpentOnTrips(timeSpent);
         return tripData;
     }
+
 
     private Trip getCurrentTrip() {
         return tripData.getTrip(currentTripId);
@@ -201,6 +193,15 @@ public class TripProcessor {
         Calendar curCal  = Calendar.getInstance();
         long     endTime = curCal.getTime().getTime();
         return endTime - tripStartTime;
+    }
+
+    private void updateTrip() {
+        Log.d(LOG_TAG, "updateTrip: called");
+        Trip trip = getCurrentTrip();
+        trip.setAvgSpeed(averageSpeed);
+        if (route != null) {
+            trip.setRoute(route);
+        }
     }
 
     private void readTripDataFromFile(Context context) {

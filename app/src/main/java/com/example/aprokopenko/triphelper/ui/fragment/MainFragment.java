@@ -278,7 +278,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void stopTracking() {
-        tripProcessor.updateTrip();
         tripProcessor.updateAvgSpeed(getAvgSpeed());
         tripProcessor.endTrip();
         setMetricFieldsToTripData();
@@ -530,10 +529,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             @Override public void onClick(View v) {
                 TripData         tripData         = tripProcessor.getTripData();
                 TripListFragment tripListFragment = TripListFragment.newInstance();
-                if (!tripData.getTrips().isEmpty()) {
-                    saveState();
-                    tripListFragment.setTripData(tripData);
-                    UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
+                if(tripData!=null){
+                    if (!tripData.getTrips().isEmpty()) {
+                        saveState();
+                        tripListFragment.setTripData(tripData);
+                        UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
+                    }
                 }
             }
         });
