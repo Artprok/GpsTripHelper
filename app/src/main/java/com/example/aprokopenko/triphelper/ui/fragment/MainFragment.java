@@ -111,7 +111,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     @Override public void onPause() {
         super.onPause();
         saveState();
-
     }
 
     @Override public void onResume() {
