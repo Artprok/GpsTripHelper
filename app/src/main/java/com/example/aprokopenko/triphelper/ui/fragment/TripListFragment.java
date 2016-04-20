@@ -120,7 +120,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
 
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
-                        tripId, routes,moneyOnFuelSpent);
+                        tripId, routes, moneyOnFuelSpent);
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

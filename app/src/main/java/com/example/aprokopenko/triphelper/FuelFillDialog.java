@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.aprokopenko.triphelper.listener.DialogFragmentInteractionListener;
+
 import butterknife.ButterKnife;
 import butterknife.Bind;
 
@@ -23,17 +25,14 @@ public class FuelFillDialog extends DialogFragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_fill_dialog, container, false);
         ButterKnife.bind(this, view);
         fillButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 String fuelCapacity = fuelToFill.getText().toString();
-                float fuel = Float.valueOf(fuelCapacity);
-                if(dialogFragmentInteractionListener !=null){
+                float  fuel         = Float.valueOf(fuelCapacity);
+                if (dialogFragmentInteractionListener != null) {
                     dialogFragmentInteractionListener.fuelFilled(fuel);
                 }
                 dismiss();
@@ -43,19 +42,17 @@ public class FuelFillDialog extends DialogFragment {
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
-    @Override
-    public void onDetach() {
+    @Override public void onDetach() {
         super.onDetach();
         dialogFragmentInteractionListener = null;
     }
 
-    public void setDialogFragmentInteractionListener(DialogFragmentInteractionListener listener){
+    public void setDialogFragmentInteractionListener(DialogFragmentInteractionListener listener) {
         dialogFragmentInteractionListener = listener;
     }
 }

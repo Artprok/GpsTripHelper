@@ -24,8 +24,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.DialogFragmentInteractionListener;
-import com.example.aprokopenko.triphelper.FuelFillDialog;
+import com.example.aprokopenko.triphelper.listener.DialogFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -36,6 +35,7 @@ import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
 import com.example.aprokopenko.triphelper.datamodel.Route;
+import com.example.aprokopenko.triphelper.FuelFillDialog;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.google.android.gms.maps.model.LatLng;
@@ -69,7 +69,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     @Bind(R.id.avgSpeed)
     TextView       avgSpeed;
     @Bind(R.id.fuelLeftView)
-    TextView fuelLeft;
+    TextView       fuelLeft;
 
     private static final String LOG_TAG = "MainFragment";
     private Subscriber<Location> locationSubscriber;
@@ -336,7 +336,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         // FIXME: 18.04.2016 mock in fuelConsumption (add fuelConsumption calculation)
         tripData.setAvgFuelConsumption(ConstantValues.FUEL_CONSUMPTION);
         tripData.setFuelSpent(fuelSpent);
-        tripData.setGasTank(tripData.getGasTank()-fuelSpent);
+        tripData.setGasTank(tripData.getGasTank() - fuelSpent);
         // FIXME: 18.04.2016 mock in fuelFilled. Create a button to "fill fuel functionality"
         tripData.setFuelFilled(65.7f);
         tripData.setMoneyOnFuelSpent(fuelSpent * ConstantValues.FUEL_COST);

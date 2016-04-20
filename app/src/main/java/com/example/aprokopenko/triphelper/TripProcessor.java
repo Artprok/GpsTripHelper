@@ -60,9 +60,8 @@ public class TripProcessor {
         route.add(routePoint);
     }
 
-    public String getFuelLeft(){
-        String fuelLeft = String.valueOf(tripData.getGasTank());
-        return fuelLeft;
+    public String getFuelLeft() {
+        return String.valueOf(tripData.getGasTank());
     }
 
     public void startNewTrip() {
@@ -177,7 +176,7 @@ public class TripProcessor {
 
 
     private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
-                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent,float gasTank) {
+                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank) {
         TripData tripData = new TripData();
         tripData.setTrips(trips);
         tripData.setDistanceTravelled(distanceTravelled);
@@ -247,7 +246,7 @@ public class TripProcessor {
                 float gasTankCapacity    = is.readFloat();
 
                 this.tripData = createTripData(trips, avgFuelConsumption, fuelFilled, fuelSpent, distanceTravelled, moneyOnFuelSpent,
-                        avgSpeed, timeSpent,gasTankCapacity);
+                        avgSpeed, timeSpent, gasTankCapacity);
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "READ: " + avgFuelConsumption);
                     Log.d(LOG_TAG, "READ: " + fuelFilled);
