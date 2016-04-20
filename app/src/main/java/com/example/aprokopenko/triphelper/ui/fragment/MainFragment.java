@@ -111,9 +111,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupStopButton();
         setupTripListButton();
         setupFillButton();
-        if (ConstantValues.DEBUG_MODE) {
+//        if (ConstantValues.DEBUG_MODE) {
             setupEraseButton();
-        }
+//        }
     }
 
     @Override public void onPause() {
@@ -226,6 +226,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
         tripProcessor.writeTripDataToFile(context);
+        Log.d(LOG_TAG, "fillGasTank: FUELE"+fuel);
         fuelLeft.setText(tripProcessor.getFuelLeft());
     }
 

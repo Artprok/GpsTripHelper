@@ -61,7 +61,15 @@ public class TripProcessor {
     }
 
     public String getFuelLeft() {
-        return String.valueOf(tripData.getGasTank());
+        if(tripData!=null){
+            Log.d(LOG_TAG, "getFuelLeft: "+tripData.getGasTank());
+            String tmpString = String.valueOf(tripData.getGasTank());
+            if(tmpString==null){
+                tmpString = "Fill!";
+            }
+            return tmpString;
+        }
+        else return "error";
     }
 
     public void startNewTrip() {
