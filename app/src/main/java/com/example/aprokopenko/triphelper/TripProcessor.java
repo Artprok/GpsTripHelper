@@ -161,6 +161,48 @@ public class TripProcessor {
 
     }
 
+    public void updateAvgSpeed(float speed) {
+        averageSpeed = speed;
+        Trip trip = tripData.getTrip(currentTripId);
+        trip.setAvgSpeed(averageSpeed);
+    }
+
+
+    private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
+                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent) {
+        TripData tripData = new TripData();
+        tripData.setTrips(trips);
+        tripData.setDistanceTravelled(distanceTravelled);
+        tripData.setFuelFilled(fuelFilled);
+        tripData.setFuelSpent(fuelSpent);
+        tripData.setMoneyOnFuelSpent(moneyOnFuelSpent);
+        tripData.setAvgFuelConsumption(avgFuelConsumption);
+        tripData.setAvgSpeed(avgSpeed);
+        tripData.setTimeSpentOnTrips(timeSpent);
+        return tripData;
+    }
+
+    private Trip getCurrentTrip() {
+        return tripData.getTrip(currentTripId);
+    }
+
+    private float setDistanceCovered(Trip trip, long timeSpent) {
+        float avgSpeed = trip.getAvgSpeed();
+        return MathUtils.calcDistTravelled(timeSpent, avgSpeed);
+    }
+
+    private Trip readTrip(ObjectInputStream is) {
+        Trip trip = new Trip();
+        trip = trip.readTrip(is);
+        return trip;
+    }
+
+    private long calcTimeInTrip() {
+        Calendar curCal  = Calendar.getInstance();
+        long     endTime = curCal.getTime().getTime();
+        return endTime - tripStartTime;
+    }
+
     private void readTripDataFromFile(Context context) {
         File file = context.getFileStreamPath(ConstantValues.FILE_NAME);
         if (file.exists()) {
@@ -208,49 +250,6 @@ public class TripProcessor {
             tripData = new TripData();
         }
     }
-
-    public void updateAvgSpeed(float speed) {
-        averageSpeed = speed;
-        Trip trip = tripData.getTrip(currentTripId);
-        trip.setAvgSpeed(averageSpeed);
-    }
-
-
-    private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
-                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent) {
-        TripData tripData = new TripData();
-        tripData.setTrips(trips);
-        tripData.setDistanceTravelled(distanceTravelled);
-        tripData.setFuelFilled(fuelFilled);
-        tripData.setFuelSpent(fuelSpent);
-        tripData.setMoneyOnFuelSpent(moneyOnFuelSpent);
-        tripData.setAvgFuelConsumption(avgFuelConsumption);
-        tripData.setAvgSpeed(avgSpeed);
-        tripData.setTimeSpentOnTrips(timeSpent);
-        return tripData;
-    }
-
-    private Trip getCurrentTrip() {
-        return tripData.getTrip(currentTripId);
-    }
-
-    private float setDistanceCovered(Trip trip, long timeSpent) {
-        float avgSpeed = trip.getAvgSpeed();
-        return MathUtils.calcDistTravelled(timeSpent, avgSpeed);
-    }
-
-    private Trip readTrip(ObjectInputStream is) {
-        Trip trip = new Trip();
-        trip = trip.readTrip(is);
-        return trip;
-    }
-
-    private long calcTimeInTrip() {
-        Calendar curCal  = Calendar.getInstance();
-        long     endTime = curCal.getTime().getTime();
-        return endTime - tripStartTime;
-    }
-
 
     private void writeTrip(Trip trip, ObjectOutputStream os) {
         trip.writeTrip(os);

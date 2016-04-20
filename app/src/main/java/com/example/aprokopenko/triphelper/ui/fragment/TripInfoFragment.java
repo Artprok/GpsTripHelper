@@ -86,8 +86,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Route>                  routes;
     private ArrayList<String>                 speedValues;
 
-    public TripInfoFragment() {
-    }
+    public TripInfoFragment() {    }
 
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float fuelConsumed, float fuelSpent,
@@ -191,7 +190,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         }
         return previousLocation;
     }
-
 
     private void setupMapView(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);
