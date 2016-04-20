@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#607D8B"
+                android:keepScreenOn="true"
+                tools:context=".ui.fragment.MainFragment">
+
+    <ImageButton
+        android:id="@+id/startButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
+        android:layout_alignBottom="@+id/speedometerTextView"
+        android:background="@drawable/start_button"/>
+
+    <ImageButton
+        android:id="@+id/eraseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignStart="@+id/tripListButton"
+        android:layout_below="@+id/tripListButton"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/common_full_open_on_phone"
+        android:visibility="invisible"/>
+
+    <ImageButton
+        android:id="@+id/stopButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
+        android:background="@drawable/stop_button"
+        android:visibility="invisible"
+        android:layout_alignBottom="@+id/speedometerTextView"/>
+
+
+    <ImageButton
+        android:id="@+id/tripListButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/statusImageView"
+        android:background="@android:drawable/ic_menu_sort_by_size"
+        />
+
+    <RelativeLayout
+        android:id="@+id/speedometerContainer"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true">
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/speedometerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/speedometerContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-70dp"
+        android:text="@string/initial_speedometer_val"
+        android:textSize="@dimen/speedometerTextViewSize">
+    </TextView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="4dp"
+        android:layout_toStartOf="@+id/speedometerContainer"
+        >
+
+        <TextView
+            android:id="@+id/avgSpeedHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/maxSpeedHint"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/avgSpeed_initial_string"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/metricsTextSize"
+            />
+
+        <TextView
+            android:id="@+id/avgSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/avgSpeedHint"
+            android:layout_toEndOf="@+id/avgSpeedHint"
+            android:text="@string/avg_speed_initial_val"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/metricsTextSize"
+            android:layout_marginStart="-15dp"/>
+
+
+        <TextView
+            android:id="@+id/maxSpeedHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/maxSpeed_initial_string"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/metricsTextSize"
+            />
+
+        <TextView
+            android:id="@+id/maxSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/maxSpeedHint"
+            android:layout_toEndOf="@+id/maxSpeedHint"
+            android:text="@string/initial_max_speed_val"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/metricsTextSize"
+            android:layout_marginStart="-65dp"/>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/statusImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/speedometerContainer"
+        android:background="@drawable/red_satellite"/>
+
+</RelativeLayout>

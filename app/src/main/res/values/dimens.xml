@@ -1,0 +1,8 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="speedometerTextViewSize">50sp</dimen>
+    <dimen name="metricsTextSize">20sp</dimen>
+    <dimen name="metricPortraitTextSize">21sp</dimen>
+</resources>
