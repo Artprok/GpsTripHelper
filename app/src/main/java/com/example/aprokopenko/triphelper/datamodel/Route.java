@@ -1,10 +1,10 @@
-package com.example.aprokopenko.triphelper;
+package com.example.aprokopenko.triphelper.datamodel;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class Route {
-    private LatLng routePoints;
-    private float  speed;
+    private final LatLng routePoints;
+    private final float  speed;
 
     public Route(LatLng routePoints, float speed) {
         this.routePoints = routePoints;

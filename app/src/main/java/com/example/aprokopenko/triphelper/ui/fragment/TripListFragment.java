@@ -1,23 +1,22 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.widget.TextView;
 import android.view.ViewGroup;
 import android.view.View;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import com.example.aprokopenko.triphelper.Route;
-import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
+import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
-import com.google.android.gms.maps.model.LatLng;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;

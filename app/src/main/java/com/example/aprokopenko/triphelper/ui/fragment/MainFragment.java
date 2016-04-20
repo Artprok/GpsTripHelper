@@ -24,9 +24,8 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.Route;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
-import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
@@ -383,9 +382,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         GpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
     }
 
-    private void addPointToRouteList(Location location, @Nullable Float speed) {
+    private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
         // FIXME: 20.04.2016 REMOVE 17!
+        Float speed;
         if (ConstantValues.DEBUG_MODE) {
             speed = 99f;
         }
@@ -410,12 +410,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             @Override public void onNext(Location location) {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: Location added to route list");
-                    addPointToRouteList(location, null);
+                    addPointToRouteList(location);
                 }
                 else {
                     float speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
                     updateSpeed(speed);
-                    addPointToRouteList(location, speed);
+                    addPointToRouteList(location);
                 }
             }
         };

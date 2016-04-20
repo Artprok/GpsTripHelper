@@ -2,9 +2,8 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.location.Location;
-import android.widget.Switch;
 
-import com.example.aprokopenko.triphelper.Route;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -15,12 +14,6 @@ import com.google.android.gms.maps.GoogleMap;
 import java.util.ArrayList;
 
 public class MapUtilMethods {
-
-    public static void addPolyline(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc) {
-        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth)
-                .color(GoogleMapsSettings.polylineColorCity));
-    }
-
     public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, float speed) {
         int color = choseColorDependOnSpeed(speed);
         googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));

@@ -2,15 +2,14 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.view.View;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
@@ -19,6 +18,7 @@ import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.GoogleMap;
 import com.example.aprokopenko.triphelper.R;
 import com.google.android.gms.maps.MapView;
@@ -134,7 +134,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             ArrayList<String> latitudeArray  = getArguments().getStringArrayList(ARG_PARAM10);
             ArrayList<String> longitudeArray = getArguments().getStringArrayList(ARG_PARAM11);
             ArrayList<String> speedArray     = getArguments().getStringArrayList(ARG_PARAM12);
-
 
             routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray, speedArray);
         }

@@ -3,12 +3,12 @@ package com.example.aprokopenko.triphelper;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;

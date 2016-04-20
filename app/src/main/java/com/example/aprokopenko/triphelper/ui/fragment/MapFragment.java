@@ -10,21 +10,19 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.Route;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.GoogleMap;
 import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
-
-import javax.crypto.spec.DESedeKeySpec;
 
 import butterknife.ButterKnife;
 import rx.Subscriber;
@@ -174,7 +172,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
             for (int i = 0; i < route.size(); i++) {
                 LatLng currentLocation = (route.get(i).getRoutePoints());
-                Log.d(LOG_TAG, "drawPathFromData: AAAAA" + route.get(0).getSpeed());
                 // FIXME: 20.04.2016 colorHereChange
                 LatLng tempPreviousLocation = getPreviousLocation(route.size(), i);
                 previousLocationFromData = currentLocation;

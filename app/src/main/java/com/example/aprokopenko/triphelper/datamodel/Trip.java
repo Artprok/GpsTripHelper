@@ -2,7 +2,6 @@ package com.example.aprokopenko.triphelper.datamodel;
 
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.Route;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ObjectOutputStream;
