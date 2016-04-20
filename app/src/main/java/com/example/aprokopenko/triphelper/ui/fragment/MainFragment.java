@@ -52,7 +52,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     @Bind(R.id.tripListButton)
     ImageButton    tripListButton;
     @Bind(R.id.statusImageView)
-
     ImageView      statusImage;
     @Bind(R.id.startButton)
     ImageButton    startButton;
@@ -64,7 +63,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     TextView       maxSpeed;
     @Bind(R.id.avgSpeed)
     TextView       avgSpeed;
-
 
     private static final String LOG_TAG = "MainFragment";
     private Subscriber<Location> locationSubscriber;
