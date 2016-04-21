@@ -1,8 +1,10 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
@@ -68,21 +70,34 @@ import dagger.Module;
     }
 
     private void setFabToMap(final MainFragment mainFragment) {
+        int res = R.drawable.map;
+        fab.setImageResource(res);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 mainFragment.openMapFragment();
-                setFabToSpeedometer(mainFragment);
+                setFabToSpeedometer();
             }
         });
     }
 
-    private void setFabToSpeedometer(final MainFragment mainFragment) {
+    private void setFabToSpeedometer() {
         int res = R.drawable.highway_alt2;
         fab.setImageResource(res);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
-                setFabToMap(mainFragment);
+                MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
+                if (mf == null) {
+                    mf = MainFragment.newInstance();
+                    UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
+                    assert fab != null;
+                    setFabToMap(mf);
+                }
+                else {
+                    mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
+                    assert fab != null;
+                    setFabToMap(mf);
+                    UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
+                }
             }
         });
     }

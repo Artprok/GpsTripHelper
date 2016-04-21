@@ -15,10 +15,11 @@ public class ConstantValues {
     public static final float            FUEL_COST                         = 20.0f;
     public static final float            KILOMETER_PER_HOUR_MULTIPLIER     = 3.6f;
     public static final int              TEXT_ANIM_DURATION                = 1700;
-    public static final boolean          DEBUG_MODE                        = true;
+    public static final boolean          DEBUG_MODE                        = false;
     public static final int              START_VALUE                       = 0;
-    public static final int              AVG_SPEED_UPDATE_FREQUENCY        = 5;
+    public static final int              AVG_SPEED_UPDATE_FREQUENCY        = 35;
     public static final int              FUEL_TANK_CAPACITY                = 60;
+
     public static final float            FUEL_CONSUMPTION                  = 11;
     public static final float            CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 5;
     public static final float            CONSUMPTION_HIGH_TRAFFIC_ADD      = 3;
@@ -30,6 +31,7 @@ public class ConstantValues {
     public static final int              MEDIUM_TRAFFIC_AVG_SPEED          = 30;
     public static final int              HIGH_TRAFFIC_AVG_SPEED            = 15;
     public static final int              VETY_HIGH_TRAFFIC_AVG_SPEED       = 10;
+
     public static final int              MIN_UPDATE_DISTANCE               = 0;
     public static final int              MIN_UPDATE_TIME                   = 1;
 

@@ -73,11 +73,11 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String distance         = UtilMethods.formatFloat00(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
-        String avgFuelCons      = UtilMethods.formatFloat00(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
-        String moneyOnFuelSpent = UtilMethods.formatFloat00(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
-        String fuelSpent        = UtilMethods.formatFloat00(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
-        String avgSpeed         = UtilMethods.formatFloat00(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
+        String distance         = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
+        String avgFuelCons      = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
+        String moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
+        String fuelSpent        = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
+        String avgSpeed         = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
 
         distanceTravelledView.setText(distance);
         avgFuelConsumptionView.setText(avgFuelCons);

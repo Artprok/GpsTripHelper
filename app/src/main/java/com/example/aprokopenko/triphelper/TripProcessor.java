@@ -112,10 +112,12 @@ public class TripProcessor {
     }
 
     public void fillGasTank(float fuel) {
-        float gasTank = tripData.getGasTank();
-        if (gasTank < ConstantValues.FUEL_TANK_CAPACITY) {
-            if (gasTank + fuel < ConstantValues.FUEL_TANK_CAPACITY) {
-                tripData.setGasTank(gasTank + fuel);
+        if(tripData!=null){
+            float gasTank = tripData.getGasTank();
+            if (gasTank < ConstantValues.FUEL_TANK_CAPACITY) {
+                if (gasTank + fuel < ConstantValues.FUEL_TANK_CAPACITY) {
+                    tripData.setGasTank(gasTank + fuel);
+                }
             }
         }
     }

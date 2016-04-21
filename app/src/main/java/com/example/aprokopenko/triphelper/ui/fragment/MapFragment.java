@@ -82,6 +82,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        SupportMapFragment f = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.mapFragment);
+        if (f != null)
+            getFragmentManager().beginTransaction().remove(f).commit();
     }
 
     @Override public void onDetach() {
@@ -121,7 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void getGoogleMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
     }
 

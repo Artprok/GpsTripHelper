@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.support.v7.widget.Toolbar;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.widget.RelativeLayout;
 import android.content.ComponentName;
 import android.view.LayoutInflater;
@@ -64,6 +65,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     ImageButton    fillButton;
     @Bind(R.id.stopButton)
     ImageButton    stopButton;
+    @Bind(R.id.fuelLayout)
+    RelativeLayout fuelLayout;
     @Bind(R.id.maxSpeed)
     TextView       maxSpeed;
     @Bind(R.id.avgSpeed)
@@ -84,6 +87,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private GpsHandler           gpsHandler;
     private Context              context;
     private Bundle               state;
+    private boolean firstStart = true;
 
     public MainFragment() {
         // Required empty public constructor
@@ -134,6 +138,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         outState.putBoolean("StatusImageState", getStatus());
         outState.putFloat("AvgSpeed", getAvgSpeed());
         outState.putFloat("MaxSpeed", getMaxSpeed());
+        outState.putBoolean("FirstStart", firstStart);
+        outState.putFloat("FuelLevel", getFuelLevel());
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "onSaveInstanceState: Save called");
             Log.d(LOG_TAG, "onSaveInstanceState: " + getButtonVisibility());
@@ -193,6 +199,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return Float.valueOf(maxSpeed.getText().toString());
     }
 
+    private Float getFuelLevel() {
+        return Float.valueOf(fuelLeft.getText().toString());
+    }
+
+
     private Float getAvgSpeed() {
         return Float.valueOf(avgSpeed.getText().toString());
     }
@@ -226,7 +237,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
         tripProcessor.writeTripDataToFile(context);
-        fuelLeft.setText(UtilMethods.formatFloat00(tripProcessor.getFuelLeft()));
+        fuelLeft.setText(UtilMethods.formatFloat(tripProcessor.getFuelLeft()));
     }
 
     private void setupFillButton() {
@@ -261,6 +272,18 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
         restoreMaxSpeed(savedInstanceState.getFloat("MaxSpeed"));
         restoreAvgSpeed(savedInstanceState.getFloat("AvgSpeed"));
+        restoreFuelVisiblity(savedInstanceState.getBoolean("FirstStart"));
+        restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
+    }
+
+    private void restoreFuelVisiblity(boolean firstState) {
+        if (!firstState) {
+            fuelLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void restoreFuelLevel(Float fuelLevel) {
+        fuelLeft.setText(UtilMethods.formatFloat(fuelLevel));
     }
 
     private void restoreStatus(Boolean status) {
@@ -383,7 +406,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
         tripProcessor = new TripProcessor(context);
-        fuelLeft.setText(UtilMethods.formatFloat00(tripProcessor.getFuelLeft()));
+        fuelLeft.setText(UtilMethods.formatFloat(tripProcessor.getFuelLeft()));
+        if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
+            fuelLayout.setVisibility(View.VISIBLE);
+        }
         configureMapFragment();
         setupSubscribers();
         setSubscribersToGpsHandler(gpsHandler);
@@ -518,7 +544,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void updateSpeedTextField(float speed) {
         String tmpString      = speedometerTextView.getText().toString();
-        String formattedSpeed = UtilMethods.formatFloat0(speed);
+        String formattedSpeed = UtilMethods.formatFloat(speed);
         int    initialValue   = Integer.valueOf(tmpString);
         int    finalValue     = Integer.valueOf(formattedSpeed);
         UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
@@ -531,7 +557,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateAverageSpeed(float speed) {
-        String tmpString  = UtilMethods.formatFloat0(speed);
+        String tmpString  = UtilMethods.formatFloat(speed);
         int    initialVal = Integer.valueOf(tmpString);
         int    finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, avgSpeed);
@@ -539,7 +565,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateMaxSpeed(float speed) {
-        String tmpString  = UtilMethods.formatFloat0(speed);
+        String tmpString  = UtilMethods.formatFloat(speed);
         int    initialVal = Integer.valueOf(tmpString);
         int    finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);
@@ -582,6 +608,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void setupStopButton() {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
+                if (firstStart) {
+                    fuelLayout.setVisibility(View.VISIBLE);
+                    firstStart = false;
+                }
                 stopTracking();
                 startButtonTurnActive();
             }
