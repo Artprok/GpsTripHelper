@@ -89,7 +89,8 @@ public class TripProcessor {
         Trip  trip             = getCurrentTrip();
         long  timeSpent        = calcTimeInTrip();
         float distanceTraveled = setDistanceCovered(trip, timeSpent);
-        float fuelSpent        = distanceTraveled * (ConstantValues.FUEL_CONSUMPTION / 100);
+        float fuelConsumption  = getFuelConsumptionLevel(averageSpeed);
+        float fuelSpent        = distanceTraveled * (fuelConsumption / 100);
         float moneySpent       = fuelSpent * ConstantValues.FUEL_COST;
         Log.d(LOG_TAG, "endTrip: " + fuelSpent);
 
@@ -99,10 +100,12 @@ public class TripProcessor {
         trip.setAvgSpeed(averageSpeed);
         trip.setTimeSpent(timeSpent);
         trip.setRoute(route);
+        trip.setAvgFuelConsumption(fuelConsumption);
 
         updateTripState();
         setTripFieldsToStartState();
     }
+
 
     public void eraseFile(Context context) {
         context.deleteFile(ConstantValues.FILE_NAME);
@@ -218,6 +221,30 @@ public class TripProcessor {
         return endTime - tripStartTime;
     }
 
+    private float getFuelConsumptionLevel(float avgSpeed) {
+        float initialConsumption = ConstantValues.FUEL_CONSUMPTION;
+        if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
+        }
+        else if (avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
+        }
+        else if (avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
+        }
+        else if (avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
+        }
+        else if (avgSpeed < ConstantValues.VETY_HIGH_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
+        }
+        else {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing!");
+            return initialConsumption;
+        }
+    }
+
+
     private void updateTrip() {
         Log.d(LOG_TAG, "updateTrip: called");
         Trip trip = getCurrentTrip();
@@ -289,22 +316,19 @@ public class TripProcessor {
     private void getTripDataFieldsValues() {
         float distanceTravelled = 0;
         float fuelSpent         = 0;
-        float fuelConsumption   = ConstantValues.FUEL_CONSUMPTION;
+        float fuelConsumption   = 0;
         for (Trip trip : tripData.getTrips()) {
             distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
             fuelSpent = fuelSpent + trip.getFuelSpent();
-            fuelConsumption = fuelConsumption + trip.getFuelConsumption();
+            fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
         }
         float moneySpent = fuelSpent * ConstantValues.FUEL_COST;
+        fuelConsumption = fuelConsumption / tripData.getTrips().size();
 
         tripData.setMoneyOnFuelSpent(moneySpent);
         tripData.setDistanceTravelled(distanceTravelled);
         tripData.setFuelSpent(fuelSpent);
         tripData.setAvgFuelConsumption(fuelConsumption);
-    }
-
-    private void getCurrConsumption() {
-
     }
 
     private void updateTripState() {

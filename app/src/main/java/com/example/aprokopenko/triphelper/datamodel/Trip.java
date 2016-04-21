@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Trip {
     private float            timeSpentInMotion;
     private float            distanceTravelled;
-    private float            fuelConsumption;
+    private float            avgFuelConsumption;
     private float            timeSpentOnStop;
     private float            fuelSpent;
     private float            timeSpent;
@@ -38,12 +38,8 @@ public class Trip {
         this.timeSpentInMotion = timeSpentInMotion;
     }
 
-    public void setFuelConsumption(float fuelConsumption) {
-        this.fuelConsumption = fuelConsumption;
-    }
-
-    public void setTimeSpentOnStop(float timeSpentOnStop) {
-        this.timeSpentOnStop = timeSpentOnStop;
+    public void setAvgFuelConsumption(float avgFuelConsumption) {
+        this.avgFuelConsumption = avgFuelConsumption;
     }
 
     public void setFuelSpent(float fuelSpent) {
@@ -95,8 +91,8 @@ public class Trip {
         return distanceTravelled;
     }
 
-    public float getFuelConsumption() {
-        return fuelConsumption;
+    public float getAvgFuelConsumption() {
+        return avgFuelConsumption;
     }
 
     public float getTimeSpentOnStop() {
@@ -137,6 +133,7 @@ public class Trip {
             os.writeObject(tripDate);
             os.writeFloat(avgSpeed);
             os.writeFloat(moneyOnFuelSpent);
+            os.writeFloat(avgFuelConsumption);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -165,9 +162,10 @@ public class Trip {
             String date              = (String) is.readObject();
             float  avgSpeed          = is.readFloat();
             float  moneySpent        = is.readFloat();
+            float  fuelConsumption   = is.readFloat();
 
             trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed,
-                    moneySpent);
+                    moneySpent, fuelConsumption);
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -176,7 +174,7 @@ public class Trip {
     }
 
     private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
-                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed,float moneySpent) {
+                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption) {
         trip.setTripDate(date);
         trip.setRoute(route);
         trip.setDistanceTravelled(distanceTravelled);
@@ -186,6 +184,7 @@ public class Trip {
         trip.setFuelSpent(fuelSpent);
         trip.setAvgSpeed(avgSpeed);
         trip.setMoneyOnFuelSpent(moneySpent);
+        trip.setAvgFuelConsumption(fuelConsumption);
         return trip;
     }
 

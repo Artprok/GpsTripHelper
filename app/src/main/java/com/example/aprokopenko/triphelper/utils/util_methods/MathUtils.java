@@ -5,17 +5,20 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import java.util.ArrayList;
 
 public class MathUtils {
-    public static float figureOutAverageSpeed(float avgSpeed, float averageSpeed, ArrayList<Float> avgList) {
-        for (Float f : avgList) {
-            avgSpeed = f + avgSpeed;
+    public static float figureOutAverageSpeed(float initialAvgSpeed, float currAvgSpeed, ArrayList<Float> avgList) {
+        int i = 0;
+        for (Float avgSpeedItem : avgList) {
+            i++;
+            initialAvgSpeed = avgSpeedItem + initialAvgSpeed;
+
         }
-        if (averageSpeed != ConstantValues.START_VALUE) {
-            averageSpeed = (averageSpeed + avgSpeed / avgList.size()) / 2;
+        if (currAvgSpeed != ConstantValues.START_VALUE) {
+            currAvgSpeed = (currAvgSpeed + initialAvgSpeed / avgList.size()) / 2;
         }
         else {
-            averageSpeed = averageSpeed + avgSpeed / avgList.size();
+            currAvgSpeed = currAvgSpeed + initialAvgSpeed / avgList.size();
         }
-        return averageSpeed;
+        return currAvgSpeed;
     }
 
     public static float getSpeedInKilometerPerHour(float speed) {
@@ -23,10 +26,20 @@ public class MathUtils {
     }
 
     public static String getTimeInNormalFormat(float timeInMills) {
-        int seconds = (int) (timeInMills / 1000) % 60;
-        int minutes = (int) ((timeInMills / (1000 * 60)) % 60);
-        int hours   = (int) ((timeInMills / (1000 * 60 * 60)) % 24);
-        return hours + " hours:" + minutes + " minutes," + seconds + " seconds";
+        String resultString;
+        int    seconds = (int) (timeInMills / 1000) % 60;
+        int    minutes = (int) ((timeInMills / (1000 * 60)) % 60);
+        int    hours   = (int) ((timeInMills / (1000 * 60 * 60)) % 24);
+        if (hours == 0) {
+            resultString = minutes + " minutes," + seconds + " seconds";
+        }
+        else if (hours == 0 && minutes == 0) {
+            resultString = seconds + " seconds";
+        }
+        else {
+            resultString = hours + " hours," + minutes + " minutes," + seconds + " seconds";
+        }
+        return resultString;
     }
 
     private static float getHoursFromMills(float timeInMills) {

@@ -9,17 +9,18 @@ public class TripData {
 
     private float           avgFuelConsumption;
     private float           distanceTravelled;
+    private float           timeSpentOnTrips;
     private float           moneyOnFuelSpent;
     private float           fuelFilled;
     private float           fuelSpent;
     private float           avgSpeed;
-    private float           timeSpentOnTrips;
+    private float           gasTank;
     private ArrayList<Trip> trips;
-    private float           gasTank=0;
 
     public TripData() {
         // TODO: 31.03.2016 maybe testCode, maybe no. Not clear now
         trips = new ArrayList<>();
+        gasTank = 0;
     }
 
     public float getGasTank() {
@@ -104,21 +105,6 @@ public class TripData {
 
     public ArrayList<Trip> getTrips() {
         return trips;
-    }
-
-
-    private void updateTripData() {
-        calcTripData();
-    }
-
-    private void calcTripData() {
-        for (Trip trip : trips) {
-            distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
-            fuelSpent = fuelSpent + trip.getFuelSpent();
-            avgFuelConsumption = avgFuelConsumption + trip.getFuelConsumption();
-        }
-        avgFuelConsumption = avgFuelConsumption / trips.size();
-        moneyOnFuelSpent = ConstantValues.FUEL_COST * fuelSpent;
     }
 }
 

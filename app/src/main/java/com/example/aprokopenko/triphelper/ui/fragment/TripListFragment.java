@@ -15,8 +15,8 @@ import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.Route;
+import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
@@ -77,15 +77,13 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         String avgFuelCons      = UtilMethods.formatFloat00(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
         String moneyOnFuelSpent = UtilMethods.formatFloat00(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
         String fuelSpent        = UtilMethods.formatFloat00(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
-        // FIXME: 18.04.2016 avgSpeedForAllTrips, not for one. Check this, maybe not!
-        String avgSpeed = UtilMethods.formatFloat00(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
+        String avgSpeed         = UtilMethods.formatFloat00(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
 
         distanceTravelledView.setText(distance);
         avgFuelConsumptionView.setText(avgFuelCons);
         moneyOnFuelView.setText(moneyOnFuelSpent);
         fuelSpentView.setText(fuelSpent);
         timeSpentView.setText(MathUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips()));
-
         avgSpeedView.setText(avgSpeed);
     }
 
@@ -105,7 +103,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         float            distTravelled     = trip.getDistanceTravelled();
         float            timeSpentInMotion = trip.getTimeSpentInMotion();
         float            moneyOnFuelSpent  = trip.getMoneyOnFuelSpent();
-        float            fuelConsumed      = trip.getFuelConsumption();
+        float            fuelConsumed      = trip.getAvgFuelConsumption();
         float            timeSpentOnStop   = trip.getTimeSpentOnStop();
         float            fuelSpent         = trip.getFuelSpent();
         float            timeSpent         = trip.getTimeSpent();

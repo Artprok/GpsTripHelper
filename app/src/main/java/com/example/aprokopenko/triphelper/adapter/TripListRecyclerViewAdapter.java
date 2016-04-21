@@ -46,7 +46,7 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
                     onListFragmentInteractionListener.onListFragmentInteraction(holder.trip);
                     TripInfoFragment tripInfoFragment = TripInfoFragment
                             .newInstance(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(), curTrip.getTimeSpent(),
-                                    curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(), curTrip.getFuelConsumption(),
+                                    curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(), curTrip.getAvgFuelConsumption(),
                                     curTrip.getFuelSpent(), id, curTrip.getRoute(),curTrip.getMoneyOnFuelSpent());
                     onListFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
                 }

@@ -163,7 +163,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/startButton"
         android:layout_alignStart="@+id/startButton"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp">
         <TextView
             android:id="@+id/fuelLeftHint"
             android:layout_width="wrap_content"

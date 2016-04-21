@@ -202,23 +202,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context);
     }
 
-    private float calcAvgSpd(int tripQuantity, Trip trip) {
+    private float calcAvgSpd(Trip trip) {
         float avgSpeed = 0;
-        if (tripQuantity == 1) {
-            avgSpeed = avgSpeed + trip.getAvgSpeed();
-        }
-        else {
-            avgSpeed = avgSpeed + trip.getAvgSpeed() / tripQuantity;
-        }
+        avgSpeed = avgSpeed + trip.getAvgSpeed();
         return avgSpeed;
     }
 
     private boolean getButtonVisibility() {
-        ImageButton stB = (ImageButton) getActivity().findViewById(R.id.startButton);
-        return stB.getVisibility() == View.VISIBLE;
+        Boolean     visiblity = false;
+        ImageButton stB       = (ImageButton) getActivity().findViewById(R.id.startButton);
+        if (stB != null) {
+            visiblity = (stB.getVisibility() == View.VISIBLE);
+        }
+        return visiblity;
     }
 
     private boolean getStatus() {
+        Log.d(LOG_TAG, "getStatus: DEUG!" + context.toString());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         return statusImage.getBackground() != greenSatellite;
     }
@@ -301,6 +301,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setStatusImage() {
+        Log.d(LOG_TAG, "setStatusImage: BEFORE ERR!" + context.toString());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage.getBackground() != greenSatellite) {
             statusImage.setBackground(greenSatellite);
@@ -314,6 +315,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setMetricFieldsToTripData();
 
         tripProcessor.writeTripDataToFile(context);
+        avgSpeed.setText("0");
+        maxSpeed.setText("0");
     }
 
     private void setMetricFieldsToTripData() {
@@ -321,25 +324,25 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         float           fuelSpent    = 0;
         float           timeSpent    = 0;
         float           avgSpeed     = 0;
+        float           avgFuelCons  = 0;
         ArrayList<Trip> allTrips     = tripData.getTrips();
         int             tripQuantity = allTrips.size();
-        for (Trip t : allTrips) {
-            fuelSpent = fuelSpent + t.getFuelSpent();
-            timeSpent = timeSpent + t.getTimeSpent();
-            // FIXME: 18.04.2016 strange behavior here? With avgSpeed.
-            avgSpeed = calcAvgSpd(tripQuantity, t);
+        for (Trip trip : allTrips) {
+            fuelSpent = fuelSpent + trip.getFuelSpent();
+            timeSpent = timeSpent + trip.getTimeSpent();
+            avgSpeed = avgSpeed + calcAvgSpd(trip);
+            avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
         }
+        avgFuelCons = avgFuelCons / tripQuantity;
+        avgSpeed = avgSpeed / tripQuantity;
         float distTravelled = MathUtils.calcDistTravelled(timeSpent, avgSpeed);
 
         tripData.setAvgSpeed(avgSpeed);
         tripData.setTimeSpentOnTrips(timeSpent);
         tripData.setDistanceTravelled(distTravelled);
-        // FIXME: 18.04.2016 mock in fuelConsumption (add fuelConsumption calculation)
-        tripData.setAvgFuelConsumption(ConstantValues.FUEL_CONSUMPTION);
+        tripData.setAvgFuelConsumption(avgFuelCons);
         tripData.setFuelSpent(fuelSpent);
         tripData.setGasTank(tripData.getGasTank() - fuelSpent);
-        // FIXME: 18.04.2016 mock in fuelFilled. Create a button to "fill fuel functionality" maybe remove this field. Useless
-        tripData.setFuelFilled(65.7f);
         tripData.setMoneyOnFuelSpent(fuelSpent * ConstantValues.FUEL_COST);
     }
 
@@ -416,7 +419,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
-        // FIXME: 20.04.2016 REMOVE 99f!
+        // FIXME: 20.04.2016 REMOVE 99f! Color dependency for line on mAp
         Float speed;
         if (ConstantValues.DEBUG_MODE) {
             speed = 99f;
@@ -424,7 +427,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         else {
             speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
-
         Route routePoint = new Route(routePoints, speed);
         tripProcessor.addRoutePoint(routePoint);
     }
@@ -570,8 +572,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 Log.d(LOG_TAG, "setupStartButton: startPressed");
-                avgSpeed.setText("0");
-                maxSpeed.setText("0");
                 tripProcessor.startNewTrip();
                 UtilMethods.setFabVisible(getActivity());
                 stopButtonTurnActive();

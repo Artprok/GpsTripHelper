@@ -26,9 +26,9 @@ public class GpsHandler {
     @Inject
     Context         context;
 
-    public static final String LOG_TAG      = "GPSHandler";
-    private             float  maxSpeed     = ConstantValues.START_VALUE;
-    private             float  averageSpeed = ConstantValues.START_VALUE;
+    public static final String LOG_TAG         = "GPSHandler";
+    private             float  maxSpeed        = ConstantValues.START_VALUE;
+    private             float  currentAvgSpeed = ConstantValues.START_VALUE;
     private Observer<Location> locationSubscriber;
     private Observer<Float>    avgSpeedSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
@@ -97,13 +97,13 @@ public class GpsHandler {
     }
 
     private void getAverageSpeed(float speed) {
-        float avgSpeed = 0;
+        float initialAvgSpeed = 0;
         if (avgSpeedArrayList.size() < ConstantValues.AVG_SPEED_UPDATE_FREQUENCY) {
             avgSpeedArrayList.add(speed);
         }
         else {
-            averageSpeed = MathUtils.figureOutAverageSpeed(avgSpeed, averageSpeed, avgSpeedArrayList);
-            setupAvgSpeedObservable(averageSpeed);
+            currentAvgSpeed = MathUtils.figureOutAverageSpeed(initialAvgSpeed, currentAvgSpeed, avgSpeedArrayList);
+            setupAvgSpeedObservable(currentAvgSpeed);
             avgSpeedArrayList.clear();
             getAverageSpeed(speed);
         }
