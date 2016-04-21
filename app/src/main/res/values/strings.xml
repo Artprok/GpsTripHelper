@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">TripHelper</string>
     <string name="action_settings">Settings</string>
-    <string name="maxSpeed_initial_string">Maximum speed - </string>
-    <string name="avgSpeed_initial_string">Average speed - </string>
+    <string name="maxSpeed_hint_initial_string">Max - </string>
+    <string name="avgSpeed_hint_initial_string">Avg - </string>
+    <string name="fuel_left_hint">Fuel left - </string>
+    <string name="refill_hint">Refill</string>
     <string name="distanceTravelled">Distance travelled - </string>
     <string name="average_fuel_consumption">Average fuel consumption - </string>
     <string name="money_on_fuel_spent">Money on fuel spent - </string>

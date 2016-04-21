@@ -111,9 +111,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupStopButton();
         setupTripListButton();
         setupFillButton();
-//        if (ConstantValues.DEBUG_MODE) {
-            setupEraseButton();
-//        }
+        //        if (ConstantValues.DEBUG_MODE) {
+        setupEraseButton();
+        //        }
     }
 
     @Override public void onPause() {
@@ -307,6 +307,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
+
     private void stopTracking() {
         tripProcessor.updateAvgSpeed(getAvgSpeed());
         tripProcessor.endTrip();
@@ -441,13 +442,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             @Override public void onNext(Location location) {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: Location added to route list");
-                    addPointToRouteList(location);
                 }
-                else {
-                    float speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
-                    updateSpeed(speed);
-                    addPointToRouteList(location);
-                }
+                addPointToRouteList(location);
             }
         };
     }
@@ -504,9 +500,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setupSubscribers() {
-        if (ConstantValues.DEBUG_MODE) {
-            setupSpeedSubscriber();
-        }
+        setupSpeedSubscriber();
         setupLocationSubscriber();
         setupAvgSpeedSubscriber();
         setupMaxSpeedSubscriber();

@@ -135,9 +135,7 @@ public class GpsHandler {
                 }
 
                 setupLocationObservable(location);
-                if (ConstantValues.DEBUG_MODE) {
-                    setupSpeedObservable(speed);
-                }
+                setupSpeedObservable(speed);
                 getMaxSpeed(speed);
                 getAverageSpeed(speed);
             }

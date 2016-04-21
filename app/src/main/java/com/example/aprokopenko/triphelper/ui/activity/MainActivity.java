@@ -77,7 +77,7 @@ import dagger.Module;
     }
 
     private void setFabToSpeedometer(final MainFragment mainFragment) {
-        int res = R.drawable.highway;
+        int res = R.drawable.highway_alt2;
         fab.setImageResource(res);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

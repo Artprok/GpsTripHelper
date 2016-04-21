@@ -55,11 +55,20 @@ public class UtilMethods {
     }
     public static String formatFloat00(float speed) {
         DecimalFormat df;
-        if(speed>100){
+        if(speed>9){
+            df = new DecimalFormat("00.0");
+        }
+        else if(speed>99){
             df = new DecimalFormat("000.0");
         }
+        else if(speed>999){
+            df = new DecimalFormat("0.000");
+        }
+        else if(speed>9999){
+            df = new DecimalFormat("0.0000");
+        }
         else{
-            df = new DecimalFormat("00.0");
+            df = new DecimalFormat("0.0");
         }
         return df.format(speed);
     }
