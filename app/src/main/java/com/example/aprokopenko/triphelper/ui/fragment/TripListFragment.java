@@ -42,7 +42,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     TextView     avgSpeedView;
 
     private static final String LOG_TAG          = "TripListFragment";
-    private static final String ARG_COLUMN_COUNT = "column-count";
     private TripData                          tripData;
     private ArrayList<Trip>                   trips;
 
