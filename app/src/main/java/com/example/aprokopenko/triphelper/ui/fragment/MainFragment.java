@@ -283,7 +283,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         restoreAvgSpeed(savedInstanceState.getFloat("AvgSpeed"));
         restoreFuelVisiblity(savedInstanceState.getBoolean("FirstStart"));
         restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
-        if(stopButton.getVisibility()==View.VISIBLE){
+        if (stopButton.getVisibility() == View.VISIBLE) {
             UtilMethods.setFabVisible(getActivity());
         }
     }
