@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.support.v7.widget.Toolbar;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.widget.RelativeLayout;
 import android.content.ComponentName;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import android.widget.ImageView;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.ViewGroup;
+import android.text.TextUtils;
 import android.content.Intent;
 import android.os.IBinder;
 import android.view.View;
@@ -86,7 +86,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private MapFragment          mapFragment;
     private GpsHandler           gpsHandler;
     private Context              context;
-    private Bundle               state;
+    private Bundle state;
     private boolean firstStart = true;
 
     public MainFragment() {
@@ -118,6 +118,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         //        if (ConstantValues.DEBUG_MODE) {
         setupEraseButton();
         //        }
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+            state=savedInstanceState;
+        }
     }
 
     @Override public void onPause() {
@@ -134,12 +138,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("ControlButtonVisibility", getButtonVisibility());
-        outState.putBoolean("StatusImageState", getStatus());
-        outState.putFloat("AvgSpeed", getAvgSpeed());
-        outState.putFloat("MaxSpeed", getMaxSpeed());
-        outState.putBoolean("FirstStart", firstStart);
-        outState.putFloat("FuelLevel", getFuelLevel());
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "onSaveInstanceState: Save called");
             Log.d(LOG_TAG, "onSaveInstanceState: " + getButtonVisibility());
@@ -147,12 +145,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             Log.d(LOG_TAG, "onSaveInstanceState: " + getMaxSpeed());
             Log.d(LOG_TAG, "onSaveInstanceState: " + getAvgSpeed());
         }
+        outState.putBoolean("ControlButtonVisibility", getButtonVisibility());
+        outState.putBoolean("StatusImageState", getStatus());
+        outState.putFloat("AvgSpeed", getAvgSpeed());
+        outState.putFloat("MaxSpeed", getMaxSpeed());
+        outState.putBoolean("FirstStart", firstStart);
+        outState.putFloat("FuelLevel", getFuelLevel());
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
 
     @Override public void onDetach() {
         super.onDetach();
@@ -188,6 +193,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     public void openMapFragment() {
+        Log.d(LOG_TAG, "openMapFragment: saveStateOpenMap");
         saveState();
         mapFragment.setGpsHandler(gpsHandler);
         setRouteToMapFragment();
@@ -229,7 +235,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private boolean getStatus() {
-        Log.d(LOG_TAG, "getStatus: DEUG!" + context.toString());
+        Log.d(LOG_TAG, "getStatus: DEbUG!" + context.toString());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         return statusImage.getBackground() != greenSatellite;
     }
@@ -255,7 +261,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void saveState() {
-        state = new Bundle();
+        if(state==null){
+            state = new Bundle();
+        }
         onSaveInstanceState(state);
     }
 
@@ -487,6 +495,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             }
 
             @Override public void onNext(Float speed) {
+                Log.d(LOG_TAG, "onNext: speedAvg"+speed);
                 updateAverageSpeed(speed);
             }
         };
@@ -537,6 +546,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void updateSpeed(float speed) {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
+
         }
         updatePointerLocation(speed);
         updateSpeedTextField(speed);
@@ -557,15 +567,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateAverageSpeed(float speed) {
-        String tmpString  = UtilMethods.formatFloat(speed);
+        String tmpString  = avgSpeed.getText().toString();
         int    initialVal = Integer.valueOf(tmpString);
-        int    finalVal   = (int) speed;
+        int    finalVal   = (int)speed;
         UtilMethods.animateTextView(initialVal, finalVal, avgSpeed);
         avgSpeed.setText(String.valueOf(speed));
     }
 
     private void updateMaxSpeed(float speed) {
-        String tmpString  = UtilMethods.formatFloat(speed);
+        String tmpString  = maxSpeed.getText().toString();
         int    initialVal = Integer.valueOf(tmpString);
         int    finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);
@@ -586,6 +596,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (tripData != null) {
                     if (!tripData.getTrips().isEmpty()) {
                         saveState();
+                        Log.d(LOG_TAG, "onClick: SaveStateTripList");
                         tripListFragment.setTripData(tripData);
                         UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
                     }

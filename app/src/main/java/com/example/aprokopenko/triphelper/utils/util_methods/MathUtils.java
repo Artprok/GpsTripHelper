@@ -1,16 +1,15 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
+import android.util.Log;
+
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;
 
 public class MathUtils {
     public static float figureOutAverageSpeed(float initialAvgSpeed, float currAvgSpeed, ArrayList<Float> avgList) {
-        int i = 0;
         for (Float avgSpeedItem : avgList) {
-            i++;
             initialAvgSpeed = avgSpeedItem + initialAvgSpeed;
-
         }
         if (currAvgSpeed != ConstantValues.START_VALUE) {
             currAvgSpeed = (currAvgSpeed + initialAvgSpeed / avgList.size()) / 2;
