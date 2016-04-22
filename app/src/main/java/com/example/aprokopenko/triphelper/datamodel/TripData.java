@@ -1,8 +1,6 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
 
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-
 import java.util.ArrayList;
 
 public class TripData {

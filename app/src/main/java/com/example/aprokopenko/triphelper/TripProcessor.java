@@ -23,7 +23,6 @@ import java.io.File;
 
 public class TripProcessor {
     private static final String LOG_TAG = "TripProcessor";
-    private final float            currentFuelConsumption;
     private final Calendar         calendar;
     private final ArrayList<Route> route;
     private       long             tripStartTime;
@@ -38,7 +37,6 @@ public class TripProcessor {
 
         // TODO: 13.04.2016 CurrentFuelConsumption is for changing fuelConsumption level depends on average speed or time onStop for example
         // TODO: 13.04.2016 Create this functional in future somehow!
-        currentFuelConsumption = ConstantValues.FUEL_CONSUMPTION;
         calendar = Calendar.getInstance();
         route = new ArrayList<>();
         if (tripData == null) {
@@ -237,7 +235,7 @@ public class TripProcessor {
         else if (avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
             return initialConsumption + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
         }
-        else if (avgSpeed < ConstantValues.VETY_HIGH_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed < ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
             return initialConsumption + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
         }
         else {

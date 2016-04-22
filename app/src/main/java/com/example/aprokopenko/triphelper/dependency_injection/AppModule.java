@@ -9,11 +9,9 @@ import dagger.Module;
 
 @Module public class AppModule {
     private static final String LOG_TAG = "AppModule";
-    private final Application application;
-    private final Context     context;
+    private final Context context;
 
     public AppModule(Application application) {
-        this.application = application;
         context = application.getApplicationContext();
     }
 

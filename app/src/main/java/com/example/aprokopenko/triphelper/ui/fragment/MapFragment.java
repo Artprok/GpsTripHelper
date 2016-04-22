@@ -33,10 +33,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Subscriber<Location> locationSubscriber;
     private LatLng               previousLocation;
     private ArrayList<Location>  locationList;
+    private GoogleMap            googleMap;
+    private Context              context;
+    private ArrayList<Route>     route;
+
     private boolean fragmentVisible = false;
-    private GoogleMap        googleMap;
-    private Context          context;
-    private ArrayList<Route> route;
 
     public MapFragment() {
         // Required empty public constructor
@@ -82,10 +83,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        SupportMapFragment f = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.mapFragment);
-        if (f != null)
+        SupportMapFragment f = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        if (f != null) {
             getFragmentManager().beginTransaction().remove(f).commit();
+        }
     }
 
     @Override public void onDetach() {

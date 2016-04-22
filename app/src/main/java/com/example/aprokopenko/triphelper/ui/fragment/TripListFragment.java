@@ -43,10 +43,8 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
 
     private static final String LOG_TAG          = "TripListFragment";
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private OnListFragmentInteractionListener onListFragmentInteractionListener;
     private TripData                          tripData;
     private ArrayList<Trip>                   trips;
-    private int columnCount = 1;
 
     public TripListFragment() {
     }
@@ -57,10 +55,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            columnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +88,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
 
     @Override public void onDetach() {
         super.onDetach();
-        onListFragmentInteractionListener = null;
         tripData = null;
         trips = null;
     }

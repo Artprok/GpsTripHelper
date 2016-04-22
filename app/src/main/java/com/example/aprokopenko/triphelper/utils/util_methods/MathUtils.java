@@ -1,7 +1,5 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
-import android.util.Log;
-
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;

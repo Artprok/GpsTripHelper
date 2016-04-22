@@ -80,11 +80,10 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private float  avgSpeed;
     private int    tripId;
 
-    private OnListFragmentInteractionListener mListener;
-    private GoogleMap                         googleMap;
-    private Context                           context;
-    private ArrayList<Route>                  routes;
-    private ArrayList<String>                 speedValues;
+    private GoogleMap         googleMap;
+    private Context           context;
+    private ArrayList<Route>  routes;
+    private ArrayList<String> speedValues;
 
     public TripInfoFragment() {
     }
@@ -170,7 +169,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public void onDetach() {
         super.onDetach();
-        mListener = null;
         context = null;
     }
 

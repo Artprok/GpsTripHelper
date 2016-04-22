@@ -226,12 +226,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private boolean getButtonVisibility() {
-        Boolean     visiblity = false;
-        ImageButton stB       = (ImageButton) getActivity().findViewById(R.id.startButton);
+        Boolean     visibility = false;
+        ImageButton stB        = (ImageButton) getActivity().findViewById(R.id.startButton);
         if (stB != null) {
-            visiblity = (stB.getVisibility() == View.VISIBLE);
+            visibility = (stB.getVisibility() == View.VISIBLE);
         }
-        return visiblity;
+        return visibility;
     }
 
     private boolean getStatus() {
@@ -239,6 +239,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         return statusImage.getBackground() != greenSatellite;
     }
+
 
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
@@ -562,17 +563,17 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateAverageSpeed(float speed) {
-        float  tmpInitialVal = Float.valueOf(avgSpeed.getText().toString());
-        int    initialVal    = (int) tmpInitialVal;
-        int    finalVal      = (int) speed;
+        float tmpInitialVal = Float.valueOf(avgSpeed.getText().toString());
+        int   initialVal    = (int) tmpInitialVal;
+        int   finalVal      = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, avgSpeed);
         avgSpeed.setText(String.valueOf(speed));
     }
 
     private void updateMaxSpeed(float speed) {
-        float  tmpFloat   = Float.valueOf(maxSpeed.getText().toString());
-        int    initialVal = (int) tmpFloat;
-        int    finalVal   = (int) speed;
+        float tmpFloat   = Float.valueOf(maxSpeed.getText().toString());
+        int   initialVal = (int) tmpFloat;
+        int   finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);
         maxSpeed.setText(String.valueOf(speed));
     }
