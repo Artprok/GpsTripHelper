@@ -34,5 +34,4 @@ public class ConstantValues {
     public static final float   CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 5;
     public static final int     MIN_UPDATE_DISTANCE               = 0;
     public static final int     MIN_UPDATE_TIME                   = 1;
-
 }

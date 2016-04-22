@@ -122,6 +122,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             restoreState(savedInstanceState);
             state = savedInstanceState;
         }
+
     }
 
     @Override public void onPause() {
@@ -240,7 +241,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return statusImage.getBackground() != greenSatellite;
     }
 
-
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
         tripProcessor.writeTripDataToFile(context);
@@ -283,6 +283,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         restoreAvgSpeed(savedInstanceState.getFloat("AvgSpeed"));
         restoreFuelVisiblity(savedInstanceState.getBoolean("FirstStart"));
         restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
+        if(stopButton.getVisibility()==View.VISIBLE){
+            UtilMethods.setFabVisible(getActivity());
+        }
     }
 
     private void restoreFuelVisiblity(boolean firstState) {
