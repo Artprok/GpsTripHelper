@@ -16,8 +16,6 @@ import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 
-import javax.inject.Inject;
-
 public class LocationService extends Service {
 
     private static final String  LOG_TAG = "LocationService:";
