@@ -1,11 +1,8 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
@@ -40,17 +37,13 @@ import dagger.Module;
             UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             assert fab != null;
             setFabToMap(mainFragment);
-            Log.d(LOG_TAG, "onCreate: NULL"+mainFragment.toString());
 
         }
         else {
             mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
             assert fab != null;
             setFabToMap(mainFragment);
-            Log.d(LOG_TAG, "onCreate:NOT NULL"+mainFragment.toString());
         }
-
-
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,7 +86,6 @@ import dagger.Module;
                 if (mf == null) {
                     mf = MainFragment.newInstance();
                     UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
-                    Log.d(LOG_TAG, "onClick: calllllll");
                     assert fab != null;
                     setFabToMap(mf);
                 }
@@ -101,7 +93,6 @@ import dagger.Module;
                     mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
                     assert fab != null;
                     setFabToMap(mf);
-                    Log.d(LOG_TAG, "onClick: calllllll");
                     UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
                 }
             }

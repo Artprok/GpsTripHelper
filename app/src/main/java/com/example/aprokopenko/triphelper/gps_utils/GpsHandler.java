@@ -118,7 +118,8 @@ public class GpsHandler {
 
     private void setUpLocationListener() {
         // FIXME: 14.04.2016 debug code remove
-        final float[] tempVal = {1};
+        final ArrayList<Float> test    = new ArrayList<>();
+        final float[]          tempVal = {1};
         avgSpeedArrayList = new ArrayList<>();
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(final Location location) {
@@ -129,6 +130,16 @@ public class GpsHandler {
                     if (speed != 0) {
                         tempVal[0] += 5;
                     }
+
+                    test.add(speed);
+                    if (test.size() == 10) {
+                        float num = 0;
+                        for (Float f : test) {
+                            num = f + num;
+                        }
+                        Log.d(LOG_TAG, "onLocationChanged: NUM" + num / test.size());
+                    }
+                    Log.d(LOG_TAG, "onLocationChanged: testSize" + test.size());
                 }
                 else {
                     speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());

@@ -86,7 +86,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private MapFragment          mapFragment;
     private GpsHandler           gpsHandler;
     private Context              context;
-    private Bundle state;
+    private Bundle               state;
     private boolean firstStart = true;
 
     public MainFragment() {
@@ -120,7 +120,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         //        }
         if (savedInstanceState != null) {
             restoreState(savedInstanceState);
-            state=savedInstanceState;
+            state = savedInstanceState;
         }
     }
 
@@ -261,7 +261,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void saveState() {
-        if(state==null){
+        if (state == null) {
             state = new Bundle();
         }
         onSaveInstanceState(state);
@@ -301,15 +301,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void restoreAvgSpeed(Float avgSpd) {
-        if (avgSpd != 0.0) {
-            updateAverageSpeed(avgSpd);
-        }
+        updateAverageSpeed(avgSpd);
     }
 
     private void restoreMaxSpeed(Float maxSpd) {
-        if (maxSpd != 0.0) {
-            updateMaxSpeed(maxSpd);
-        }
+        updateMaxSpeed(maxSpd);
     }
 
     private void restoreVisibility(Boolean visibility) {
@@ -495,7 +491,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             }
 
             @Override public void onNext(Float speed) {
-                Log.d(LOG_TAG, "onNext: speedAvg"+speed);
+                Log.d(LOG_TAG, "onNext: speedAvg" + speed);
                 updateAverageSpeed(speed);
             }
         };
@@ -546,7 +542,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void updateSpeed(float speed) {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
-
         }
         updatePointerLocation(speed);
         updateSpeedTextField(speed);
@@ -567,16 +562,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateAverageSpeed(float speed) {
-        String tmpString  = avgSpeed.getText().toString();
-        int    initialVal = Integer.valueOf(tmpString);
-        int    finalVal   = (int)speed;
+        float  tmpInitialVal = Float.valueOf(avgSpeed.getText().toString());
+        int    initialVal    = (int) tmpInitialVal;
+        int    finalVal      = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, avgSpeed);
         avgSpeed.setText(String.valueOf(speed));
     }
 
     private void updateMaxSpeed(float speed) {
-        String tmpString  = maxSpeed.getText().toString();
-        int    initialVal = Integer.valueOf(tmpString);
+        float  tmpFloat   = Float.valueOf(maxSpeed.getText().toString());
+        int    initialVal = (int) tmpFloat;
         int    finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);
         maxSpeed.setText(String.valueOf(speed));
@@ -596,7 +591,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (tripData != null) {
                     if (!tripData.getTrips().isEmpty()) {
                         saveState();
-                        Log.d(LOG_TAG, "onClick: SaveStateTripList");
                         tripListFragment.setTripData(tripData);
                         UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
                     }
