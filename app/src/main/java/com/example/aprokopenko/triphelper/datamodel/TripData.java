@@ -21,32 +21,28 @@ public class TripData {
         gasTank = 0;
     }
 
-    public float getGasTank() {
-        return gasTank;
+    public ArrayList<Trip> getTrips() {
+        return trips;
     }
 
-    public void setGasTank(float gasTank) {
-        this.gasTank = gasTank;
+    public Trip getTrip(int index) {
+        return trips.get(index);
+    }
+
+    public float getGasTank() {
+        return gasTank;
     }
 
     public float getTimeSpentOnTrips() {
         return timeSpentOnTrips;
     }
 
-    public void setTimeSpentOnTrips(float timeSpentOnTrips) {
-        this.timeSpentOnTrips = timeSpentOnTrips;
-    }
-
     public float getAvgSpeed() {
         return avgSpeed;
     }
 
-    public float getMaxSpeed(){
+    public float getMaxSpeed() {
         return maxSpeed;
-    }
-
-    public void setAvgSpeed(float avgSpeed) {
-        this.avgSpeed = avgSpeed;
     }
 
     public float getAvgFuelConsumption() {
@@ -67,6 +63,18 @@ public class TripData {
 
     public float getFuelSpent() {
         return fuelSpent;
+    }
+
+    public void setGasTank(float gasTank) {
+        this.gasTank = gasTank;
+    }
+
+    public void setTimeSpentOnTrips(float timeSpentOnTrips) {
+        this.timeSpentOnTrips = timeSpentOnTrips;
+    }
+
+    public void setAvgSpeed(float avgSpeed) {
+        this.avgSpeed = avgSpeed;
     }
 
     public void setAvgFuelConsumption(float avgFuelConsumption) {
@@ -99,14 +107,6 @@ public class TripData {
 
     public void updateTrip(Trip trip, int index) {
         trips.set(index, trip);
-    }
-
-    public Trip getTrip(int index) {
-        return trips.get(index);
-    }
-
-    public ArrayList<Trip> getTrips() {
-        return trips;
     }
 
     public void setMaxSpeed(float maxSpeed) {

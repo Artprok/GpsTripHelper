@@ -39,49 +39,43 @@ public class Trip {
         route = new ArrayList<>();
     }
 
-    public float getMoneyOnFuelSpent() {
-        return moneyOnFuelSpent;
-    }
-
-    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
-        this.moneyOnFuelSpent = moneyOnFuelSpent;
-    }
-
-    private void setTimeSpentInMotion(float timeSpentInMotion) {
-        this.timeSpentInMotion = timeSpentInMotion;
-    }
-
-    public void setAvgFuelConsumption(float avgFuelConsumption) {
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
-
-    public void setFuelSpent(float fuelSpent) {
-        this.fuelSpent = fuelSpent;
-    }
-
-    private void setTripDate(String tripDate) {
-        this.tripDate = tripDate;
-    }
-
-    private void setTripID(int tripID) {
-        this.tripID = tripID;
-    }
-
-    public void setAvgSpeed(float avgSpeed) {
-        this.avgSpeed = avgSpeed;
-    }
-
     public Trip(int tripID, String tripDate) {
         this.tripID = tripID;
         this.tripDate = tripDate;
     }
 
-    public void setTimeSpent(float timeSpent) {
-        this.timeSpent = timeSpent;
-    }
+    public Trip readTrip(ObjectInputStream is) {
+        ArrayList<Route> route = new ArrayList<>();
+        int              routeSize;
+        Trip             trip  = new Trip();
+        try {
+            routeSize = is.readInt();
+            for (int i = 0; i < routeSize; i++) {
+                double tmpLatitude  = is.readDouble();
+                double tmpLongitude = is.readDouble();
+                float  tmpSpeed     = is.readFloat();
 
-    public void setDistanceTravelled(float distanceTravelled) {
-        this.distanceTravelled = distanceTravelled;
+                Route tmpRoutePoint = new Route(new LatLng(tmpLatitude, tmpLongitude), tmpSpeed);
+                route.add(tmpRoutePoint);
+            }
+            float  timeSpentInMotion = is.readFloat();
+            float  distanceTravelled = is.readFloat();
+            float  fuelSpent         = is.readFloat();
+            float  timeSpent         = is.readFloat();
+            int    tripID            = is.readInt();
+            String date              = (String) is.readObject();
+            float  avgSpeed          = is.readFloat();
+            float  moneySpent        = is.readFloat();
+            float  fuelConsumption   = is.readFloat();
+            float  maxSpeed          = is.readFloat();
+
+            trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed,
+                    moneySpent, fuelConsumption, maxSpeed);
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return trip;
     }
 
     public ArrayList<Route> getRoute() {
@@ -94,6 +88,10 @@ public class Trip {
 
     public int getTripID() {
         return tripID;
+    }
+
+    public float getMoneyOnFuelSpent() {
+        return moneyOnFuelSpent;
     }
 
     public float getTimeSpentInMotion() {
@@ -128,6 +126,30 @@ public class Trip {
         return maxSpeed;
     }
 
+    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
+        this.moneyOnFuelSpent = moneyOnFuelSpent;
+    }
+
+    public void setAvgFuelConsumption(float avgFuelConsumption) {
+        this.avgFuelConsumption = avgFuelConsumption;
+    }
+
+    public void setFuelSpent(float fuelSpent) {
+        this.fuelSpent = fuelSpent;
+    }
+
+    public void setAvgSpeed(float avgSpeed) {
+        this.avgSpeed = avgSpeed;
+    }
+
+    public void setTimeSpent(float timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
+    public void setDistanceTravelled(float distanceTravelled) {
+        this.distanceTravelled = distanceTravelled;
+    }
+
     public void setRoute(ArrayList<Route> routes) {
         this.route = routes;
     }
@@ -158,38 +180,8 @@ public class Trip {
         }
     }
 
-    public Trip readTrip(ObjectInputStream is) {
-        ArrayList<Route> route = new ArrayList<>();
-        int              routeSize;
-        Trip             trip  = new Trip();
-        try {
-            routeSize = is.readInt();
-            for (int i = 0; i < routeSize; i++) {
-                double tmpLatitude  = is.readDouble();
-                double tmpLongitude = is.readDouble();
-                float  tmpSpeed     = is.readFloat();
-
-                Route tmpRoutePoint = new Route(new LatLng(tmpLatitude, tmpLongitude), tmpSpeed);
-                route.add(tmpRoutePoint);
-            }
-            float  timeSpentInMotion = is.readFloat();
-            float  distanceTravelled = is.readFloat();
-            float  fuelSpent         = is.readFloat();
-            float  timeSpent         = is.readFloat();
-            int    tripID            = is.readInt();
-            String date              = (String) is.readObject();
-            float  avgSpeed          = is.readFloat();
-            float  moneySpent        = is.readFloat();
-            float  fuelConsumption   = is.readFloat();
-            float  maxSpeed          = is.readFloat();
-
-            trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed,
-                    moneySpent, fuelConsumption,maxSpeed);
-        }
-        catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return trip;
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
@@ -209,7 +201,15 @@ public class Trip {
         return trip;
     }
 
-    public void setMaxSpeed(float maxSpeed) {
-        this.maxSpeed = maxSpeed;
+    private void setTimeSpentInMotion(float timeSpentInMotion) {
+        this.timeSpentInMotion = timeSpentInMotion;
+    }
+
+    private void setTripDate(String tripDate) {
+        this.tripDate = tripDate;
+    }
+
+    private void setTripID(int tripID) {
+        this.tripID = tripID;
     }
 }

@@ -135,6 +135,12 @@ public class TripProcessor {
         trip.setMaxSpeed(maxSpeed);
     }
 
+    public void writeDataToFile() {
+        WriteFileTask writeFileTask = new WriteFileTask();
+        writeFileTask.execute(tripData);
+
+    }
+
 
     private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
                                     float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank,
@@ -174,6 +180,7 @@ public class TripProcessor {
         return endTime - tripStartTime;
     }
 
+
     private float getFuelConsumptionLevel(float avgSpeed) {
         float initialConsumption = ConstantValues.FUEL_CONSUMPTION;
         if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
@@ -196,7 +203,6 @@ public class TripProcessor {
             return initialConsumption;
         }
     }
-
 
     private void updateTrip() {
         Log.d(LOG_TAG, "updateTrip: called");
@@ -238,12 +244,6 @@ public class TripProcessor {
     private void updateTripState() {
         Trip trip = tripData.getTrip(currentTripId);
         tripData.updateTrip(trip, currentTripId);
-    }
-
-    public void writeDataToFile() {
-        WriteFileTask writeFileTask = new WriteFileTask();
-        writeFileTask.execute(tripData);
-
     }
 
     private TripData readDataFromFile() {
