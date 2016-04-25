@@ -82,11 +82,9 @@ public class GpsHandler implements ServiceInteractionInterface {
     }
 
     private void getMaxSpeed(float speed) {
-        if (speed > maxSpeed) {
-            maxSpeed = speed;
-            setupMaxSpeedObservable(maxSpeed);
-        }
-    }
+        maxSpeed = MathUtils.findMaxSpeed(speed,maxSpeed);
+        setupMaxSpeedObservable(maxSpeed);
+}
 
     @Override public void locationChanged(Location location) {
         // FIXME: 14.04.2016 debug code remove

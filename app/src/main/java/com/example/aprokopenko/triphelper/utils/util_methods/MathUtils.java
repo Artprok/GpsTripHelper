@@ -1,6 +1,8 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
 
+import android.util.Log;
+
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 
@@ -32,6 +34,15 @@ public class MathUtils {
 
     public static float calcDistTravelled(float timeSpent, float avgSpeed) {
         return avgSpeed * getHoursFromMills(timeSpent);
+    }
+
+    public static float findMaxSpeed(float speed,float initialVal) {
+        float maxSpeed = initialVal;
+        if (speed > maxSpeed) {
+            maxSpeed = speed;
+        }
+        Log.d("A", "findMaxSpeed: maxSpeed"+maxSpeed);
+        return maxSpeed;
     }
 }
 

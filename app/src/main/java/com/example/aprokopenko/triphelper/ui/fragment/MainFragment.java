@@ -372,11 +372,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             timeSpent = timeSpent + trip.getTimeSpent();
             avgSpeed = avgSpeed + calcAvgSpd(trip);
             avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
-            float tmpMaxSpeed = trip.getMaxSpeed();
-            if (tmpMaxSpeed>maxSpeed) {
-                maxSpeed = tmpMaxSpeed;
-            }
-
+            maxSpeed = MathUtils.findMaxSpeed(trip.getMaxSpeed(),maxSpeed);
         }
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
@@ -462,7 +458,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
         GpsHandler.setSpeedSubscriber(speedSubscriber);
         GpsHandler.setLocationSubscriber(locationSubscriber);
-        //        GpsHandler.setAvgSpeedSubscriber(avgSpeedSubscriber);
         GpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
     }
 
