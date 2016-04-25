@@ -1,23 +1,10 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
+
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
-import java.util.ArrayList;
 
 public class MathUtils {
-    public static float figureOutAverageSpeed(float initialAvgSpeed, float currAvgSpeed, ArrayList<Float> avgList) {
-        for (Float avgSpeedItem : avgList) {
-            initialAvgSpeed = avgSpeedItem + initialAvgSpeed;
-        }
-        if (currAvgSpeed != ConstantValues.START_VALUE) {
-            currAvgSpeed = (currAvgSpeed + initialAvgSpeed / avgList.size()) / 2;
-        }
-        else {
-            currAvgSpeed = currAvgSpeed + initialAvgSpeed / avgList.size();
-        }
-        return currAvgSpeed;
-    }
-
     public static float getSpeedInKilometerPerHour(float speed) {
         return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
     }

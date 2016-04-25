@@ -17,8 +17,8 @@ public class ConstantValues {
     public static final float   FUEL_COST                         = 20.0f;
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER     = 3.6f;
     public static final int     TEXT_ANIM_DURATION                = 1700;
-    public static final boolean DEBUG_MODE                        = true; //change for release to false
-    public static final int     AVG_SPEED_UPDATE_FREQUENCY        = 3;    //change for release to 35 or more to 60
+    public static final boolean DEBUG_MODE                        = true; //todo change for release to false
+    public static final int     AVG_SPEED_UPDATE_FREQUENCY        = 3;    //todo change for release to 35 or more to 60 for accuracy
     public static final int     START_VALUE                       = 0;
     public static final int     FUEL_TANK_CAPACITY                = 60;
     public static final float   FUEL_CONSUMPTION                  = 11;

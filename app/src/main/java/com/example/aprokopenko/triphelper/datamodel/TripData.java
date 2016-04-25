@@ -16,7 +16,6 @@ public class TripData {
     private ArrayList<Trip> trips;
 
     public TripData() {
-        // TODO: 31.03.2016 maybe testCode, maybe no. Not clear now
         trips = new ArrayList<>();
         gasTank = 0;
     }

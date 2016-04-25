@@ -24,33 +24,25 @@ public class GpsHandler implements ServiceInteractionInterface {
     @Inject
     Context         context;
 
-    public static final String LOG_TAG         = "GPSHandler";
-    private             float  maxSpeed        = ConstantValues.START_VALUE;
-    private             float  currentAvgSpeed = ConstantValues.START_VALUE;
-    private Observer<Location>          locationSubscriber;
-    private Observer<Float>             avgSpeedSubscriber;
-    private Observer<Float>             maxSpeedSubscriber;
-    private Observer<Float>             speedSubscriber;
-    private ArrayList<Float>            avgSpeedArrayList;
+    public static final String LOG_TAG  = "GPSHandler";
+    private             float  maxSpeed = ConstantValues.START_VALUE;
+    private Observer<Location> locationSubscriber;
+    private Observer<Float>    maxSpeedSubscriber;
+    private Observer<Float>    speedSubscriber;
 
     // FIXME: 14.04.2016 debug code remove
-    final ArrayList<Float> test    = new ArrayList<>();
-    final float[]          tempVal = {1};
+    private final ArrayList<Float> test    = new ArrayList<>();
+    private final float[]          tempVal = {1};
 
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "GpsHandler: onCreate");
         }
-        avgSpeedArrayList = new ArrayList<>();
     }
 
     public void setLocationSubscriber(Subscriber<Location> locationSubscriber) {
         this.locationSubscriber = locationSubscriber;
-    }
-
-    public void setAvgSpeedSubscriber(Subscriber<Float> avgSpeedSubscriber) {
-        this.avgSpeedSubscriber = avgSpeedSubscriber;
     }
 
     public void setMaxSpeedSubscriber(Subscriber<Float> maxSpeedSubscriber) {
@@ -61,15 +53,6 @@ public class GpsHandler implements ServiceInteractionInterface {
         this.speedSubscriber = speedSubscriber;
     }
 
-
-    private void setupAvgSpeedObservable(final float averageSpeed) {
-        Observable<Float> avgSpeedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-            @Override public void call(Subscriber<? super Float> subscriber) {
-                subscriber.onNext(averageSpeed);
-            }
-        });
-        avgSpeedObservable.subscribe(avgSpeedSubscriber);
-    }
 
     private void setupLocationObservable(final Location location) {
         Observable<Location> speedObservable = Observable.create(new Observable.OnSubscribe<Location>() {
@@ -96,20 +79,6 @@ public class GpsHandler implements ServiceInteractionInterface {
             }
         });
         speedObservable.subscribe(speedSubscriber);
-    }
-
-    private void getAverageSpeed(float speed) {
-        float initialAvgSpeed = 0;
-        if (avgSpeedArrayList.size() < ConstantValues.AVG_SPEED_UPDATE_FREQUENCY) {
-            avgSpeedArrayList.add(speed);
-        }
-        else {
-            currentAvgSpeed = MathUtils.figureOutAverageSpeed(initialAvgSpeed, currentAvgSpeed, avgSpeedArrayList);
-            Log.d(LOG_TAG, "getAverageSpeed: "+currentAvgSpeed);
-            setupAvgSpeedObservable(currentAvgSpeed);
-            avgSpeedArrayList.clear();
-            getAverageSpeed(speed);
-        }
     }
 
     private void getMaxSpeed(float speed) {
@@ -145,6 +114,5 @@ public class GpsHandler implements ServiceInteractionInterface {
         setupLocationObservable(location);
         setupSpeedObservable(speed);
         getMaxSpeed(speed);
-        getAverageSpeed(speed);
     }
 }

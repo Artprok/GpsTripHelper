@@ -74,7 +74,7 @@
         android:layout_marginTop="10dp"
         >
 
-        <ImageView
+      <!--  <ImageView
             android:id="@+id/avgSpeedIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -107,15 +107,15 @@
             android:text="@string/avg_speed_initial_val"
             android:textSize="35sp"
             android:textStyle="bold"
-            android:typeface="sans"/>
+            android:typeface="sans"/>-->
 
         <ImageView
             android:id="@+id/maxSpeedIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/speedometer"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="10dp"/>
 
         <TextView
             android:id="@+id/maxSpeedHint"

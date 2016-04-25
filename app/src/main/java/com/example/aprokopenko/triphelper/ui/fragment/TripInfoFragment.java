@@ -10,7 +10,6 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;

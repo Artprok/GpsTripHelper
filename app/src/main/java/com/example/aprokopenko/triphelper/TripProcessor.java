@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -10,6 +11,7 @@ import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 
+import java.util.concurrent.ExecutionException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
@@ -29,23 +31,29 @@ public class TripProcessor {
     private       int              currentTripId;
     private       float            averageSpeed;
     private       TripData         tripData;
+    private final Context          context;
+
+    private boolean fileIsInWriteMode = false;
 
     public TripProcessor(Context context) {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "TripProcessor: IsConstructed");
         }
-
-        // TODO: 13.04.2016 CurrentFuelConsumption is for changing fuelConsumption level depends on average speed or time onStop for example
-        // TODO: 13.04.2016 Create this functional in future somehow!
         calendar = Calendar.getInstance();
         route = new ArrayList<>();
+        this.context = context;
         if (tripData == null) {
-            readTripDataFromFile(context);
+            Log.d(LOG_TAG, "TripProcessor: Done?");
+            tripData = readDataFromFile();
         }
     }
 
     public TripData getTripData() {
         return tripData;
+    }
+
+    public boolean isFileNotInWriteMode() {
+        return !fileIsInWriteMode;
     }
 
     public ArrayList<Route> getRoutes() {
@@ -110,7 +118,7 @@ public class TripProcessor {
     }
 
     public void fillGasTank(float fuel) {
-        if(tripData!=null){
+        if (tripData != null) {
             float gasTank = tripData.getGasTank();
             if (gasTank < ConstantValues.FUEL_TANK_CAPACITY) {
                 if (gasTank + fuel < ConstantValues.FUEL_TANK_CAPACITY) {
@@ -118,64 +126,6 @@ public class TripProcessor {
                 }
             }
         }
-    }
-
-    public void writeTripDataToFile(Context context) {
-        if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
-            Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getAvgSpeed());
-        }
-        FileOutputStream fos;
-        ArrayList<Trip>  trips = tripData.getTrips();
-        getTripDataFieldsValues();
-        if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "WRITE: " + tripData.getAvgFuelConsumption());
-            Log.d(LOG_TAG, "WRITE: " + tripData.getFuelFilled());
-            Log.d(LOG_TAG, "WRITE: " + tripData.getFuelSpent());
-            Log.d(LOG_TAG, "WRITE: " + tripData.getDistanceTravelled());
-            Log.d(LOG_TAG, "WRITE: " + tripData.getMoneyOnFuelSpent());
-            Log.d(LOG_TAG, "WRITE: " + tripData.getAvgSpeed());
-        }
-
-
-        int   tripsSize          = trips.size();
-        float avgFuelConsumption = tripData.getAvgFuelConsumption();
-        float fuelFilled         = tripData.getFuelFilled();
-        float fuelSpent          = tripData.getFuelSpent();
-        float distanceTravelled  = tripData.getDistanceTravelled();
-        float moneyOnFuelSpent   = tripData.getMoneyOnFuelSpent();
-        float avgSpeed           = tripData.getAvgSpeed();
-        float timeSpent          = tripData.getTimeSpentOnTrips();
-        float gasTankCapacity    = tripData.getGasTank();
-
-        try {
-            fos = context.openFileOutput(ConstantValues.FILE_NAME, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-
-            os.writeInt(tripsSize);
-            for (Trip trip : trips) {
-                Log.d(LOG_TAG, "writeTripDataToFile: trips " + trip.toString());
-                writeTrip(trip, os);
-            }
-
-            os.writeFloat(avgFuelConsumption);
-            os.writeFloat(fuelFilled);
-            os.writeFloat(fuelSpent);
-            os.writeFloat(distanceTravelled);
-            os.writeFloat(moneyOnFuelSpent);
-            os.writeFloat(avgSpeed);
-            os.writeFloat(timeSpent);
-            os.writeFloat(gasTankCapacity);
-
-
-            os.close();
-            fos.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
-
     }
 
     public void updateAvgSpeed(float speed) {
@@ -254,55 +204,6 @@ public class TripProcessor {
         }
     }
 
-    private void readTripDataFromFile(Context context) {
-        File file = context.getFileStreamPath(ConstantValues.FILE_NAME);
-        if (file.exists()) {
-            Log.d(LOG_TAG, "readTripDataFromFile: ");
-            ArrayList<Trip> trips = new ArrayList<>();
-            FileInputStream fis;
-            int             tripsSize;
-            try {
-                fis = context.openFileInput(ConstantValues.FILE_NAME);
-                ObjectInputStream is = new ObjectInputStream(fis);
-
-                tripsSize = is.readInt();
-                for (int i = 0; i < tripsSize; i++) {
-                    Trip trip = readTrip(is);
-                    trips.add(trip);
-                }
-                float avgFuelConsumption = is.readFloat();
-                float fuelFilled         = is.readFloat();
-                float fuelSpent          = is.readFloat();
-                float distanceTravelled  = is.readFloat();
-                float moneyOnFuelSpent   = is.readFloat();
-                float avgSpeed           = is.readFloat();
-                float timeSpent          = is.readFloat();
-                float gasTankCapacity    = is.readFloat();
-
-                this.tripData = createTripData(trips, avgFuelConsumption, fuelFilled, fuelSpent, distanceTravelled, moneyOnFuelSpent,
-                        avgSpeed, timeSpent, gasTankCapacity);
-                if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "READ: " + avgFuelConsumption);
-                    Log.d(LOG_TAG, "READ: " + fuelFilled);
-                    Log.d(LOG_TAG, "READ: " + fuelSpent);
-                    Log.d(LOG_TAG, "READ: " + distanceTravelled);
-                    Log.d(LOG_TAG, "READ: " + moneyOnFuelSpent);
-                    Log.d(LOG_TAG, "READ: " + avgSpeed);
-                    Log.d(LOG_TAG, "READ: " + timeSpent);
-                }
-                is.close();
-                fis.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            Log.d(LOG_TAG, "TripProcessor: file is empty");
-            tripData = new TripData();
-        }
-    }
-
     private void writeTrip(Trip trip, ObjectOutputStream os) {
         trip.writeTrip(os);
     }
@@ -334,6 +235,149 @@ public class TripProcessor {
     private void updateTripState() {
         Trip trip = tripData.getTrip(currentTripId);
         tripData.updateTrip(trip, currentTripId);
+    }
+
+    public void writeDataToFile() {
+        WriteFileTask writeFileTask = new WriteFileTask();
+        writeFileTask.execute(tripData);
+
+    }
+
+    private TripData readDataFromFile() {
+        ReadFileTask readFileTask = new ReadFileTask();
+        try {
+            tripData = readFileTask.execute(ConstantValues.FILE_NAME).get();
+        }
+        catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return tripData;
+    }
+
+    private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
+        @Override protected Boolean doInBackground(TripData... params) {
+
+            if (ConstantValues.DEBUG_MODE) {
+                Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
+                Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getAvgSpeed());
+            }
+            FileOutputStream fos;
+            ArrayList<Trip>  trips = tripData.getTrips();
+            getTripDataFieldsValues();
+            if (ConstantValues.DEBUG_MODE) {
+                Log.d(LOG_TAG, "WRITE: " + tripData.getAvgFuelConsumption());
+                Log.d(LOG_TAG, "WRITE: " + tripData.getFuelFilled());
+                Log.d(LOG_TAG, "WRITE: " + tripData.getFuelSpent());
+                Log.d(LOG_TAG, "WRITE: " + tripData.getDistanceTravelled());
+                Log.d(LOG_TAG, "WRITE: " + tripData.getMoneyOnFuelSpent());
+                Log.d(LOG_TAG, "WRITE: " + tripData.getAvgSpeed());
+            }
+
+
+            int   tripsSize          = trips.size();
+            float avgFuelConsumption = tripData.getAvgFuelConsumption();
+            float fuelFilled         = tripData.getFuelFilled();
+            float fuelSpent          = tripData.getFuelSpent();
+            float distanceTravelled  = tripData.getDistanceTravelled();
+            float moneyOnFuelSpent   = tripData.getMoneyOnFuelSpent();
+            float avgSpeed           = tripData.getAvgSpeed();
+            float timeSpent          = tripData.getTimeSpentOnTrips();
+            float gasTankCapacity    = tripData.getGasTank();
+
+            try {
+                fos = context.openFileOutput(ConstantValues.FILE_NAME, Context.MODE_PRIVATE);
+                ObjectOutputStream os = new ObjectOutputStream(fos);
+
+                os.writeInt(tripsSize);
+                for (Trip trip : trips) {
+                    Log.d(LOG_TAG, "writeTripDataToFile: trips " + trip.toString());
+                    writeTrip(trip, os);
+                }
+
+                os.writeFloat(avgFuelConsumption);
+                os.writeFloat(fuelFilled);
+                os.writeFloat(fuelSpent);
+                os.writeFloat(distanceTravelled);
+                os.writeFloat(moneyOnFuelSpent);
+                os.writeFloat(avgSpeed);
+                os.writeFloat(timeSpent);
+                os.writeFloat(gasTankCapacity);
+
+                os.close();
+                fos.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
+            return true;
+        }
+
+        @Override protected void onPostExecute(Boolean result) {
+            if (result) {
+                Log.d(LOG_TAG, "file written successfully");
+            }
+        }
+    }
+
+    private class ReadFileTask extends AsyncTask<String, Void, TripData> {
+        @Override protected TripData doInBackground(String... params) {
+            Log.d(LOG_TAG, "readFile");
+            fileIsInWriteMode = true;
+            File file = context.getFileStreamPath(ConstantValues.FILE_NAME);
+            if (file.exists()) {
+                Log.d(LOG_TAG, "readTripDataFromFile: ");
+                ArrayList<Trip> trips = new ArrayList<>();
+                FileInputStream fis;
+                int             tripsSize;
+                try {
+                    fis = context.openFileInput(ConstantValues.FILE_NAME);
+                    ObjectInputStream is = new ObjectInputStream(fis);
+
+                    tripsSize = is.readInt();
+                    for (int i = 0; i < tripsSize; i++) {
+                        Trip trip = readTrip(is);
+                        trips.add(trip);
+                    }
+                    float avgFuelConsumption = is.readFloat();
+                    float fuelFilled         = is.readFloat();
+                    float fuelSpent          = is.readFloat();
+                    float distanceTravelled  = is.readFloat();
+                    float moneyOnFuelSpent   = is.readFloat();
+                    float avgSpeed           = is.readFloat();
+                    float timeSpent          = is.readFloat();
+                    float gasTankCapacity    = is.readFloat();
+
+                    tripData = createTripData(trips, avgFuelConsumption, fuelFilled, fuelSpent, distanceTravelled, moneyOnFuelSpent,
+                            avgSpeed, timeSpent, gasTankCapacity);
+                    if (ConstantValues.DEBUG_MODE) {
+                        Log.d(LOG_TAG, "READ: " + avgFuelConsumption);
+                        Log.d(LOG_TAG, "READ: " + fuelFilled);
+                        Log.d(LOG_TAG, "READ: " + fuelSpent);
+                        Log.d(LOG_TAG, "READ: " + distanceTravelled);
+                        Log.d(LOG_TAG, "READ: " + moneyOnFuelSpent);
+                        Log.d(LOG_TAG, "READ: " + avgSpeed);
+                        Log.d(LOG_TAG, "READ: " + timeSpent);
+                    }
+                    is.close();
+                    fis.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Log.d(LOG_TAG, "TripProcessor: file is empty");
+                tripData = new TripData();
+            }
+            return tripData;
+        }
+
+        @Override protected void onPostExecute(TripData tripData) {
+            super.onPostExecute(tripData);
+            fileIsInWriteMode = false;
+
+        }
     }
 }
 

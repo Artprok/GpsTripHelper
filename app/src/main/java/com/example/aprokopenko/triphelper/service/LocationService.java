@@ -21,7 +21,6 @@ public class LocationService extends Service {
     private static final String  LOG_TAG = "LocationService:";
     private final        IBinder mBinder = new LocalBinder();
     private ServiceInteractionInterface serviceInteractionInterface;
-    private LocationManager             locationManager;
     private GpsHandler                  gpsHandler;
 
     public GpsHandler getGpsHandler() {
@@ -44,7 +43,7 @@ public class LocationService extends Service {
         }
         super.onStartCommand(intent, flags, startId);
         gpsHandler = new GpsHandler();
-        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         serviceInteractionInterface = gpsHandler;
         LocationListener locationListener = new LocationListener() {
             @Override public void onLocationChanged(Location location) {
@@ -68,7 +67,6 @@ public class LocationService extends Service {
         locationManager
                 .requestLocationUpdates(LocationManager.GPS_PROVIDER, ConstantValues.MIN_UPDATE_TIME, ConstantValues.MIN_UPDATE_DISTANCE,
                         locationListener);
-        // FIXME: 22.04.2016 add locationlistener here and provide callback on it to gpshandler
         return START_STICKY;
     }
 

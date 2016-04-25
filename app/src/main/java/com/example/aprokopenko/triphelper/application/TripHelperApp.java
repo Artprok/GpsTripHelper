@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.application;
 
-import android.location.LocationManager;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;

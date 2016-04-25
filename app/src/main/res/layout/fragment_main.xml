@@ -80,7 +80,7 @@
         android:layout_toEndOf="@+id/statusImageView"
         android:layout_toStartOf="@+id/tripListButton">
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/avgSpeedIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -113,14 +113,16 @@
             android:text="@string/avg_speed_initial_val"
             android:textSize="35sp"
             android:textStyle="bold"
-            android:typeface="sans"/>
+            android:typeface="sans"/>-->
 
         <ImageView
             android:id="@+id/maxSpeedIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/speedometer"/>
+            android:background="@drawable/speedometer"
+            android:layout_toStartOf="@+id/maxSpeedHint"/>
 
         <TextView
             android:id="@+id/maxSpeedHint"
@@ -128,11 +130,11 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/maxSpeedIcon"
             android:layout_alignParentTop="false"
-            android:layout_toEndOf="@+id/maxSpeedIcon"
             android:text="@string/maxSpeed_hint_initial_string"
             android:textSize="@dimen/metricPortraitTextSize"
             android:textStyle="bold|italic"
-            android:typeface="sans"/>
+            android:typeface="sans"
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:id="@+id/maxSpeed"

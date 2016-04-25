@@ -50,26 +50,21 @@ public class UtilMethods {
         return sdf.format(dateString);
     }
 
-//    public static String formatFloat0(float speed) {
-//        DecimalFormat df = new DecimalFormat("#");
-//        return df.format(speed);
-//    }
-
     public static String formatFloat(float speed) {
         DecimalFormat df;
-        if(speed>9){
+        if (speed > 9) {
             df = new DecimalFormat("##.#");
         }
-        else if(speed>99){
+        else if (speed > 99) {
             df = new DecimalFormat("###.#");
         }
-        else if(speed>999){
+        else if (speed > 999) {
             df = new DecimalFormat("####.#");
         }
-        else if(speed>9999){
+        else if (speed > 9999) {
             df = new DecimalFormat("#####.#");
         }
-        else{
+        else {
             df = new DecimalFormat("#.#");
         }
         return df.format(speed);

@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.datamodel;
 
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ObjectOutputStream;
@@ -23,7 +24,17 @@ public class Trip {
     private ArrayList<Route> route;
 
     public Trip() {
-
+        timeSpentInMotion = ConstantValues.START_VALUE;
+        distanceTravelled = ConstantValues.START_VALUE;
+        avgFuelConsumption = ConstantValues.START_VALUE;
+        timeSpentOnStop = ConstantValues.START_VALUE;
+        fuelSpent = ConstantValues.START_VALUE;
+        timeSpent = ConstantValues.START_VALUE;
+        tripDate = "tripDateStartVal";
+        avgSpeed = ConstantValues.START_VALUE;
+        moneyOnFuelSpent = ConstantValues.START_VALUE;
+        tripID = ConstantValues.START_VALUE;
+        route = new ArrayList<>();
     }
 
     public float getMoneyOnFuelSpent() {
