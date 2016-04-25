@@ -32,7 +32,7 @@ public class GaugeFactorySettings {
 
     public static final NeedleType needleType            = NeedleType.Triangle;
     public static final String     knobNeedleColorString = "#212121";
-    public static final int        needleColorString     = Color.DKGRAY;
+    public static final int        needleColorString     = Color.BLACK;
     public static final String     tickColorString       = "#212121";
     public static final int        labelTextColor        = Color.BLACK;
     public static final double     ticksOffset           = 0.07;

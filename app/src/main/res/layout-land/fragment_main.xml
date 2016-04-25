@@ -1,10 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#607D8B"
-                android:keepScreenOn="true"
-                tools:context=".ui.fragment.MainFragment">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    tools:context=".ui.fragment.MainFragment">
 
     <ImageButton
         android:id="@+id/startButton"
@@ -74,48 +74,13 @@
         android:layout_marginTop="10dp"
         >
 
-      <!--  <ImageView
-            android:id="@+id/avgSpeedIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentBottom="false"
-            android:layout_alignStart="@+id/maxSpeedIcon"
-            android:layout_below="@+id/maxSpeedIcon"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/maxSpeed"
-            android:background="@drawable/speedometer"/>
-
-        <TextView
-            android:id="@+id/avgSpeedHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/avgSpeedIcon"
-            android:layout_toEndOf="@+id/avgSpeedIcon"
-            android:text="@string/avgSpeed_hint_initial_string"
-            android:textSize="@dimen/metricsLandTextSize"
-            android:textStyle="bold|italic"
-            android:typeface="sans"/>
-
-        <TextView
-            android:id="@+id/avgSpeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/avgSpeedHint"
-            android:layout_alignStart="@+id/maxSpeed"
-            android:layout_marginBottom="2dp"
-            android:layout_toEndOf="@+id/avgSpeedHint"
-            android:text="@string/avg_speed_initial_val"
-            android:textSize="35sp"
-            android:textStyle="bold"
-            android:typeface="sans"/>-->
-
         <ImageView
             android:id="@+id/maxSpeedIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/speedometer"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            android:background="@drawable/speedometer"/>
 
         <TextView
             android:id="@+id/maxSpeedHint"
@@ -165,8 +130,8 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/gas_station"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp"
+            android:background="@drawable/gas_station"/>
 
         <TextView
             android:id="@+id/fuelLeftView"
@@ -181,9 +146,9 @@
             android:id="@+id/fillButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:layout_alignStart="@+id/fuelIcon"
             android:layout_below="@+id/fuelIcon"
-            android:background="@drawable/gas_pump"
-            android:layout_alignStart="@+id/fuelIcon"/>
+            android:background="@drawable/gas_pump"/>
 
         <TextView
             android:id="@+id/refillHint"
@@ -203,8 +168,8 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignTop="@+id/speedometerContainer"
-        android:background="@drawable/red_satellite"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:background="@drawable/red_satellite"/>
 
 </RelativeLayout>

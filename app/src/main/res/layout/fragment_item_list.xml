@@ -12,7 +12,8 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        >
 
         <TextView
             android:id="@+id/headerForAllInfo"
@@ -31,28 +32,33 @@
             android:text="@string/time_spent_on_all"
             >
         </TextView>
+
         <TextView
             android:id="@+id/timeSpentOnAllTripsListFrag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/timeSpentOnAllTripsLabel"
-            android:layout_toEndOf="@id/timeSpentOnAllTripsLabel">
+            android:layout_toEndOf="@id/timeSpentOnAllTripsLabel"
+            >
         </TextView>
 
         <TextView
-        android:id="@+id/distanceTravelledLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timeSpentOnAllTripsLabel"
-        android:layout_marginTop="5dp"
-        android:text="@string/distanceTravelled">
+            android:id="@+id/distanceTravelledLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/timeSpentOnAllTripsLabel"
+            android:layout_marginTop="5dp"
+            android:text="@string/distanceTravelled"
+            >
         </TextView>
+
         <TextView
-        android:id="@+id/distanceTravelledListFrag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/distanceTravelledLabel"
-        android:layout_toEndOf="@+id/distanceTravelledLabel">
+            android:id="@+id/distanceTravelledListFrag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/distanceTravelledLabel"
+            android:layout_toEndOf="@+id/distanceTravelledLabel"
+            >
         </TextView>
 
         <TextView
@@ -63,12 +69,14 @@
             android:layout_marginTop="5dp"
             android:text="@string/AverageSpeed">
         </TextView>
+
         <TextView
             android:id="@+id/avgSpeedListFrag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/avgSpeedLabel"
-            android:layout_toEndOf="@id/avgSpeedLabel">
+            android:layout_toEndOf="@id/avgSpeedLabel"
+            >
         </TextView>
 
         <TextView
@@ -77,14 +85,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/avgSpeedLabel"
             android:layout_marginTop="5dp"
-            android:text="@string/average_fuel_consumption">
+            android:text="@string/average_fuel_consumption"
+            >
         </TextView>
+
         <TextView
             android:id="@+id/avgFuelConsListFrag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/avgFuelConsumptionLabel"
-            android:layout_toEndOf="@+id/avgFuelConsumptionLabel">
+            android:layout_toEndOf="@+id/avgFuelConsumptionLabel"
+            >
         </TextView>
 
         <TextView
@@ -93,14 +104,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/fuelSpentLabel"
             android:layout_marginTop="5dp"
-            android:text="@string/money_on_fuel_spent">
+            android:text="@string/money_on_fuel_spent"
+            >
         </TextView>
+
         <TextView
             android:id="@+id/moneyOnFuelSpentListFrag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/moneyOnFuelSpentLabel"
-            android:layout_toEndOf="@id/moneyOnFuelSpentLabel">
+            android:layout_toEndOf="@id/moneyOnFuelSpentLabel"
+            >
         </TextView>
 
         <TextView
@@ -109,14 +123,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/avgFuelConsumptionLabel"
             android:layout_marginTop="5dp"
-            android:text="@string/fuel_spent">
+            android:text="@string/fuel_spent"
+            >
         </TextView>
+
         <TextView
             android:id="@+id/fuelSpentListFrag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/fuelSpentLabel"
-            android:layout_toEndOf="@id/fuelSpentLabel">
+            android:layout_toEndOf="@id/fuelSpentLabel"
+            >
         </TextView>
     </RelativeLayout>
 

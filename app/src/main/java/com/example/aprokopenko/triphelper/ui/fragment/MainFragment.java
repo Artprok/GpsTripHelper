@@ -1,5 +1,15 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -610,6 +620,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             @Override public void onClick(View v) {
                 stopTracking();
                 startButtonTurnActive();
+
             }
         });
     }

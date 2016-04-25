@@ -18,6 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dexOptions {
+        incremental true
+    }
 }
 
 repositories {
@@ -34,10 +37,10 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
     apt 'com.google.dagger:dagger-compiler:2.1'
     compile(name: 'Syncfusion.SfGauge.Android', ext: 'aar')
-
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:palette-v7:23.3.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:design:23.3.0'
     compile 'com.jakewharton:butterknife:7.0.1'
