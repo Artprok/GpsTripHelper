@@ -40,10 +40,12 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     RecyclerView tripListView;
     @Bind(R.id.avgSpeedListFrag)
     TextView     avgSpeedView;
+    @Bind(R.id.maxSpeedListFrag)
+    TextView     maxSpeedView;
 
-    private static final String LOG_TAG          = "TripListFragment";
-    private TripData                          tripData;
-    private ArrayList<Trip>                   trips;
+    private static final String LOG_TAG = "TripListFragment";
+    private TripData        tripData;
+    private ArrayList<Trip> trips;
 
     public TripListFragment() {
     }
@@ -67,6 +69,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         String moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
         String fuelSpent        = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
         String avgSpeed         = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
+        String maxSpeed         = UtilMethods.formatFloat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
 
         distanceTravelledView.setText(distance);
         avgFuelConsumptionView.setText(avgFuelCons);
@@ -74,6 +77,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         fuelSpentView.setText(fuelSpent);
         timeSpentView.setText(MathUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips()));
         avgSpeedView.setText(avgSpeed);
+        maxSpeedView.setText(maxSpeed);
     }
 
     @Override public void onDestroyView() {
@@ -97,12 +101,14 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         float            timeSpent         = trip.getTimeSpent();
         String           tripDate          = trip.getTripDate();
         float            avgSpeed          = trip.getAvgSpeed();
+        float            maxSpeed          = trip.getMaxSpeed();
         int              tripId            = trip.getTripID();
         ArrayList<Route> routes            = trip.getRoute();
 
+
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
-                        tripId, routes, moneyOnFuelSpent);
+                        tripId, routes, moneyOnFuelSpent, maxSpeed);
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

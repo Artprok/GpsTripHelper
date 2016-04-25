@@ -3,7 +3,6 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#607D8B"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
     >
@@ -61,11 +60,30 @@
             >
         </TextView>
 
+
+        <TextView
+            android:id="@+id/maxSpeedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/distanceTravelledLabel"
+            android:layout_marginTop="5dp"
+            android:text="@string/MaximumSpd">
+        </TextView>
+
+        <TextView
+            android:id="@+id/maxSpeedListFrag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/maxSpeedLabel"
+            android:layout_toEndOf="@id/maxSpeedLabel">
+        </TextView>
+
+
         <TextView
             android:id="@+id/avgSpeedLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/distanceTravelledLabel"
+            android:layout_below="@+id/maxSpeedLabel"
             android:layout_marginTop="5dp"
             android:text="@string/AverageSpeed">
         </TextView>

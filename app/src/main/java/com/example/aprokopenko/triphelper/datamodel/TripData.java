@@ -12,6 +12,7 @@ public class TripData {
     private float           fuelFilled;
     private float           fuelSpent;
     private float           avgSpeed;
+    private float           maxSpeed;
     private float           gasTank;
     private ArrayList<Trip> trips;
 
@@ -38,6 +39,10 @@ public class TripData {
 
     public float getAvgSpeed() {
         return avgSpeed;
+    }
+
+    public float getMaxSpeed(){
+        return maxSpeed;
     }
 
     public void setAvgSpeed(float avgSpeed) {
@@ -102,6 +107,10 @@ public class TripData {
 
     public ArrayList<Trip> getTrips() {
         return trips;
+    }
+
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 }
 

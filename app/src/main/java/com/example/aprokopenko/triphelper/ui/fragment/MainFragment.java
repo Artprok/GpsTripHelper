@@ -1,15 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -355,7 +345,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
 
     private void stopTracking() {
-        tripProcessor.updateAvgSpeed(calcAvgSpeed());
+        tripProcessor.updateSpeed(calcAvgSpeed(),getMaxSpeed());
         tripProcessor.endTrip();
         setMetricFieldsToTripData();
 
@@ -374,6 +364,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         float           timeSpent    = 0;
         float           avgSpeed     = 0;
         float           avgFuelCons  = 0;
+        float           maxSpeed     = 0;
         ArrayList<Trip> allTrips     = tripData.getTrips();
         int             tripQuantity = allTrips.size();
         for (Trip trip : allTrips) {
@@ -381,11 +372,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             timeSpent = timeSpent + trip.getTimeSpent();
             avgSpeed = avgSpeed + calcAvgSpd(trip);
             avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
+            float tmpMaxSpeed = trip.getMaxSpeed();
+            if (tmpMaxSpeed>maxSpeed) {
+                maxSpeed = tmpMaxSpeed;
+            }
+
         }
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
         float distTravelled = MathUtils.calcDistTravelled(timeSpent, avgSpeed);
-
+        tripData.setMaxSpeed(maxSpeed);
         tripData.setAvgSpeed(avgSpeed);
         tripData.setTimeSpentOnTrips(timeSpent);
         tripData.setDistanceTravelled(distTravelled);

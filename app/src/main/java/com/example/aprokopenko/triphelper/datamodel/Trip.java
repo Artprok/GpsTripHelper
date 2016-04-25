@@ -19,6 +19,7 @@ public class Trip {
     private float            timeSpent;
     private String           tripDate;
     private float            avgSpeed;
+    private float            maxSpeed;
     private float            moneyOnFuelSpent;
     private int              tripID;
     private ArrayList<Route> route;
@@ -32,6 +33,7 @@ public class Trip {
         timeSpent = ConstantValues.START_VALUE;
         tripDate = "tripDateStartVal";
         avgSpeed = ConstantValues.START_VALUE;
+        maxSpeed = ConstantValues.START_VALUE;
         moneyOnFuelSpent = ConstantValues.START_VALUE;
         tripID = ConstantValues.START_VALUE;
         route = new ArrayList<>();
@@ -122,6 +124,10 @@ public class Trip {
         return avgSpeed;
     }
 
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
     public void setRoute(ArrayList<Route> routes) {
         this.route = routes;
     }
@@ -145,6 +151,7 @@ public class Trip {
             os.writeFloat(avgSpeed);
             os.writeFloat(moneyOnFuelSpent);
             os.writeFloat(avgFuelConsumption);
+            os.writeFloat(maxSpeed);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -174,9 +181,10 @@ public class Trip {
             float  avgSpeed          = is.readFloat();
             float  moneySpent        = is.readFloat();
             float  fuelConsumption   = is.readFloat();
+            float  maxSpeed          = is.readFloat();
 
             trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed,
-                    moneySpent, fuelConsumption);
+                    moneySpent, fuelConsumption,maxSpeed);
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -185,7 +193,8 @@ public class Trip {
     }
 
     private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
-                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption) {
+                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,
+                                    float maxSpeed) {
         trip.setTripDate(date);
         trip.setRoute(route);
         trip.setDistanceTravelled(distanceTravelled);
@@ -196,7 +205,11 @@ public class Trip {
         trip.setAvgSpeed(avgSpeed);
         trip.setMoneyOnFuelSpent(moneySpent);
         trip.setAvgFuelConsumption(fuelConsumption);
+        trip.setMaxSpeed(maxSpeed);
         return trip;
     }
 
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
 }

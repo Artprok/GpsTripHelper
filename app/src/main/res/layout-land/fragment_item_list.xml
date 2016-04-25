@@ -3,16 +3,15 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#607D8B"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
     >
 
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
 
         <TextView
             android:id="@+id/timeSpentOnAllTripsLabel"
@@ -58,11 +57,30 @@
             android:layout_toEndOf="@+id/distanceTravelledLabel">
         </TextView>
 
+
+        <TextView
+            android:id="@+id/maxSpeedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/distanceTravelledLabel"
+            android:layout_marginTop="5dp"
+            android:text="@string/MaximumSpd">
+        </TextView>
+
+        <TextView
+            android:id="@+id/maxSpeedListFrag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/maxSpeedLabel"
+            android:layout_toEndOf="@id/avgSpeedLabel">
+        </TextView>
+
+
         <TextView
             android:id="@+id/avgSpeedLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/distanceTravelledLabel"
+            android:layout_below="@+id/maxSpeedLabel"
             android:layout_marginTop="5dp"
             android:text="@string/AverageSpeed">
         </TextView>
@@ -139,7 +157,9 @@
         android:layout_below="@id/header"
         android:layout_marginTop="10dp"
         android:text="@string/list_of_trips"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"/>
 
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -152,5 +172,6 @@
         android:layout_below="@+id/tripListHeader"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.fragment.TripListFragment"
-        tools:listitem="@layout/fragment_item"/>
+        tools:listitem="@layout/fragment_item"
+        />
 </RelativeLayout>

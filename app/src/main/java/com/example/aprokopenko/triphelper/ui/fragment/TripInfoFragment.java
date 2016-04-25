@@ -45,6 +45,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     TextView tripAvgSpeedView;
     @Bind(R.id.moneyOnTripFuelSpent)
     TextView moneySpentView;
+    @Bind(R.id.tripMaxSpeed)
+    TextView tripMaxSpeed;
     @Bind(R.id.tripDate)
     TextView tripDateView;
     @Bind(R.id.tripId)
@@ -67,6 +69,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String ARG_PARAM11 = "LongitudeArray";
     private static final String ARG_PARAM12 = "SpeedArray";
     private static final String ARG_PARAM13 = "MoneySpent";
+    private static final String ARG_PARAM14 = "MaxSpeed";
 
     private float  timeSpentInMotion;
     private float  timeSpentOnStop;
@@ -78,6 +81,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private String tripDate;
     private float  avgSpeed;
     private int    tripId;
+    private float  maxSpeed;
 
     private GoogleMap         googleMap;
     private Context           context;
@@ -89,7 +93,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float fuelConsumed, float fuelSpent,
-                                               int tripId, ArrayList<Route> routes, Float moneySpent) {
+                                               int tripId, ArrayList<Route> routes, Float moneySpent, Float maxSpeed) {
         TripInfoFragment  fragment       = new TripInfoFragment();
         Bundle            args           = new Bundle();
         ArrayList<String> latitudeArray  = new ArrayList<>();
@@ -118,6 +122,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         args.putStringArrayList(ARG_PARAM11, longitudeArray);
         args.putStringArrayList(ARG_PARAM12, speedArray);
         args.putFloat(ARG_PARAM13, moneySpent);
+        args.putFloat(ARG_PARAM14, maxSpeed);
 
         fragment.setArguments(args);
         return fragment;
@@ -141,6 +146,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             ArrayList<String> longitudeArray = getArguments().getStringArrayList(ARG_PARAM11);
             ArrayList<String> speedArray     = getArguments().getStringArrayList(ARG_PARAM12);
             moneySpent = getArguments().getFloat(ARG_PARAM13);
+            maxSpeed = getArguments().getFloat(ARG_PARAM14);
             speedValues = speedArray;
 
             routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray, speedArray);
@@ -208,6 +214,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         String fuelSpent        = UtilMethods.formatFloat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
         String avgSpeed         = UtilMethods.formatFloat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
         String moneyOnFuelSpent = UtilMethods.formatFloat(this.moneySpent) + " " + getString(R.string.currency_prefix);
+        String maxSpeed         = UtilMethods.formatFloat(this.maxSpeed) + " " + getString(R.string.speed_prefix);
+
 
         for (String value : speedValues) {
             if (Float.valueOf(value) == 0) {
@@ -226,6 +234,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         tripDateView.setText(tripDate);
         tripAvgFuelConsumptionView.setText(avgFuelCons);
         tripAvgSpeedView.setText(avgSpeed);
+        tripMaxSpeed.setText(maxSpeed);
         tripFuelSpentView.setText(fuelSpent);
         tripIdView.setText(String.valueOf(tripId));
         tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(timeSpentInMotion));

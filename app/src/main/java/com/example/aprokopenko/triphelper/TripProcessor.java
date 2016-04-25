@@ -30,6 +30,7 @@ public class TripProcessor {
     private       long             tripStartTime;
     private       int              currentTripId;
     private       float            averageSpeed;
+    private       float            maxSpeed;
     private       TripData         tripData;
     private final Context          context;
 
@@ -128,15 +129,18 @@ public class TripProcessor {
         }
     }
 
-    public void updateAvgSpeed(float speed) {
-        averageSpeed = speed;
+    public void updateSpeed(float avgSpeed, float maxSpeed) {
+        averageSpeed = avgSpeed;
+        this.maxSpeed = maxSpeed;
         Trip trip = tripData.getTrip(currentTripId);
         trip.setAvgSpeed(averageSpeed);
+        trip.setMaxSpeed(maxSpeed);
     }
 
 
     private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
-                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank) {
+                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank,
+                                    float maxSpeed) {
         TripData tripData = new TripData();
         tripData.setTrips(trips);
         tripData.setDistanceTravelled(distanceTravelled);
@@ -147,6 +151,7 @@ public class TripProcessor {
         tripData.setAvgSpeed(avgSpeed);
         tripData.setTimeSpentOnTrips(timeSpent);
         tripData.setGasTank(gasTank);
+        tripData.setMaxSpeed(maxSpeed);
         return tripData;
     }
 
@@ -283,6 +288,7 @@ public class TripProcessor {
             float avgSpeed           = tripData.getAvgSpeed();
             float timeSpent          = tripData.getTimeSpentOnTrips();
             float gasTankCapacity    = tripData.getGasTank();
+            float maxSpeed           = tripData.getMaxSpeed();
 
             try {
                 fos = context.openFileOutput(ConstantValues.FILE_NAME, Context.MODE_PRIVATE);
@@ -302,6 +308,7 @@ public class TripProcessor {
                 os.writeFloat(avgSpeed);
                 os.writeFloat(timeSpent);
                 os.writeFloat(gasTankCapacity);
+                os.writeFloat(maxSpeed);
 
                 os.close();
                 fos.close();
@@ -347,9 +354,10 @@ public class TripProcessor {
                     float avgSpeed           = is.readFloat();
                     float timeSpent          = is.readFloat();
                     float gasTankCapacity    = is.readFloat();
+                    float maxSpeed           = is.readFloat();
 
                     tripData = createTripData(trips, avgFuelConsumption, fuelFilled, fuelSpent, distanceTravelled, moneyOnFuelSpent,
-                            avgSpeed, timeSpent, gasTankCapacity);
+                            avgSpeed, timeSpent, gasTankCapacity, maxSpeed);
                     if (ConstantValues.DEBUG_MODE) {
                         Log.d(LOG_TAG, "READ: " + avgFuelConsumption);
                         Log.d(LOG_TAG, "READ: " + fuelFilled);

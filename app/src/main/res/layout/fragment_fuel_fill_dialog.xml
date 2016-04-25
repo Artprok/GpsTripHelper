@@ -3,7 +3,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:context=".ui.activity.MainActivity"
-                android:background="@android:color/darker_gray">
+               >
 
     <EditText
         android:id="@+id/fuelToFill"
