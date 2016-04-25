@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
@@ -6,23 +6,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">@color/textColor</item>
-        <item name="android:colorBackground">@color/backgroundColor</item>
-    </style>
+       <item name="android:colorBackground">@color/backgroundColor</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
 
-    <style name="AppTheme.NoActionBar" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+
 
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark">
-
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat">
     </style>
+
+
 
 
 </resources>

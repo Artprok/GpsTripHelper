@@ -103,7 +103,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         context = getActivity();
-        removeToolbar();
+//        removeToolbar();
 
         registerGpsStatusListener();
 
@@ -199,7 +199,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private Float getFuelLevel() {
         return Float.valueOf(fuelLeft.getText().toString());
     }
-
 
     private Float calcAvgSpeed() {
         float avgSpeed = 0;
@@ -443,10 +442,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         speedometerTextView.setTypeface(tf);
     }
 
-    private void removeToolbar() {
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.GONE);
-    }
+//    private void removeToolbar() {
+//        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+//        toolbar.setVisibility(View.GONE);
+//    }
 
     private void configureMapFragment() {
         mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);

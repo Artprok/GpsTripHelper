@@ -28,8 +28,8 @@ import dagger.Module;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         MainFragment mainFragment;
-        Toolbar      toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar      toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         UtilMethods.setFabInvisible(this);
 
         if (savedInstanceState == null) {
