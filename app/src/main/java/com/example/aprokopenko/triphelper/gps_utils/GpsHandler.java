@@ -108,7 +108,6 @@ public class GpsHandler implements ServiceInteractionInterface {
         else {
             speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
-
         setupLocationObservable(location);
         setupSpeedObservable(speed);
         getMaxSpeed(speed);

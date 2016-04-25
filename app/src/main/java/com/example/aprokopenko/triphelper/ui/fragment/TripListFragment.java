@@ -63,7 +63,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         String distance         = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
         String avgFuelCons      = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
         String moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);

@@ -10,10 +10,10 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapsInitializer;
@@ -141,14 +141,12 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             fuelConsumed = getArguments().getFloat(ARG_PARAM7);
             fuelSpent = getArguments().getFloat(ARG_PARAM8);
             tripId = getArguments().getInt(ARG_PARAM9);
-
             ArrayList<String> latitudeArray  = getArguments().getStringArrayList(ARG_PARAM10);
             ArrayList<String> longitudeArray = getArguments().getStringArrayList(ARG_PARAM11);
             ArrayList<String> speedArray     = getArguments().getStringArrayList(ARG_PARAM12);
             moneySpent = getArguments().getFloat(ARG_PARAM13);
             maxSpeed = getArguments().getFloat(ARG_PARAM14);
             speedValues = speedArray;
-
             routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray, speedArray);
         }
     }

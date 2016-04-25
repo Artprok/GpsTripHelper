@@ -3,8 +3,8 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 import android.support.annotation.Nullable;
 import android.location.Location;
 
-import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
+import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,14 +43,14 @@ public class MapUtilMethods {
     public static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;
         int    routeSize = routes.size();
-        int index = routeSize - 1;
-        if(index>0){
+        int    index     = routeSize - 1;
+        if (index > 0) {
             lastPoint = routes.get(routeSize - 1).getRoutePoints();
             return lastPoint;
         }
         else {
             // FIXME: 20.04.2016 change on something more appropriate
-            return new LatLng(0,0);
+            return new LatLng(0, 0);
         }
     }
 
@@ -80,4 +80,5 @@ public class MapUtilMethods {
         }
         return color;
     }
+
 }

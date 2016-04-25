@@ -33,7 +33,6 @@ public class TripProcessor {
     private       float            maxSpeed;
     private       TripData         tripData;
     private final Context          context;
-
     private boolean fileIsInWriteMode = false;
 
     public TripProcessor(Context context) {
@@ -53,12 +52,12 @@ public class TripProcessor {
         return tripData;
     }
 
-    public boolean isFileNotInWriteMode() {
-        return !fileIsInWriteMode;
-    }
-
     public ArrayList<Route> getRoutes() {
         return route;
+    }
+
+    public boolean isFileNotInWriteMode() {
+        return !fileIsInWriteMode;
     }
 
     public void addRoutePoint(Route routePoint) {
@@ -112,7 +111,6 @@ public class TripProcessor {
         updateTripState();
         setTripFieldsToStartState();
     }
-
 
     public void eraseFile(Context context) {
         context.deleteFile(ConstantValues.FILE_NAME);

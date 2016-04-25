@@ -4,7 +4,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
 import android.content.ServiceConnection;
-import android.support.v7.widget.Toolbar;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
 import android.widget.RelativeLayout;
@@ -103,7 +102,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         context = getActivity();
-//        removeToolbar();
 
         registerGpsStatusListener();
 
@@ -114,7 +112,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             restoreState(savedInstanceState);
             state = savedInstanceState;
         }
-
     }
 
     @Override public void onPause() {
@@ -148,7 +145,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-
 
     @Override public void onDetach() {
         super.onDetach();
@@ -240,7 +236,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
         tripProcessor.writeDataToFile();
-
         fuelLeft.setText(UtilMethods.formatFloat(tripProcessor.getFuelLeft()));
     }
 
@@ -344,7 +339,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
 
     private void stopTracking() {
-        tripProcessor.updateSpeed(calcAvgSpeed(),getMaxSpeed());
+        tripProcessor.updateSpeed(calcAvgSpeed(), getMaxSpeed());
         tripProcessor.endTrip();
         setMetricFieldsToTripData();
 
@@ -371,7 +366,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             timeSpent = timeSpent + trip.getTimeSpent();
             avgSpeed = avgSpeed + calcAvgSpd(trip);
             avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
-            maxSpeed = MathUtils.findMaxSpeed(trip.getMaxSpeed(),maxSpeed);
+            maxSpeed = MathUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
         }
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
@@ -441,11 +436,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/android_7.ttf");
         speedometerTextView.setTypeface(tf);
     }
-
-//    private void removeToolbar() {
-//        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-//        toolbar.setVisibility(View.GONE);
-//    }
 
     private void configureMapFragment() {
         mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
