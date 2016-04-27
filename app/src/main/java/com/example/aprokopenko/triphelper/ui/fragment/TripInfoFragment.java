@@ -220,15 +220,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                 timeSpentOnStop++;
             }
         }
-        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpentInMotion + "=" + timeSpent + "-" + MathUtils
-                .getTimeInNormalFormat(timeSpentOnStop));
-        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpent);
-        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpentOnStop);
-        float AAA = (timeSpent - timeSpentOnStop);
-        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + AAA);
-        timeSpentInMotion = (timeSpent - timeSpentOnStop);
-        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpentInMotion);
-
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);

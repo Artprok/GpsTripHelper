@@ -2,7 +2,9 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.support.v4.app.ActivityCompat;
 import android.content.pm.PackageManager;

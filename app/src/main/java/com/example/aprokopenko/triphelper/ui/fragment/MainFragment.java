@@ -492,6 +492,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: Location added to route list");
                 }
+                // FIXME: 27.04.2016 STOPTIME not shown because of loc not changed and loc speed = 0; maybe///
                 addPointToRouteList(location);
             }
         };
