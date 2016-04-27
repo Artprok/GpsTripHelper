@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
+import java.util.Calendar;
+
 public class MathUtils {
     public static float getSpeedInKilometerPerHour(float speed) {
         return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
@@ -31,7 +33,11 @@ public class MathUtils {
     }
 
     public static float calcDistTravelled(float timeSpent, float avgSpeed) {
-        return avgSpeed * getHoursFromMills(timeSpent);
+        Float distanceTravelled = avgSpeed * getHoursFromMills(timeSpent);
+        if(distanceTravelled.isNaN()){
+            distanceTravelled=0f;
+        }
+        return distanceTravelled;
     }
 
     public static float findMaxSpeed(float speed, float initialVal) {
@@ -41,6 +47,12 @@ public class MathUtils {
         }
         Log.d("A", "findMaxSpeed: maxSpeed" + maxSpeed);
         return maxSpeed;
+    }
+
+    public static long calcTimeInTrip(long tripStartTime) {
+        Calendar curCal  = Calendar.getInstance();
+        long     endTime = curCal.getTime().getTime();
+        return endTime - tripStartTime;
     }
 }
 

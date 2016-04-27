@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.location.Location;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
 import com.example.aprokopenko.triphelper.datamodel.Route;
@@ -49,7 +50,7 @@ public class MapUtilMethods {
             return lastPoint;
         }
         else {
-            // FIXME: 20.04.2016 change on something more appropriate
+            // FIXME: 20.04.2016 change on something more appropriate(empty value for map)
             return new LatLng(0, 0);
         }
     }
@@ -61,6 +62,7 @@ public class MapUtilMethods {
         for (int i = 0; i < latitudes.size(); i++) {
             LatLng routePointCoordinates = new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i)));
             speed = Float.valueOf(speedArr.get(i));
+            Log.d("TIME", "unwrapRoute: "+speed);
             routePoint = new Route(routePointCoordinates, speed);
             route.add(routePoint);
         }
@@ -69,7 +71,7 @@ public class MapUtilMethods {
 
     private static int choseColorDependOnSpeed(float speed) {
         int color = 0;
-        if (speed > 0 && speed < 80) {
+        if (speed >= 0 && speed < 80) {
             color = GoogleMapsSettings.polylineColorCity;
         }
         else if (speed > 80 && speed < 110) {

@@ -9,7 +9,6 @@ public class TripData {
     private float           distanceTravelled;
     private float           timeSpentOnTrips;
     private float           moneyOnFuelSpent;
-    private float           fuelFilled;
     private float           fuelSpent;
     private float           avgSpeed;
     private float           maxSpeed;
@@ -18,6 +17,13 @@ public class TripData {
 
     public TripData() {
         trips = new ArrayList<>();
+        avgFuelConsumption = 0;
+        distanceTravelled = 0;
+        timeSpentOnTrips = 0;
+        moneyOnFuelSpent = 0;
+        fuelSpent = 0;
+        avgSpeed = 0;
+        maxSpeed = 0;
         gasTank = 0;
     }
 
@@ -57,10 +63,6 @@ public class TripData {
         return moneyOnFuelSpent;
     }
 
-    public float getFuelFilled() {
-        return fuelFilled;
-    }
-
     public float getFuelSpent() {
         return fuelSpent;
     }
@@ -87,10 +89,6 @@ public class TripData {
 
     public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
         this.moneyOnFuelSpent = moneyOnFuelSpent;
-    }
-
-    public void setFuelFilled(float fuelFilled) {
-        this.fuelFilled = fuelFilled;
     }
 
     public void setFuelSpent(float fuelSpent) {

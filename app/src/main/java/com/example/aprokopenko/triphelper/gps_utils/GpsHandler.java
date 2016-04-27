@@ -10,8 +10,6 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 import rx.Subscriber;
@@ -31,7 +29,6 @@ public class GpsHandler implements ServiceInteractionInterface {
     private Observer<Float>    speedSubscriber;
 
     // FIXME: 14.04.2016 debug code remove
-    private final ArrayList<Float> test    = new ArrayList<>();
     private final float[]          tempVal = {1};
 
     public GpsHandler() {
@@ -94,16 +91,9 @@ public class GpsHandler implements ServiceInteractionInterface {
             if (speed != 0) {
                 tempVal[0] += 5;
             }
-
-            test.add(speed);
-            if (test.size() == 10) {
-                float num = 0;
-                for (Float f : test) {
-                    num = f + num;
-                }
-                Log.d(LOG_TAG, "onLocationChanged: NUM" + num / test.size());
+            if(speed>50){
+                speed=0;
             }
-            Log.d(LOG_TAG, "onLocationChanged: testSize" + test.size());
         }
         else {
             speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());

@@ -85,6 +85,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private Context              context;
     private Bundle               state;
     private boolean firstStart = true;
+    private final float[]          tempVal = {1};
 
     public MainFragment() {
         // Required empty public constructor
@@ -100,8 +101,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         context = getActivity();
+        ButterKnife.bind(this, view);
 
         registerGpsStatusListener();
 
@@ -197,12 +198,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private Float calcAvgSpeed() {
-        float avgSpeed = 0;
+        Float avgSpeed = 0f;
         if (avgSpeedArrayList != null) {
             for (Float tmpSpeed : avgSpeedArrayList) {
                 avgSpeed = avgSpeed + tmpSpeed;
             }
             avgSpeed = avgSpeed / avgSpeedArrayList.size();
+        }
+        if (avgSpeed.isNaN()) {
+            avgSpeed = 0f;
         }
         return avgSpeed;
     }
@@ -228,7 +232,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private boolean getStatus() {
-        Log.d(LOG_TAG, "getStatus: DEbUG!" + context.toString());
+        if (context == null) {
+            context = getActivity();
+        }
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         return statusImage.getBackground() != greenSatellite;
     }
@@ -272,6 +278,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void restoreState(Bundle savedInstanceState) {
+        if (context == null) {
+            context = getActivity();
+        }
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "onViewCreated: calledRestore");
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.toString());
@@ -330,7 +339,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setStatusImage() {
-        Log.d(LOG_TAG, "setStatusImage: BEFORE ERR!" + context.toString());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage.getBackground() != greenSatellite) {
             statusImage.setBackground(greenSatellite);
@@ -382,7 +390,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void registerGpsStatusListener() {
-        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         UtilMethods.checkPermission(context);
         lm.addGpsStatusListener(this);
     }
@@ -409,10 +417,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setupLocationService() {
-        Intent intent = new Intent(getActivity(), LocationService.class);
+        Intent intent = new Intent(context, LocationService.class);
         setupServiceConnection();
-        getActivity().getApplicationContext().startService(intent);
-        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        context.getApplicationContext().startService(intent);
+        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void configureGpsHandler() {
@@ -452,15 +460,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
-        // FIXME: 20.04.2016 REMOVE 99f! Color dependency for line on mAp
-        Float speed;
+        float speed;
         if (ConstantValues.DEBUG_MODE) {
-            speed = 99f;
+            speed = 0 + tempVal[0];
+            if (speed != 0) {
+                tempVal[0] += 5;
+            }
+            if(speed>50){
+                speed=0;
+            }
         }
         else {
-            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+            speed       = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
-        Route routePoint = new Route(routePoints, speed);
+
+        Route  routePoint  = new Route(routePoints, speed);
         tripProcessor.addRoutePoint(routePoint);
     }
 
@@ -569,6 +583,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         tripListButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (tripProcessor.isFileNotInWriteMode()) {
+                    UtilMethods.setFabInvisible(getActivity());
                     TripData         tripData         = tripProcessor.getTripData();
                     TripListFragment tripListFragment = TripListFragment.newInstance();
                     if (tripData != null && stopButton.getVisibility() == View.INVISIBLE) {

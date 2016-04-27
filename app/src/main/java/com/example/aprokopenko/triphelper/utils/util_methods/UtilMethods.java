@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.support.v4.app.ActivityCompat;
 import android.content.pm.PackageManager;
@@ -73,7 +74,7 @@ public class UtilMethods {
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {
         ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);
         valueAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
-        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.setInterpolator(new AccelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 if (textview != null) {

@@ -220,14 +220,24 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                 timeSpentOnStop++;
             }
         }
-        timeSpentInMotion = timeSpent - timeSpentOnStop;
+        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpentInMotion + "=" + timeSpent + "-" + MathUtils
+                .getTimeInNormalFormat(timeSpentOnStop));
+        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpent);
+        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpentOnStop);
+        float AAA = (timeSpent - timeSpentOnStop);
+        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + AAA);
+        timeSpentInMotion = (timeSpent - timeSpentOnStop);
+        Log.d(LOG_TAG, "setDataToInfoFragmentFields: " + timeSpentInMotion);
 
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);
-            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + timeSpentOnStop);
+            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + MathUtils.getTimeInNormalFormat(timeSpentOnStop));
         }
 
+
+        float valInMotion      = getInMotionValue();
+        float valWithoutMotion = getWithoutMotionValue(valInMotion);
         tripDistanceTravelledView.setText(distance);
         tripDateView.setText(tripDate);
         tripAvgFuelConsumptionView.setText(avgFuelCons);
@@ -235,9 +245,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         tripMaxSpeed.setText(maxSpeed);
         tripFuelSpentView.setText(fuelSpent);
         tripIdView.setText(String.valueOf(tripId));
-        tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(timeSpentInMotion));
-        tripTimeSpentOnStopView.setText(MathUtils.getTimeInNormalFormat(timeSpentOnStop));
         tripTimeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpent));
+        tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(valInMotion));
+        tripTimeSpentOnStopView.setText(MathUtils.getTimeInNormalFormat(valWithoutMotion));
         moneySpentView.setText(moneyOnFuelSpent);
     }
 
@@ -255,5 +265,16 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             MapUtilMethods.animateCamera(null, positionToAnimate, googleMap);
             routes = null;
         }
+    }
+
+    private float getInMotionValue() {
+        float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
+        float percentInMotion      = 100 - percentWithoutMotion;
+        float valInMotion          = timeSpent / 100 * percentInMotion;
+        return valInMotion;
+    }
+
+    private float getWithoutMotionValue(float timeSpentInMotion) {
+        return timeSpent - timeSpentInMotion;
     }
 }

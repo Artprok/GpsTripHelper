@@ -93,7 +93,7 @@ public class TripProcessor {
         updateTrip();
 
         Trip  trip             = getCurrentTrip();
-        long  timeSpent        = calcTimeInTrip();
+        long  timeSpent        = MathUtils.calcTimeInTrip(tripStartTime);
         float distanceTraveled = setDistanceCovered(trip, timeSpent);
         float fuelConsumption  = getFuelConsumptionLevel(averageSpeed);
         float fuelSpent        = distanceTraveled * (fuelConsumption / 100);
@@ -127,9 +127,9 @@ public class TripProcessor {
         }
     }
 
-    public void updateSpeed(float avgSpeed, float maxSpeed) {
+    public void updateSpeed(float avgSpeed, float maxSpd) {
         averageSpeed = avgSpeed;
-        this.maxSpeed = maxSpeed;
+        maxSpeed = maxSpd;
         Trip trip = tripData.getTrip(currentTripId);
         trip.setAvgSpeed(averageSpeed);
         trip.setMaxSpeed(maxSpeed);
@@ -142,13 +142,11 @@ public class TripProcessor {
     }
 
 
-    private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelFilled, float fuelSpent,
-                                    float distanceTravelled, float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank,
-                                    float maxSpeed) {
+    private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelSpent, float distanceTravelled,
+                                    float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank, float maxSpeed) {
         TripData tripData = new TripData();
         tripData.setTrips(trips);
         tripData.setDistanceTravelled(distanceTravelled);
-        tripData.setFuelFilled(fuelFilled);
         tripData.setFuelSpent(fuelSpent);
         tripData.setMoneyOnFuelSpent(moneyOnFuelSpent);
         tripData.setAvgFuelConsumption(avgFuelConsumption);
@@ -174,11 +172,11 @@ public class TripProcessor {
         return trip;
     }
 
-    private long calcTimeInTrip() {
-        Calendar curCal  = Calendar.getInstance();
-        long     endTime = curCal.getTime().getTime();
-        return endTime - tripStartTime;
-    }
+//    private long calcTimeInTrip() {
+//        Calendar curCal  = Calendar.getInstance();
+//        long     endTime = curCal.getTime().getTime();
+//        return endTime - tripStartTime;
+//    }
 
 
     private float getFuelConsumptionLevel(float avgSpeed) {
@@ -269,19 +267,16 @@ public class TripProcessor {
             getTripDataFieldsValues();
             if (ConstantValues.DEBUG_MODE) {
                 Log.d(LOG_TAG, "WRITE: " + tripData.getAvgFuelConsumption());
-                Log.d(LOG_TAG, "WRITE: " + tripData.getFuelFilled());
                 Log.d(LOG_TAG, "WRITE: " + tripData.getFuelSpent());
                 Log.d(LOG_TAG, "WRITE: " + tripData.getDistanceTravelled());
                 Log.d(LOG_TAG, "WRITE: " + tripData.getMoneyOnFuelSpent());
                 Log.d(LOG_TAG, "WRITE: " + tripData.getAvgSpeed());
             }
 
-
             int   tripsSize          = trips.size();
-            float avgFuelConsumption = tripData.getAvgFuelConsumption();
-            float fuelFilled         = tripData.getFuelFilled();
-            float fuelSpent          = tripData.getFuelSpent();
             float distanceTravelled  = tripData.getDistanceTravelled();
+            float avgFuelConsumption = tripData.getAvgFuelConsumption();
+            float fuelSpent          = tripData.getFuelSpent();
             float moneyOnFuelSpent   = tripData.getMoneyOnFuelSpent();
             float avgSpeed           = tripData.getAvgSpeed();
             float timeSpent          = tripData.getTimeSpentOnTrips();
@@ -299,7 +294,6 @@ public class TripProcessor {
                 }
 
                 os.writeFloat(avgFuelConsumption);
-                os.writeFloat(fuelFilled);
                 os.writeFloat(fuelSpent);
                 os.writeFloat(distanceTravelled);
                 os.writeFloat(moneyOnFuelSpent);
@@ -345,7 +339,6 @@ public class TripProcessor {
                         trips.add(trip);
                     }
                     float avgFuelConsumption = is.readFloat();
-                    float fuelFilled         = is.readFloat();
                     float fuelSpent          = is.readFloat();
                     float distanceTravelled  = is.readFloat();
                     float moneyOnFuelSpent   = is.readFloat();
@@ -354,11 +347,10 @@ public class TripProcessor {
                     float gasTankCapacity    = is.readFloat();
                     float maxSpeed           = is.readFloat();
 
-                    tripData = createTripData(trips, avgFuelConsumption, fuelFilled, fuelSpent, distanceTravelled, moneyOnFuelSpent,
-                            avgSpeed, timeSpent, gasTankCapacity, maxSpeed);
+                    tripData = createTripData(trips, avgFuelConsumption, fuelSpent, distanceTravelled, moneyOnFuelSpent, avgSpeed,
+                            timeSpent, gasTankCapacity, maxSpeed);
                     if (ConstantValues.DEBUG_MODE) {
                         Log.d(LOG_TAG, "READ: " + avgFuelConsumption);
-                        Log.d(LOG_TAG, "READ: " + fuelFilled);
                         Log.d(LOG_TAG, "READ: " + fuelSpent);
                         Log.d(LOG_TAG, "READ: " + distanceTravelled);
                         Log.d(LOG_TAG, "READ: " + moneyOnFuelSpent);
