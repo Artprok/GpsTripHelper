@@ -35,7 +35,7 @@ public class MathUtils {
     public static float calcDistTravelled(float timeSpent, float avgSpeed) {
         Float distanceTravelled = avgSpeed * getHoursFromMills(timeSpent);
         if(distanceTravelled.isNaN()){
-            distanceTravelled=0f;
+            distanceTravelled=(float)ConstantValues.START_VALUE;
         }
         return distanceTravelled;
     }

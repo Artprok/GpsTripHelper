@@ -84,8 +84,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private GpsHandler           gpsHandler;
     private Context              context;
     private Bundle               state;
-    private boolean firstStart = true;
-    private final float[]          tempVal = {1};
+    private       boolean firstStart = true;
+    private final float[] tempVal    = {1};
 
     public MainFragment() {
         // Required empty public constructor
@@ -206,7 +206,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             avgSpeed = avgSpeed / avgSpeedArrayList.size();
         }
         if (avgSpeed.isNaN()) {
-            avgSpeed = 0f;
+            avgSpeed = (float)ConstantValues.START_VALUE;
         }
         return avgSpeed;
     }
@@ -460,21 +460,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
-        float speed;
+        float  speed;
         if (ConstantValues.DEBUG_MODE) {
             speed = 0 + tempVal[0];
             if (speed != 0) {
                 tempVal[0] += 5;
             }
-            if(speed>50){
-                speed=0;
+            if (speed > 50) {
+                speed = 0;
             }
         }
         else {
-            speed       = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
 
-        Route  routePoint  = new Route(routePoints, speed);
+        Route routePoint = new Route(routePoints, speed);
         tripProcessor.addRoutePoint(routePoint);
     }
 

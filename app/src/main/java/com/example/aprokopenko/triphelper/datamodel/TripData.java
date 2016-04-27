@@ -1,6 +1,8 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
 
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+
 import java.util.ArrayList;
 
 public class TripData {
@@ -17,14 +19,14 @@ public class TripData {
 
     public TripData() {
         trips = new ArrayList<>();
-        avgFuelConsumption = 0;
-        distanceTravelled = 0;
-        timeSpentOnTrips = 0;
-        moneyOnFuelSpent = 0;
-        fuelSpent = 0;
-        avgSpeed = 0;
-        maxSpeed = 0;
-        gasTank = 0;
+        avgFuelConsumption = ConstantValues.START_VALUE;
+        distanceTravelled = ConstantValues.START_VALUE;
+        timeSpentOnTrips = ConstantValues.START_VALUE;
+        moneyOnFuelSpent = ConstantValues.START_VALUE;
+        fuelSpent = ConstantValues.START_VALUE;
+        avgSpeed = ConstantValues.START_VALUE;
+        maxSpeed = ConstantValues.START_VALUE;
+        gasTank = ConstantValues.START_VALUE;
     }
 
     public ArrayList<Trip> getTrips() {
