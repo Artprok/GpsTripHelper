@@ -98,7 +98,7 @@ public class MapUtilMethods {
             return lastPoint;
         }
         else {
-            return ConstantValues.BERMUDA_COORDS;
+            return ConstantValues.BERMUDA_COORDINATES;
         }
     }
 

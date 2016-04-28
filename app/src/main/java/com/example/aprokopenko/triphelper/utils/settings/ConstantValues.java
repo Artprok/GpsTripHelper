@@ -10,7 +10,7 @@ public class ConstantValues {
 
     public static final String FILE_NAME = "TripData";
 
-    public static final LatLng  BERMUDA_COORDS                = new LatLng(32.30, -64.78);
+    public static final LatLng  BERMUDA_COORDINATES           = new LatLng(32.30, -64.78);
     public static final String  TRIP_INFO_FRAGMENT_TAG        = "TRIP_INFO_FRAGMENT";
     public static final String  TRIP_LIST_TAG                 = "TRIP_LIST_FRAGMENT";
     public static final String  MAIN_FRAGMENT_TAG             = "MAIN_FRAGMENT";
