@@ -5,7 +5,7 @@ import android.location.Location;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.ServiceInteractionInterface;
+import com.example.aprokopenko.triphelper.listener.LocationListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
@@ -16,7 +16,7 @@ import rx.Subscriber;
 import rx.Observable;
 import rx.Observer;
 
-public class GpsHandler implements ServiceInteractionInterface {
+public class GpsHandler implements LocationListener {
     @Inject
     LocationManager locationManager;
     @Inject

@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.aprokopenko.triphelper.listener.DialogFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -19,7 +19,7 @@ public class FuelFillDialog extends DialogFragment {
     @Bind(R.id.fuelToFill)
     EditText fuelToFill;
 
-    private DialogFragmentInteractionListener dialogFragmentInteractionListener;
+    private FuelChangeAmountListener fuelChangeAmountListener;
 
     public FuelFillDialog() {
     }
@@ -31,8 +31,8 @@ public class FuelFillDialog extends DialogFragment {
             @Override public void onClick(View v) {
                 String fuelCapacity = fuelToFill.getText().toString();
                 float  fuel         = Float.valueOf(fuelCapacity);
-                if (dialogFragmentInteractionListener != null) {
-                    dialogFragmentInteractionListener.fuelFilled(fuel);
+                if (fuelChangeAmountListener != null) {
+                    fuelChangeAmountListener.fuelFilled(fuel);
                 }
                 dismiss();
             }
@@ -48,11 +48,11 @@ public class FuelFillDialog extends DialogFragment {
 
     @Override public void onDetach() {
         super.onDetach();
-        dialogFragmentInteractionListener = null;
+        fuelChangeAmountListener = null;
     }
 
-    public void setDialogFragmentInteractionListener(DialogFragmentInteractionListener listener) {
-        dialogFragmentInteractionListener = listener;
+    public void setFuelChangeAmountListener(FuelChangeAmountListener listener) {
+        fuelChangeAmountListener = listener;
     }
 }
 

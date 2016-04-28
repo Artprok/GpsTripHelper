@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MapUtilMethods {
 
-    public static final String LOG_TAG = "MapUtilMehtods";
+    public static final String LOG_TAG = "MapUtilMethods";
 
     public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
         ArrayList<Route> route = new ArrayList<>();
@@ -88,7 +88,8 @@ public class MapUtilMethods {
         return result;
     }
 
-    public static LatLng getPositionForCamera(ArrayList<Route> routes) {
+
+    private static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;
         int    routeSize = routes.size();
         int    index     = routeSize - 1;
@@ -101,7 +102,6 @@ public class MapUtilMethods {
             return new LatLng(0, 0);
         }
     }
-
 
     private static int choseColorDependOnSpeed(float speed) {
         int color = 0;

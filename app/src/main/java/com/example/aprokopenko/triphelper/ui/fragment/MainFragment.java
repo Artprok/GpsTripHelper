@@ -24,7 +24,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.DialogFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -292,7 +292,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         fillButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 FuelFillDialog dialog = new FuelFillDialog();
-                dialog.setDialogFragmentInteractionListener(new DialogFragmentInteractionListener() {
+                dialog.setFuelChangeAmountListener(new FuelChangeAmountListener() {
                     @Override public void fuelFilled(float fuel) {
                         fillGasTank(fuel);
                     }

@@ -1,5 +1,5 @@
 package com.example.aprokopenko.triphelper.listener;
 
-public interface DialogFragmentInteractionListener {
+public interface FuelChangeAmountListener {
     void fuelFilled(float fuelFilled);
 }

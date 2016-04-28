@@ -29,21 +29,21 @@ public class CircularGaugeFactory {
     private void setScale(SfCircularGauge gauge, CircularScale scale, ArrayList<CircularRange> ranges, ArrayList<CircularPointer> pointers,
                           ArrayList<TickSetting> tickSettings) {
         ArrayList<CircularScale> circularScales = new ArrayList<>();
+        scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
         scale.setStartValue(GaugeFactorySettings.startValue);
-        scale.setEndValue(GaugeFactorySettings.endValue);
         scale.setStartAngle(GaugeFactorySettings.startAngle);
         scale.setSweepAngle(GaugeFactorySettings.sweepAngle);
-        scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
+        scale.setEndValue(GaugeFactorySettings.endValue);
         scale.setInterval(GaugeFactorySettings.interval);
 
-        scale.setLabelOffset(GaugeFactorySettings.labelOffset);
         scale.setLabelTextSize(GaugeFactorySettings.labelTextSize);
         scale.setLabelColor(GaugeFactorySettings.labelTextColor);
+        scale.setLabelOffset(GaugeFactorySettings.labelOffset);
 
         setupTickSettings(tickSettings, scale);
 
-        scale.setCircularRanges(ranges);
         scale.setCircularPointers(pointers);
+        scale.setCircularRanges(ranges);
 
         circularScales.add(0, scale);
         gauge.setCircularScales(circularScales);
@@ -52,29 +52,29 @@ public class CircularGaugeFactory {
     private ArrayList<CircularRange> setupRanges(CircularScale scale) {
         ArrayList<CircularRange> circularRangeArrayList = new ArrayList<>();
         CircularRange            circularRange1         = new CircularRange();
-        circularRange1.setWidth(GaugeFactorySettings.rangeScaleWidth);
         circularRange1.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
-        circularRange1.setOffset(GaugeFactorySettings.rangeOffset);
         circularRange1.setStartValue(GaugeFactorySettings.cityLimitationSpeedFrom);
         circularRange1.setEndValue(GaugeFactorySettings.cityLimitationSpeedTo);
+        circularRange1.setWidth(GaugeFactorySettings.rangeScaleWidth);
+        circularRange1.setOffset(GaugeFactorySettings.rangeOffset);
         circularRangeArrayList.add(0, circularRange1);
 
         scale.setCircularRanges(circularRangeArrayList);
         CircularRange circularRange2 = new CircularRange();
-        circularRange2.setWidth(GaugeFactorySettings.rangeScaleWidth);
-        circularRange2.setOffset(GaugeFactorySettings.rangeOffset);
         circularRange2.setColor(Color.parseColor(GaugeFactorySettings.outCityColorString));
         circularRange2.setStartValue(GaugeFactorySettings.outOfTownLimitationSpeedFrom);
         circularRange2.setEndValue(GaugeFactorySettings.outOfTownLimitationSpeedTo);
+        circularRange2.setWidth(GaugeFactorySettings.rangeScaleWidth);
+        circularRange2.setOffset(GaugeFactorySettings.rangeOffset);
         circularRangeArrayList.add(1, circularRange2);
 
         scale.setCircularRanges(circularRangeArrayList);
         CircularRange circularRange3 = new CircularRange();
-        circularRange3.setWidth(GaugeFactorySettings.rangeScaleWidth);
-        circularRange3.setOffset(GaugeFactorySettings.rangeOffset);
         circularRange3.setColor(Color.parseColor(GaugeFactorySettings.deniedSpeedColorString));
         circularRange3.setStartValue(GaugeFactorySettings.deniedSpeedLimitationSpeedFrom);
         circularRange3.setEndValue(GaugeFactorySettings.deniedSpeedLimitationSpeedTo);
+        circularRange3.setWidth(GaugeFactorySettings.rangeScaleWidth);
+        circularRange3.setOffset(GaugeFactorySettings.rangeOffset);
         circularRangeArrayList.add(2, circularRange3);
 
         return circularRangeArrayList;
@@ -83,13 +83,13 @@ public class CircularGaugeFactory {
     private ArrayList<CircularPointer> setupPointer() {
         ArrayList<CircularPointer> circularPointerArrayList = new ArrayList<>();
         NeedlePointer              needlePointer            = new NeedlePointer();
-        needlePointer.setValue(GaugeFactorySettings.pointerStartValue);
         needlePointer.setKnobColor(Color.parseColor(GaugeFactorySettings.knobNeedleColorString));
-        needlePointer.setKnobRadius(GaugeFactorySettings.knobRadius);
-        needlePointer.setType(GaugeFactorySettings.needleType);
         needlePointer.setLengthFactor(GaugeFactorySettings.needleLengthFactor);
-        needlePointer.setWidth(GaugeFactorySettings.needleWidth);
         needlePointer.setColor(GaugeFactorySettings.needleColorString);
+        needlePointer.setValue(GaugeFactorySettings.pointerStartValue);
+        needlePointer.setKnobRadius(GaugeFactorySettings.knobRadius);
+        needlePointer.setWidth(GaugeFactorySettings.needleWidth);
+        needlePointer.setType(GaugeFactorySettings.needleType);
         circularPointerArrayList.add(0, needlePointer);
         return circularPointerArrayList;
     }
@@ -98,15 +98,15 @@ public class CircularGaugeFactory {
         ArrayList<TickSetting> tickSettingArrayList = new ArrayList<>();
         TickSetting            majorTicksSettings   = new TickSetting();
         majorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
+        majorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
         majorTicksSettings.setSize(GaugeFactorySettings.majorTickSize);
         majorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
-        majorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
 
         TickSetting minorTicksSettings = new TickSetting();
         minorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
+        minorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
         minorTicksSettings.setSize(GaugeFactorySettings.minorTickSize);
         minorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
-        minorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
 
         tickSettingArrayList.add(0, majorTicksSettings);
         tickSettingArrayList.add(1, minorTicksSettings);

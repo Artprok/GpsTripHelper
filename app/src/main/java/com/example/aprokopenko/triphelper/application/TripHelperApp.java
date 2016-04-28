@@ -11,7 +11,6 @@ import com.example.aprokopenko.triphelper.ApplicationComponent;
 
 public class TripHelperApp extends Application {
     private static final String LOG_TAG = "TripHelperApp";
-    private        Context              context;
     private static ApplicationComponent applicationComponent;
 
     public static ApplicationComponent getApplicationComponent() {
@@ -20,7 +19,7 @@ public class TripHelperApp extends Application {
 
     @Override public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        Context context = getApplicationContext();
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "onCreate: ApplicationCreated");
             Log.d(LOG_TAG, "onCreate: context - " + context.toString());

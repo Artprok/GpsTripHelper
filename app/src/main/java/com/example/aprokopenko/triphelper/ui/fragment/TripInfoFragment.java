@@ -84,7 +84,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private int    tripId;
 
     private ArrayList<String> speedValues;
-    private GoogleMap         googleMap;
     private Context           context;
     private ArrayList<Route>  routes;
 
@@ -182,9 +181,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         googleMap.getUiSettings().setMapToolbarEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.setMyLocationEnabled(true);
-        this.googleMap = googleMap;
-        boolean drawed = MapUtilMethods.drawPathFromData(routes, googleMap);
-        if (drawed) {
+        boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
+        if (drawn) {
             routes = null;
         }
     }

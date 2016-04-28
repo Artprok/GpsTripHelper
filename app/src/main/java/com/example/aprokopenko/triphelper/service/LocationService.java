@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.service;
 
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
 import android.content.Context;
@@ -11,17 +10,17 @@ import android.os.Bundle;
 import android.os.Binder;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.ServiceInteractionInterface;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.listener.LocationListener;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 
 public class LocationService extends Service {
 
     private static final String  LOG_TAG = "LocationService:";
     private final        IBinder mBinder = new LocalBinder();
-    private ServiceInteractionInterface serviceInteractionInterface;
-    private GpsHandler                  gpsHandler;
+    private LocationListener locationListener;
+    private GpsHandler       gpsHandler;
 
     public GpsHandler getGpsHandler() {
         return gpsHandler;
@@ -44,10 +43,10 @@ public class LocationService extends Service {
         super.onStartCommand(intent, flags, startId);
         gpsHandler = new GpsHandler();
         LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        serviceInteractionInterface = gpsHandler;
-        LocationListener locationListener = new LocationListener() {
+        locationListener = gpsHandler;
+        android.location.LocationListener locationListener = new android.location.LocationListener() {
             @Override public void onLocationChanged(Location location) {
-                serviceInteractionInterface.locationChanged(location);
+                LocationService.this.locationListener.locationChanged(location);
             }
 
             @Override public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -81,6 +80,6 @@ public class LocationService extends Service {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "onDestroy");
         }
-        serviceInteractionInterface = null;
+        locationListener = null;
     }
 }
