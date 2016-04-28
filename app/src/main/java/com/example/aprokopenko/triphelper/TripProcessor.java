@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.io.File;
 
-
 public class TripProcessor {
     private static final String LOG_TAG = "TripProcessor";
     private       boolean          fileIsInWriteMode;
@@ -153,6 +152,27 @@ public class TripProcessor {
         return tripData;
     }
 
+    private Trip getCurrentTrip() {
+        return tripData.getTrip(currentTripId);
+    }
+
+    private Trip readTrip(ObjectInputStream is) {
+        Trip trip = new Trip();
+        trip = trip.readTrip(is);
+        return trip;
+    }
+
+    private TripData readDataFromFile() {
+        ReadFileTask readFileTask = new ReadFileTask();
+        try {
+            tripData = readFileTask.execute(ConstantValues.FILE_NAME).get();
+        }
+        catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return tripData;
+    }
+
     private float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
         return distanceTraveled * (fuelConsumption / 100);
     }
@@ -188,28 +208,6 @@ public class TripProcessor {
             return initialConsumption;
         }
     }
-
-    private Trip getCurrentTrip() {
-        return tripData.getTrip(currentTripId);
-    }
-
-    private Trip readTrip(ObjectInputStream is) {
-        Trip trip = new Trip();
-        trip = trip.readTrip(is);
-        return trip;
-    }
-
-    private TripData readDataFromFile() {
-        ReadFileTask readFileTask = new ReadFileTask();
-        try {
-            tripData = readFileTask.execute(ConstantValues.FILE_NAME).get();
-        }
-        catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return tripData;
-    }
-
 
     private void writeTrip(Trip trip, ObjectOutputStream os) {
         trip.writeTrip(os);

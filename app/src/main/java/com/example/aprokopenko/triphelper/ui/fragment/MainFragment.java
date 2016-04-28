@@ -24,8 +24,8 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
+import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
@@ -227,16 +227,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return result;
     }
 
-    private void setupButtons() {
-        setupStartButton();
-        setupStopButton();
-        setupTripListButton();
-        setupFillButton();
-        // TODO: 28.04.2016 Erase button replace in some settings fragment of something
-        //        if (ConstantValues.DEBUG_MODE) {
-        setupEraseButton();
-        //        }
-    }
 
     private void setupTripListButton() {
         tripListButton.setOnClickListener(new View.OnClickListener() {
@@ -269,21 +259,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         });
     }
 
+    private void setupEraseButton() {
+        eraseButton.setVisibility(View.VISIBLE);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                UtilMethods.eraseFile(context);
+            }
+        });
+    }
+
     private void setupStopButton() {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 stopTracking();
                 startButtonTurnActive();
 
-            }
-        });
-    }
-
-    private void setupEraseButton() {
-        eraseButton.setVisibility(View.VISIBLE);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                UtilMethods.eraseFile(context);
             }
         });
     }
@@ -302,9 +292,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         });
     }
 
-    private void stopButtonTurnActive() {
-        startButton.setVisibility(View.INVISIBLE);
-        stopButton.setVisibility(View.VISIBLE);
+    private void setupButtons() {
+        setupStartButton();
+        setupStopButton();
+        setupTripListButton();
+        setupFillButton();
+        // TODO: 28.04.2016 Erase button replace in some settings fragment of something
+        //        if (ConstantValues.DEBUG_MODE) {
+        setupEraseButton();
+        //        }
     }
 
     private void startButtonTurnActive() {
@@ -312,11 +308,24 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         stopButton.setVisibility(View.INVISIBLE);
     }
 
-    private void saveState() {
-        if (state == null) {
-            state = new Bundle();
+    private void stopButtonTurnActive() {
+        startButton.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.VISIBLE);
+    }
+
+
+    private void restoreFuelLevel(Float fuelLevel) {
+        fuelLeft.setText(UtilMethods.formatFloat(fuelLevel));
+    }
+
+    private void restoreMaxSpeed(Float maxSpd) {
+        updateMaxSpeed(maxSpd);
+    }
+
+    private void restoreFuelLayoutVisibility(boolean firstState) {
+        if (!firstState) {
+            fuelLayout.setVisibility(View.VISIBLE);
         }
-        onSaveInstanceState(state);
     }
 
     private void restoreState(Bundle savedInstanceState) {
@@ -342,14 +351,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-    private void restoreFuelLayoutVisibility(boolean firstState) {
-        if (!firstState) {
-            fuelLayout.setVisibility(View.VISIBLE);
+    private void restoreVisibility(Boolean visibility) {
+        if (visibility) {
+            startButtonTurnActive();
         }
-    }
-
-    private void restoreFuelLevel(Float fuelLevel) {
-        fuelLeft.setText(UtilMethods.formatFloat(fuelLevel));
+        else {
+            stopButtonTurnActive();
+        }
     }
 
     private void restoreStatus(Boolean status) {
@@ -358,17 +366,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-    private void restoreMaxSpeed(Float maxSpd) {
-        updateMaxSpeed(maxSpd);
-    }
-
-    private void restoreVisibility(Boolean visibility) {
-        if (visibility) {
-            startButtonTurnActive();
+    private void saveState() {
+        if (state == null) {
+            state = new Bundle();
         }
-        else {
-            stopButtonTurnActive();
-        }
+        onSaveInstanceState(state);
     }
 
 
@@ -493,6 +495,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
+
+    private void addRoutePoint(LatLng routePoints, float speed) {
+        Route routePoint = new Route(routePoints, speed);
+        tripProcessor.addRoutePoint(routePoint);
+    }
+
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
         float  speed;
@@ -511,9 +519,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         addRoutePoint(routePoints, speed);
     }
 
-    private void addRoutePoint(LatLng routePoints, float speed) {
-        Route routePoint = new Route(routePoints, speed);
-        tripProcessor.addRoutePoint(routePoint);
+    private void setRouteToMapFragment() {
+        if (tripProcessor.getRoutes() != null) {
+            mapFragment.setRoutes(tripProcessor.getRoutes());
+        }
     }
 
 
@@ -583,22 +592,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
 
-    private void setRouteToMapFragment() {
-        if (tripProcessor.getRoutes() != null) {
-            mapFragment.setRoutes(tripProcessor.getRoutes());
-        }
-    }
-
     private void storeSpeedTicks(float speed) {
         avgSpeedArrayList.add(speed);
     }
 
-    private void updateSpeed(float speed) {
-        if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
-        }
-        updatePointerLocation(speed);
-        updateSpeedTextField(speed);
+    private void updatePointerLocation(float speed) {
+        CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
+        pointer.setValue((double) speed);
     }
 
     private void updateSpeedTextField(float speed) {
@@ -610,16 +610,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         speedometerTextView.setText(formattedSpeed);
     }
 
-    private void updatePointerLocation(float speed) {
-        CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
-        pointer.setValue((double) speed);
-    }
-
     private void updateMaxSpeed(float speed) {
         float tmpFloat   = Float.valueOf(maxSpeed.getText().toString());
         int   initialVal = (int) tmpFloat;
         int   finalVal   = (int) speed;
         UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);
         maxSpeed.setText(String.valueOf(speed));
+    }
+
+    private void updateSpeed(float speed) {
+        if (ConstantValues.DEBUG_MODE) {
+            Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
+        }
+        updatePointerLocation(speed);
+        updateSpeedTextField(speed);
     }
 }

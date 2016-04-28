@@ -114,17 +114,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return previousLoc;
     }
 
-    private LatLng getPreviousLocation(int size, int currentIndex) {
-        LatLng previousLocation;
-        if (size > 1 && currentIndex > 1) {
-            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
-        }
-        else {
-            previousLocation = (routes.get(currentIndex).getRoutePoints());
-        }
-        return previousLocation;
-    }
-
 
     private void getGoogleMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapFragment);
@@ -155,7 +144,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     UtilMethods.checkPermission(context);
                     // FIXME: 20.04.2016 DEBUG 101f
                     if (ConstantValues.DEBUG_MODE) {
-                        locationTracking(googleMap, location, 101f);
+                        float testSpeed = 101f;
+                        locationTracking(googleMap, location, testSpeed);
                     }
                     else {
                         float speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
@@ -181,7 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Log.d(LOG_TAG, "drawPathFromData: DrawFromData");
             }
             for (int i = 0; i < routes.size(); i++) {
-                LatLng currentLocation = (routes.get(i).getRoutePoints());
+                LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
                 previousLocationFromData = currentLocation;
                 if (ConstantValues.DEBUG_MODE) {

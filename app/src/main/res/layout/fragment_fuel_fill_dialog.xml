@@ -1,17 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:context=".ui.activity.MainActivity"
-               >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".ui.activity.MainActivity"
+    >
 
     <EditText
         android:id="@+id/fuelToFill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:background="@color/common_plus_signin_btn_text_dark_disabled"
         android:hint="@string/fuel_filled_val"
-        android:layout_centerHorizontal="true"
         android:inputType="textCapSentences"/>
 
     <Button
@@ -20,8 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/fuelToFill"
         android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
         android:text="@string/fill_fuel_tank"
-        android:textSize="12sp"
-        android:layout_margin="5dp" />
+        android:textSize="12sp"/>
 
 </RelativeLayout>

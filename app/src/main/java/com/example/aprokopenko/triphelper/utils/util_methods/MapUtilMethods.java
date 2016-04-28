@@ -98,8 +98,7 @@ public class MapUtilMethods {
             return lastPoint;
         }
         else {
-            // FIXME: 20.04.2016 change on something more appropriate(empty value for map)
-            return new LatLng(0, 0);
+            return ConstantValues.BERMUDA_COORDS;
         }
     }
 

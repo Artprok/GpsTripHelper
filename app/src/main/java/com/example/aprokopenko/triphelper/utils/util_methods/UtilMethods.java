@@ -115,6 +115,7 @@ public class UtilMethods {
         }
     }
 
+
     private static void buildAlertMessageNoGps(final Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)

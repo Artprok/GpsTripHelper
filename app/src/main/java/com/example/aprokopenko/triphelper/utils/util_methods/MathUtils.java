@@ -12,10 +12,6 @@ public class MathUtils {
         return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
     }
 
-    private static float getHoursFromMills(float timeInMills) {
-        return ((timeInMills / (1000 * 60 * 60)) % 24);
-    }
-
     public static float calcAvgSpeedForOneTrip(ArrayList<Float> avgSpeedArrayList) {
         Float avgSpeed = 0f;
         if (avgSpeedArrayList != null) {
@@ -68,6 +64,11 @@ public class MathUtils {
         Calendar curCal  = Calendar.getInstance();
         long     endTime = curCal.getTime().getTime();
         return endTime - tripStartTime;
+    }
+
+
+    private static float getHoursFromMills(float timeInMills) {
+        return ((timeInMills / (1000 * 60 * 60)) % 24);
     }
 }
 

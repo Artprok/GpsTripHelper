@@ -15,7 +15,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignStart="@+id/speedometerContainer"
         android:layout_marginStart="10dp"
-        android:background="@drawable/play_alt2"/>
+        android:background="@drawable/play_alt2"
+        />
 
     <ImageButton
         android:id="@+id/eraseButton"
@@ -25,7 +26,8 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/startButton"
         android:background="@android:drawable/ic_menu_delete"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        />
 
     <ImageButton
         android:id="@+id/stopButton"
@@ -35,7 +37,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:background="@drawable/stop_alt1"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        />
 
 
     <ImageButton
@@ -53,8 +56,7 @@
         android:layout_height="400dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="5dp"
-        >
-    </RelativeLayout>
+        />
 
     <TextView
         android:id="@+id/speedometerTextView"
@@ -65,8 +67,7 @@
         android:layout_marginTop="15dp"
         android:text="@string/initial_speedometer_val"
         android:textSize="@dimen/speedometerTextViewSize"
-        >
-    </TextView>
+        />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -79,41 +80,6 @@
         android:layout_toEndOf="@+id/statusImageView"
         android:layout_toStartOf="@+id/tripListButton">
 
-        <!-- <ImageView
-             android:id="@+id/avgSpeedIcon"
-             android:layout_width="35dp"
-             android:layout_height="35dp"
-             android:layout_alignParentBottom="false"
-             android:layout_alignStart="@+id/maxSpeedIcon"
-             android:layout_below="@+id/maxSpeedIcon"
-             android:layout_marginTop="5dp"
-             android:layout_toEndOf="@+id/maxSpeed"
-             android:background="@drawable/speedometer"/>
-
-         <TextView
-             android:id="@+id/avgSpeedHint"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignBottom="@+id/avgSpeedIcon"
-             android:layout_toEndOf="@+id/avgSpeedIcon"
-             android:text="@string/avgSpeed_hint_initial_string"
-             android:textSize="@dimen/metricPortraitTextSize"
-             android:textStyle="bold|italic"
-             android:typeface="sans"/>
-
-         <TextView
-             android:id="@+id/avgSpeed"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignBaseline="@+id/avgSpeedHint"
-             android:layout_alignStart="@+id/maxSpeed"
-             android:layout_marginBottom="2dp"
-             android:layout_toEndOf="@+id/avgSpeedHint"
-             android:text="@string/avg_speed_initial_val"
-             android:textSize="35sp"
-             android:textStyle="bold"
-             android:typeface="sans"/>-->
-
         <ImageView
             android:id="@+id/maxSpeedIcon"
             android:layout_width="35dp"
@@ -121,7 +87,8 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="15dp"
             android:layout_toStartOf="@+id/maxSpeedHint"
-            android:background="@drawable/speedometer"/>
+            android:background="@drawable/speedometer"
+            />
 
         <TextView
             android:id="@+id/maxSpeedHint"
@@ -133,7 +100,8 @@
             android:text="@string/maxSpeed_hint_initial_string"
             android:textSize="@dimen/metricPortraitTextSize"
             android:textStyle="bold|italic"
-            android:typeface="sans"/>
+            android:typeface="sans"
+            />
 
         <TextView
             android:id="@+id/maxSpeed"
@@ -145,7 +113,8 @@
             android:text="@string/initial_max_speed_val"
             android:textSize="35sp"
             android:textStyle="bold"
-            android:typeface="sans"/>
+            android:typeface="sans"
+            />
     </RelativeLayout>
 
     <ImageView
@@ -178,14 +147,16 @@
             android:text="@string/fuel_left_hint"
             android:textSize="@dimen/metricPortraitTextSize"
             android:textStyle="bold|italic"
-            android:typeface="sans"/>
+            android:typeface="sans"
+            />
 
         <ImageView
             android:id="@+id/fuelIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/gas_station"/>
+            android:background="@drawable/gas_station"
+            />
 
         <TextView
             android:id="@+id/fuelLeftView"
@@ -195,7 +166,8 @@
             android:layout_marginStart="2dp"
             android:layout_toEndOf="@+id/fuelLeftHint"
             android:text="@string/fuel_left_initial_val"
-            android:textSize="@dimen/metricPortraitTextSize"/>
+            android:textSize="@dimen/metricPortraitTextSize"
+            />
 
         <TextView
             android:id="@+id/refillHint"
@@ -207,7 +179,8 @@
             android:text="@string/refill_hint"
             android:textSize="@dimen/metricPortraitTextSize"
             android:textStyle="bold|italic"
-            android:typeface="sans"/>
+            android:typeface="sans"
+            />
 
         <ImageButton
             android:id="@+id/fillButton"
@@ -216,10 +189,7 @@
             android:layout_alignBottom="@+id/fuelIcon"
             android:layout_marginStart="60dp"
             android:layout_toStartOf="@id/refillHint"
-            android:background="@drawable/gas_pump"/>
-
-
+            android:background="@drawable/gas_pump"
+            />
     </RelativeLayout>
-
-
 </RelativeLayout>

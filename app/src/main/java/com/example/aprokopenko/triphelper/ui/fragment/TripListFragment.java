@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 
-
 public class TripListFragment extends Fragment implements OnListFragmentInteractionListener {
     @Bind(R.id.timeSpentOnAllTripsListFrag)
     TextView     timeSpentView;
