@@ -108,7 +108,6 @@ public class TripProcessor {
         setTripFieldsToStartState();
     }
 
-
     public void updateSpeed(float avgSpeed, float maxSpd) {
         averageSpeed = avgSpeed;
         Trip trip = tripData.getTrip(currentTripId);

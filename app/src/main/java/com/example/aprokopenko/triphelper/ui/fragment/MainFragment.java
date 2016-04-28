@@ -200,7 +200,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private Float getFuelLevelFieldValue() {
-        return Float.valueOf(fuelLeft.getText().toString());
+        return tripProcessor.getFuelLeft();
     }
 
     private boolean getButtonVisibility() {

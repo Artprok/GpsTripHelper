@@ -29,15 +29,14 @@ public class FuelFillDialog extends DialogFragment {
         ButterKnife.bind(this, view);
         fillButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                String fuelCapacity = fuelToFill.getText().toString();
-                float  fuel         = Float.valueOf(fuelCapacity);
+                String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
+                float  fuel         = Float.valueOf(fuelToFill);
                 if (fuelChangeAmountListener != null) {
                     fuelChangeAmountListener.fuelFilled(fuel);
                 }
                 dismiss();
             }
         });
-
         return view;
     }
 
