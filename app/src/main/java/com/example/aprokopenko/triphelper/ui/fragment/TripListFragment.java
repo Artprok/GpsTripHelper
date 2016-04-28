@@ -3,6 +3,7 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.view.ViewGroup;
@@ -91,10 +92,10 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     }
 
     @Override public void onListFragmentInteraction(Trip trip) {
+        float            fuelConsumed      = trip.getAvgFuelConsumption();
         float            distTravelled     = trip.getDistanceTravelled();
         float            timeSpentInMotion = trip.getTimeSpentInMotion();
         float            moneyOnFuelSpent  = trip.getMoneyOnFuelSpent();
-        float            fuelConsumed      = trip.getAvgFuelConsumption();
         float            timeSpentOnStop   = trip.getTimeSpentOnStop();
         float            fuelSpent         = trip.getFuelSpent();
         float            timeSpent         = trip.getTimeSpent();

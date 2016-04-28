@@ -11,37 +11,117 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Trip {
+    private float            avgFuelConsumption;
     private float            timeSpentInMotion;
     private float            distanceTravelled;
-    private float            avgFuelConsumption;
+    private float            moneyOnFuelSpent;
     private float            timeSpentOnStop;
     private float            fuelSpent;
     private float            timeSpent;
     private String           tripDate;
     private float            avgSpeed;
     private float            maxSpeed;
-    private float            moneyOnFuelSpent;
     private int              tripID;
     private ArrayList<Route> route;
 
     public Trip() {
+        avgFuelConsumption = ConstantValues.START_VALUE;
         timeSpentInMotion = ConstantValues.START_VALUE;
         distanceTravelled = ConstantValues.START_VALUE;
-        avgFuelConsumption = ConstantValues.START_VALUE;
+        moneyOnFuelSpent = ConstantValues.START_VALUE;
         timeSpentOnStop = ConstantValues.START_VALUE;
         fuelSpent = ConstantValues.START_VALUE;
         timeSpent = ConstantValues.START_VALUE;
-        tripDate = "tripDateStartVal";
         avgSpeed = ConstantValues.START_VALUE;
         maxSpeed = ConstantValues.START_VALUE;
-        moneyOnFuelSpent = ConstantValues.START_VALUE;
         tripID = ConstantValues.START_VALUE;
+        tripDate = "tripDateStartVal";
         route = new ArrayList<>();
     }
 
     public Trip(int tripID, String tripDate) {
         this.tripID = tripID;
         this.tripDate = tripDate;
+    }
+
+    public float getAvgFuelConsumption() {
+        return avgFuelConsumption;
+    }
+
+    public float getTimeSpentInMotion() {
+        return timeSpentInMotion;
+    }
+
+    public float getDistanceTravelled() {
+        return distanceTravelled;
+    }
+
+    public float getMoneyOnFuelSpent() {
+        return moneyOnFuelSpent;
+    }
+
+    public float getTimeSpentOnStop() {
+        return timeSpentOnStop;
+    }
+
+    public float getFuelSpent() {
+        return fuelSpent;
+    }
+
+    public float getTimeSpent() {
+        return timeSpent;
+    }
+
+    public float getAvgSpeed() {
+        return avgSpeed;
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public ArrayList<Route> getRoute() {
+        return route;
+    }
+
+    public String getTripDate() {
+        return tripDate;
+    }
+
+    public int getTripID() {
+        return tripID;
+    }
+
+    public void setAvgFuelConsumption(float avgFuelConsumption) {
+        this.avgFuelConsumption = avgFuelConsumption;
+    }
+
+    public void setDistanceTravelled(float distanceTravelled) {
+        this.distanceTravelled = distanceTravelled;
+    }
+
+    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
+        this.moneyOnFuelSpent = moneyOnFuelSpent;
+    }
+
+    public void setTimeSpent(float timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
+    public void setFuelSpent(float fuelSpent) {
+        this.fuelSpent = fuelSpent;
+    }
+
+    public void setRoute(ArrayList<Route> routes) {
+        this.route = routes;
+    }
+
+    public void setAvgSpeed(float avgSpeed) {
+        this.avgSpeed = avgSpeed;
+    }
+
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     public Trip readTrip(ObjectInputStream is) {
@@ -78,82 +158,6 @@ public class Trip {
         return trip;
     }
 
-    public ArrayList<Route> getRoute() {
-        return route;
-    }
-
-    public String getTripDate() {
-        return tripDate;
-    }
-
-    public int getTripID() {
-        return tripID;
-    }
-
-    public float getMoneyOnFuelSpent() {
-        return moneyOnFuelSpent;
-    }
-
-    public float getTimeSpentInMotion() {
-        return timeSpentInMotion;
-    }
-
-    public float getDistanceTravelled() {
-        return distanceTravelled;
-    }
-
-    public float getAvgFuelConsumption() {
-        return avgFuelConsumption;
-    }
-
-    public float getTimeSpentOnStop() {
-        return timeSpentOnStop;
-    }
-
-    public float getFuelSpent() {
-        return fuelSpent;
-    }
-
-    public float getTimeSpent() {
-        return timeSpent;
-    }
-
-    public float getAvgSpeed() {
-        return avgSpeed;
-    }
-
-    public float getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
-        this.moneyOnFuelSpent = moneyOnFuelSpent;
-    }
-
-    public void setAvgFuelConsumption(float avgFuelConsumption) {
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
-
-    public void setFuelSpent(float fuelSpent) {
-        this.fuelSpent = fuelSpent;
-    }
-
-    public void setAvgSpeed(float avgSpeed) {
-        this.avgSpeed = avgSpeed;
-    }
-
-    public void setTimeSpent(float timeSpent) {
-        this.timeSpent = timeSpent;
-    }
-
-    public void setDistanceTravelled(float distanceTravelled) {
-        this.distanceTravelled = distanceTravelled;
-    }
-
-    public void setRoute(ArrayList<Route> routes) {
-        this.route = routes;
-    }
-
     public void writeTrip(ObjectOutputStream os) {
         try {
             os.writeInt(route.size());
@@ -180,9 +184,6 @@ public class Trip {
         }
     }
 
-    public void setMaxSpeed(float maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
 
     private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
                                     float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,

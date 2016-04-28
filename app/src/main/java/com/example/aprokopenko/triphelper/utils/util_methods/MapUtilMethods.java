@@ -5,6 +5,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -15,6 +16,23 @@ import com.google.android.gms.maps.GoogleMap;
 import java.util.ArrayList;
 
 public class MapUtilMethods {
+
+    public static final String LOG_TAG = "MapUtilMehtods";
+
+    public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
+        ArrayList<Route> route = new ArrayList<>();
+        Float            speed;
+        Route            routePoint;
+        for (int i = 0; i < latitudes.size(); i++) {
+            LatLng routePointCoordinates = new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i)));
+            speed = Float.valueOf(speedArr.get(i));
+            Log.d("TIME", "unwrapRoute: " + speed);
+            routePoint = new Route(routePointCoordinates, speed);
+            route.add(routePoint);
+        }
+        return route;
+    }
+
     public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, float speed) {
         int color = choseColorDependOnSpeed(speed);
         googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
@@ -41,6 +59,35 @@ public class MapUtilMethods {
         }
     }
 
+    public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
+        LatLng previousLocation;
+        if (size > 1 && currentIndex > 1) {
+            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
+        }
+        else {
+            previousLocation = (routes.get(currentIndex).getRoutePoints());
+        }
+        return previousLocation;
+    }
+
+    public static boolean drawPathFromData(ArrayList<Route> routes, GoogleMap googleMap) {
+        boolean result = false;
+        if (routes != null) {
+            for (int i = 0; i < routes.size(); i++) {
+                LatLng currentLocation      = (routes.get(i).getRoutePoints());
+                LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
+                if (ConstantValues.DEBUG_MODE) {
+                    Log.d(LOG_TAG, "drawPathFromData: +" + routes.get(i).getSpeed());
+                }
+                MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
+            }
+            LatLng positionToAnimate = MapUtilMethods.getPositionForCamera(routes);
+            MapUtilMethods.animateCamera(null, positionToAnimate, googleMap);
+            result = true;
+        }
+        return result;
+    }
+
     public static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;
         int    routeSize = routes.size();
@@ -55,19 +102,6 @@ public class MapUtilMethods {
         }
     }
 
-    public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
-        ArrayList<Route> route = new ArrayList<>();
-        Float            speed;
-        Route            routePoint;
-        for (int i = 0; i < latitudes.size(); i++) {
-            LatLng routePointCoordinates = new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i)));
-            speed = Float.valueOf(speedArr.get(i));
-            Log.d("TIME", "unwrapRoute: "+speed);
-            routePoint = new Route(routePointCoordinates, speed);
-            route.add(routePoint);
-        }
-        return route;
-    }
 
     private static int choseColorDependOnSpeed(float speed) {
         int color = 0;
@@ -82,5 +116,4 @@ public class MapUtilMethods {
         }
         return color;
     }
-
 }

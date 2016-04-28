@@ -25,17 +25,17 @@ import java.io.File;
 
 public class TripProcessor {
     private static final String LOG_TAG = "TripProcessor";
-    private final Calendar         calendar;
-    private final ArrayList<Route> route;
+    private       boolean          fileIsInWriteMode;
     private       long             tripStartTime;
     private       int              currentTripId;
     private       float            averageSpeed;
-    private       float            maxSpeed;
+    private final Calendar         calendar;
     private       TripData         tripData;
     private final Context          context;
-    private boolean fileIsInWriteMode = false;
+    private final ArrayList<Route> route;
 
     public TripProcessor(Context context) {
+        fileIsInWriteMode = false;
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "TripProcessor: IsConstructed");
         }
@@ -43,62 +43,59 @@ public class TripProcessor {
         route = new ArrayList<>();
         this.context = context;
         if (tripData == null) {
-            Log.d(LOG_TAG, "TripProcessor: Done?");
+            if (ConstantValues.DEBUG_MODE) {
+                Log.d(LOG_TAG, "TripProcessor: Reading data from file, file isn't empty");
+            }
             tripData = readDataFromFile();
         }
-    }
-
-    public TripData getTripData() {
-        return tripData;
-    }
-
-    public ArrayList<Route> getRoutes() {
-        return route;
     }
 
     public boolean isFileNotInWriteMode() {
         return !fileIsInWriteMode;
     }
 
-    public void addRoutePoint(Route routePoint) {
-        Trip trip = tripData.getTrip(currentTripId);
-        trip.setRoute(route);
-        route.add(routePoint);
+    public ArrayList<Route> getRoutes() {
+        return route;
+    }
+
+    public TripData getTripData() {
+        return tripData;
     }
 
     public float getFuelLeft() {
         if (tripData != null) {
-            Log.d(LOG_TAG, "getFuelLeft: " + tripData.getGasTank());
-
+            if (ConstantValues.DEBUG_MODE) {
+                Log.d(LOG_TAG, "getFuelLeft: " + tripData.getGasTank());
+            }
             return tripData.getGasTank();
         }
         else {
-            return 0;
+            return ConstantValues.START_VALUE; // empty fuel tank
         }
     }
+
 
     public void startNewTrip() {
         tripStartTime = calendar.getTime().getTime();
         currentTripId = tripData.getTrips().size();
-        Calendar curCalendar   = Calendar.getInstance();
-        Date     date          = curCalendar.getTime();
-        String   formattedDate = UtilMethods.parseDate(date);
-        Trip     trip          = new Trip(currentTripId, formattedDate);
+        Calendar currentCalendarInstance = Calendar.getInstance();
+        Date     date                    = currentCalendarInstance.getTime();
+        String   formattedDate           = UtilMethods.parseDate(date);
+        Trip     trip                    = new Trip(currentTripId, formattedDate);
         tripData.addTrip(trip);
-
     }
 
     public void endTrip() {
-        Log.d(LOG_TAG, "endTrip: end called");
-        updateTrip();
-
-        Trip  trip             = getCurrentTrip();
+        if (ConstantValues.DEBUG_MODE) {
+            Log.d(LOG_TAG, "endTrip: end trip called");
+        }
+        Trip trip = getCurrentTrip();
+        updateTrip(trip);
         long  timeSpent        = MathUtils.calcTimeInTrip(tripStartTime);
-        float distanceTraveled = setDistanceCovered(trip, timeSpent);
+        float distanceTraveled = setDistanceCoveredForTrip(trip, timeSpent);
         float fuelConsumption  = getFuelConsumptionLevel(averageSpeed);
-        float fuelSpent        = distanceTraveled * (fuelConsumption / 100);
-        float moneySpent       = fuelSpent * ConstantValues.FUEL_COST;
-        Log.d(LOG_TAG, "endTrip: " + fuelSpent);
+        float fuelSpent        = calcFuelSpent(distanceTraveled, fuelConsumption);
+        float moneySpent       = calcMoneySpent(fuelSpent);
 
         trip.setMoneyOnFuelSpent(moneySpent);
         trip.setFuelSpent(fuelSpent);
@@ -107,38 +104,38 @@ public class TripProcessor {
         trip.setTimeSpent(timeSpent);
         trip.setRoute(route);
         trip.setAvgFuelConsumption(fuelConsumption);
-
         updateTripState();
         setTripFieldsToStartState();
     }
 
-    public void eraseFile(Context context) {
-        context.deleteFile(ConstantValues.FILE_NAME);
+
+    public void updateSpeed(float avgSpeed, float maxSpd) {
+        averageSpeed = avgSpeed;
+        Trip trip = tripData.getTrip(currentTripId);
+        trip.setAvgSpeed(averageSpeed);
+        trip.setMaxSpeed(maxSpd);
+    }
+
+    public void addRoutePoint(Route routePoint) {
+        Trip trip = tripData.getTrip(currentTripId);
+        trip.setRoute(route);
+        route.add(routePoint);
     }
 
     public void fillGasTank(float fuel) {
         if (tripData != null) {
             float gasTank = tripData.getGasTank();
-            if (gasTank < ConstantValues.FUEL_TANK_CAPACITY) {
-                if (gasTank + fuel < ConstantValues.FUEL_TANK_CAPACITY) {
+            if (gasTank <= ConstantValues.FUEL_TANK_CAPACITY) {
+                if (gasTank + fuel <= ConstantValues.FUEL_TANK_CAPACITY) {
                     tripData.setGasTank(gasTank + fuel);
                 }
             }
         }
     }
 
-    public void updateSpeed(float avgSpeed, float maxSpd) {
-        averageSpeed = avgSpeed;
-        maxSpeed = maxSpd;
-        Trip trip = tripData.getTrip(currentTripId);
-        trip.setAvgSpeed(averageSpeed);
-        trip.setMaxSpeed(maxSpeed);
-    }
-
     public void writeDataToFile() {
         WriteFileTask writeFileTask = new WriteFileTask();
         writeFileTask.execute(tripData);
-
     }
 
 
@@ -157,27 +154,18 @@ public class TripProcessor {
         return tripData;
     }
 
-    private Trip getCurrentTrip() {
-        return tripData.getTrip(currentTripId);
+    private float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
+        return distanceTraveled * (fuelConsumption / 100);
     }
 
-    private float setDistanceCovered(Trip trip, long timeSpent) {
+    private float calcMoneySpent(float fuelSpent) {
+        return fuelSpent * ConstantValues.FUEL_COST;
+    }
+
+    private float setDistanceCoveredForTrip(Trip trip, long timeSpent) {
         float avgSpeed = trip.getAvgSpeed();
         return MathUtils.calcDistTravelled(timeSpent, avgSpeed);
     }
-
-    private Trip readTrip(ObjectInputStream is) {
-        Trip trip = new Trip();
-        trip = trip.readTrip(is);
-        return trip;
-    }
-
-//    private long calcTimeInTrip() {
-//        Calendar curCal  = Calendar.getInstance();
-//        long     endTime = curCal.getTime().getTime();
-//        return endTime - tripStartTime;
-//    }
-
 
     private float getFuelConsumptionLevel(float avgSpeed) {
         float initialConsumption = ConstantValues.FUEL_CONSUMPTION;
@@ -202,46 +190,14 @@ public class TripProcessor {
         }
     }
 
-    private void updateTrip() {
-        Log.d(LOG_TAG, "updateTrip: called");
-        Trip trip = getCurrentTrip();
-        trip.setAvgSpeed(averageSpeed);
-        if (route != null) {
-            trip.setRoute(route);
-        }
+    private Trip getCurrentTrip() {
+        return tripData.getTrip(currentTripId);
     }
 
-    private void writeTrip(Trip trip, ObjectOutputStream os) {
-        trip.writeTrip(os);
-    }
-
-    private void setTripFieldsToStartState() {
-        currentTripId = ConstantValues.START_VALUE;
-        tripStartTime = ConstantValues.START_VALUE;
-        averageSpeed = ConstantValues.START_VALUE;
-    }
-
-    private void getTripDataFieldsValues() {
-        float distanceTravelled = 0;
-        float fuelSpent         = 0;
-        float fuelConsumption   = 0;
-        for (Trip trip : tripData.getTrips()) {
-            distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
-            fuelSpent = fuelSpent + trip.getFuelSpent();
-            fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
-        }
-        float moneySpent = fuelSpent * ConstantValues.FUEL_COST;
-        fuelConsumption = fuelConsumption / tripData.getTrips().size();
-
-        tripData.setMoneyOnFuelSpent(moneySpent);
-        tripData.setDistanceTravelled(distanceTravelled);
-        tripData.setFuelSpent(fuelSpent);
-        tripData.setAvgFuelConsumption(fuelConsumption);
-    }
-
-    private void updateTripState() {
-        Trip trip = tripData.getTrip(currentTripId);
-        tripData.updateTrip(trip, currentTripId);
+    private Trip readTrip(ObjectInputStream is) {
+        Trip trip = new Trip();
+        trip = trip.readTrip(is);
+        return trip;
     }
 
     private TripData readDataFromFile() {
@@ -255,9 +211,53 @@ public class TripProcessor {
         return tripData;
     }
 
+
+    private void writeTrip(Trip trip, ObjectOutputStream os) {
+        trip.writeTrip(os);
+    }
+
+    private void setTripFieldsToStartState() {
+        currentTripId = ConstantValues.START_VALUE;
+        tripStartTime = ConstantValues.START_VALUE;
+        averageSpeed = ConstantValues.START_VALUE;
+    }
+
+    private void getTripDataFieldsValues() {
+        float distanceTravelled = ConstantValues.START_VALUE;
+        float fuelSpent         = ConstantValues.START_VALUE;
+        float fuelConsumption   = ConstantValues.START_VALUE;
+        for (Trip trip : tripData.getTrips()) {
+            distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
+            fuelSpent = fuelSpent + trip.getFuelSpent();
+            fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
+        }
+        float moneySpent = calcMoneySpent(fuelSpent);
+        fuelConsumption = fuelConsumption / tripData.getTrips().size();
+
+        tripData.setDistanceTravelled(distanceTravelled);
+        tripData.setAvgFuelConsumption(fuelConsumption);
+        tripData.setMoneyOnFuelSpent(moneySpent);
+        tripData.setFuelSpent(fuelSpent);
+    }
+
+    private void updateTrip(Trip trip) {
+        if (ConstantValues.DEBUG_MODE) {
+            Log.d(LOG_TAG, "updateTrip: called");
+        }
+        trip.setAvgSpeed(averageSpeed);
+        if (route != null) {
+            trip.setRoute(route);
+        }
+    }
+
+    private void updateTripState() {
+        Trip trip = tripData.getTrip(currentTripId);
+        tripData.updateTrip(trip, currentTripId);
+    }
+
+
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
         @Override protected Boolean doInBackground(TripData... params) {
-
             if (ConstantValues.DEBUG_MODE) {
                 Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
                 Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getAvgSpeed());
@@ -272,7 +272,6 @@ public class TripProcessor {
                 Log.d(LOG_TAG, "WRITE: " + tripData.getMoneyOnFuelSpent());
                 Log.d(LOG_TAG, "WRITE: " + tripData.getAvgSpeed());
             }
-
             int   tripsSize          = trips.size();
             float distanceTravelled  = tripData.getDistanceTravelled();
             float avgFuelConsumption = tripData.getAvgFuelConsumption();
@@ -286,13 +285,11 @@ public class TripProcessor {
             try {
                 fos = context.openFileOutput(ConstantValues.FILE_NAME, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
-
                 os.writeInt(tripsSize);
                 for (Trip trip : trips) {
                     Log.d(LOG_TAG, "writeTripDataToFile: trips " + trip.toString());
                     writeTrip(trip, os);
                 }
-
                 os.writeFloat(avgFuelConsumption);
                 os.writeFloat(fuelSpent);
                 os.writeFloat(distanceTravelled);
@@ -301,7 +298,6 @@ public class TripProcessor {
                 os.writeFloat(timeSpent);
                 os.writeFloat(gasTankCapacity);
                 os.writeFloat(maxSpeed);
-
                 os.close();
                 fos.close();
             }
@@ -332,7 +328,6 @@ public class TripProcessor {
                 try {
                     fis = context.openFileInput(ConstantValues.FILE_NAME);
                     ObjectInputStream is = new ObjectInputStream(fis);
-
                     tripsSize = is.readInt();
                     for (int i = 0; i < tripsSize; i++) {
                         Trip trip = readTrip(is);

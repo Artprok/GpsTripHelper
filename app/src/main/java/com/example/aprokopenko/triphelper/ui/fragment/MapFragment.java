@@ -35,7 +35,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Location>  locationList;
     private GoogleMap            googleMap;
     private Context              context;
-    private ArrayList<Route>     route;
+    private ArrayList<Route>     routes;
 
     private boolean fragmentVisible = false;
 
@@ -71,11 +71,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override public void onMapReady(GoogleMap googleMap) {
         googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         UtilMethods.checkPermission(context);
-        googleMap.getUiSettings().setMapToolbarEnabled(true);
-        googleMap.getUiSettings().setAllGesturesEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setAllGesturesEnabled(true);
+        googleMap.getUiSettings().setMapToolbarEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.setMyLocationEnabled(true);
         this.googleMap = googleMap;
     }
@@ -94,9 +94,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         context = null;
     }
 
-    public void setRoute(ArrayList<Route> route) {
-        this.route = route;
+    public void setRoutes(ArrayList<Route> routes) {
+        this.routes = routes;
     }
+
 
     private LatLng getStartingPosition(Location location) {
         LatLng previousLoc;
@@ -116,10 +117,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LatLng getPreviousLocation(int size, int currentIndex) {
         LatLng previousLocation;
         if (size > 1 && currentIndex > 1) {
-            previousLocation = (route.get(currentIndex - 1).getRoutePoints());
+            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
         }
         else {
-            previousLocation = (route.get(currentIndex).getRoutePoints());
+            previousLocation = (routes.get(currentIndex).getRoutePoints());
         }
         return previousLocation;
     }
@@ -175,23 +176,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void drawPathFromData() {
-        if (route != null) {
+        if (routes != null) {
             if (ConstantValues.DEBUG_MODE) {
                 Log.d(LOG_TAG, "drawPathFromData: DrawFromData");
             }
-            for (int i = 0; i < route.size(); i++) {
-                LatLng currentLocation = (route.get(i).getRoutePoints());
-                // FIXME: 20.04.2016 colorHereChange
-                LatLng tempPreviousLocation = getPreviousLocation(route.size(), i);
+            for (int i = 0; i < routes.size(); i++) {
+                LatLng currentLocation = (routes.get(i).getRoutePoints());
+                LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
                 previousLocationFromData = currentLocation;
                 if (ConstantValues.DEBUG_MODE) {
-                    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, route.get(i).getSpeed());
+                    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
                 }
                 else {
-                    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, route.get(i).getSpeed());
+                    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
                 }
             }
-            route = null;
+            routes = null;
         }
     }
 }

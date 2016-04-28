@@ -37,22 +37,6 @@ public class TripData {
         return trips.get(index);
     }
 
-    public float getGasTank() {
-        return gasTank;
-    }
-
-    public float getTimeSpentOnTrips() {
-        return timeSpentOnTrips;
-    }
-
-    public float getAvgSpeed() {
-        return avgSpeed;
-    }
-
-    public float getMaxSpeed() {
-        return maxSpeed;
-    }
-
     public float getAvgFuelConsumption() {
         return avgFuelConsumption;
     }
@@ -65,20 +49,24 @@ public class TripData {
         return moneyOnFuelSpent;
     }
 
+    public float getTimeSpentOnTrips() {
+        return timeSpentOnTrips;
+    }
+
     public float getFuelSpent() {
         return fuelSpent;
     }
 
-    public void setGasTank(float gasTank) {
-        this.gasTank = gasTank;
+    public float getAvgSpeed() {
+        return avgSpeed;
     }
 
-    public void setTimeSpentOnTrips(float timeSpentOnTrips) {
-        this.timeSpentOnTrips = timeSpentOnTrips;
+    public float getMaxSpeed() {
+        return maxSpeed;
     }
 
-    public void setAvgSpeed(float avgSpeed) {
-        this.avgSpeed = avgSpeed;
+    public float getGasTank() {
+        return gasTank;
     }
 
     public void setAvgFuelConsumption(float avgFuelConsumption) {
@@ -93,24 +81,37 @@ public class TripData {
         this.moneyOnFuelSpent = moneyOnFuelSpent;
     }
 
+    public void setTimeSpentOnTrips(float timeSpentOnTrips) {
+        this.timeSpentOnTrips = timeSpentOnTrips;
+    }
+
     public void setFuelSpent(float fuelSpent) {
         this.fuelSpent = fuelSpent;
+    }
+
+    public void setAvgSpeed(float avgSpeed) {
+        this.avgSpeed = avgSpeed;
+    }
+
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     public void setTrips(ArrayList<Trip> trips) {
         this.trips = trips;
     }
 
-    public void addTrip(Trip trip) {
-        trips.add(trip);
+    public void setGasTank(float gasTank) {
+        this.gasTank = gasTank;
     }
+
 
     public void updateTrip(Trip trip, int index) {
         trips.set(index, trip);
     }
 
-    public void setMaxSpeed(float maxSpeed) {
-        this.maxSpeed = maxSpeed;
+    public void addTrip(Trip trip) {
+        trips.add(trip);
     }
 }
 

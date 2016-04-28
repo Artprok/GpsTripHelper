@@ -22,7 +22,6 @@ public class FuelFillDialog extends DialogFragment {
     private DialogFragmentInteractionListener dialogFragmentInteractionListener;
 
     public FuelFillDialog() {
-
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

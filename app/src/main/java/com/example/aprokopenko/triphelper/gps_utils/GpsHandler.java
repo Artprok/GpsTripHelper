@@ -29,13 +29,33 @@ public class GpsHandler implements ServiceInteractionInterface {
     private Observer<Float>    speedSubscriber;
 
     // FIXME: 14.04.2016 debug code remove
-    private final float[]          tempVal = {1};
+    private final float[] tempVal = {1};
 
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "GpsHandler: onCreate");
         }
+    }
+
+    @Override public void locationChanged(Location location) {
+        // FIXME: 14.04.2016 debug code remove
+        float speed;
+        if (ConstantValues.DEBUG_MODE) {
+            speed = 0 + tempVal[0];
+            if (speed != 0) {
+                tempVal[0] += 5;
+            }
+            if (speed > 50) {
+                speed = 20;
+            }
+        }
+        else {
+            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+        }
+        setupLocationObservable(location);
+        setupSpeedObservable(speed);
+        getMaxSpeed(speed);
     }
 
     public void setLocationSubscriber(Subscriber<Location> locationSubscriber) {
@@ -79,27 +99,7 @@ public class GpsHandler implements ServiceInteractionInterface {
     }
 
     private void getMaxSpeed(float speed) {
-        maxSpeed = MathUtils.findMaxSpeed(speed,maxSpeed);
+        maxSpeed = MathUtils.findMaxSpeed(speed, maxSpeed);
         setupMaxSpeedObservable(maxSpeed);
-}
-
-    @Override public void locationChanged(Location location) {
-        // FIXME: 14.04.2016 debug code remove
-        float speed;
-        if (ConstantValues.DEBUG_MODE) {
-            speed = 0 + tempVal[0];
-            if (speed != 0) {
-                tempVal[0] += 5;
-            }
-            if(speed>50){
-                speed=0;
-            }
-        }
-        else {
-            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
-        }
-        setupLocationObservable(location);
-        setupSpeedObservable(speed);
-        getMaxSpeed(speed);
     }
 }

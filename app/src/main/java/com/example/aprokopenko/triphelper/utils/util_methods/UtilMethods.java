@@ -2,10 +2,7 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.support.v4.app.ActivityCompat;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -32,22 +29,6 @@ import butterknife.ButterKnife;
 
 public class UtilMethods {
 
-    public static void checkPermission(Context context) {
-        if (context != null) {
-            if (ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat
-                    .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-        }
-    }
-
-    public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
-        FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commit();
-
-    }
-
     public static String parseDate(Date dateString) {
         SimpleDateFormat sdf = ConstantValues.DATE_FORMAT;
         return sdf.format(dateString);
@@ -73,6 +54,12 @@ public class UtilMethods {
         return df.format(speed);
     }
 
+    public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
+        FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commit();
+
+    }
+
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {
         ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);
         valueAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
@@ -87,31 +74,8 @@ public class UtilMethods {
         valueAnimator.start();
     }
 
-    public static void setFabVisible(Activity activity) {
-        FloatingActionButton fab = ButterKnife.findById(activity, R.id.fab);
-        fab.setVisibility(View.VISIBLE);
-    }
-
-    public static void setFabInvisible(Activity activity) {
-        FloatingActionButton fab = ButterKnife.findById(activity, R.id.fab);
-        fab.setVisibility(View.INVISIBLE);
-    }
-
-    private static void buildAlertMessageNoGps(final Context context) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                        @SuppressWarnings("unused") final int id) {
-                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                dialog.cancel();
-            }
-        });
-        final AlertDialog alert = builder.create();
-        alert.show();
+    public static void eraseFile(Context context) {
+        context.deleteFile(ConstantValues.FILE_NAME);
     }
 
     public static void checkIfGpsEnabled(Context context) {
@@ -129,5 +93,42 @@ public class UtilMethods {
                 Log.i(LOG_TAG, "checkIfGpsEnabled: Gps Enabled");
             }
         }
+    }
+
+    public static void setFabInvisible(Activity activity) {
+        FloatingActionButton fab = ButterKnife.findById(activity, R.id.fab);
+        fab.setVisibility(View.INVISIBLE);
+    }
+
+    public static void setFabVisible(Activity activity) {
+        FloatingActionButton fab = ButterKnife.findById(activity, R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+    }
+
+    public static void checkPermission(Context context) {
+        if (context != null) {
+            if (ActivityCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat
+                    .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+    }
+
+    private static void buildAlertMessageNoGps(final Context context) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }
