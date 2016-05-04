@@ -39,7 +39,6 @@ public class MathUtils {
         if (speed > maxSpeed) {
             maxSpeed = speed;
         }
-        Log.d("A", "findMaxSpeed: maxSpeed" + maxSpeed);
         return maxSpeed;
     }
 
@@ -49,13 +48,13 @@ public class MathUtils {
         int    minutes = (int) ((timeInMills / (1000 * 60)) % 60);
         int    hours   = (int) ((timeInMills / (1000 * 60 * 60)) % 24);
         if (hours == 0) {
-            resultString = minutes + " minutes," + seconds + " seconds";
+            resultString = minutes + " m," + seconds + " s";
         }
         else if (hours == 0 && minutes == 0) {
-            resultString = seconds + " seconds";
+            resultString = seconds + " s";
         }
         else {
-            resultString = hours + " hours," + minutes + " minutes," + seconds + " seconds";
+            resultString = hours + " h," + minutes + " m," + seconds + " s";
         }
         return resultString;
     }

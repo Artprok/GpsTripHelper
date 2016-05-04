@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.animation.Animator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -167,7 +168,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         return v;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         context = getActivity();
@@ -175,20 +176,103 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
         openMapButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (!mapOpened) {
-                    dataContainer.setVisibility(View.INVISIBLE);
-                    mapView.setVisibility(View.VISIBLE);
-                    mapOpened = true;
+                if (mapOpened) {
+                    animateMapClosing(view);
                 }
                 else {
-                    mapView.setVisibility(View.INVISIBLE);
-                    dataContainer.setVisibility(View.VISIBLE);
-                    mapOpened = false;
+                    animateMapOpening(view);
                 }
-
             }
         });
+    }
 
+    private void animateMapClosing(View view) {
+        mapView.animate()
+                .translationY(-view.getHeight())
+                .setDuration(500)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+                        mapView.setVisibility(View.INVISIBLE);
+                        dataContainer.animate()
+                                .translationY(0)
+                                .setDuration(500)
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override public void onAnimationStart(Animator animation) {
+                                        dataContainer.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override public void onAnimationEnd(Animator animation) {
+
+                                        mapOpened = false;
+                                    }
+
+                                    @Override public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                });
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+    }
+
+    private void animateMapOpening(View view) {
+        dataContainer.animate()
+                .translationY(view.getHeight())
+                .setDuration(500)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+                        dataContainer.setVisibility(View.INVISIBLE);
+                        mapView.animate()
+
+                                .translationY(0)
+                                .setDuration(510)
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override public void onAnimationStart(Animator animation) {
+                                        mapView.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override public void onAnimationEnd(Animator animation) {
+                                        mapOpened = true;
+                                    }
+
+                                    @Override public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                });
+
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
     }
 
     @Override public void onDestroyView() {
