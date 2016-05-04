@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
         final Trip   curTrip = tripList.get(position);
         final String date    = curTrip.getTripDate();
         final int    id      = curTrip.getTripID();
+
 
         holder.idView.setText(String.valueOf(id));
         holder.contentView.setText(date);

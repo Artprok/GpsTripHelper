@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.content.Context;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.view.View;
@@ -54,6 +56,12 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     @Bind(R.id.mapView)
     MapView  mapView;
 
+    @Bind(R.id.textDataContainer)
+    RelativeLayout dataContainer;
+    @Bind(R.id.mapTurnActiveButton)
+    ImageButton    openMapButton;
+
+
     private static final String LOG_TAG = "TripInfoFragment";
 
     private static final String TIME_SPENT_IN_MOTION      = "TimeSpentOnMotion";
@@ -86,6 +94,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<String> speedValues;
     private Context           context;
     private ArrayList<Route>  routes;
+    private boolean mapOpened = false;
 
     public TripInfoFragment() {
     }
@@ -93,6 +102,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float averageFuelCons, float fuelSpent,
                                                int tripId, ArrayList<Route> routes, Float moneySpent, Float maxSpeed) {
+
+        Log.d(LOG_TAG, "newInstance: CALLED");
         TripInfoFragment  fragment       = new TripInfoFragment();
         Bundle            args           = new Bundle();
         ArrayList<String> latitudeArray  = new ArrayList<>();
@@ -161,12 +172,30 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         ButterKnife.bind(this, view);
         context = getActivity();
         setDataToInfoFragmentFields();
+
+        openMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (!mapOpened) {
+                    dataContainer.setVisibility(View.INVISIBLE);
+                    mapView.setVisibility(View.VISIBLE);
+                    mapOpened = true;
+                }
+                else {
+                    mapView.setVisibility(View.INVISIBLE);
+                    dataContainer.setVisibility(View.VISIBLE);
+                    mapOpened = false;
+                }
+
+            }
+        });
+
     }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
 
     @Override public void onDetach() {
         super.onDetach();

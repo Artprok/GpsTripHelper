@@ -1,8 +1,10 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.view.ViewGroup;
@@ -25,14 +27,14 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 
 public class TripListFragment extends Fragment implements OnListFragmentInteractionListener {
-    @Bind(R.id.timeSpentOnAllTripsListFrag)
-    TextView     timeSpentView;
     @Bind(R.id.avgFuelConsListFrag)
     TextView     avgFuelConsumptionView;
     @Bind(R.id.distanceTravelledListFrag)
     TextView     distanceTravelledView;
     @Bind(R.id.moneyOnFuelSpentListFrag)
     TextView     moneyOnFuelView;
+    @Bind(R.id.timeSpentOnAllTripsListFrag)
+    TextView     timeSpentView;
     @Bind(R.id.fuelSpentListFrag)
     TextView     fuelSpentView;
     @Bind(R.id.tripList)
@@ -41,6 +43,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     TextView     avgSpeedView;
     @Bind(R.id.maxSpeedListFrag)
     TextView     maxSpeedView;
+
 
     private static final String LOG_TAG = "TripListFragment";
     private TripData        tripData;
@@ -56,27 +59,52 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         ButterKnife.bind(this, view);
+        if (savedInstanceState != null) {
+            tripData = savedInstanceState.getParcelable("tripData");
+            trips = tripData.getTrips();
+        }
         tripListView.setAdapter(new TripListRecyclerViewAdapter(trips, this));
+        tripListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        if (tripData != null) {
+            outState.putParcelable("tripData", tripData);
+        }
+    }
+
+    @Override public void onResume() {
+        super.onResume();
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String distance         = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
-        String avgFuelCons      = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
-        String moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
-        String fuelSpent        = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
-        String avgSpeed         = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
-        String maxSpeed         = UtilMethods.formatFloat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
+        String distance;
+        String avgFuelCons;
+        String moneyOnFuelSpent;
+        String fuelSpent;
+        String avgSpeed;
+        String maxSpeed;
+        float  timeSpentOnTrips;
+
+        distance = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
+        avgFuelCons = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
+        moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
+        fuelSpent = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
+        avgSpeed = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
+        maxSpeed = UtilMethods.formatFloat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
+        timeSpentOnTrips = tripData.getTimeSpentOnTrips();
 
         distanceTravelledView.setText(distance);
         avgFuelConsumptionView.setText(avgFuelCons);
         moneyOnFuelView.setText(moneyOnFuelSpent);
         fuelSpentView.setText(fuelSpent);
-        timeSpentView.setText(MathUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips()));
+        timeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpentOnTrips));
         avgSpeedView.setText(avgSpeed);
         maxSpeedView.setText(maxSpeed);
     }
+
 
     @Override public void onDestroyView() {
         super.onDestroyView();

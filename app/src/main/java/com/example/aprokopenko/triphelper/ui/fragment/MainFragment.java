@@ -66,8 +66,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     ImageButton    stopButton;
     @Bind(R.id.fuelLayout)
     RelativeLayout fuelLayout;
-    @Bind(R.id.maxSpeed)
-    TextView       maxSpeed;
     @Bind(R.id.fuelLeftView)
     TextView       fuelLeft;
 
@@ -86,6 +84,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private Bundle               state;
     private       boolean firstStart = true;
     private final float[] tempVal    = {1};
+    private float maxSpeedVal;
 
     public MainFragment() {
         // Required empty public constructor
@@ -102,9 +101,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getActivity();
+        tripProcessor = new TripProcessor(context);
         ButterKnife.bind(this, view);
-
+        Log.d(LOG_TAG, "onViewCreated: ONCEASTTASEKJ");
         registerGpsStatusListener();
+
 
         setupLocationService();
         setupSpeedometer();
@@ -117,7 +118,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onPause() {
         super.onPause();
-        saveState();
+        //        saveState();
+        //        Log.d(LOG_TAG, "onPause: save onPause!");
     }
 
     @Override public void onResume() {
@@ -133,13 +135,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             Log.d(LOG_TAG, "onSaveInstanceState: Save called");
             Log.d(LOG_TAG, "onSaveInstanceState: " + getButtonVisibility());
             Log.d(LOG_TAG, "onSaveInstanceState: " + getStatusImageState());
-            Log.d(LOG_TAG, "onSaveInstanceState: " + getMaxSpeedFieldValue());
             Log.d(LOG_TAG, "onSaveInstanceState: " + firstStart);
             Log.d(LOG_TAG, "onSaveInstanceState: " + getFuelLevelFieldValue());
+            Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + getButtonVisibility());
         }
         outState.putBoolean("ControlButtonVisibility", getButtonVisibility());
         outState.putBoolean("StatusImageState", getStatusImageState());
-        outState.putFloat("MaxSpeed", getMaxSpeedFieldValue());
         outState.putBoolean("FirstStart", firstStart);
         outState.putFloat("FuelLevel", getFuelLevelFieldValue());
     }
@@ -151,12 +152,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onDetach() {
         super.onDetach();
-        getActivity().unbindService(serviceConnection);
+        if (serviceConnection != null) {
+            getActivity().unbindService(serviceConnection);
+        }
         context = null;
         locationService = null;
         mapFragment = null;
         serviceConnection = null;
         gpsHandler = null;
+        tripProcessor = null;
+        Log.d(LOG_TAG, "onDetach: called");
     }
 
     @Override public void onGpsStatusChanged(int event) {
@@ -184,6 +189,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     public void openMapFragment() {
         saveState();
+        Log.d(LOG_TAG, "openMapFragment: saveOnOpenMap");
         mapFragment.setGpsHandler(gpsHandler);
         setRouteToMapFragment();
         UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
@@ -195,20 +201,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context);
     }
 
-    private Float getMaxSpeedFieldValue() {
-        return Float.valueOf(maxSpeed.getText().toString());
-    }
-
     private Float getFuelLevelFieldValue() {
-        return tripProcessor.getFuelLeft();
+        return 0f;
     }
 
     private boolean getButtonVisibility() {
-        Boolean     visibility = false;
+        Boolean     visibility = true;
         ImageButton stB        = (ImageButton) getActivity().findViewById(R.id.startButton);
         if (stB != null) {
-            visibility = (stB.getVisibility() == View.VISIBLE);
+            if (stB.getVisibility() == View.VISIBLE) {
+                visibility = true;
+            }
+            else {
+                visibility = false;
+            }
         }
+
+
         return visibility;
     }
 
@@ -239,6 +248,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                         if (!tripData.getTrips().isEmpty()) {
                             saveState();
                             tripListFragment.setTripData(tripData);
+
                             UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
                         }
                     }
@@ -318,10 +328,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         fuelLeft.setText(UtilMethods.formatFloat(fuelLevel));
     }
 
-    private void restoreMaxSpeed(Float maxSpd) {
-        updateMaxSpeed(maxSpd);
-    }
-
     private void restoreFuelLayoutVisibility(boolean firstState) {
         if (!firstState) {
             fuelLayout.setVisibility(View.VISIBLE);
@@ -337,13 +343,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.toString());
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getFloat("MaxSpeed"));
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getFloat("FirstStart"));
+            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getFloat("FuelLevel"));
         }
         restoreVisibility(savedInstanceState.getBoolean("ControlButtonVisibility"));
         restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
-        restoreMaxSpeed(savedInstanceState.getFloat("MaxSpeed"));
         restoreFuelLayoutVisibility(savedInstanceState.getBoolean("FirstStart"));
         restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
         if (stopButton.getVisibility() == View.VISIBLE) {
@@ -376,15 +380,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void stopTracking() {
         float averageSpeed = MathUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
-        float maximumSpeed = getMaxSpeedFieldValue();
+        float maximumSpeed = maxSpeedVal;
         tripProcessor.updateSpeed(averageSpeed, maximumSpeed);
         tripProcessor.endTrip();
         setMetricFieldsToTripData();
 
         tripProcessor.writeDataToFile();
         avgSpeedArrayList.clear();
-        maxSpeed.setText("0");
+        maxSpeedVal = 0f;
         if (firstStart) {
+            Log.d(LOG_TAG, "stopTracking: WHY????");
             fuelLayout.setVisibility(View.VISIBLE);
             firstStart = false;
         }
@@ -469,7 +474,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void configureGpsHandler() {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
-        tripProcessor = new TripProcessor(context);
+
         fuelLeft.setText(UtilMethods.formatFloat(tripProcessor.getFuelLeft()));
         if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
             fuelLayout.setVisibility(View.VISIBLE);
@@ -611,11 +616,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateMaxSpeed(float speed) {
-        float tmpFloat   = Float.valueOf(maxSpeed.getText().toString());
-        int   initialVal = (int) tmpFloat;
-        int   finalVal   = (int) speed;
-        UtilMethods.animateTextView(initialVal, finalVal, maxSpeed);
-        maxSpeed.setText(String.valueOf(speed));
+        maxSpeedVal = speed;
     }
 
     private void updateSpeed(float speed) {

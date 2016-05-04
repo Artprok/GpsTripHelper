@@ -1,11 +1,14 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;
 
-public class TripData {
+public class TripData implements Parcelable {
 
     private float           avgFuelConsumption;
     private float           distanceTravelled;
@@ -28,6 +31,29 @@ public class TripData {
         maxSpeed = ConstantValues.START_VALUE;
         gasTank = ConstantValues.START_VALUE;
     }
+
+
+    protected TripData(Parcel in) {
+        avgFuelConsumption = in.readFloat();
+        distanceTravelled = in.readFloat();
+        timeSpentOnTrips = in.readFloat();
+        moneyOnFuelSpent = in.readFloat();
+        fuelSpent = in.readFloat();
+        avgSpeed = in.readFloat();
+        maxSpeed = in.readFloat();
+        gasTank = in.readFloat();
+        trips = in.createTypedArrayList(Trip.CREATOR);
+    }
+
+    public static final Creator<TripData> CREATOR = new Creator<TripData>() {
+        @Override public TripData createFromParcel(Parcel in) {
+            return new TripData(in);
+        }
+
+        @Override public TripData[] newArray(int size) {
+            return new TripData[size];
+        }
+    };
 
     public ArrayList<Trip> getTrips() {
         return trips;
@@ -112,6 +138,23 @@ public class TripData {
 
     public void addTrip(Trip trip) {
         trips.add(trip);
+    }
+
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeFloat(avgFuelConsumption);
+        dest.writeFloat(distanceTravelled);
+        dest.writeFloat(timeSpentOnTrips);
+        dest.writeFloat(moneyOnFuelSpent);
+        dest.writeFloat(fuelSpent);
+        dest.writeFloat(avgSpeed);
+        dest.writeFloat(maxSpeed);
+        dest.writeFloat(gasTank);
+        dest.writeTypedList(trips);
     }
 }
 

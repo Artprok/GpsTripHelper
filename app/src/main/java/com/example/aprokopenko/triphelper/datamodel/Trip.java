@@ -1,5 +1,7 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -10,7 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Trip {
+public class Trip implements Parcelable {
     private float            avgFuelConsumption;
     private float            timeSpentInMotion;
     private float            distanceTravelled;
@@ -43,6 +45,32 @@ public class Trip {
         this.tripID = tripID;
         this.tripDate = tripDate;
     }
+
+
+    protected Trip(Parcel in) {
+        avgFuelConsumption = in.readFloat();
+        timeSpentInMotion = in.readFloat();
+        distanceTravelled = in.readFloat();
+        moneyOnFuelSpent = in.readFloat();
+        timeSpentOnStop = in.readFloat();
+        fuelSpent = in.readFloat();
+        timeSpent = in.readFloat();
+        tripDate = in.readString();
+        avgSpeed = in.readFloat();
+        maxSpeed = in.readFloat();
+        tripID = in.readInt();
+        route = in.createTypedArrayList(Route.CREATOR);
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 
     public float getAvgFuelConsumption() {
         return avgFuelConsumption;
@@ -212,5 +240,25 @@ public class Trip {
 
     private void setTripID(int tripID) {
         this.tripID = tripID;
+    }
+
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeFloat(avgFuelConsumption);
+        dest.writeFloat(timeSpentInMotion);
+        dest.writeFloat(distanceTravelled);
+        dest.writeFloat(moneyOnFuelSpent);
+        dest.writeFloat(timeSpentOnStop);
+        dest.writeFloat(fuelSpent);
+        dest.writeFloat(timeSpent);
+        dest.writeString(tripDate);
+        dest.writeFloat(avgSpeed);
+        dest.writeFloat(maxSpeed);
+        dest.writeInt(tripID);
+        dest.writeTypedList(route);
     }
 }

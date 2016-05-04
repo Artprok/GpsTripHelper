@@ -1,4 +1,5 @@
 <RelativeLayout
+    android:animateLayoutChanges="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -52,7 +53,7 @@
         android:id="@+id/speedometerContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/speedValLayout"
+        android:layout_toEndOf="@+id/fuelLayout"
         android:layout_toStartOf="@+id/tripListButton">
 
         <TextView
@@ -69,55 +70,10 @@
 
 
     <RelativeLayout
-        android:id="@+id/speedValLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/statusImageView"
-        android:layout_marginEnd="40dp"
-        android:layout_marginTop="10dp"
-        >
-
-        <ImageView
-            android:id="@+id/maxSpeedIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/speedometer"
-            />
-
-        <TextView
-            android:id="@+id/maxSpeedHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/maxSpeedIcon"
-            android:layout_alignParentTop="false"
-            android:layout_toEndOf="@+id/maxSpeedIcon"
-            android:text="@string/maxSpeed_hint_initial_string"
-            android:textSize="@dimen/metricsLandTextSize"
-            android:textStyle="bold|italic"
-            android:typeface="sans"
-            />
-
-        <TextView
-            android:id="@+id/maxSpeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/maxSpeedHint"
-            android:layout_centerHorizontal="true"
-            android:layout_toEndOf="@+id/maxSpeedHint"
-            android:text="@string/initial_max_speed_val"
-            android:textSize="35sp"
-            android:textStyle="bold"
-            android:typeface="sans"
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/fuelLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/speedValLayout"
+        android:layout_below="@+id/statusImageView"
         android:visibility="invisible">
 
         <TextView

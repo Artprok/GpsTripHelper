@@ -1,195 +1,149 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:keepScreenOn="true"
-    tools:context=".ui.fragment.MainFragment"
-    >
-
-    <ImageButton
-        android:id="@+id/startButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/speedometerTextView"
-        android:layout_alignParentStart="true"
-        android:layout_alignStart="@+id/speedometerContainer"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/play_alt2"
-        />
-
-    <ImageButton
-        android:id="@+id/eraseButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@id/startButton"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/startButton"
-        android:background="@android:drawable/ic_menu_delete"
-        android:visibility="invisible"
-        />
-
-    <ImageButton
-        android:id="@+id/stopButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/speedometerTextView"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/stop_alt1"
-        android:visibility="invisible"
-        />
-
-
-    <ImageButton
-        android:id="@+id/tripListButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/statusImageView"
-        android:background="@android:drawable/ic_menu_sort_by_size"
-        />
-
-    <RelativeLayout
-        android:id="@+id/speedometerContainer"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="5dp"
-        />
-
-    <TextView
-        android:id="@+id/speedometerTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/speedometerContainer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="@string/initial_speedometer_val"
-        android:textSize="@dimen/speedometerTextViewSize"
-        />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/speedometerContainer"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="-20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_toEndOf="@+id/statusImageView"
-        android:layout_toStartOf="@+id/tripListButton">
-
-        <ImageView
-            android:id="@+id/maxSpeedIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="15dp"
-            android:layout_toStartOf="@+id/maxSpeedHint"
-            android:background="@drawable/speedometer"
-            />
-
-        <TextView
-            android:id="@+id/maxSpeedHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/maxSpeedIcon"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="true"
-            android:text="@string/maxSpeed_hint_initial_string"
-            android:textSize="@dimen/metricPortraitTextSize"
-            android:textStyle="bold|italic"
-            android:typeface="sans"
-            />
-
-        <TextView
-            android:id="@+id/maxSpeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/maxSpeedHint"
-            android:layout_centerHorizontal="true"
-            android:layout_toEndOf="@+id/maxSpeedHint"
-            android:text="@string/initial_max_speed_val"
-            android:textSize="35sp"
-            android:textStyle="bold"
-            android:typeface="sans"
-            />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/statusImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/red_satellite"
-        />
-
-    <RelativeLayout
-        android:id="@+id/fuelLayout"
+ <RelativeLayout
+     android:animateLayoutChanges="true"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/startButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:visibility="invisible">
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        tools:context=".ui.fragment.MainFragment"
+        >
 
-        <TextView
-            android:id="@+id/fuelLeftHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/fuelIcon"
-            android:layout_toEndOf="@+id/fuelIcon"
-            android:text="@string/fuel_left_hint"
-            android:textSize="@dimen/metricPortraitTextSize"
-            android:textStyle="bold|italic"
-            android:typeface="sans"
-            />
-
-        <ImageView
-            android:id="@+id/fuelIcon"
+        <ImageButton
+            android:id="@+id/startButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/gas_station"
-            />
-
-        <TextView
-            android:id="@+id/fuelLeftView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fuelLeftHint"
-            android:layout_marginStart="2dp"
-            android:layout_toEndOf="@+id/fuelLeftHint"
-            android:text="@string/fuel_left_initial_val"
-            android:textSize="@dimen/metricPortraitTextSize"
-            />
-
-        <TextView
-            android:id="@+id/refillHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/fuelIcon"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp"
-            android:text="@string/refill_hint"
-            android:textSize="@dimen/metricPortraitTextSize"
-            android:textStyle="bold|italic"
-            android:typeface="sans"
+            android:layout_alignBottom="@+id/speedometerTextView"
+            android:layout_alignParentStart="true"
+            android:layout_alignStart="@+id/speedometerContainer"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/play_alt2"
             />
 
         <ImageButton
-            android:id="@+id/fillButton"
+            android:id="@+id/eraseButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignBottom="@+id/fuelIcon"
-            android:layout_marginStart="60dp"
-            android:layout_toStartOf="@id/refillHint"
-            android:background="@drawable/gas_pump"
+            android:layout_alignBottom="@id/startButton"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/startButton"
+            android:background="@android:drawable/ic_menu_delete"
+            android:visibility="invisible"
             />
+
+        <ImageButton
+            android:id="@+id/stopButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/speedometerTextView"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/stop_alt1"
+            android:visibility="invisible"
+            />
+
+
+        <ImageButton
+            android:id="@+id/tripListButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/statusImageView"
+            android:background="@android:drawable/ic_menu_sort_by_size"
+            />
+
+        <RelativeLayout
+            android:id="@+id/speedometerContainer"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            />
+
+        <TextView
+            android:id="@+id/speedometerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/speedometerContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="@string/initial_speedometer_val"
+            android:textSize="@dimen/speedometerTextViewSize"
+            />
+
+        <ImageView
+            android:id="@+id/statusImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/red_satellite"
+            />
+
+        <RelativeLayout
+            android:id="@+id/fuelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/startButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/fuelLeftHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/fuelIcon"
+                android:layout_toEndOf="@+id/fuelIcon"
+                android:text="@string/fuel_left_hint"
+                android:textSize="@dimen/metricPortraitTextSize"
+                android:textStyle="bold|italic"
+                android:typeface="sans"
+                />
+
+            <ImageView
+                android:id="@+id/fuelIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/gas_station"
+                />
+
+            <TextView
+                android:id="@+id/fuelLeftView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/fuelLeftHint"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@+id/fuelLeftHint"
+                android:text="@string/fuel_left_initial_val"
+                android:textSize="@dimen/metricPortraitTextSize"
+                />
+
+            <TextView
+                android:id="@+id/refillHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/fuelIcon"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp"
+                android:text="@string/refill_hint"
+                android:textSize="@dimen/metricPortraitTextSize"
+                android:textStyle="bold|italic"
+                android:typeface="sans"
+                />
+
+            <ImageButton
+                android:id="@+id/fillButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@+id/fuelIcon"
+                android:layout_marginStart="60dp"
+                android:layout_toStartOf="@id/refillHint"
+                android:background="@drawable/gas_pump"
+                />
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+

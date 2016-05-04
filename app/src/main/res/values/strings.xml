@@ -29,4 +29,9 @@
     <string name="fuel_prefix"> litre</string>
     <string name="speed_prefix"> km/h</string>
     <string name="tripId">Trip id - </string>
+    <string name="speedLayoutLabel">Speed:</string>
+    <string name="tripDataLayoutLabel">Trip data:</string>
+    <string name="timeSpentLayoutLabel">Time:</string>
+    <string name="fuelSpentLayoutLabel">Fuel:</string>
+
 </resources>
