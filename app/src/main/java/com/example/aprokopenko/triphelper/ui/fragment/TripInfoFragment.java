@@ -186,95 +186,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void animateMapClosing(View view) {
-        mapView.animate()
-                .translationY(-view.getHeight())
-                .setDuration(500)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationEnd(Animator animation) {
-                        mapView.setVisibility(View.INVISIBLE);
-                        dataContainer.animate()
-                                .translationY(0)
-                                .setDuration(500)
-                                .setListener(new Animator.AnimatorListener() {
-                                    @Override public void onAnimationStart(Animator animation) {
-                                        dataContainer.setVisibility(View.VISIBLE);
-                                    }
-
-                                    @Override public void onAnimationEnd(Animator animation) {
-
-                                        mapOpened = false;
-                                    }
-
-                                    @Override public void onAnimationCancel(Animator animation) {
-
-                                    }
-
-                                    @Override public void onAnimationRepeat(Animator animation) {
-
-                                    }
-                                });
-                    }
-
-                    @Override public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-    }
-
-    private void animateMapOpening(View view) {
-        dataContainer.animate()
-                .translationY(view.getHeight())
-                .setDuration(500)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationEnd(Animator animation) {
-                        dataContainer.setVisibility(View.INVISIBLE);
-                        mapView.animate()
-
-                                .translationY(0)
-                                .setDuration(510)
-                                .setListener(new Animator.AnimatorListener() {
-                                    @Override public void onAnimationStart(Animator animation) {
-                                        mapView.setVisibility(View.VISIBLE);
-                                    }
-
-                                    @Override public void onAnimationEnd(Animator animation) {
-                                        mapOpened = true;
-                                    }
-
-                                    @Override public void onAnimationCancel(Animator animation) {
-
-                                    }
-
-                                    @Override public void onAnimationRepeat(Animator animation) {
-
-                                    }
-                                });
-
-                    }
-
-                    @Override public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-    }
-
     @Override public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -300,6 +211,15 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    private float getInMotionValue() {
+        float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
+        float percentInMotion      = 100 - percentWithoutMotion;
+        return timeSpent / 100 * percentInMotion;
+    }
+
+    private float getWithoutMotionValue(float timeSpentInMotion) {
+        return timeSpent - timeSpentInMotion;
+    }
 
     private void setupMapView(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);
@@ -343,13 +263,83 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         tripDateView.setText(tripDate);
     }
 
-    private float getInMotionValue() {
-        float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
-        float percentInMotion      = 100 - percentWithoutMotion;
-        return timeSpent / 100 * percentInMotion;
+    private void animateMapClosing(View view) {
+        mapView.animate().translationY(-view.getHeight()).setDuration(500).setListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override public void onAnimationEnd(Animator animation) {
+                mapView.setVisibility(View.INVISIBLE);
+                dataContainer.animate().translationY(0).setDuration(500).setListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        dataContainer.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+
+                        mapOpened = false;
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+            }
+
+            @Override public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
-    private float getWithoutMotionValue(float timeSpentInMotion) {
-        return timeSpent - timeSpentInMotion;
+    private void animateMapOpening(View view) {
+        dataContainer.animate().translationY(view.getHeight()).setDuration(500).setListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override public void onAnimationEnd(Animator animation) {
+                dataContainer.setVisibility(View.INVISIBLE);
+                mapView.animate()
+
+                        .translationY(0).setDuration(510).setListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        mapView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+                        mapOpened = true;
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+
+            }
+
+            @Override public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
+
+
 }

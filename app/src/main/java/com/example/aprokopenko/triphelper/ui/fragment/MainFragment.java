@@ -323,7 +323,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         stopButton.setVisibility(View.VISIBLE);
     }
 
-
     private void restoreFuelLevel(Float fuelLevel) {
         fuelLeft.setText(UtilMethods.formatFloat(fuelLevel));
     }
@@ -376,7 +375,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
         onSaveInstanceState(state);
     }
-
 
     private void stopTracking() {
         float averageSpeed = MathUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
@@ -500,7 +498,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-
     private void addRoutePoint(LatLng routePoints, float speed) {
         Route routePoint = new Route(routePoints, speed);
         tripProcessor.addRoutePoint(routePoint);
@@ -529,7 +526,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             mapFragment.setRoutes(tripProcessor.getRoutes());
         }
     }
-
 
     private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
         GpsHandler.setSpeedSubscriber(speedSubscriber);
@@ -595,7 +591,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupLocationSubscriber();
         setupMaxSpeedSubscriber();
     }
-
 
     private void storeSpeedTicks(float speed) {
         avgSpeedArrayList.add(speed);
