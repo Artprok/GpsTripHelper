@@ -77,9 +77,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String AVERAGE_FUEL_CONS         = "FuelConsumed";
     private static final String MONEY_SPENT               = "MoneySpent";
     private static final String SPEED_ARR                 = "SpeedArray";
-    private static final String AVERAGE_SPEED             = "AvgSpeed";
     private static final String TIME_SPENT                = "TimeSpent";
     private static final String FUEL_SPENT                = "FuelSpent";
+    private static final String AVERAGE_SPEED             = "AvgSpeed";
     private static final String TRIP_DATE                 = "TripDate";
     private static final String MAX_SPEED                 = "MaxSpeed";
     private static final String TRIP_ID                   = "TripId";
@@ -99,7 +99,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<String> speedValues;
     private Context           context;
     private ArrayList<Route>  routes;
+
     private boolean mapOpened = false;
+
 
     public TripInfoFragment() {
     }

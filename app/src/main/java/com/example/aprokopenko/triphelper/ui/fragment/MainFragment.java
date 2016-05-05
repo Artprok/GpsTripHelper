@@ -70,21 +70,27 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     TextView       fuelLeft;
 
     private static final String LOG_TAG = "MainFragment";
+
     private Subscriber<Location> locationSubscriber;
     private Subscriber<Float>    maxSpeedSubscriber;
-    private ArrayList<Float>     avgSpeedArrayList;
     private Subscriber<Float>    speedSubscriber;
-    private ServiceConnection    serviceConnection;
-    private LocationService      locationService;
-    private TripProcessor        tripProcessor;
-    private SfCircularGauge      speedometer;
-    private MapFragment          mapFragment;
-    private GpsHandler           gpsHandler;
-    private Context              context;
-    private Bundle               state;
-    private       boolean firstStart = true;
-    private final float[] tempVal    = {1};
+
+    private ServiceConnection serviceConnection;
+    private LocationService   locationService;
+
+    private ArrayList<Float> avgSpeedArrayList;
+    private TripProcessor    tripProcessor;
+    private SfCircularGauge  speedometer;
+    private MapFragment      mapFragment;
+    private GpsHandler       gpsHandler;
+    private Context          context;
+    private Bundle           state;
+
     private float maxSpeedVal;
+
+    private       boolean firstStart = true;
+    //todo: tempVal is testing val remove in release!
+    private final float[] tempVal    = {1};
 
     public MainFragment() {
         // Required empty public constructor

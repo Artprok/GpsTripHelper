@@ -5,8 +5,8 @@ import android.graphics.Color;
 import com.syncfusion.gauges.SfCircularGauge.enums.NeedleType;
 
 public class GaugeFactorySettings {
-    public static final int startAngle            = 135;
-    public static final int sweepAngle            = 270;
+    public static final int startAngle            = 120;
+    public static final int sweepAngle            = 300;
     public static final int endValue              = 200;
     public static final int interval              = 10;
     public static final int minorTicksPerInterval = 5;
@@ -16,9 +16,9 @@ public class GaugeFactorySettings {
     public static final String speedometerHeaderText = "km/h";
     public static final int    textSize              = 20;
 
-    public static final String deniedSpeedColorString = "#FF3D00";
-    public static final String outCityColorString     = "#FFFF00";
-    public static final String cityColorString        = "#00E676";
+    public static final String deniedSpeedColorString = "#B71C1C";
+    public static final String outCityColorString     = "#FBC02D";
+    public static final String cityColorString        = "#4CAF50";
     public static final int    rangeScaleWidth        = 15;
     public static final int    rangeOffset            = 0;
 
@@ -35,13 +35,13 @@ public class GaugeFactorySettings {
     public static final int        needleColorString     = Color.RED;
     public static final String     tickColorString       = "#FFFFFF";
     public static final int        labelTextColor        = Color.WHITE;
-    public static final double     ticksOffset           = 0.07;
+    public static final double     ticksOffset           = 0.03;
     public static final double     labelOffset           = 0.15;
     public static final double     needleLengthFactor    = 0.8;
-    public static final int        minorTickSize         = 10;
-    public static final int        majorTickSize         = 20;
-    public static final int        labelTextSize         = 17;
-    public static final int        needleWidth           = 15;
+    public static final int        minorTickSize         = 20;
+    public static final int        majorTickSize         = 50;
+    public static final int        labelTextSize         = 20;
+    public static final int        needleWidth           = 20;
     public static final int        knobRadius            = 20;
-    public static final int        ticksWidth            = 3;
+    public static final int        ticksWidth            = 5;
 }
