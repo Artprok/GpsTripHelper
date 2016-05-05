@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -207,6 +208,22 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private Float getFuelLevelFieldValue() {
         return tripProcessor.getFuelLeft();
+    }
+
+    private float getDistanceToDriveLeft(float fuelLeftVal) {
+        float avgSpeed = tripProcessor.getTripData().getAvgSpeed();
+        if (avgSpeed == 0) {
+            avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
+        }
+        return (fuelLeftVal / avgSpeed) * 100;
+    }
+
+    @NonNull private String getFuelLeftString() {
+        float fuelLeftVal = tripProcessor.getFuelLeft();
+        tripProcessor.writeDataToFile();
+        float distanceToDriveLeft = getDistanceToDriveLeft(fuelLeftVal);
+        return (UtilMethods.formatFloat(fuelLeftVal) + " (~" + UtilMethods.formatFloat(distanceToDriveLeft) + getString(
+                R.string.distance_prefix) + ")");
     }
 
     private boolean getButtonVisibility() {
@@ -428,8 +445,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void fillGasTank(float fuel) {
         tripProcessor.fillGasTank(fuel);
-        tripProcessor.writeDataToFile();
-        fuelLeft.setText(UtilMethods.formatFloat(tripProcessor.getFuelLeft()));
+        String fuelLeftString = getFuelLeftString();
+        fuelLeft.setText(fuelLeftString);
     }
 
     private void registerGpsStatusListener() {
@@ -477,8 +494,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void configureGpsHandler() {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
-
-        fuelLeft.setText(UtilMethods.formatFloat(tripProcessor.getFuelLeft()));
+        String fuelLeftString = getFuelLeftString();
+        fuelLeft.setText(fuelLeftString);
         if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
             fuelLayout.setVisibility(View.VISIBLE);
         }

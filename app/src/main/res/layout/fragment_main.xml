@@ -86,8 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/startButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/speedometerContainer"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:visibility="invisible">
@@ -114,7 +113,7 @@
 
             <TextView
                 android:id="@+id/fuelLeftView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/fuelLeftHint"
                 android:layout_toEndOf="@+id/fuelLeftHint"
@@ -140,7 +139,6 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/fuelIcon"
                 android:layout_alignStart="@id/fuelIcon"
-
                 android:background="@drawable/gas_pump"
                 />
         </RelativeLayout>
