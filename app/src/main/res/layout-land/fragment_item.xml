@@ -3,8 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorOfBlock"
     android:orientation="horizontal"
-    android:background="@color/colorOfBlock">
+    android:padding="@dimen/block_padding"
+    >
 
     <TextView
         android:id="@+id/id"
