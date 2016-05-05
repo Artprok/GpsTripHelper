@@ -42,6 +42,8 @@ import com.example.aprokopenko.triphelper.TripProcessor;
 import com.google.android.gms.maps.model.LatLng;
 import com.example.aprokopenko.triphelper.R;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -97,7 +99,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         // Required empty public constructor
     }
 
-    public static MainFragment newInstance() {
+    @Contract(" -> !null") public static MainFragment newInstance() {
         return new MainFragment();
     }
 
@@ -206,8 +208,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context);
     }
 
-    private Float getFuelLevelFieldValue() {
-        return tripProcessor.getFuelLeft();
+    @NonNull private Float getFuelLevelFieldValue() {
+        if (tripProcessor != null) {
+            return tripProcessor.getFuelLeft();
+        }
+        else {
+            return 0f;
+        }
     }
 
     private float getDistanceToDriveLeft(float fuelLeftVal) {

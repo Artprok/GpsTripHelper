@@ -21,6 +21,8 @@ import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.R;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -52,7 +54,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     public TripListFragment() {
     }
 
-    public static TripListFragment newInstance() {
+    @Contract(" -> !null") public static TripListFragment newInstance() {
         return new TripListFragment();
     }
 

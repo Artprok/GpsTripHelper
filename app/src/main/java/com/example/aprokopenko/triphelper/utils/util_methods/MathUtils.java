@@ -6,11 +6,13 @@ import android.content.res.Resources;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MathUtils {
-    public static float getSpeedInKilometerPerHour(float speed) {
+    @Contract(pure = true) public static float getSpeedInKilometerPerHour(float speed) {
         return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
     }
 
@@ -36,7 +38,7 @@ public class MathUtils {
         return distanceTravelled;
     }
 
-    public static float findMaxSpeed(float speed, float initialVal) {
+    @Contract(pure = true) public static float findMaxSpeed(float speed, float initialVal) {
         float maxSpeed = initialVal;
         if (speed > maxSpeed) {
             maxSpeed = speed;
@@ -82,15 +84,15 @@ public class MathUtils {
     }
 
 
-    private static int getSecondsFromMills(float timeInMills) {
+    @Contract(pure = true) private static int getSecondsFromMills(float timeInMills) {
         return (int) (timeInMills / 1000) % 60;
     }
 
-    private static int getMinutesFromMills(float timeInMills) {
+    @Contract(pure = true) private static int getMinutesFromMills(float timeInMills) {
         return (int) ((timeInMills / (1000 * 60)) % 60);
     }
 
-    private static int getHoursFromMills(float timeInMills) {
+    @Contract(pure = true) private static int getHoursFromMills(float timeInMills) {
         return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
     }
 }

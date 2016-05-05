@@ -102,7 +102,7 @@ public class MapUtilMethods {
         }
     }
 
-    private static int choseColorDependOnSpeed(float speed) {
+    @org.jetbrains.annotations.Contract(pure = true) private static int choseColorDependOnSpeed(float speed) {
         int color = 0;
         if (speed >= 0 && speed < 80) {
             color = GoogleMapsSettings.polylineColorCity;

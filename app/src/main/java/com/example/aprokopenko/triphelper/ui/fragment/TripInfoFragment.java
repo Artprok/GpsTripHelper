@@ -30,6 +30,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.example.aprokopenko.triphelper.R;
 import com.google.android.gms.maps.MapView;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -235,7 +237,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         return timeSpent / 100 * percentInMotion;
     }
 
-    private float getWithoutMotionValue(float timeSpentInMotion) {
+    @Contract(pure = true) private float getWithoutMotionValue(float timeSpentInMotion) {
         return timeSpent - timeSpentInMotion;
     }
 
