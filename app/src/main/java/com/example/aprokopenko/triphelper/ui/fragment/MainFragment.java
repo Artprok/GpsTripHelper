@@ -338,7 +338,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void restoreFuelLevel(Float fuelLevel) {
-        fuelLeft.setText(UtilMethods.formatFloat(fuelLevel));
+        String fuelString = getFuelLeftString();
+        fuelLeft.setText(fuelString);
     }
 
     private void restoreFuelLayoutVisibility(boolean firstState) {
