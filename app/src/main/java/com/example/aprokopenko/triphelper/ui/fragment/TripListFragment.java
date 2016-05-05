@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.view.ViewGroup;
@@ -61,7 +61,9 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         ButterKnife.bind(this, view);
         if (savedInstanceState != null) {
             tripData = savedInstanceState.getParcelable("tripData");
-            trips = tripData.getTrips();
+            if (tripData != null) {
+                trips = tripData.getTrips();
+            }
         }
         tripListView.setAdapter(new TripListRecyclerViewAdapter(trips, this));
         tripListView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -74,22 +76,19 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         }
     }
 
-    @Override public void onResume() {
-        super.onResume();
-    }
-
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String distance;
-        String avgFuelCons;
-        String moneyOnFuelSpent;
-        String fuelSpent;
-        String avgSpeed;
-        String maxSpeed;
-        float  timeSpentOnTrips;
+        Resources res = getResources();
+        String    distance;
+        String    avgFuelCons;
+        String    moneyOnFuelSpent;
+        String    fuelSpent;
+        String    avgSpeed;
+        String    maxSpeed;
+        float     timeSpentOnTrips;
 
         distance = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
-        avgFuelCons = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_prefix);
+        avgFuelCons = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
         moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
         fuelSpent = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
         avgSpeed = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
@@ -100,11 +99,10 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         avgFuelConsumptionView.setText(avgFuelCons);
         moneyOnFuelView.setText(moneyOnFuelSpent);
         fuelSpentView.setText(fuelSpent);
-        timeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpentOnTrips));
+        timeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpentOnTrips, res));
         avgSpeedView.setText(avgSpeed);
         maxSpeedView.setText(maxSpeed);
     }
-
 
     @Override public void onDestroyView() {
         super.onDestroyView();

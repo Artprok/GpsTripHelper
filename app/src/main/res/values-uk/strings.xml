@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Автопомощник</string>
+    <string name="average_speed_hint">Середня швидкiсть -&#160;</string>
+    <string name="maximum_speed_hint">Максимальна швидкiсть -&#160;</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="average_fuel_consumption_hint">Середня витрата палива -&#160;</string>
+    <string name="currency_prefix">&#160;грн</string>
+    <string name="distance_travelled_hint">Расстояние пройдено -&#160;</string>
+    <string name="distance_prefix">&#160;км</string>
+    <string name="fill_fuel_tank">Залити паливо</string>
+    <string name="fuel_spent_layout_label">Паливо:&#160;</string>
+    <string name="fuel_filled_val">Скiльки палива залити?</string>
+    <string name="fuel_left_hint">Палива залишилось -&#160;</string>
+    <string name="fuel_prefix">&#160;литрiв</string>
+    <string name="fuel_spent_hint">Палива израсходовано -&#160;</string>
+    <string name="info_about_all_trip_header_label">Iнформацiя о всiх поездках:&#160;</string>
+    <string name="list_of_trips_label">Перелiк усiх поездок:&#160;</string>
+    <string name="money_on_fuel_spent_hint">Грошей на паливо потрачено -&#160;</string>
+    <string name="refill_hint">Залити паливо</string>
+    <string name="speed_layout_label">Швидкiсть:&#160;</string>
+    <string name="speed_prefix">&#160;км/год</string>
+    <string name="time_spent_layout_label">Час:&#160;</string>
+    <string name="time_spent_in_motion_hint">Час в русi:&#160;</string>
+    <string name="time_spent_on_all_hint">Час усiх поездок:&#160;</string>
+    <string name="time_spent_on_stop_hint">Час простою:&#160;</string>
+    <string name="time_spent_on_trip_hint">Час поездки:&#160;</string>
+    <string name="trip_data_layout_label">Дата поездки:&#160;</string>
+    <string name="trip_ID_hint">Номер поездки -&#160;</string>
+    <string name="trip_date_label">Дата поездки:&#160;</string>
+    <string name="secondPref">&#160;c</string>
+    <string name="minutePref">&#160;хв</string>
+    <string name="hourPrefix">&#160;год</string>
+    <string name="fuel_cons_prefix">литрiв/100км</string>
+</resources>

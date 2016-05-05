@@ -1,8 +1,9 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
+
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
 import android.view.animation.AccelerateInterpolator;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ActivityCompat;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -55,8 +56,28 @@ public class UtilMethods {
     }
 
     public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
+        int orientation = fragmentActivity.getResources()
+                .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape
+        int animEnter;
+        int animExit;
+        int animPopEnter;
+        int animPopExit;
+
+        if (orientation == 1) {
+            animEnter = R.anim.fragment_enter_vertical;
+            animExit = R.anim.fragment_exit_vertical;
+            animPopEnter = R.anim.pop_enter_vertical;
+            animPopExit = R.anim.pop_exit_vertical;
+        }
+        else {
+            animEnter = R.anim.fragment_enter_horizontal;
+            animExit = R.anim.fragment_exit_horizontal;
+            animPopEnter = R.anim.pop_enter_horizontal;
+            animPopExit = R.anim.pop_exit_horizontal;
+        }
+
         FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fragment_enter,R.anim.fragment_exit,R.anim.pop_enter,R.anim.pop_exit);
+        fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
         fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commit();
 
     }

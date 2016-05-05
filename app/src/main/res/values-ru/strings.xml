@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--hints-->
+    <string name="money_on_fuel_spent_hint">Денег на топливо потрачено -&#160;</string>
+    <string name="time_spent_in_motion_hint">Времени в движении -&#160;</string>
+    <string name="average_fuel_consumption_hint">Средний раход -&#160;</string>
+    <string name="distance_travelled_hint">Расстояние пройдено -&#160;</string>
+    <string name="time_spent_on_all_hint">Время всех поездок -&#160;</string>
+    <string name="maximum_speed_hint">Максимальная скорость -&#160;</string>
+    <string name="time_spent_on_stop_hint">Время простоя -&#160;</string>
+    <string name="time_spent_on_trip_hint">Время поездки -&#160;</string>
+    <string name="fuel_spent_hint">Топлива израсходовано -&#160;</string>
+    <string name="average_speed_hint">Средняя скорость -&#160;</string>
+    <string name="fuel_left_hint">Топлива осталось -&#160;</string>
+    <string name="trip_ID_hint">Номер поездки -&#160;</string>
+    <!--/hints-->
+
+
+    <!--labels-->
+    <string name="info_about_all_trip_header_label">Информация о всех поездках:&#160;</string>
+    <string name="list_of_trips_label">Список всех поездок:&#160;</string>
+    <string name="trip_data_layout_label">Дата поездки:&#160;</string>
+    <string name="fuel_spent_layout_label">Топливо:&#160;</string>
+    <string name="time_spent_layout_label">Время:&#160;</string>
+    <string name="trip_date_label">Дата поездки:&#160;</string>
+    <string name="speed_layout_label">Скорость:&#160;</string>
+    <!--/labels-->
+
+    <!--prefixes-->
+    <string name="fuel_cons_prefix">&#160;литров/100км</string>
+    <string name="currency_prefix">&#160;грн</string>
+    <string name="distance_prefix">&#160;км</string>
+    <string name="fuel_prefix">&#160;литров</string>
+    <string name="speed_prefix">&#160;км/ч</string>
+    <string name="hourPrefix">&#160;ч</string>
+    <string name="minutePref">&#160;м</string>
+    <string name="secondPref">&#160;c</string>
+    <!--/prefixes-->
+
+
+    <!--fill_fuel_dialog-->
+    <string name="fuel_filled_val">Сколько топлива заправить?</string>
+    <string name="fill_fuel_tank">Заправить топливо&#160;</string>
+    <string name="refill_hint">Заправить</string>
+    <!--/fill_fuel_dialog-->
+
+
+    <string name="action_settings">Настройки</string>
+    <string name="app_name">Автопомощник</string>
+</resources>

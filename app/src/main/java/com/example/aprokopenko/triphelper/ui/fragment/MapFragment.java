@@ -114,14 +114,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return previousLoc;
     }
 
-
-    private void getGoogleMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(this);
+    private void setPreviousLocationPoint(LatLng previousLocationPoint){
+        previousLocationFromData = previousLocationPoint;
     }
 
     private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
         GpsHandler.setLocationSubscriber(locationSubscriber);
+    }
+
+    private void locationTracking(GoogleMap googleMap, Location location, @Nullable Float speed) {
+        drawPathFromData();
+        LatLng tempPreviousLocation = getStartingPosition(location);
+        LatLng tempLocation         = new LatLng(location.getLatitude(), location.getLongitude());
+        previousLocation = tempLocation;
+        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, tempLocation, speed);
     }
 
     private void setupSubscribers() {
@@ -157,14 +163,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         };
     }
 
-    private void locationTracking(GoogleMap googleMap, Location location, @Nullable Float speed) {
-        drawPathFromData();
-        LatLng tempPreviousLocation = getStartingPosition(location);
-        LatLng tempLocation         = new LatLng(location.getLatitude(), location.getLongitude());
-        previousLocation = tempLocation;
-        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, tempLocation, speed);
-    }
-
     private void drawPathFromData() {
         if (routes != null) {
             if (ConstantValues.DEBUG_MODE) {
@@ -173,7 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             for (int i = 0; i < routes.size(); i++) {
                 LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
-                previousLocationFromData = currentLocation;
+                setPreviousLocationPoint(currentLocation);
                 if (ConstantValues.DEBUG_MODE) {
                     MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
                 }
@@ -183,6 +181,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
             routes = null;
         }
+    }
+
+    private void getGoogleMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(this);
     }
 }
 

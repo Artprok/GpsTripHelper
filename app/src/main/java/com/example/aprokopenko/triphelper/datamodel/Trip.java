@@ -47,7 +47,7 @@ public class Trip implements Parcelable {
     }
 
 
-    protected Trip(Parcel in) {
+    private Trip(Parcel in) {
         avgFuelConsumption = in.readFloat();
         timeSpentInMotion = in.readFloat();
         distanceTravelled = in.readFloat();

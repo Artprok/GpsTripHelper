@@ -1,7 +1,9 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
-import android.util.Log;
+import android.support.annotation.Nullable;
+import android.content.res.Resources;
 
+import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;
@@ -42,19 +44,33 @@ public class MathUtils {
         return maxSpeed;
     }
 
-    public static String getTimeInNormalFormat(float timeInMills) {
+    public static String getTimeInNormalFormat(float timeInMills, @Nullable Resources res) {
         String resultString;
-        int    seconds = (int) (timeInMills / 1000) % 60;
-        int    minutes = (int) ((timeInMills / (1000 * 60)) % 60);
-        int    hours   = (int) ((timeInMills / (1000 * 60 * 60)) % 24);
-        if (hours == 0) {
-            resultString = minutes + " m," + seconds + " s";
-        }
-        else if (hours == 0 && minutes == 0) {
-            resultString = seconds + " s";
+        String hoursPrefix;
+        String minutePrefix;
+        String secondsPrefix;
+        if (res == null) {
+            hoursPrefix = " h";
+            minutePrefix = " m";
+            secondsPrefix = " s";
         }
         else {
-            resultString = hours + " h," + minutes + " m," + seconds + " s";
+            hoursPrefix = res.getString(R.string.hourPrefix);
+            minutePrefix = res.getString(R.string.minutePref);
+            secondsPrefix = res.getString(R.string.secondPref);
+        }
+
+        int seconds = getSecondsFromMills(timeInMills);
+        int minutes = getMinutesFromMills(timeInMills);
+        int hours   = getHoursFromMills(timeInMills);
+        if (hours == 0) {
+            resultString = minutes + minutePrefix + ", " + seconds + secondsPrefix;
+            if (minutes == 0) {
+                resultString = seconds + secondsPrefix;
+            }
+        }
+        else {
+            resultString = hours + hoursPrefix + ", " + minutes + minutePrefix + ", " + seconds + secondsPrefix;
         }
         return resultString;
     }
@@ -66,8 +82,16 @@ public class MathUtils {
     }
 
 
-    private static float getHoursFromMills(float timeInMills) {
-        return ((timeInMills / (1000 * 60 * 60)) % 24);
+    private static int getSecondsFromMills(float timeInMills) {
+        return (int) (timeInMills / 1000) % 60;
+    }
+
+    private static int getMinutesFromMills(float timeInMills) {
+        return (int) ((timeInMills / (1000 * 60)) % 60);
+    }
+
+    private static int getHoursFromMills(float timeInMills) {
+        return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
     }
 }
 

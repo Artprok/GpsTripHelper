@@ -1,173 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:animateLayoutChanges="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:animateLayoutChanges="true"
     >
 
     <RelativeLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
+        android:id="@+id/listTripInfoLayout"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp">
-
-        <TextView
-            android:id="@+id/timeSpentOnAllTripsLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/headerForAllInfo"
-            android:text="@string/time_spent_on_all"
-            />
-
-        <TextView
-            android:id="@+id/timeSpentOnAllTripsListFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/timeSpentOnAllTripsLabel"
-            android:layout_toEndOf="@id/timeSpentOnAllTripsLabel"
-            />
+        android:layout_margin="5dp"
+        >
 
         <TextView
             android:id="@+id/headerForAllInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/info_about_all_trip_header"
+            android:text="@string/info_about_all_trip_header_label"
             android:textSize="20sp"
             />
 
-        <TextView
-            android:id="@+id/distanceTravelledLabel"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/listDataLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/timeSpentOnAllTripsLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/distanceTravelled"
-            />
+            android:layout_below="@id/headerForAllInfo"
+            android:background="@color/colorOfBlock"
+            android:padding="@dimen/block_padding_land"
+            >
+
+            <TextView
+                android:id="@+id/tripDataLayoutLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trip_data_layout_label"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <TextView
+                android:id="@+id/timeSpentOnAllTripsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tripDataLayoutLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:text="@string/time_spent_on_all_hint"
+                />
+
+            <TextView
+                android:id="@+id/timeSpentOnAllTripsListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/timeSpentOnAllTripsLabel"
+                android:layout_toEndOf="@id/timeSpentOnAllTripsLabel"
+                />
+
+            <TextView
+                android:id="@+id/distanceTravelledLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/timeSpentOnAllTripsLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:layout_marginTop="@dimen/block_item_top_margin_land"
+                android:text="@string/distance_travelled_hint"
+                />
+
+            <TextView
+                android:id="@+id/distanceTravelledListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/distanceTravelledLabel"
+                android:layout_toEndOf="@+id/distanceTravelledLabel"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/listSpeedLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listDataLayout"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorOfBlock"
+            android:padding="@dimen/block_padding_land"
+            >
+
+            <TextView
+                android:id="@+id/speedLayoutLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speed_layout_label"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <TextView
+                android:id="@+id/maxSpeedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/speedLayoutLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:text="@string/maximum_speed_hint"
+                />
+
+            <TextView
+                android:id="@+id/maxSpeedListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/maxSpeedLabel"
+                android:layout_toEndOf="@id/maxSpeedLabel"
+                />
+
+            <TextView
+                android:id="@+id/tripAvgSpeedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/maxSpeedLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:layout_marginTop="@dimen/block_item_top_margin_land"
+                android:text="@string/average_speed_hint"
+                />
+
+            <TextView
+                android:id="@+id/avgSpeedListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tripAvgSpeedLabel"
+                android:layout_toEndOf="@id/tripAvgSpeedLabel"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/listFuelSpentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listSpeedLayout"
+            android:background="@color/colorOfBlock"
+            android:padding="@dimen/block_padding_land"
+            >
+
+            <TextView
+                android:id="@+id/fuelSpentLayoutLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fuel_spent_layout_label"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <TextView
+                android:id="@+id/avgFuelConsumptionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fuelSpentLayoutLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:text="@string/average_fuel_consumption_hint"
+                />
+
+            <TextView
+                android:id="@+id/avgFuelConsListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/avgFuelConsumptionLabel"
+                android:layout_toEndOf="@+id/avgFuelConsumptionLabel"
+                />
+
+            <TextView
+                android:id="@+id/moneyOnFuelSpentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fuelSpentLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:layout_marginTop="5dp"
+                android:text="@string/money_on_fuel_spent_hint"
+                />
+
+            <TextView
+                android:id="@+id/moneyOnFuelSpentListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/moneyOnFuelSpentLabel"
+                android:layout_toEndOf="@id/moneyOnFuelSpentLabel"
+                />
+
+            <TextView
+                android:id="@+id/fuelSpentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avgFuelConsumptionLabel"
+                android:layout_marginStart="@dimen/block_item_start_margin_land"
+                android:layout_marginTop="5dp"
+                android:text="@string/fuel_spent_hint"
+                />
+
+            <TextView
+                android:id="@+id/fuelSpentListFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/fuelSpentLabel"
+                android:layout_toEndOf="@id/fuelSpentLabel"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/listTripInfoLayout"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/listTripInfoLayout">
 
         <TextView
-            android:id="@+id/distanceTravelledListFrag"
+            android:id="@+id/tripListHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/distanceTravelledLabel"
-            android:layout_toEndOf="@+id/distanceTravelledLabel"
+            android:layout_marginTop="10dp"
+            android:text="@string/list_of_trips_label"
+            android:textSize="20sp"
             />
 
-        <TextView
-            android:id="@+id/maxSpeedLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/distanceTravelledLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/MaximumSpd"
-            />
-
-        <TextView
-            android:id="@+id/maxSpeedListFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/maxSpeedLabel"
-            android:layout_toEndOf="@id/avgSpeedLabel"
-            />
-
-        <TextView
-            android:id="@+id/avgSpeedLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/maxSpeedLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/AverageSpeed"
-            />
-
-        <TextView
-            android:id="@+id/avgSpeedListFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/avgSpeedLabel"
-            android:layout_toEndOf="@id/avgSpeedLabel"
-            />
-
-        <TextView
-            android:id="@+id/avgFuelConsumptionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/avgSpeedLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/average_fuel_consumption"
-            />
-
-        <TextView
-            android:id="@+id/avgFuelConsListFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/avgFuelConsumptionLabel"
-            android:layout_toEndOf="@+id/avgFuelConsumptionLabel"
-            />
-
-        <TextView
-            android:id="@+id/moneyOnFuelSpentLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fuelSpentLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/money_on_fuel_spent"
-            />
-
-        <TextView
-            android:id="@+id/moneyOnFuelSpentListFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/moneyOnFuelSpentLabel"
-            android:layout_toEndOf="@id/moneyOnFuelSpentLabel"
-            />
-
-        <TextView
-            android:id="@+id/fuelSpentLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/avgFuelConsumptionLabel"
-            android:layout_marginTop="5dp"
-            android:text="@string/fuel_spent"
-            />
-
-        <TextView
-            android:id="@+id/fuelSpentListFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/fuelSpentLabel"
-            android:layout_toEndOf="@id/fuelSpentLabel"
+        <android.support.v7.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/tripList"
+            android:name="com.example.aprokopenko.triphelper.ui.fragment.TripListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/tripListHeader"
+            android:layout_below="@+id/tripListHeader"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".ui.fragment.TripListFragment"
+            tools:listitem="@layout/fragment_item"
             />
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tripListHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tripList"
-        android:layout_below="@id/header"
-        android:layout_marginTop="10dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:text="@string/list_of_trips"
-        android:textSize="20sp"
-        />
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/tripList"
-        android:name="com.example.aprokopenko.triphelper.ui.fragment.TripListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tripListHeader"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.fragment.TripListFragment"
-        tools:listitem="@layout/fragment_item"
-        />
 </RelativeLayout>

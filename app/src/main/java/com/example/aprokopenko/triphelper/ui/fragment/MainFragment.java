@@ -103,7 +103,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         context = getActivity();
         tripProcessor = new TripProcessor(context);
         ButterKnife.bind(this, view);
-        Log.d(LOG_TAG, "onViewCreated: ONCEASTTASEKJ");
         registerGpsStatusListener();
 
 
@@ -118,8 +117,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onPause() {
         super.onPause();
-        //        saveState();
-        //        Log.d(LOG_TAG, "onPause: save onPause!");
+        saveState();
+        Log.d(LOG_TAG, "onPause: save onPause!");
     }
 
     @Override public void onResume() {
@@ -202,22 +201,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private Float getFuelLevelFieldValue() {
-        return 0f;
+        return tripProcessor.getFuelLeft();
     }
 
     private boolean getButtonVisibility() {
         Boolean     visibility = true;
         ImageButton stB        = (ImageButton) getActivity().findViewById(R.id.startButton);
         if (stB != null) {
-            if (stB.getVisibility() == View.VISIBLE) {
-                visibility = true;
-            }
-            else {
-                visibility = false;
-            }
+            visibility = stB.getVisibility() == View.VISIBLE;
         }
-
-
         return visibility;
     }
 
@@ -464,9 +456,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void setupLocationService() {
         Intent intent = new Intent(context, LocationService.class);
-        setupServiceConnection();
-        context.getApplicationContext().startService(intent);
-        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        if (serviceConnection == null) {
+            setupServiceConnection();
+            context.getApplicationContext().startService(intent);
+            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     private void configureGpsHandler() {

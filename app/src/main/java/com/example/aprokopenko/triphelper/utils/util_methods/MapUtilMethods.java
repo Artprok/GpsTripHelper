@@ -41,20 +41,20 @@ public class MapUtilMethods {
     public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
         if (location != null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                   // Sets the zoom
-                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                // Sets the orientation of the camera to east
-                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))     // Sets the center of the map to location user
+                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                            // Sets the zoom
+                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                      // Sets the orientation of the camera to east
+                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                            // Sets the tilt of the camera to 30 degrees
+                    .build();                                                                // Creates a CameraPosition from the builder
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
         if (position != null) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(position)      // Sets the center of the map to location user
-                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                              // Sets the zoom
-                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                        // Sets the orientation of the camera to east
-                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                              // Sets the tilt of the camera to 30 degrees
-                    .build();                                                                  // Creates a CameraPosition from the builder
+                    .target(position)                                                       // Sets the center of the map to location user
+                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                           // Sets the zoom
+                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                     // Sets the orientation of the camera to east
+                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                           // Sets the tilt of the camera to 30 degrees
+                    .build();                                                               // Creates a CameraPosition from the builder
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }

@@ -1,37 +1,52 @@
 <resources>
-    <string name="average_fuel_consumption">Average fuel consumption - </string>
-    <string name="info_about_all_trip_header">Info about all trips:</string>
-    <string name="time_spent_on_stop">Time spent without motion - </string>
-    <string name="time_spent_in_motion">Time spent in motion - </string>
-    <string name="time_spent_on_all">Time spent on all trips - </string>
-    <string name="money_on_fuel_spent">Money on fuel spent - </string>
-    <string name="time_spent_on_trip">Time spent on trip - </string>
-    <string name="distanceTravelled">Distance travelled - </string>
-    <string name="fuel_filled_val">How much fuel to fill?</string>
-    <string name="maxSpeed_hint_initial_string">Max - </string>
-    <string name="AverageSpeed">Average speed is - </string>
-    <string name="fill_fuel_tank">Fill fuel tank</string>
-    <string name="list_of_trips">List of trips: </string>
-    <string name="fuel_left_hint">Fuel left - </string>
-    <string name="MaximumSpd">Maximum speed -</string>
-    <string name="initial_speedometer_val">0</string>
-    <string name="fuel_spent">Fuel spent - </string>
-    <string name="action_settings">Settings</string>
-    <string name="avg_speed_initial_val">0</string>
-    <string name="initial_max_speed_val">0</string>
-    <string name="fuel_left_initial_val">0</string>
-    <string name="fuel_left">Fuel left -</string>
-    <string name="trip_date">Trip date:</string>
-    <string name="currency_prefix"> grn</string>
-    <string name="app_name">TripHelper</string>
-    <string name="distance_prefix"> km</string>
-    <string name="refill_hint">Refill</string>
-    <string name="fuel_prefix"> litre</string>
-    <string name="speed_prefix"> km/h</string>
-    <string name="tripId">Trip id - </string>
-    <string name="speedLayoutLabel">Speed:</string>
-    <string name="tripDataLayoutLabel">Trip data:</string>
-    <string name="timeSpentLayoutLabel">Time:</string>
-    <string name="fuelSpentLayoutLabel">Fuel:</string>
+    <!--hints-->
+    <string name="average_fuel_consumption_hint">Average fuel consumption -&#160;</string>
+    <string name="time_spent_on_stop_hint">Time spent without motion -&#160;</string>
+    <string name="time_spent_in_motion_hint">Time spent in motion -&#160;</string>
+    <string name="time_spent_on_all_hint">Time spent on all trips -&#160;</string>
+    <string name="money_on_fuel_spent_hint">Money on fuel spent -&#160;</string>
+    <string name="time_spent_on_trip_hint">Time spent on trip -&#160;</string>
+    <string name="distance_travelled_hint">Distance travelled -&#160;</string>
+    <string name="average_speed_hint">Average speed is -&#160;</string>
+    <string name="maximum_speed_hint">Maximum speed -&#160;</string>
+    <string name="fuel_spent_hint">Fuel spent -&#160;</string>
+    <string name="fuel_left_hint">Fuel left -&#160;</string>
+    <string name="trip_ID_hint">Trip id -&#160;</string>
+    <!--/hints-->
 
+
+    <!--labels-->
+    <string name="info_about_all_trip_header_label">Info about all trips:&#160;</string>
+    <string name="list_of_trips_label">List of trips:&#160;</string>
+    <string name="trip_data_layout_label">Trip data:&#160;</string>
+    <string name="time_spent_layout_label">Time:&#160;</string>
+    <string name="fuel_spent_layout_label">Fuel:&#160;</string>
+    <string name="trip_date_label">Trip date:&#160;</string>
+    <string name="speed_layout_label">Speed:&#160;</string>
+    <!--/labels-->
+
+
+    <!--prefixes:-->
+    <string name="fuel_cons_prefix">&#160;litre/100km</string>
+    <string name="currency_prefix">&#160;grn</string>
+    <string name="distance_prefix">&#160;km</string>
+    <string name="fuel_prefix">&#160;litre</string>
+    <string name="speed_prefix">&#160;km/h</string>
+    <string name="hourPrefix">&#160;h</string>
+    <string name="minutePref">&#160;m</string>
+    <string name="secondPref">&#160;s</string>
+    <!--/prefixes-->
+
+
+    <!--fill_fuel_dialog-->
+    <string name="fuel_filled_val">How much fuel to fill?</string>
+    <string name="fill_fuel_tank">Fill fuel tank</string>
+    <string name="refill_hint">Refill</string>
+    <!--/fill_fuel_dialog-->
+
+
+    <string name="initial_speedometer_val" translatable="false">0</string>
+    <string name="fuel_left_initial_val" translatable="false">0</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">TripHelper</string>
 </resources>

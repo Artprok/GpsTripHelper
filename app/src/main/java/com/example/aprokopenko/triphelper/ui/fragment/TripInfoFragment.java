@@ -1,16 +1,21 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.animation.Animator;
+import android.content.res.Resources;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.support.annotation.Nullable;
+import android.animation.ObjectAnimator;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.content.Context;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.view.LayoutInflater;
+import android.widget.ImageButton;
+import android.animation.Animator;
+import android.content.Context;
 import android.widget.TextView;
 import android.view.ViewGroup;
-import android.view.View;
 import android.os.Bundle;
+import android.view.View;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
@@ -33,34 +38,33 @@ import butterknife.Bind;
 public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     @Bind(R.id.tripAvgFuelConsumption)
-    TextView tripAvgFuelConsumptionView;
+    TextView       tripAvgFuelConsumptionView;
     @Bind(R.id.tripDistanceTravelled)
-    TextView tripDistanceTravelledView;
+    TextView       tripDistanceTravelledView;
     @Bind(R.id.tripTimeSpentInMotion)
-    TextView tripTimeSpentInMotionView;
+    TextView       tripTimeSpentInMotionView;
     @Bind(R.id.tripTimeSpentOnStop)
-    TextView tripTimeSpentOnStopView;
+    TextView       tripTimeSpentOnStopView;
     @Bind(R.id.tripMoneyOnTripFuelSpent)
-    TextView tripMoneySpentView;
+    TextView       tripMoneySpentView;
     @Bind(R.id.tripFuelSpent)
-    TextView tripFuelSpentView;
+    TextView       tripFuelSpentView;
     @Bind(R.id.tripTimeSpent)
-    TextView tripTimeSpentView;
+    TextView       tripTimeSpentView;
     @Bind(R.id.tripAvgSpeed)
-    TextView tripAvgSpeedView;
+    TextView       tripAvgSpeedView;
     @Bind(R.id.tripMaxSpeed)
-    TextView tripMaxSpeedView;
-    @Bind(R.id.tripDate)
-    TextView tripDateView;
-    @Bind(R.id.tripId)
-    TextView tripIdView;
-    @Bind(R.id.mapView)
-    MapView  mapView;
-
-    @Bind(R.id.textDataContainer)
-    RelativeLayout dataContainer;
+    TextView       tripMaxSpeedView;
     @Bind(R.id.mapTurnActiveButton)
     ImageButton    openMapButton;
+    @Bind(R.id.textDataContainer)
+    RelativeLayout dataContainer;
+    @Bind(R.id.tripDate)
+    TextView       tripDateView;
+    @Bind(R.id.tripId)
+    TextView       tripIdView;
+    @Bind(R.id.mapView)
+    MapView        mapView;
 
 
     private static final String LOG_TAG = "TripInfoFragment";
@@ -176,11 +180,23 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
         openMapButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (mapOpened) {
-                    animateMapClosing(view);
+                Log.d(LOG_TAG, "onClick: called");
+                int orientation = getActivity().getResources().getConfiguration().orientation;
+                if (orientation == 1) {
+                    if (mapOpened) {
+                        animateMapClosingForPortrait(view);
+                    }
+                    else {
+                        animateMapOpeningForPortrait(view);
+                    }
                 }
                 else {
-                    animateMapOpening(view);
+                    if (mapOpened) {
+                        animateMapClosingForLandscape(view);
+                    }
+                    else {
+                        animateMapOpeningForLandscape(view);
+                    }
                 }
             }
         });
@@ -190,7 +206,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-
 
     @Override public void onDetach() {
         super.onDetach();
@@ -211,6 +226,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+
     private float getInMotionValue() {
         float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
         float percentInMotion      = 100 - percentWithoutMotion;
@@ -220,6 +236,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private float getWithoutMotionValue(float timeSpentInMotion) {
         return timeSpent - timeSpentInMotion;
     }
+
 
     private void setupMapView(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);
@@ -244,15 +261,17 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);
-            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + MathUtils.getTimeInNormalFormat(timeSpentOnStop));
+            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + MathUtils.getTimeInNormalFormat(timeSpentOnStop, null));
         }
 
         float valInMotion      = getInMotionValue();
         float valWithoutMotion = getWithoutMotionValue(valInMotion);
 
-        tripTimeSpentOnStopView.setText(MathUtils.getTimeInNormalFormat(valWithoutMotion));
-        tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(valInMotion));
-        tripTimeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpent));
+        Resources res = getResources();
+
+        tripTimeSpentOnStopView.setText(MathUtils.getTimeInNormalFormat(valWithoutMotion, res));
+        tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(valInMotion, res));
+        tripTimeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpent, res));
         tripAvgFuelConsumptionView.setText(avgFuelCons);
         tripMoneySpentView.setText(moneyOnFuelSpent);
         tripDistanceTravelledView.setText(distance);
@@ -263,61 +282,29 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         tripDateView.setText(tripDate);
     }
 
-    private void animateMapClosing(View view) {
-        mapView.animate().translationY(-view.getHeight()).setDuration(500).setListener(new Animator.AnimatorListener() {
+    private void animateMapOpeningForLandscape(final View view) {
+        ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, 0, view.getWidth());
+        dataContainerAnimator.setDuration(900);
+        dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
+        dataContainerAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override public void onAnimationEnd(Animator animation) {
-                mapView.setVisibility(View.INVISIBLE);
-                dataContainer.animate().translationY(0).setDuration(500).setListener(new Animator.AnimatorListener() {
-                    @Override public void onAnimationStart(Animator animation) {
-                        dataContainer.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override public void onAnimationEnd(Animator animation) {
-
-                        mapOpened = false;
-                    }
-
-                    @Override public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-            }
-
-            @Override public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-    }
-
-    private void animateMapOpening(View view) {
-        dataContainer.animate().translationY(view.getHeight()).setDuration(500).setListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animation) {
-
+                Log.d(LOG_TAG, "onAnimationStart: MapOpen dataContAnim anim");
             }
 
             @Override public void onAnimationEnd(Animator animation) {
                 dataContainer.setVisibility(View.INVISIBLE);
-                mapView.animate()
-
-                        .translationY(0).setDuration(510).setListener(new Animator.AnimatorListener() {
+                ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, -view.getWidth(), 0);
+                mapViewAnimator.setDuration(900);
+                mapViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                mapViewAnimator.addListener(new Animator.AnimatorListener() {
                     @Override public void onAnimationStart(Animator animation) {
                         mapView.setVisibility(View.VISIBLE);
+                        mapOpened = true;
+                        Log.d(LOG_TAG, "onAnimationStart: MapOpen mapView anim");
                     }
 
                     @Override public void onAnimationEnd(Animator animation) {
-                        mapOpened = true;
+
                     }
 
                     @Override public void onAnimationCancel(Animator animation) {
@@ -328,7 +315,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
                     }
                 });
-
+                mapViewAnimator.start();
             }
 
             @Override public void onAnimationCancel(Animator animation) {
@@ -339,7 +326,144 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+        dataContainerAnimator.start();
     }
 
+    private void animateMapClosingForLandscape(final View view) {
+        ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, 0, -view.getWidth());
+        mapViewAnimator.setDuration(900);
+        mapViewAnimator.setInterpolator(new AnticipateInterpolator());
+        mapViewAnimator.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animation) {
+            }
 
+            @Override public void onAnimationEnd(Animator animation) {
+                mapView.setVisibility(View.INVISIBLE);
+                ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, view.getWidth(), 0);
+                dataContainerAnimator.setDuration(900);
+                dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                dataContainerAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        dataContainer.setVisibility(View.VISIBLE);
+                        mapOpened = false;
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                dataContainerAnimator.start();
+            }
+
+            @Override public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mapViewAnimator.start();
+    }
+
+    private void animateMapOpeningForPortrait(final View view) {
+        ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, 0, view.getHeight());
+        dataContainerAnimator.setDuration(900);
+        dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
+        dataContainerAnimator.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animation) {
+                Log.d(LOG_TAG, "onAnimationStart: MapOpen dataContAnim anim");
+            }
+
+            @Override public void onAnimationEnd(Animator animation) {
+                dataContainer.setVisibility(View.INVISIBLE);
+                ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, -view.getHeight(), 0);
+                mapViewAnimator.setDuration(1500);
+                mapViewAnimator.setInterpolator(new BounceInterpolator());
+                mapViewAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        mapView.setVisibility(View.VISIBLE);
+                        mapOpened = true;
+                        Log.d(LOG_TAG, "onAnimationStart: MapOpen mapView anim");
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                mapViewAnimator.start();
+            }
+
+            @Override public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        dataContainerAnimator.start();
+    }
+
+    private void animateMapClosingForPortrait(final View view) {
+        ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, 0, -view.getHeight());
+        mapViewAnimator.setDuration(900);
+        mapViewAnimator.setInterpolator(new AnticipateInterpolator());
+        mapViewAnimator.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animation) {
+            }
+
+            @Override public void onAnimationEnd(Animator animation) {
+                mapView.setVisibility(View.INVISIBLE);
+                ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, view.getHeight(), 0);
+                dataContainerAnimator.setDuration(900);
+                dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                dataContainerAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        dataContainer.setVisibility(View.VISIBLE);
+                        mapOpened = false;
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                dataContainerAnimator.start();
+            }
+
+            @Override public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mapViewAnimator.start();
+    }
 }
+

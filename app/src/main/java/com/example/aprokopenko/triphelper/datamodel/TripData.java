@@ -33,7 +33,7 @@ public class TripData implements Parcelable {
     }
 
 
-    protected TripData(Parcel in) {
+    private TripData(Parcel in) {
         avgFuelConsumption = in.readFloat();
         distanceTravelled = in.readFloat();
         timeSpentOnTrips = in.readFloat();

@@ -14,7 +14,7 @@ public class Route implements Parcelable {
         this.speed = speed;
     }
 
-    protected Route(Parcel in) {
+    private Route(Parcel in) {
         routePoints = in.readParcelable(LatLng.class.getClassLoader());
         speed = in.readFloat();
     }
