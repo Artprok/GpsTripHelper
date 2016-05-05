@@ -1,6 +1,6 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="speedometerTextViewSize">50sp</dimen>
+    <dimen name="speedometerTextViewSize">55sp</dimen>
     <dimen name="metricPortraitTextSize">21sp</dimen>
     <dimen name="metricsLandTextSize">18sp</dimen>
     <dimen name="text_margin">16dp</dimen>

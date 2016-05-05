@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ import dagger.Module;
         UtilMethods.setFabInvisible(this);
 
         if (savedInstanceState == null) {
+            Log.d(LOG_TAG, "onCreate: new fragment");
             mainFragment = MainFragment.newInstance();
             UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             assert fab != null;
@@ -37,6 +39,7 @@ import dagger.Module;
 
         }
         else {
+            Log.d(LOG_TAG, "onCreate: old fragment");
             mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
             assert fab != null;
             setFabToMap(mainFragment);

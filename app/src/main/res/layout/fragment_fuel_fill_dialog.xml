@@ -16,7 +16,7 @@
         android:inputType="textCapSentences"/>
 
     <Button
-        android:id="@+id/fillButton"
+        android:id="@+id/refillButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fuelToFill"

@@ -60,7 +60,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     ImageButton    startButton;
     @Bind(R.id.eraseButton)
     ImageButton    eraseButton;
-    @Bind(R.id.fillButton)
+    @Bind(R.id.refillButton)
     ImageButton    fillButton;
     @Bind(R.id.stopButton)
     ImageButton    stopButton;
@@ -100,12 +100,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
         context = getActivity();
         tripProcessor = new TripProcessor(context);
-        ButterKnife.bind(this, view);
         registerGpsStatusListener();
-
-
         setupLocationService();
         setupSpeedometer();
 
@@ -122,10 +120,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onResume() {
-        super.onResume();
         if (state != null) {
             restoreState(state);
         }
+        super.onResume();
+
     }
 
     @Override public void onSaveInstanceState(Bundle outState) {
@@ -145,12 +144,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onDestroyView() {
-        super.onDestroyView();
         ButterKnife.unbind(this);
+        super.onDestroyView();
     }
 
     @Override public void onDetach() {
-        super.onDetach();
         if (serviceConnection != null) {
             getActivity().unbindService(serviceConnection);
         }
@@ -160,6 +158,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         serviceConnection = null;
         gpsHandler = null;
         tripProcessor = null;
+        super.onDetach();
         Log.d(LOG_TAG, "onDetach: called");
     }
 
@@ -299,7 +298,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupStopButton();
         setupTripListButton();
         setupFillButton();
-        // TODO: 28.04.2016 Erase button replace in some settings fragment of something
+        // TODO: 28.04.2016 Erase button replace to some settings fragment of something
         //        if (ConstantValues.DEBUG_MODE) {
         setupEraseButton();
         //        }
@@ -435,7 +434,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void setupServiceConnection() {
         serviceConnection = new ServiceConnection() {
-
             @Override public void onServiceConnected(ComponentName className, IBinder service) {
                 LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
                 locationService = binder.getService();
@@ -460,6 +458,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             setupServiceConnection();
             context.getApplicationContext().startService(intent);
             context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
+        else {
+            if (ConstantValues.DEBUG_MODE) {
+                Log.d(LOG_TAG, "onServiceConnected: service already exist");
+            }
+            configureGpsHandler();
+            setupButtons();
         }
     }
 
