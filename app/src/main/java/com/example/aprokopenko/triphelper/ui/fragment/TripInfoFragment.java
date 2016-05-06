@@ -1,12 +1,12 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.content.res.Resources;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.support.annotation.Nullable;
 import android.animation.ObjectAnimator;
 import android.support.v4.app.Fragment;
+import android.content.res.Resources;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
@@ -18,10 +18,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapsInitializer;

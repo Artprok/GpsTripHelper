@@ -1,8 +1,8 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.location.Location;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
@@ -34,35 +34,6 @@ public class MapUtilMethods {
         return route;
     }
 
-    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
-        int color=Color.BLACK;;
-        if(speed!=null){
-            color = choseColorDependOnSpeed(speed);
-        }
-        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
-    }
-
-    public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
-        if (location != null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))     // Sets the center of the map to location user
-                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                            // Sets the zoom
-                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                      // Sets the orientation of the camera to east
-                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                            // Sets the tilt of the camera to 30 degrees
-                    .build();                                                                // Creates a CameraPosition from the builder
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        }
-        if (position != null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(position)                                                       // Sets the center of the map to location user
-                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                           // Sets the zoom
-                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                     // Sets the orientation of the camera to east
-                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                           // Sets the tilt of the camera to 30 degrees
-                    .build();                                                               // Creates a CameraPosition from the builder
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        }
-    }
-
     public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
         LatLng previousLocation;
         if (size > 1 && currentIndex > 1) {
@@ -92,19 +63,35 @@ public class MapUtilMethods {
         return result;
     }
 
-
-    private static LatLng getPositionForCamera(ArrayList<Route> routes) {
-        LatLng lastPoint;
-        int    routeSize = routes.size();
-        int    index     = routeSize - 1;
-        if (index > 0) {
-            lastPoint = routes.get(routeSize - 1).getRoutePoints();
-            return lastPoint;
+    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
+        int color=Color.BLACK;;
+        if(speed!=null){
+            color = choseColorDependOnSpeed(speed);
         }
-        else {
-            return ConstantValues.BERMUDA_COORDINATES;
+        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
+    }
+
+    public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
+        if (location != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))     // Sets the center of the map to location user
+                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                            // Sets the zoom
+                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                      // Sets the orientation of the camera to east
+                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                            // Sets the tilt of the camera to 30 degrees
+                    .build();                                                                // Creates a CameraPosition from the builder
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+        if (position != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(position)                                                       // Sets the center of the map to location user
+                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                           // Sets the zoom
+                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                     // Sets the orientation of the camera to east
+                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                           // Sets the tilt of the camera to 30 degrees
+                    .build();                                                               // Creates a CameraPosition from the builder
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
+
 
     @org.jetbrains.annotations.Contract(pure = true) private static int choseColorDependOnSpeed(float speed) {
         int color = 0;
@@ -118,5 +105,18 @@ public class MapUtilMethods {
             color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowedINT;
         }
         return color;
+    }
+
+    private static LatLng getPositionForCamera(ArrayList<Route> routes) {
+        LatLng lastPoint;
+        int    routeSize = routes.size();
+        int    index     = routeSize - 1;
+        if (index > 0) {
+            lastPoint = routes.get(routeSize - 1).getRoutePoints();
+            return lastPoint;
+        }
+        else {
+            return ConstantValues.BERMUDA_COORDINATES;
+        }
     }
 }

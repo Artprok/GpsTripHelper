@@ -1,10 +1,12 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
 
-import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Parcel;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
@@ -32,6 +34,22 @@ public class TripData implements Parcelable {
         gasTank = ConstantValues.START_VALUE;
     }
 
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeFloat(avgFuelConsumption);
+        dest.writeFloat(distanceTravelled);
+        dest.writeFloat(timeSpentOnTrips);
+        dest.writeFloat(moneyOnFuelSpent);
+        dest.writeFloat(fuelSpent);
+        dest.writeFloat(avgSpeed);
+        dest.writeFloat(maxSpeed);
+        dest.writeFloat(gasTank);
+        dest.writeTypedList(trips);
+    }
+
 
     private TripData(Parcel in) {
         avgFuelConsumption = in.readFloat();
@@ -46,11 +64,11 @@ public class TripData implements Parcelable {
     }
 
     public static final Creator<TripData> CREATOR = new Creator<TripData>() {
-        @Override public TripData createFromParcel(Parcel in) {
+        @Contract("_ -> !null") @Override public TripData createFromParcel(Parcel in) {
             return new TripData(in);
         }
 
-        @Override public TripData[] newArray(int size) {
+        @Contract(value = "_ -> !null", pure = true) @Override public TripData[] newArray(int size) {
             return new TripData[size];
         }
     };
@@ -141,20 +159,5 @@ public class TripData implements Parcelable {
     }
 
 
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(avgFuelConsumption);
-        dest.writeFloat(distanceTravelled);
-        dest.writeFloat(timeSpentOnTrips);
-        dest.writeFloat(moneyOnFuelSpent);
-        dest.writeFloat(fuelSpent);
-        dest.writeFloat(avgSpeed);
-        dest.writeFloat(maxSpeed);
-        dest.writeFloat(gasTank);
-        dest.writeTypedList(trips);
-    }
 }
 

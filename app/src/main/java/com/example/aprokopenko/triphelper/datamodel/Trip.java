@@ -1,7 +1,7 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
-import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Parcel;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -44,6 +44,25 @@ public class Trip implements Parcelable {
     public Trip(int tripID, String tripDate) {
         this.tripID = tripID;
         this.tripDate = tripDate;
+    }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeFloat(avgFuelConsumption);
+        dest.writeFloat(timeSpentInMotion);
+        dest.writeFloat(distanceTravelled);
+        dest.writeFloat(moneyOnFuelSpent);
+        dest.writeFloat(timeSpentOnStop);
+        dest.writeFloat(fuelSpent);
+        dest.writeFloat(timeSpent);
+        dest.writeString(tripDate);
+        dest.writeFloat(avgSpeed);
+        dest.writeFloat(maxSpeed);
+        dest.writeInt(tripID);
+        dest.writeTypedList(route);
     }
 
 
@@ -242,25 +261,5 @@ public class Trip implements Parcelable {
 
     private void setTripID(int tripID) {
         this.tripID = tripID;
-    }
-
-
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(avgFuelConsumption);
-        dest.writeFloat(timeSpentInMotion);
-        dest.writeFloat(distanceTravelled);
-        dest.writeFloat(moneyOnFuelSpent);
-        dest.writeFloat(timeSpentOnStop);
-        dest.writeFloat(fuelSpent);
-        dest.writeFloat(timeSpent);
-        dest.writeString(tripDate);
-        dest.writeFloat(avgSpeed);
-        dest.writeFloat(maxSpeed);
-        dest.writeInt(tripID);
-        dest.writeTypedList(route);
     }
 }
