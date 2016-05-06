@@ -92,7 +92,7 @@
             android:layout_alignBottom="@+id/fuelIcon"
             android:layout_toEndOf="@+id/fuelIcon"
             android:text="@string/fuel_left_label"
-            android:textSize="@dimen/metricsLandTextSize"
+            android:textSize="@dimen/metricsTextSize"
             android:textStyle="bold|italic"
             android:typeface="sans"
             />
@@ -128,7 +128,7 @@
                 android:layout_alignBottom="@+id/refillButton"
                 android:layout_toEndOf="@+id/refillButton"
                 android:text="@string/refill_hint"
-                android:textSize="@dimen/metricsLandTextSize"
+                android:textSize="@dimen/metricsTextSize"
                 android:textStyle="bold|italic"
                 android:typeface="sans"
                 />

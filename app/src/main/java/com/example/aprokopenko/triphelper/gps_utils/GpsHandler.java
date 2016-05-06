@@ -47,7 +47,7 @@ public class GpsHandler implements LocationListener {
                 tempVal[0] += 5;
             }
             if (speed > 50) {
-                speed = 20;
+                speed = 0;
             }
         }
         else {

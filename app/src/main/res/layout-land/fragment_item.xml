@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="@dimen/metricsLandTextSize"/>
+        android:textSize="@dimen/metricsTextSize"/>
 
     <ImageView
         android:id="@+id/calendarIcon"
@@ -30,5 +30,5 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/calendarIcon"
         android:layout_toEndOf="@+id/calendarIcon"
-        android:textSize="@dimen/metricsLandTextSize"/>
+        android:textSize="@dimen/metricsTextSize"/>
 </RelativeLayout>

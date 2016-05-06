@@ -1,0 +1,15 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="margin_between_blocks_list">5dp</dimen>
+    <dimen name="margin_between_blocks_info">3dp</dimen>
+    <dimen name="block_label_bottom_margin">5dp</dimen>
+    <dimen name="block_item_start_margin">10dp</dimen>
+    <dimen name="block_item_bottom_margin">5dp</dimen>
+    <dimen name="block_label_start_margin">5dp</dimen>
+    <dimen name="block_label_top_margin">10dp</dimen>
+    <dimen name="block_item_top_margin">5dp</dimen>
+    <dimen name="margin_between_items">0dp</dimen>
+    <dimen name="metricsTextSize">17sp</dimen>
+    <dimen name="label_text_size">20sp</dimen>
+    <dimen name="block_padding">4dp</dimen>
+</resources>

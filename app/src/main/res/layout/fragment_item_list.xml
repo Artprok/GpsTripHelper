@@ -31,7 +31,6 @@
             android:layout_below="@id/headerForAllInfo"
             android:background="@color/colorOfBlock"
             android:padding="@dimen/block_padding"
-
             >
 
             <TextView
