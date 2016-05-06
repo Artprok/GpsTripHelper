@@ -11,7 +11,7 @@
     <string name="fill_fuel_tank">Залити паливо</string>
     <string name="fuel_spent_layout_label">Паливо:&#160;</string>
     <string name="fuel_filled_val">Скiльки палива залити?</string>
-    <string name="fuel_left_hint">Палива залишилось -&#160;</string>
+    <string name="fuel_left_label">Палива залишилось -&#160;</string>
     <string name="fuel_prefix">&#160;литрiв</string>
     <string name="fuel_spent_hint">Палива израсходовано -&#160;</string>
     <string name="info_about_all_trip_header_label">Iнформацiя о всiх поездках:&#160;</string>

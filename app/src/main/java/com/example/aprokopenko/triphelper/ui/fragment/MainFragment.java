@@ -1,8 +1,8 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.graphics.drawable.Drawable;
 import android.content.ServiceConnection;
 import android.location.LocationManager;
@@ -57,14 +57,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     TextView       speedometerTextView;
     @Bind(R.id.tripListButton)
     ImageButton    tripListButton;
+    @Bind(R.id.refillButtonLayout)
+    RelativeLayout refillLayout;
     @Bind(R.id.statusImageView)
     ImageView      statusImage;
     @Bind(R.id.startButton)
     ImageButton    startButton;
     @Bind(R.id.eraseButton)
     ImageButton    eraseButton;
-    @Bind(R.id.refillButton)
-    ImageButton    fillButton;
     @Bind(R.id.stopButton)
     ImageButton    stopButton;
     @Bind(R.id.fuelLayout)
@@ -310,7 +310,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setupFillButton() {
-        fillButton.setOnClickListener(new View.OnClickListener() {
+        refillLayout.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 FuelFillDialog dialog = new FuelFillDialog();
                 dialog.setFuelChangeAmountListener(new FuelChangeAmountListener() {

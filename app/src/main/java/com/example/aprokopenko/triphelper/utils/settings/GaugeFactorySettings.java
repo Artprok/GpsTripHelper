@@ -35,13 +35,13 @@ public class GaugeFactorySettings {
     public static final int        needleColorString     = Color.RED;
     public static final String     tickColorString       = "#FFFFFF";
     public static final int        labelTextColor        = Color.WHITE;
-    public static final double     ticksOffset           = 0.03;
+    public static final double     ticksOffset           = 0.07;
     public static final double     labelOffset           = 0.15;
     public static final double     needleLengthFactor    = 0.8;
-    public static final int        minorTickSize         = 20;
-    public static final int        majorTickSize         = 50;
+    public static final int        minorTickSize         = 10;
+    public static final int        majorTickSize         = 25;
     public static final int        labelTextSize         = 20;
     public static final int        needleWidth           = 20;
     public static final int        knobRadius            = 20;
-    public static final int        ticksWidth            = 5;
+    public static final int        ticksWidth            = 4;
 }

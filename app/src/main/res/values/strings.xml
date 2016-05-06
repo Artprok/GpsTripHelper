@@ -10,7 +10,6 @@
     <string name="average_speed_hint">Average speed is -&#160;</string>
     <string name="maximum_speed_hint">Maximum speed -&#160;</string>
     <string name="fuel_spent_hint">Fuel spent -&#160;</string>
-    <string name="fuel_left_hint">Fuel left -&#160;</string>
     <string name="trip_ID_hint">Trip id -&#160;</string>
     <!--/hints-->
 
@@ -21,6 +20,7 @@
     <string name="trip_data_layout_label">Trip data:&#160;</string>
     <string name="time_spent_layout_label">Time:&#160;</string>
     <string name="fuel_spent_layout_label">Fuel:&#160;</string>
+    <string name="fuel_left_label">Fuel left:&#160;</string>
     <string name="trip_date_label">Trip date:&#160;</string>
     <string name="speed_layout_label">Speed:&#160;</string>
     <!--/labels-->

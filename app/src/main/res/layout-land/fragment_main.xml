@@ -1,9 +1,9 @@
 <RelativeLayout
-    android:animateLayoutChanges="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:keepScreenOn="true"
     tools:context=".ui.fragment.MainFragment">
 
@@ -74,7 +74,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/statusImageView"
-        android:visibility="invisible">
+        android:layout_marginStart="5dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/fuelIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/gas_station"
+            />
 
         <TextView
             android:id="@+id/fuelLeftHint"
@@ -82,51 +91,49 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/fuelIcon"
             android:layout_toEndOf="@+id/fuelIcon"
-            android:text="@string/fuel_left_hint"
+            android:text="@string/fuel_left_label"
             android:textSize="@dimen/metricsLandTextSize"
             android:textStyle="bold|italic"
             android:typeface="sans"
-            />
-
-        <ImageView
-            android:id="@+id/fuelIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/gas_station"
             />
 
         <TextView
             android:id="@+id/fuelLeftView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fuelLeftHint"
-            android:layout_marginStart="2dp"
-            android:layout_toEndOf="@+id/fuelLeftHint"
+            android:layout_alignStart="@+id/fuelLeftHint"
+            android:layout_below="@id/fuelLeftHint"
             android:textSize="@dimen/metricPortraitTextSize"
             />
 
-        <ImageButton
-            android:id="@+id/refillButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignStart="@+id/fuelIcon"
-            android:layout_below="@+id/fuelIcon"
-            android:background="@drawable/gas_pump"
-            />
-
-        <TextView
-            android:id="@+id/refillHint"
+        <RelativeLayout
+            android:id="@+id/refillButtonLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/refillButton"
-            android:layout_toEndOf="@+id/refillButton"
-            android:text="@string/refill_hint"
-            android:textSize="@dimen/metricsLandTextSize"
-            android:textStyle="bold|italic"
-            android:typeface="sans"
-            />
+            android:layout_alignStart="@id/fuelIcon"
+            android:layout_below="@id/fuelIcon"
+            >
+
+            <ImageButton
+                android:id="@+id/refillButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/gas_pump"
+                />
+
+            <TextView
+                android:id="@+id/refillHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/refillButton"
+                android:layout_toEndOf="@+id/refillButton"
+                android:text="@string/refill_hint"
+                android:textSize="@dimen/metricsLandTextSize"
+                android:textStyle="bold|italic"
+                android:typeface="sans"
+                />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <ImageView
