@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.location.Location;
 import android.util.Log;
@@ -33,8 +34,11 @@ public class MapUtilMethods {
         return route;
     }
 
-    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, float speed) {
-        int color = choseColorDependOnSpeed(speed);
+    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
+        int color=Color.BLACK;;
+        if(speed!=null){
+            color = choseColorDependOnSpeed(speed);
+        }
         googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
     }
 

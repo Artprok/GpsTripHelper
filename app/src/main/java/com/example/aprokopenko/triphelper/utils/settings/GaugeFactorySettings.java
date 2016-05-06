@@ -12,7 +12,7 @@ public class GaugeFactorySettings {
     public static final int minorTicksPerInterval = 5;
     public static final int startValue            = 0;
 
-    public static final int    textColor             = Color.WHITE;
+    public static final int    textColor             = ConstantValues.TEXT_COLOR;
     public static final String speedometerHeaderText = "km/h";
     public static final int    textSize              = 20;
 
@@ -31,10 +31,10 @@ public class GaugeFactorySettings {
     public static final int pointerStartValue              = 0;
 
     public static final NeedleType needleType            = NeedleType.Triangle;
-    public static final String     knobNeedleColorString = "#FF0000";
+    public static final String     knobNeedleColorString = "#000000";
     public static final int        needleColorString     = Color.RED;
     public static final String     tickColorString       = "#FFFFFF";
-    public static final int        labelTextColor        = Color.WHITE;
+    public static final int        labelTextColor        = ConstantValues.TEXT_COLOR;
     public static final double     ticksOffset           = 0.07;
     public static final double     labelOffset           = 0.15;
     public static final double     needleLengthFactor    = 0.8;
@@ -44,4 +44,5 @@ public class GaugeFactorySettings {
     public static final int        needleWidth           = 20;
     public static final int        knobRadius            = 20;
     public static final int        ticksWidth            = 4;
+
 }

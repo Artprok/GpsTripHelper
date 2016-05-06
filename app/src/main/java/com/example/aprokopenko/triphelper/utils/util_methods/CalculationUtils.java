@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.content.res.Resources;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.R;
 
 import org.jetbrains.annotations.Contract;
@@ -11,39 +12,14 @@ import org.jetbrains.annotations.Contract;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MathUtils {
-    @Contract(pure = true) public static float getSpeedInKilometerPerHour(float speed) {
-        return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
+public class CalculationUtils {
+
+    @Contract(pure = true) public static float calcMoneySpent(float fuelSpent) {
+        return fuelSpent * ConstantValues.FUEL_COST;
     }
 
-    public static float calcAvgSpeedForOneTrip(ArrayList<Float> avgSpeedArrayList) {
-        Float avgSpeed = 0f;
-        if (avgSpeedArrayList != null) {
-            for (Float tmpSpeed : avgSpeedArrayList) {
-                avgSpeed = avgSpeed + tmpSpeed;
-            }
-            avgSpeed = avgSpeed / avgSpeedArrayList.size();
-        }
-        if (avgSpeed.isNaN()) {
-            avgSpeed = (float) ConstantValues.START_VALUE;
-        }
-        return avgSpeed;
-    }
-
-    public static float calcDistTravelled(float timeSpent, float avgSpeed) {
-        Float distanceTravelled = avgSpeed * getHoursFromMills(timeSpent);
-        if (distanceTravelled.isNaN()) {
-            distanceTravelled = (float) ConstantValues.START_VALUE;
-        }
-        return distanceTravelled;
-    }
-
-    @Contract(pure = true) public static float findMaxSpeed(float speed, float initialVal) {
-        float maxSpeed = initialVal;
-        if (speed > maxSpeed) {
-            maxSpeed = speed;
-        }
-        return maxSpeed;
+    @Contract(pure = true) public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
+        return distanceTraveled * (fuelConsumption / 100);
     }
 
     public static String getTimeInNormalFormat(float timeInMills, @Nullable Resources res) {
@@ -75,6 +51,45 @@ public class MathUtils {
             resultString = hours + hoursPrefix + ", " + minutes + minutePrefix + ", " + seconds + secondsPrefix;
         }
         return resultString;
+    }
+
+    @Contract(pure = true) public static float findMaxSpeed(float speed, float initialVal) {
+        float maxSpeed = initialVal;
+        if (speed > maxSpeed) {
+            maxSpeed = speed;
+        }
+        return maxSpeed;
+    }
+
+    @Contract(pure = true) public static float getSpeedInKilometerPerHour(float speed) {
+        return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
+    }
+
+    public static float calcAvgSpeedForOneTrip(ArrayList<Float> avgSpeedArrayList) {
+        Float avgSpeed = 0f;
+        if (avgSpeedArrayList != null) {
+            for (Float tmpSpeed : avgSpeedArrayList) {
+                avgSpeed = avgSpeed + tmpSpeed;
+            }
+            avgSpeed = avgSpeed / avgSpeedArrayList.size();
+        }
+        if (avgSpeed.isNaN()) {
+            avgSpeed = (float) ConstantValues.START_VALUE;
+        }
+        return avgSpeed;
+    }
+
+    public static float setDistanceCoveredForTrip(Trip trip, long timeSpent) {
+        float avgSpeed = trip.getAvgSpeed();
+        return calcDistTravelled(timeSpent, avgSpeed);
+    }
+
+    public static float calcDistTravelled(float timeSpent, float avgSpeed) {
+        Float distanceTravelled = avgSpeed * getHoursFromMills(timeSpent);
+        if (distanceTravelled.isNaN()) {
+            distanceTravelled = (float) ConstantValues.START_VALUE;
+        }
+        return distanceTravelled;
     }
 
     public static long calcTimeInTrip(long tripStartTime) {

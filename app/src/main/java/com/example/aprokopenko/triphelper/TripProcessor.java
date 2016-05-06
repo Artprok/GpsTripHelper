@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -73,7 +73,6 @@ public class TripProcessor {
         }
     }
 
-
     public void startNewTrip() {
         tripStartTime = calendar.getTime().getTime();
         currentTripId = tripData.getTrips().size();
@@ -90,11 +89,11 @@ public class TripProcessor {
         }
         Trip trip = getCurrentTrip();
         updateTrip(trip);
-        long  timeSpent        = MathUtils.calcTimeInTrip(tripStartTime);
-        float distanceTraveled = setDistanceCoveredForTrip(trip, timeSpent);
-        float fuelConsumption  = getFuelConsumptionLevel(averageSpeed);
-        float fuelSpent        = calcFuelSpent(distanceTraveled, fuelConsumption);
-        float moneySpent       = calcMoneySpent(fuelSpent);
+        long  timeSpent        = CalculationUtils.calcTimeInTrip(tripStartTime);
+        float distanceTraveled = CalculationUtils.setDistanceCoveredForTrip(trip, timeSpent);
+        float fuelConsumption  = UtilMethods.getFuelConsumptionLevel(averageSpeed);
+        float fuelSpent        = CalculationUtils.calcFuelSpent(distanceTraveled, fuelConsumption);
+        float moneySpent       = CalculationUtils.calcMoneySpent(fuelSpent);
 
         trip.setMoneyOnFuelSpent(moneySpent);
         trip.setFuelSpent(fuelSpent);
@@ -131,11 +130,11 @@ public class TripProcessor {
         }
     }
 
+
     public void writeDataToFile() {
         WriteFileTask writeFileTask = new WriteFileTask();
         writeFileTask.execute(tripData);
     }
-
 
     private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelSpent, float distanceTravelled,
                                     float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank, float maxSpeed) {
@@ -173,41 +172,6 @@ public class TripProcessor {
         return tripData;
     }
 
-    private float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
-        return distanceTraveled * (fuelConsumption / 100);
-    }
-
-    private float calcMoneySpent(float fuelSpent) {
-        return fuelSpent * ConstantValues.FUEL_COST;
-    }
-
-    private float setDistanceCoveredForTrip(Trip trip, long timeSpent) {
-        float avgSpeed = trip.getAvgSpeed();
-        return MathUtils.calcDistTravelled(timeSpent, avgSpeed);
-    }
-
-    private float getFuelConsumptionLevel(float avgSpeed) {
-        float initialConsumption = ConstantValues.FUEL_CONSUMPTION;
-        if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
-            return initialConsumption + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
-        }
-        else if (avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
-            return initialConsumption + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
-        }
-        else if (avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
-            return initialConsumption + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
-        }
-        else if (avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
-            return initialConsumption + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
-        }
-        else if (avgSpeed < ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
-            return initialConsumption + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
-        }
-        else {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing!");
-            return initialConsumption;
-        }
-    }
 
     private void writeTrip(Trip trip, ObjectOutputStream os) {
         trip.writeTrip(os);
@@ -228,7 +192,7 @@ public class TripProcessor {
             fuelSpent = fuelSpent + trip.getFuelSpent();
             fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
         }
-        float moneySpent = calcMoneySpent(fuelSpent);
+        float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent);
         fuelConsumption = fuelConsumption / tripData.getTrips().size();
 
         tripData.setDistanceTravelled(distanceTravelled);
@@ -284,7 +248,9 @@ public class TripProcessor {
                 ObjectOutputStream os = new ObjectOutputStream(fos);
                 os.writeInt(tripsSize);
                 for (Trip trip : trips) {
-                    Log.d(LOG_TAG, "writeTripDataToFile: trips " + trip.toString());
+                    if(ConstantValues.DEBUG_MODE){
+                        Log.d(LOG_TAG, "writeTripDataToFile: trips " + trip.toString());
+                    }
                     writeTrip(trip, os);
                 }
                 os.writeFloat(avgFuelConsumption);

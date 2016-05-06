@@ -30,6 +30,29 @@ import butterknife.ButterKnife;
 
 public class UtilMethods {
 
+    public static float getFuelConsumptionLevel(float avgSpeed) {
+        float initialConsumption = ConstantValues.FUEL_CONSUMPTION;
+        if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
+        }
+        else if (avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
+        }
+        else if (avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
+        }
+        else if (avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
+        }
+        else if (avgSpeed < ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
+            return initialConsumption + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
+        }
+        else {
+            Log.d("Util methods", "getFuelConsumptionLevel: Impossible thing!");
+            return initialConsumption;
+        }
+    }
+
     public static String parseDate(Date dateString) {
         SimpleDateFormat sdf = ConstantValues.DATE_FORMAT;
         return sdf.format(dateString);

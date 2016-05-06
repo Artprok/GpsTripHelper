@@ -26,10 +26,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.service.LocationService;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
@@ -222,7 +222,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         if (avgSpeed == 0) {
             avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
         }
-        return (fuelLeftVal / avgSpeed) * 100;
+        float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed);
+        return (fuelLeftVal / fuelConsLevel) * 100;
     }
 
     @NonNull private String getFuelLeftString() {
@@ -399,7 +400,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void stopTracking() {
-        float averageSpeed = MathUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
+        float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
         float maximumSpeed = maxSpeedVal;
         tripProcessor.updateSpeed(averageSpeed, maximumSpeed);
         tripProcessor.endTrip();
@@ -436,11 +437,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             timeSpent = timeSpent + trip.getTimeSpent();
             avgSpeed = avgSpeed + trip.getAvgSpeed();
             avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
-            maxSpeed = MathUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
+            maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
         }
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
-        float distTravelled = MathUtils.calcDistTravelled(timeSpent, avgSpeed);
+        float distTravelled = CalculationUtils.calcDistTravelled(timeSpent, avgSpeed);
         tripData.setMaxSpeed(maxSpeed);
         tripData.setAvgSpeed(avgSpeed);
         tripData.setTimeSpentOnTrips(timeSpent);
@@ -546,7 +547,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             }
         }
         else {
-            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+            speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
         addRoutePoint(routePoints, speed);
     }

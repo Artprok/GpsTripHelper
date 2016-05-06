@@ -5,8 +5,8 @@ import android.location.Location;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.listener.LocationListener;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 
@@ -51,7 +51,7 @@ public class GpsHandler implements LocationListener {
             }
         }
         else {
-            speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+            speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
         setupLocationObservable(location);
         setupSpeedObservable(speed);
@@ -99,7 +99,7 @@ public class GpsHandler implements LocationListener {
     }
 
     private void getMaxSpeed(float speed) {
-        maxSpeed = MathUtils.findMaxSpeed(speed, maxSpeed);
+        maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
         setupMaxSpeedObservable(maxSpeed);
     }
 }

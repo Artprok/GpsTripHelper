@@ -1,5 +1,7 @@
 package com.example.aprokopenko.triphelper.utils.settings;
 
+import android.graphics.Color;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
@@ -11,6 +13,7 @@ public class ConstantValues {
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.getDefault());
 
     public static final String FILE_NAME = "TripData";
+
 
     public static final LatLng  BERMUDA_COORDINATES           = new LatLng(32.30, -64.78);
     public static final String  TRIP_INFO_FRAGMENT_TAG        = "TRIP_INFO_FRAGMENT";
@@ -37,6 +40,7 @@ public class ConstantValues {
     public static final float CONSUMPTION_MEDIUM_TRAFFIC_ADD    = 1;
     public static final float CONSUMPTION_HIGH_TRAFFIC_ADD      = 3;
     public static final float CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 5;
+    public static final int   TEXT_COLOR                        = Color.parseColor("#EEEEEE");
 
     public static final int MIN_UPDATE_DISTANCE = 0;
     public static final int MIN_UPDATE_TIME     = 1;

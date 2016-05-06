@@ -10,10 +10,10 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -116,7 +116,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return previousLoc;
     }
 
-    private void setPreviousLocationPoint(LatLng previousLocationPoint){
+    private void setPreviousLocationPoint(LatLng previousLocationPoint) {
         previousLocationFromData = previousLocationPoint;
     }
 
@@ -156,7 +156,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         locationTracking(googleMap, location, testSpeed);
                     }
                     else {
-                        float speed = MathUtils.getSpeedInKilometerPerHour(location.getSpeed());
+                        float speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
                         locationTracking(googleMap, location, speed);
                     }
                     MapUtilMethods.animateCamera(location, null, googleMap);

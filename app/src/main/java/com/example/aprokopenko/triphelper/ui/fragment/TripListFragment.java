@@ -15,7 +15,7 @@ import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionList
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -101,7 +101,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         avgFuelConsumptionView.setText(avgFuelCons);
         moneyOnFuelView.setText(moneyOnFuelSpent);
         fuelSpentView.setText(fuelSpent);
-        timeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpentOnTrips, res));
+        timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpentOnTrips, res));
         avgSpeedView.setText(avgSpeed);
         maxSpeedView.setText(maxSpeed);
     }

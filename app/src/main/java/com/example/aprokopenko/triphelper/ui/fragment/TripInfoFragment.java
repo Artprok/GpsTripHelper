@@ -21,7 +21,7 @@ import android.util.Log;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.MathUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapsInitializer;
@@ -265,7 +265,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);
-            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + MathUtils.getTimeInNormalFormat(timeSpentOnStop, null));
+            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, null));
         }
 
         float valInMotion      = getInMotionValue();
@@ -273,9 +273,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
         Resources res = getResources();
 
-        tripTimeSpentOnStopView.setText(MathUtils.getTimeInNormalFormat(valWithoutMotion, res));
-        tripTimeSpentInMotionView.setText(MathUtils.getTimeInNormalFormat(valInMotion, res));
-        tripTimeSpentView.setText(MathUtils.getTimeInNormalFormat(timeSpent, res));
+        tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(valWithoutMotion, res));
+        tripTimeSpentInMotionView.setText(CalculationUtils.getTimeInNormalFormat(valInMotion, res));
+        tripTimeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpent, res));
         tripAvgFuelConsumptionView.setText(avgFuelCons);
         tripMoneySpentView.setText(moneyOnFuelSpent);
         tripDistanceTravelledView.setText(distance);
