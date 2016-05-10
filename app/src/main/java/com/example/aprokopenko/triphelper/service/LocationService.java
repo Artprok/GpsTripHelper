@@ -71,14 +71,14 @@ public class LocationService extends Service {
 
     @Override public void onCreate() {
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "onCreate");
+            Log.i(LOG_TAG, "service OnCreate");
         }
     }
 
     @Override public void onDestroy() {
         super.onDestroy();
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "onDestroy");
+            Log.i(LOG_TAG, "service OnDestroy");
         }
         locationListener = null;
     }

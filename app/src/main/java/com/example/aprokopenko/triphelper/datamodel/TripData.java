@@ -51,18 +51,6 @@ public class TripData implements Parcelable {
     }
 
 
-    private TripData(Parcel in) {
-        avgFuelConsumption = in.readFloat();
-        distanceTravelled = in.readFloat();
-        timeSpentOnTrips = in.readFloat();
-        moneyOnFuelSpent = in.readFloat();
-        fuelSpent = in.readFloat();
-        avgSpeed = in.readFloat();
-        maxSpeed = in.readFloat();
-        gasTank = in.readFloat();
-        trips = in.createTypedArrayList(Trip.CREATOR);
-    }
-
     public static final Creator<TripData> CREATOR = new Creator<TripData>() {
         @Contract("_ -> !null") @Override public TripData createFromParcel(Parcel in) {
             return new TripData(in);
@@ -149,7 +137,6 @@ public class TripData implements Parcelable {
         this.gasTank = gasTank;
     }
 
-
     public void updateTrip(Trip trip, int index) {
         trips.set(index, trip);
     }
@@ -159,5 +146,16 @@ public class TripData implements Parcelable {
     }
 
 
+    private TripData(Parcel in) {
+        avgFuelConsumption = in.readFloat();
+        distanceTravelled = in.readFloat();
+        timeSpentOnTrips = in.readFloat();
+        moneyOnFuelSpent = in.readFloat();
+        fuelSpent = in.readFloat();
+        avgSpeed = in.readFloat();
+        maxSpeed = in.readFloat();
+        gasTank = in.readFloat();
+        trips = in.createTypedArrayList(Trip.CREATOR);
+    }
 }
 

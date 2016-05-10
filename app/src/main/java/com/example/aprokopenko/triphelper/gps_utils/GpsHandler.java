@@ -34,7 +34,8 @@ public class GpsHandler implements LocationListener {
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "GpsHandler: onCreate");
+            Log.d(LOG_TAG, "GpsHandler: created,context - "+context);
+            Log.d(LOG_TAG, "GpsHandler: created,locationManger - "+locationManager);
         }
     }
 

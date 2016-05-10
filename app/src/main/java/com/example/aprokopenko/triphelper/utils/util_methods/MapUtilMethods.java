@@ -27,7 +27,6 @@ public class MapUtilMethods {
         for (int i = 0; i < latitudes.size(); i++) {
             LatLng routePointCoordinates = new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i)));
             speed = Float.valueOf(speedArr.get(i));
-            Log.d("TIME", "unwrapRoute: " + speed);
             routePoint = new Route(routePointCoordinates, speed);
             route.add(routePoint);
         }
@@ -52,7 +51,7 @@ public class MapUtilMethods {
                 LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
                 if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "drawPathFromData: +" + routes.get(i).getSpeed());
+                    Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
                 }
                 MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
             }
@@ -64,8 +63,9 @@ public class MapUtilMethods {
     }
 
     public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
-        int color=Color.BLACK;;
-        if(speed!=null){
+        int color = Color.BLACK;
+        ;
+        if (speed != null) {
             color = choseColorDependOnSpeed(speed);
         }
         googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));

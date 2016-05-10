@@ -20,11 +20,10 @@ public class TripHelperApp extends Application {
     @Override public void onCreate() {
         super.onCreate();
         Context context = getApplicationContext();
-        if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "onCreate: ApplicationCreated");
-            Log.d(LOG_TAG, "onCreate: context - " + context.toString());
-        }
         AppModule module = new AppModule(this);
         applicationComponent = DaggerApplicationComponent.builder().appModule(module).build();
+        if (ConstantValues.DEBUG_MODE) {
+            Log.i(LOG_TAG, "onCreate:Dagger2 testing,ApplicationCreated, context is "+context.toString());
+        }
     }
 }

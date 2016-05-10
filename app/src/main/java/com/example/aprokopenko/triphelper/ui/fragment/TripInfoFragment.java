@@ -184,7 +184,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
         openMapButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.d(LOG_TAG, "onClick: called");
                 int orientation = getActivity().getResources().getConfiguration().orientation;
                 if (orientation == 1) {
                     if (mapOpened) {
@@ -292,7 +291,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
         dataContainerAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
-                Log.d(LOG_TAG, "onAnimationStart: MapOpen dataContAnim anim");
+
             }
 
             @Override public void onAnimationEnd(Animator animation) {
@@ -304,7 +303,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                     @Override public void onAnimationStart(Animator animation) {
                         mapView.setVisibility(View.VISIBLE);
                         mapOpened = true;
-                        Log.d(LOG_TAG, "onAnimationStart: MapOpen mapView anim");
                     }
 
                     @Override public void onAnimationEnd(Animator animation) {
@@ -384,7 +382,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
         dataContainerAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
-                Log.d(LOG_TAG, "onAnimationStart: MapOpen dataContAnim anim");
+
             }
 
             @Override public void onAnimationEnd(Animator animation) {
@@ -396,7 +394,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                     @Override public void onAnimationStart(Animator animation) {
                         mapView.setVisibility(View.VISIBLE);
                         mapOpened = true;
-                        Log.d(LOG_TAG, "onAnimationStart: MapOpen mapView anim");
                     }
 
                     @Override public void onAnimationEnd(Animator animation) {

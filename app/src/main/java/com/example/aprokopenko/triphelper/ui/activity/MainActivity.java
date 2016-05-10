@@ -32,7 +32,7 @@ import dagger.Module;
 
         if (savedInstanceState == null) {
             if(ConstantValues.DEBUG_MODE){
-                Log.d(LOG_TAG, "onCreate: new fragment");
+                Log.i(LOG_TAG, "onCreate: new fragment");
             }
             mainFragment = MainFragment.newInstance();
             UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
@@ -42,7 +42,7 @@ import dagger.Module;
         }
         else {
             if(ConstantValues.DEBUG_MODE){
-                Log.d(LOG_TAG, "onCreate: old fragment");
+                Log.i(LOG_TAG, "onCreate: old fragment");
             }
             mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
             assert fab != null;

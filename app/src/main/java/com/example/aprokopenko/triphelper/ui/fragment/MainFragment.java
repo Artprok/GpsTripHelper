@@ -85,17 +85,17 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private TripProcessor    tripProcessor;
     private SfCircularGauge  speedometer;
     private MapFragment      mapFragment;
+    private float            maxSpeedVal;
     private GpsHandler       gpsHandler;
     private Context          context;
     private Bundle           state;
-    private float            maxSpeedVal;
 
-    private static final boolean REMOVE   = false;
-    private static final boolean REGISTER = true;
+    private static final boolean REMOVE     = false;
+    private static final boolean REGISTER   = true;
+    private              boolean firstStart = true;
 
-    private       boolean firstStart = true;
     //todo: tempVal is testing val REMOVE in release!
-    private final float[] tempVal    = {1};
+    private final float[] tempVal = {1};
 
     public MainFragment() {
         // Required empty public constructor
@@ -124,9 +124,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onPause() {
-        super.onPause();
         saveState();
-        Log.d(LOG_TAG, "onPause: save onPause!");
+        super.onPause();
     }
 
     @Override public void onResume() {
@@ -139,18 +138,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        Log.d(LOG_TAG, "onAttach: " + context);
     }
 
     @Override public void onSaveInstanceState(Bundle outState) {
+        Log.i(LOG_TAG, "onSaveInstanceState: Save called");
         super.onSaveInstanceState(outState);
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "onSaveInstanceState: Save called");
-            Log.d(LOG_TAG, "onSaveInstanceState: " + getButtonVisibility());
+            Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + getButtonVisibility());
             Log.d(LOG_TAG, "onSaveInstanceState: " + getStatusImageState());
             Log.d(LOG_TAG, "onSaveInstanceState: " + firstStart);
             Log.d(LOG_TAG, "onSaveInstanceState: " + getFuelLevelFieldValue());
-            Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + getButtonVisibility());
         }
         outState.putBoolean("ControlButtonVisibility", getButtonVisibility());
         outState.putBoolean("StatusImageState", getStatusImageState());
@@ -164,7 +161,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onDetach() {
-        Log.d(LOG_TAG, "onDetach: called");
+        Log.i(LOG_TAG, "onDetach: called");
         if (serviceConnection != null) {
             getActivity().unbindService(serviceConnection);
         }
@@ -188,7 +185,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
-                Log.d(LOG_TAG, "onGpsStatusChanged: calledFromGpsStatus");
                 setStatusImage();
                 break;
             case GpsStatus.GPS_EVENT_STARTED:
@@ -203,7 +199,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     public void openMapFragment() {
         saveState();
-        Log.d(LOG_TAG, "openMapFragment: saveOnOpenMap");
         mapFragment.setGpsHandler(gpsHandler);
         setRouteToMapFragment();
         UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
@@ -245,10 +240,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private boolean getButtonVisibility() {
-        Boolean     visibility = true;
-        ImageButton stB        = (ImageButton) getActivity().findViewById(R.id.startButton);
-        if (stB != null) {
-            visibility = stB.getVisibility() == View.VISIBLE;
+        Boolean visibility = true;
+        if (startButton != null) {
+            visibility = startButton.getVisibility() == View.VISIBLE;
         }
         return visibility;
     }
@@ -294,7 +288,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void setupStartButton() {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.d(LOG_TAG, "setupStartButton: startPressed");
                 tripProcessor.startNewTrip();
                 avgSpeedArrayList = new ArrayList<>();
                 UtilMethods.setFabVisible(getActivity());
@@ -363,7 +356,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void restoreFuelLevel(Float fuelLevel) {
-        Log.d(LOG_TAG, "restoreFuelLevel: RestoFuel");
         String fuelString = getFuelLeftString();
         fuelLeft.setText(fuelString);
     }
@@ -375,23 +367,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void restoreState(Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "onViewCreated: calledRestore");
         getContextIfNull();
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "onViewCreated: calledRestore");
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.toString());
+            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getFloat("FuelLevel"));
         }
-        firstStart = savedInstanceState.getBoolean("FirstStart");
 
+        firstStart = savedInstanceState.getBoolean("FirstStart");
         restoreButtonsVisiblity(savedInstanceState.getBoolean("ControlButtonVisibility"));
         restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
-        restoreFuelLayoutVisibility(firstStart);
         restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
 
-
+        restoreFuelLayoutVisibility(firstStart);
         if (stopButton.getVisibility() == View.VISIBLE) {
             UtilMethods.setFabVisible(getActivity());
         }
@@ -416,7 +406,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void restoreStatus(Boolean status) {
         if (status) {
-            Log.d(LOG_TAG, "restoreStatus: restore call");
             setStatusImage();
         }
     }
@@ -444,25 +433,18 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
         maxSpeedVal = 0f;
         if (firstStart) {
-            Log.d(LOG_TAG, "stopTracking: WHY????");
+            Log.d(LOG_TAG, "stopTracking: WHY???? (firstStart?)");
             fuelLayout.setVisibility(View.VISIBLE);
             firstStart = false;
         }
     }
 
     private void setStatusImage() {
-        Log.d(LOG_TAG, "setStatusImage: con bef" + context);
         if (context == null) {
             context = getActivity();
             context = getContext();
-            Log.d(LOG_TAG, "setStatusImage: con after" + context);
-            Log.d(LOG_TAG, "setStatusImage: con act after" + getActivity());
         }
-        Log.d(LOG_TAG, "setStatusImage: context before crash " + context);
-        Log.d(LOG_TAG, "setStatusImage: " + R.drawable.green_satellite);
-        Log.d(LOG_TAG, "setStatusImage: " + statusImage);
         ButterKnife.bind(R.id.statusImageView, getActivity());
-        Log.d(LOG_TAG, "setStatusImage: " + statusImage);
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage.getBackground() != greenSatellite) {
             statusImage.setBackground(greenSatellite);
@@ -524,14 +506,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 locationService = binder.getService();
                 configureGpsHandler();
                 if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "onServiceConnected: bounded");
+                    Log.i(LOG_TAG, "onServiceConnected: bounded");
                 }
                 setupButtons();
             }
 
             @Override public void onServiceDisconnected(ComponentName arg0) {
                 if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "onServiceConnected: unbounded");
+                    Log.i(LOG_TAG, "onServiceConnected: unbounded");
                 }
             }
         };
@@ -546,7 +528,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
         else {
             if (ConstantValues.DEBUG_MODE) {
-                Log.d(LOG_TAG, "onServiceConnected: service already exist");
+                Log.i(LOG_TAG, "onServiceConnected: service already exist");
             }
             configureGpsHandler();
             setupButtons();
@@ -556,7 +538,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void configureGpsHandler() {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
-        Log.d(LOG_TAG, "configureGpsHandler: configureGpsFuel");
         String fuelLeftString = getFuelLeftString();
         fuelLeft.setText(fuelLeftString);
         if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
@@ -591,6 +572,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
         float  speed;
+        // TODO: 10.05.2016 remove debug code
         if (ConstantValues.DEBUG_MODE) {//debug code for testing
             speed = 0 + tempVal[0];
             if (speed != 0) {           //speed increment by 5 each tick

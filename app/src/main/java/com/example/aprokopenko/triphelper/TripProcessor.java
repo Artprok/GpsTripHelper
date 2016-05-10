@@ -36,7 +36,7 @@ public class TripProcessor {
     public TripProcessor(Context context) {
         fileIsInWriteMode = false;
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "TripProcessor: IsConstructed");
+            Log.i(LOG_TAG, "TripProcessor: IsConstructed");
         }
         calendar = Calendar.getInstance();
         route = new ArrayList<>();
@@ -221,17 +221,17 @@ public class TripProcessor {
         @Override protected Boolean doInBackground(TripData... params) {
             if (ConstantValues.DEBUG_MODE) {
                 Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
-                Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getAvgSpeed());
+                Log.d(LOG_TAG, "writeTripDataToFile: avgSpeed - " + tripData.getAvgSpeed());
             }
             FileOutputStream fos;
             ArrayList<Trip>  trips = tripData.getTrips();
             getTripDataFieldsValues();
             if (ConstantValues.DEBUG_MODE) {
-                Log.d(LOG_TAG, "WRITE: " + tripData.getAvgFuelConsumption());
-                Log.d(LOG_TAG, "WRITE: " + tripData.getFuelSpent());
-                Log.d(LOG_TAG, "WRITE: " + tripData.getDistanceTravelled());
-                Log.d(LOG_TAG, "WRITE: " + tripData.getMoneyOnFuelSpent());
-                Log.d(LOG_TAG, "WRITE: " + tripData.getAvgSpeed());
+                Log.d(LOG_TAG, "WRITE: distTravelledForTripData" + tripData.getDistanceTravelled());
+                Log.d(LOG_TAG, "WRITE: avgConsForTripData" + tripData.getAvgFuelConsumption());
+                Log.d(LOG_TAG, "WRITE: fuelSpentForTripData" + tripData.getFuelSpent());
+                Log.d(LOG_TAG, "WRITE: moneyOnFuelForTripData" + tripData.getMoneyOnFuelSpent());
+                Log.d(LOG_TAG, "WRITE: avgSpeedForTripData" + tripData.getAvgSpeed());
             }
             int   tripsSize          = trips.size();
             float distanceTravelled  = tripData.getDistanceTravelled();
@@ -248,8 +248,8 @@ public class TripProcessor {
                 ObjectOutputStream os = new ObjectOutputStream(fos);
                 os.writeInt(tripsSize);
                 for (Trip trip : trips) {
-                    if(ConstantValues.DEBUG_MODE){
-                        Log.d(LOG_TAG, "writeTripDataToFile: trips " + trip.toString());
+                    if (ConstantValues.DEBUG_MODE) {
+                        Log.d(LOG_TAG, "writeTripDataToFile: trip to string - " + trip.toString());
                     }
                     writeTrip(trip, os);
                 }
@@ -267,13 +267,17 @@ public class TripProcessor {
             catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
+            if (ConstantValues.DEBUG_MODE) {
+                Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
+            }
             return true;
         }
 
         @Override protected void onPostExecute(Boolean result) {
             if (result) {
-                Log.d(LOG_TAG, "file written successfully");
+                if (ConstantValues.DEBUG_MODE) {
+                    Log.d(LOG_TAG, "file written successfully");
+                }
             }
         }
     }
@@ -308,12 +312,12 @@ public class TripProcessor {
                     tripData = createTripData(trips, avgFuelConsumption, fuelSpent, distanceTravelled, moneyOnFuelSpent, avgSpeed,
                             timeSpent, gasTankCapacity, maxSpeed);
                     if (ConstantValues.DEBUG_MODE) {
-                        Log.d(LOG_TAG, "READ: " + avgFuelConsumption);
-                        Log.d(LOG_TAG, "READ: " + fuelSpent);
-                        Log.d(LOG_TAG, "READ: " + distanceTravelled);
-                        Log.d(LOG_TAG, "READ: " + moneyOnFuelSpent);
-                        Log.d(LOG_TAG, "READ: " + avgSpeed);
-                        Log.d(LOG_TAG, "READ: " + timeSpent);
+                        Log.d(LOG_TAG, "READ: avgFuelConsForTrip" + avgFuelConsumption);
+                        Log.d(LOG_TAG, "READ: fuelSpentForTrip" + fuelSpent);
+                        Log.d(LOG_TAG, "READ: distTravelledForTrip" + distanceTravelled);
+                        Log.d(LOG_TAG, "READ: moneyOnFuelForTrip" + moneyOnFuelSpent);
+                        Log.d(LOG_TAG, "READ: avgSpeedForTrip" + avgSpeed);
+                        Log.d(LOG_TAG, "READ: timeSpentForTrip" + timeSpent);
                     }
                     is.close();
                     fis.close();
@@ -332,7 +336,6 @@ public class TripProcessor {
         @Override protected void onPostExecute(TripData tripData) {
             super.onPostExecute(tripData);
             fileIsInWriteMode = false;
-
         }
     }
 }

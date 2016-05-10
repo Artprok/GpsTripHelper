@@ -139,36 +139,21 @@ public class Trip implements Parcelable {
         return tripID;
     }
 
-    public void setAvgFuelConsumption(float avgFuelConsumption) {
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
-
-    public void setDistanceTravelled(float distanceTravelled) {
-        this.distanceTravelled = distanceTravelled;
-    }
-
-    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
-        this.moneyOnFuelSpent = moneyOnFuelSpent;
-    }
-
-    public void setTimeSpent(float timeSpent) {
-        this.timeSpent = timeSpent;
-    }
-
-    public void setFuelSpent(float fuelSpent) {
-        this.fuelSpent = fuelSpent;
-    }
-
-    public void setRoute(ArrayList<Route> routes) {
-        this.route = routes;
-    }
-
-    public void setAvgSpeed(float avgSpeed) {
-        this.avgSpeed = avgSpeed;
-    }
-
-    public void setMaxSpeed(float maxSpeed) {
-        this.maxSpeed = maxSpeed;
+    private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
+                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,
+                                    float maxSpeed) {
+        trip.setTripDate(date);
+        trip.setRoute(route);
+        trip.setDistanceTravelled(distanceTravelled);
+        trip.setTimeSpent(timeSpent);
+        trip.setTimeSpentInMotion(timeSpentInMotion);
+        trip.setTripID(tripID);
+        trip.setFuelSpent(fuelSpent);
+        trip.setAvgSpeed(avgSpeed);
+        trip.setMoneyOnFuelSpent(moneySpent);
+        trip.setAvgFuelConsumption(fuelConsumption);
+        trip.setMaxSpeed(maxSpeed);
+        return trip;
     }
 
     public Trip readTrip(ObjectInputStream is) {
@@ -205,6 +190,38 @@ public class Trip implements Parcelable {
         return trip;
     }
 
+    public void setAvgFuelConsumption(float avgFuelConsumption) {
+        this.avgFuelConsumption = avgFuelConsumption;
+    }
+
+    public void setDistanceTravelled(float distanceTravelled) {
+        this.distanceTravelled = distanceTravelled;
+    }
+
+    public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
+        this.moneyOnFuelSpent = moneyOnFuelSpent;
+    }
+
+    public void setTimeSpent(float timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
+    public void setFuelSpent(float fuelSpent) {
+        this.fuelSpent = fuelSpent;
+    }
+
+    public void setRoute(ArrayList<Route> routes) {
+        this.route = routes;
+    }
+
+    public void setAvgSpeed(float avgSpeed) {
+        this.avgSpeed = avgSpeed;
+    }
+
+    public void setMaxSpeed(float maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
     public void writeTrip(ObjectOutputStream os) {
         try {
             os.writeInt(route.size());
@@ -213,7 +230,7 @@ public class Trip implements Parcelable {
                 os.writeDouble(tmpRoutePoint.latitude);
                 os.writeDouble(tmpRoutePoint.longitude);
                 os.writeFloat(routePoint.getSpeed());
-                if(ConstantValues.DEBUG_MODE){
+                if (ConstantValues.DEBUG_MODE) {
                     Log.d("Trip", "writeTrip: " + routePoint.getSpeed());
                 }
             }
@@ -233,23 +250,6 @@ public class Trip implements Parcelable {
         }
     }
 
-
-    private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
-                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,
-                                    float maxSpeed) {
-        trip.setTripDate(date);
-        trip.setRoute(route);
-        trip.setDistanceTravelled(distanceTravelled);
-        trip.setTimeSpent(timeSpent);
-        trip.setTimeSpentInMotion(timeSpentInMotion);
-        trip.setTripID(tripID);
-        trip.setFuelSpent(fuelSpent);
-        trip.setAvgSpeed(avgSpeed);
-        trip.setMoneyOnFuelSpent(moneySpent);
-        trip.setAvgFuelConsumption(fuelConsumption);
-        trip.setMaxSpeed(maxSpeed);
-        return trip;
-    }
 
     private void setTimeSpentInMotion(float timeSpentInMotion) {
         this.timeSpentInMotion = timeSpentInMotion;

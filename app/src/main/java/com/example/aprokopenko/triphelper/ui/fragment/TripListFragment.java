@@ -13,9 +13,9 @@ import android.os.Bundle;
 
 import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -117,7 +117,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         trips = null;
     }
 
-    @Override public void onListFragmentInteraction(Trip trip) {
+    @Override public void onListItemClick(Trip trip) {
         float            fuelConsumed      = trip.getAvgFuelConsumption();
         float            distTravelled     = trip.getDistanceTravelled();
         float            timeSpentInMotion = trip.getTimeSpentInMotion();

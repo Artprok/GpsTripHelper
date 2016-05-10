@@ -44,7 +44,7 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (onListFragmentInteractionListener != null) {
-                    onListFragmentInteractionListener.onListFragmentInteraction(holder.trip);
+                    onListFragmentInteractionListener.onListItemClick(holder.trip);
                     TripInfoFragment tripInfoFragment = TripInfoFragment
                             .newInstance(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(), curTrip.getTimeSpent(),
                                     curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(), curTrip.getAvgFuelConsumption(),
