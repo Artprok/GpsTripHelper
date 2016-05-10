@@ -9,11 +9,9 @@ import java.util.Locale;
 
 public class ConstantValues {
 
-
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.getDefault());
 
     public static final String FILE_NAME = "TripData";
-
 
     public static final LatLng  BERMUDA_COORDINATES           = new LatLng(32.30, -64.78);
     public static final String  TRIP_INFO_FRAGMENT_TAG        = "TRIP_INFO_FRAGMENT";
@@ -25,7 +23,7 @@ public class ConstantValues {
     public static final float   FUEL_COST                     = 20.0f;
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER = 3.6f;
     public static final int     TEXT_ANIM_DURATION            = 900;
-    public static final boolean DEBUG_MODE                    = false; //todo change for release to false
+    public static final boolean DEBUG_MODE                    = true; //todo change for release to false
     public static final int     START_VALUE                   = 0;
     public static final int     FUEL_TANK_CAPACITY            = 60;
     public static final float   FUEL_CONSUMPTION              = 11;
@@ -40,7 +38,8 @@ public class ConstantValues {
     public static final float CONSUMPTION_MEDIUM_TRAFFIC_ADD    = 1;
     public static final float CONSUMPTION_HIGH_TRAFFIC_ADD      = 3;
     public static final float CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 5;
-    public static final int   TEXT_COLOR                        = Color.parseColor("#EEEEEE");
+
+    public static final int TEXT_COLOR = Color.parseColor("#EEEEEE");
 
     public static final int MIN_UPDATE_DISTANCE = 0;
     public static final int MIN_UPDATE_TIME     = 1;
