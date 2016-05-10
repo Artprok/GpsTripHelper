@@ -14,11 +14,11 @@ import android.app.AlertDialog;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 import android.app.Activity;
 import android.view.View;
 import android.util.Log;
 import android.Manifest;
-import android.widget.Toast;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
@@ -76,6 +76,10 @@ public class UtilMethods {
         return df.format(speed);
     }
 
+    public static boolean eraseFile(Context context) {
+        return context.deleteFile(ConstantValues.FILE_NAME);
+    }
+
     public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
         int orientation = fragmentActivity.getResources()
                 .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape
@@ -117,8 +121,9 @@ public class UtilMethods {
         valueAnimator.start();
     }
 
-    public static boolean eraseFile(Context context) {
-        return context.deleteFile(ConstantValues.FILE_NAME);
+    public static void showToast(Context context, CharSequence stringToShow){
+        Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     public static void checkIfGpsEnabled(Context context) {
@@ -156,11 +161,6 @@ public class UtilMethods {
                 return;
             }
         }
-    }
-
-    public static void showToast(Context context, CharSequence stringToShow){
-        Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
 
