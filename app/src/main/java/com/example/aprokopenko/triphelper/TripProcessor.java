@@ -227,11 +227,11 @@ public class TripProcessor {
             ArrayList<Trip>  trips = tripData.getTrips();
             getTripDataFieldsValues();
             if (ConstantValues.DEBUG_MODE) {
-                Log.d(LOG_TAG, "WRITE: distTravelledForTripData" + tripData.getDistanceTravelled());
-                Log.d(LOG_TAG, "WRITE: avgConsForTripData" + tripData.getAvgFuelConsumption());
-                Log.d(LOG_TAG, "WRITE: fuelSpentForTripData" + tripData.getFuelSpent());
-                Log.d(LOG_TAG, "WRITE: moneyOnFuelForTripData" + tripData.getMoneyOnFuelSpent());
-                Log.d(LOG_TAG, "WRITE: avgSpeedForTripData" + tripData.getAvgSpeed());
+                Log.d(LOG_TAG, "WRITE: distTravelledForTripData " + tripData.getDistanceTravelled());
+                Log.d(LOG_TAG, "WRITE: avgConsForTripData " + tripData.getAvgFuelConsumption());
+                Log.d(LOG_TAG, "WRITE: fuelSpentForTripData " + tripData.getFuelSpent());
+                Log.d(LOG_TAG, "WRITE: moneyOnFuelForTripData " + tripData.getMoneyOnFuelSpent());
+                Log.d(LOG_TAG, "WRITE: avgSpeedForTripData " + tripData.getAvgSpeed());
             }
             int   tripsSize          = trips.size();
             float distanceTravelled  = tripData.getDistanceTravelled();
@@ -312,12 +312,12 @@ public class TripProcessor {
                     tripData = createTripData(trips, avgFuelConsumption, fuelSpent, distanceTravelled, moneyOnFuelSpent, avgSpeed,
                             timeSpent, gasTankCapacity, maxSpeed);
                     if (ConstantValues.DEBUG_MODE) {
-                        Log.d(LOG_TAG, "READ: avgFuelConsForTrip" + avgFuelConsumption);
-                        Log.d(LOG_TAG, "READ: fuelSpentForTrip" + fuelSpent);
-                        Log.d(LOG_TAG, "READ: distTravelledForTrip" + distanceTravelled);
-                        Log.d(LOG_TAG, "READ: moneyOnFuelForTrip" + moneyOnFuelSpent);
-                        Log.d(LOG_TAG, "READ: avgSpeedForTrip" + avgSpeed);
-                        Log.d(LOG_TAG, "READ: timeSpentForTrip" + timeSpent);
+                        Log.d(LOG_TAG, "READ: avgFuelConsForTrip " + avgFuelConsumption);
+                        Log.d(LOG_TAG, "READ: fuelSpentForTrip " + fuelSpent);
+                        Log.d(LOG_TAG, "READ: distTravelledForTrip " + distanceTravelled);
+                        Log.d(LOG_TAG, "READ: moneyOnFuelForTrip " + moneyOnFuelSpent);
+                        Log.d(LOG_TAG, "READ: avgSpeedForTrip " + avgSpeed);
+                        Log.d(LOG_TAG, "READ: timeSpentForTrip " + timeSpent);
                     }
                     is.close();
                     fis.close();

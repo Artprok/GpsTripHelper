@@ -20,7 +20,7 @@ public class ConstantValues {
     public static final String  MAP_FRAGMENT_TAG              = "MAP_FRAGMENT";
     public static final float   SPEEDOMETER_HEIGHT            = 0.99f;
     public static final float   SPEEDOMETER_WIDTH             = 0.99f;
-    public static final float   FUEL_COST                     = 20.0f;
+    public static final float   FUEL_COST                     = 20.5f;
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER = 3.6f;
     public static final int     TEXT_ANIM_DURATION            = 900;
     public static final boolean DEBUG_MODE                    = true; //todo change for release to false

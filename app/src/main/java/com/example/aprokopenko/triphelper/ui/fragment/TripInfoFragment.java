@@ -287,7 +287,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     private void animateMapOpeningForLandscape(final View view) {
         ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, 0, view.getWidth());
-        dataContainerAnimator.setDuration(900);
+        dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
         dataContainerAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
@@ -297,7 +297,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             @Override public void onAnimationEnd(Animator animation) {
                 dataContainer.setVisibility(View.INVISIBLE);
                 ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, -view.getWidth(), 0);
-                mapViewAnimator.setDuration(900);
+                mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 mapViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 mapViewAnimator.addListener(new Animator.AnimatorListener() {
                     @Override public void onAnimationStart(Animator animation) {
@@ -333,7 +333,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     private void animateMapClosingForLandscape(final View view) {
         ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, 0, -view.getWidth());
-        mapViewAnimator.setDuration(900);
+        mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AnticipateInterpolator());
         mapViewAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
@@ -342,7 +342,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             @Override public void onAnimationEnd(Animator animation) {
                 mapView.setVisibility(View.INVISIBLE);
                 ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, view.getWidth(), 0);
-                dataContainerAnimator.setDuration(900);
+                dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 dataContainerAnimator.addListener(new Animator.AnimatorListener() {
                     @Override public void onAnimationStart(Animator animation) {
@@ -378,7 +378,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     private void animateMapOpeningForPortrait(final View view) {
         ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, 0, view.getHeight());
-        dataContainerAnimator.setDuration(900);
+        dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
         dataContainerAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
@@ -424,7 +424,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     private void animateMapClosingForPortrait(final View view) {
         ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, 0, -view.getHeight());
-        mapViewAnimator.setDuration(900);
+        mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AnticipateInterpolator());
         mapViewAnimator.addListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animation) {
@@ -433,7 +433,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             @Override public void onAnimationEnd(Animator animation) {
                 mapView.setVisibility(View.INVISIBLE);
                 ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, view.getHeight(), 0);
-                dataContainerAnimator.setDuration(900);
+                dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 dataContainerAnimator.addListener(new Animator.AnimatorListener() {
                     @Override public void onAnimationStart(Animator animation) {

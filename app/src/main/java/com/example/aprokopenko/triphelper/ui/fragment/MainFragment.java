@@ -55,10 +55,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     RelativeLayout speedometerContainer;
     @Bind(R.id.speedometerTextView)
     TextView       speedometerTextView;
-    @Bind(R.id.tripListButton)
-    ImageButton    tripListButton;
     @Bind(R.id.refillButtonLayout)
     RelativeLayout refillButtonLayout;
+    @Bind(R.id.tripListButton)
+    ImageButton    tripListButton;
     @Bind(R.id.statusImageView)
     ImageView      statusImage;
     @Bind(R.id.startButton)
