@@ -60,7 +60,7 @@ public class UtilMethods {
     }
 
     public static String formatFloat(float speed) {
-        DecimalFormat df=new DecimalFormat("#.#");;
+        DecimalFormat df=new DecimalFormat("#.#");
         if (speed > 9) {
             df = new DecimalFormat("##.#");
         }

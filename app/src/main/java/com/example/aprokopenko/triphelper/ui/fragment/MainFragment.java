@@ -358,13 +358,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void startButtonTurnActive() {
         startButton.setVisibility(View.VISIBLE);
         stopButton.setVisibility(View.INVISIBLE);
-        setButtonsVisiblityDuringWriteMode(View.VISIBLE);
+        setButtonsVisibilityDuringWriteMode(View.VISIBLE);
     }
 
     private void stopButtonTurnActive() {
         startButton.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.VISIBLE);
-        setButtonsVisiblityDuringWriteMode(View.INVISIBLE);
+        setButtonsVisibilityDuringWriteMode(View.INVISIBLE);
     }
 
     private void restoreFuelLevel(Float fuelLevel) {
@@ -389,7 +389,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
 
         firstStart = savedInstanceState.getBoolean("FirstStart");
-        restoreButtonsVisiblity(savedInstanceState.getBoolean("ControlButtonVisibility"));
+        restoreButtonsVisibility(savedInstanceState.getBoolean("ControlButtonVisibility"));
         restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
         restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
 
@@ -399,7 +399,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-    private void restoreButtonsVisiblity(Boolean visibility) {
+    private void restoreButtonsVisibility(Boolean visibility) {
         if (visibility) {
             startButtonTurnActive();
 
@@ -410,7 +410,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-    private void setButtonsVisiblityDuringWriteMode(int visibility) {
+    private void setButtonsVisibilityDuringWriteMode(int visibility) {
         tripListButton.setVisibility(visibility);
         eraseButton.setVisibility(visibility);
         refillButtonLayout.setVisibility(visibility);

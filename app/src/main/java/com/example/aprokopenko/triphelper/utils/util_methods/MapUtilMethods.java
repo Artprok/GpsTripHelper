@@ -64,7 +64,6 @@ public class MapUtilMethods {
 
     public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
         int color = Color.BLACK;
-        ;
         if (speed != null) {
             color = choseColorDependOnSpeed(speed);
         }
