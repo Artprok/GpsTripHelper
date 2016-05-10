@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.view.View;
 import android.util.Log;
 import android.Manifest;
+import android.widget.Toast;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
@@ -59,7 +60,7 @@ public class UtilMethods {
     }
 
     public static String formatFloat(float speed) {
-        DecimalFormat df;
+        DecimalFormat df=new DecimalFormat("#.#");;
         if (speed > 9) {
             df = new DecimalFormat("##.#");
         }
@@ -71,9 +72,6 @@ public class UtilMethods {
         }
         else if (speed > 9999) {
             df = new DecimalFormat("#####.#");
-        }
-        else {
-            df = new DecimalFormat("#.#");
         }
         return df.format(speed);
     }
@@ -119,8 +117,8 @@ public class UtilMethods {
         valueAnimator.start();
     }
 
-    public static void eraseFile(Context context) {
-        context.deleteFile(ConstantValues.FILE_NAME);
+    public static boolean eraseFile(Context context) {
+        return context.deleteFile(ConstantValues.FILE_NAME);
     }
 
     public static void checkIfGpsEnabled(Context context) {
@@ -158,6 +156,11 @@ public class UtilMethods {
                 return;
             }
         }
+    }
+
+    public static void showToast(Context context, CharSequence stringToShow){
+        Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 

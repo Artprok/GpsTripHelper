@@ -44,7 +44,13 @@
     <string name="refill_hint">Заправить</string>
     <!--/fill_fuel_dialog-->
 
+    <!--toasts-->
+    <string name="fuel_overload_toast">Указано топлива, больше чем объём бака</string>
+    <string name="fuel_spent_toast">Топлива заправлено -&#160;</string>
+    <!--/toasts-->
 
     <string name="action_settings">Настройки</string>
     <string name="app_name">Автопомощник</string>
+    <string name="file_erased">Данные стёрты</string>
+    <string name="file_not_erased">Что-то пошло не так и данные не удалось удалить</string>
 </resources>

@@ -301,7 +301,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         eraseButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (tripProcessor.isFileNotInWriteMode()) {
-                    UtilMethods.eraseFile(context);
+                    if (UtilMethods.eraseFile(context)) {
+                        onPause();
+                        tripProcessor = new TripProcessor(context);
+                        UtilMethods.showToast(context, context.getString(R.string.file_erased));
+                        onResume();
+                    }
+                    else {
+                        UtilMethods.showToast(context, "Something went wrong with data_erasing");
+                    }
+
                 }
             }
         });

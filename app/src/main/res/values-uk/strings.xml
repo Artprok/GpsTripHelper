@@ -32,4 +32,8 @@
     <string name="minutePref">&#160;хв</string>
     <string name="hourPrefix">&#160;год</string>
     <string name="fuel_cons_prefix">литрiв/100км</string>
+    <string name="fuel_overload_toast">Указано топлива, больше чем объём бака</string>
+    <string name="fuel_spent_toast">Fuel filled -</string>
+    <string name="file_erased">Данные стёрты</string>
+    <string name="file_not_erased">Что-то пошло не так и данные не удалось удалить</string>
 </resources>

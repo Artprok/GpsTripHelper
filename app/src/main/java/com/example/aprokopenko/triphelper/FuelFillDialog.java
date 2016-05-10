@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper;
 
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.view.ViewGroup;
@@ -30,7 +31,10 @@ public class FuelFillDialog extends DialogFragment {
         fillButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
-                float  fuel         = Float.valueOf(fuelToFill);
+                float  fuel       = 0;
+                if (!TextUtils.equals(fuelToFill, "")) {
+                    fuel = Float.valueOf(fuelToFill);
+                }
                 if (fuelChangeAmountListener != null) {
                     fuelChangeAmountListener.fuelFilled(fuel);
                 }

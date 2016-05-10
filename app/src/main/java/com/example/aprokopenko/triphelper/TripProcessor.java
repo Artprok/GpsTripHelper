@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
@@ -122,10 +123,16 @@ public class TripProcessor {
     public void fillGasTank(float fuel) {
         if (tripData != null) {
             float gasTank = tripData.getGasTank();
-            if (gasTank <= ConstantValues.FUEL_TANK_CAPACITY) {
-                if (gasTank + fuel <= ConstantValues.FUEL_TANK_CAPACITY) {
-                    tripData.setGasTank(gasTank + fuel);
-                }
+            if (gasTank + fuel <= ConstantValues.FUEL_TANK_CAPACITY) {
+                tripData.setGasTank(gasTank + fuel);
+                CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
+                        .getString(R.string.fuel_prefix);
+                UtilMethods.showToast(context, resCharSequence);
+                Log.d(LOG_TAG, "fillGasTank: called"+resCharSequence);
+            }
+            else {
+                Log.d(LOG_TAG, "fillGasTank: called"+context.getResources().getString(R.string.fuel_overload_toast));
+                UtilMethods.showToast(context, context.getString(R.string.fuel_overload_toast));
             }
         }
     }
