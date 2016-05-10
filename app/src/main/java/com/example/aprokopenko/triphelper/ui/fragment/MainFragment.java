@@ -186,6 +186,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
                 setStatusImage();
+                UtilMethods.showToast(context,context.getString(R.string.gps_first_fix_toast));
                 break;
             case GpsStatus.GPS_EVENT_STARTED:
                 if (ConstantValues.DEBUG_MODE) {
@@ -291,6 +292,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 tripProcessor.startNewTrip();
                 avgSpeedArrayList = new ArrayList<>();
                 UtilMethods.setFabVisible(getActivity());
+                UtilMethods.showToast(context,context.getString(R.string.trip_started_toast));
                 stopButtonTurnActive();
             }
         });
@@ -304,11 +306,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                     if (UtilMethods.eraseFile(context)) {
                         onPause();
                         tripProcessor = new TripProcessor(context);
-                        UtilMethods.showToast(context, context.getString(R.string.file_erased));
+                        UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
                         onResume();
                     }
                     else {
-                        UtilMethods.showToast(context, "Something went wrong with data_erasing");
+                        UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
                     }
 
                 }
@@ -320,6 +322,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 stopTracking();
+                UtilMethods.showToast(context,context.getString(R.string.trip_ended_toast));
                 startButtonTurnActive();
             }
         });

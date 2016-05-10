@@ -51,6 +51,12 @@
 
     <string name="action_settings">Настройки</string>
     <string name="app_name">Автопомощник</string>
-    <string name="file_erased">Данные стёрты</string>
-    <string name="file_not_erased">Что-то пошло не так и данные не удалось удалить</string>
+
+
+    <string name="file_erased_toast">Данные стёрты</string>
+    <string name="file_not_erased_toast">Что-то пошло не так и данные не удалось стереть</string>
+    <string name="gps_first_fix_toast">Связь со спутниками установлена</string>
+    <string name="trip_ended_toast">Поездка закончена</string>
+    <string name="trip_started_toast">Поездка начата</string>
+
 </resources>

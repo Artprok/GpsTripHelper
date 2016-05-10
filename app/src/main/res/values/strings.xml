@@ -53,8 +53,13 @@
     <string name="fuel_left_initial_val" translatable="false">0</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">TripHelper</string>
-    <string name="file_erased">Data erased</string>
-    <string name="file_not_erased">Something went wrong with data_erasing</string>
+    <string name="file_erased_toast">Data erased</string>
+    <string name="file_not_erased_toast">Something went wrong with data_erasing</string>
+    <string name="trip_started_toast">Trip started</string>
+    <string name="trip_ended_toast">Trip ended</string>
+    <string name="gps_first_fix_toast">Satellites connected</string>
+
+
 
 
 </resources>
