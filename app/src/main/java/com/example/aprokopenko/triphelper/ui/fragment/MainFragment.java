@@ -430,6 +430,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void stopTracking() {
+        for(float f:avgSpeedArrayList){
+            Log.d(LOG_TAG, "stopTracking: "+f);
+        }
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
         float maximumSpeed = maxSpeedVal;
         tripProcessor.updateSpeed(averageSpeed, maximumSpeed);

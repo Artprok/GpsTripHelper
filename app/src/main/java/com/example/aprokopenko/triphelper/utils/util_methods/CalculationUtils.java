@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -80,12 +81,13 @@ public class CalculationUtils {
     }
 
     public static float setDistanceCoveredForTrip(Trip trip, long timeSpent) {
+
         float avgSpeed = trip.getAvgSpeed();
         return calcDistTravelled(timeSpent, avgSpeed);
     }
 
     public static float calcDistTravelled(float timeSpent, float avgSpeed) {
-        Float distanceTravelled = avgSpeed * getHoursFromMills(timeSpent);
+        Float distanceTravelled = avgSpeed * getTimeFromMills(timeSpent);
         if (distanceTravelled.isNaN()) {
             distanceTravelled = (float) ConstantValues.START_VALUE;
         }
@@ -109,6 +111,24 @@ public class CalculationUtils {
 
     @Contract(pure = true) private static int getHoursFromMills(float timeInMills) {
         return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
+    }
+
+    private static float getTimeFromMills(float timeInMills){
+        float result = 0;
+        float seconds = getSecondsFromMills(timeInMills);
+        float minutes = getMinutesFromMills(timeInMills);
+        float hours   = getHoursFromMills(timeInMills);
+        if (hours == 0) {
+            result = minutes/100+seconds/1000;
+            if (minutes == 0) {
+                result = seconds/1000;
+            }
+        }
+        else {
+            result = hours  + minutes/100 + seconds/1000;
+        }
+        return result;
+
     }
 }
 
