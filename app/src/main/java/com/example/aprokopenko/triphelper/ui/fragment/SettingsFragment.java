@@ -206,8 +206,8 @@ import butterknife.ButterKnife;
 
         @Override protected void onPostExecute(Boolean result) {
             if (result) {
+                updateTextFields();
                 if (ConstantValues.DEBUG_MODE) {
-                    updateTextFields();
                     Log.d(LOG_TAG, "file written successfully");
                 }
             }
