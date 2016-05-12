@@ -31,8 +31,9 @@ import butterknife.ButterKnife;
 
 public class UtilMethods {
 
-    public static float getFuelConsumptionLevel(float avgSpeed) {
-        float initialConsumption = ConstantValues.FUEL_CONSUMPTION;
+    public static float getFuelConsumptionLevel(float avgSpeed,float fuelCons) {
+        Log.d("A", "getFuelConsumptionLevel: avg+fuelCons"+avgSpeed+"aaaa"+fuelCons);
+        float initialConsumption = fuelCons;
         if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
             return initialConsumption + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
         }
@@ -77,6 +78,7 @@ public class UtilMethods {
     }
 
     public static boolean eraseFile(Context context) {
+        context.deleteFile(ConstantValues.INTERNAL_SETTING_FILE_NAME);
         return context.deleteFile(ConstantValues.FILE_NAME);
     }
 

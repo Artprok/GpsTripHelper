@@ -15,8 +15,8 @@ import java.util.Calendar;
 
 public class CalculationUtils {
 
-    @Contract(pure = true) public static float calcMoneySpent(float fuelSpent) {
-        return fuelSpent * ConstantValues.FUEL_COST;
+    @Contract(pure = true) public static float calcMoneySpent(float fuelSpent,float fuelCost) {
+        return fuelSpent * fuelCost;
     }
 
     @Contract(pure = true) public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
@@ -113,22 +113,21 @@ public class CalculationUtils {
         return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
     }
 
-    private static float getTimeFromMills(float timeInMills){
-        float result = 0;
+    private static float getTimeFromMills(float timeInMills) {
+        float result;
         float seconds = getSecondsFromMills(timeInMills);
         float minutes = getMinutesFromMills(timeInMills);
         float hours   = getHoursFromMills(timeInMills);
         if (hours == 0) {
-            result = minutes/100+seconds/1000;
+            result = minutes / 100 + seconds / 1000;
             if (minutes == 0) {
-                result = seconds/1000;
+                result = seconds / 1000;
             }
         }
         else {
-            result = hours  + minutes/100 + seconds/1000;
+            result = hours + minutes / 100 + seconds / 1000;
         }
         return result;
-
     }
 }
 

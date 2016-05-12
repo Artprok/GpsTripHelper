@@ -33,7 +33,16 @@ public class TripProcessor {
     private final Context          context;
     private final ArrayList<Route> route;
 
-    public TripProcessor(Context context) {
+    private float fuelConsFromSettings;
+    private float fuelPrice;
+    private int   fuelCapacity;
+
+    public TripProcessor(Context context,float fuelConsFromSettings,float fuelPrice,int fuelCapacity) {
+        this.fuelConsFromSettings=fuelConsFromSettings;
+        this.fuelPrice=fuelPrice;
+        this.fuelCapacity=fuelCapacity;
+
+        Log.d(LOG_TAG, "TripProcessor: fu"+fuelCapacity+fuelPrice+fuelConsFromSettings);
         fileIsInWriteMode = false;
         if (ConstantValues.DEBUG_MODE) {
             Log.i(LOG_TAG, "TripProcessor: IsConstructed");
@@ -91,9 +100,9 @@ public class TripProcessor {
         updateTrip(trip);
         long  timeSpent        = CalculationUtils.calcTimeInTrip(tripStartTime);
         float distanceTraveled = CalculationUtils.setDistanceCoveredForTrip(trip, timeSpent);
-        float fuelConsumption  = UtilMethods.getFuelConsumptionLevel(averageSpeed);
+        float fuelConsumption  = UtilMethods.getFuelConsumptionLevel(averageSpeed,fuelConsFromSettings);
         float fuelSpent        = CalculationUtils.calcFuelSpent(distanceTraveled, fuelConsumption);
-        float moneySpent       = CalculationUtils.calcMoneySpent(fuelSpent);
+        float moneySpent       = CalculationUtils.calcMoneySpent(fuelSpent,fuelPrice);
 
         trip.setMoneyOnFuelSpent(moneySpent);
         trip.setFuelSpent(fuelSpent);
@@ -122,7 +131,7 @@ public class TripProcessor {
     public void fillGasTank(float fuel) {
         if (tripData != null) {
             float gasTank = tripData.getGasTank();
-            if (gasTank + fuel <= ConstantValues.FUEL_TANK_CAPACITY) {
+            if (gasTank + fuel <= fuelCapacity) {
                 tripData.setGasTank(gasTank + fuel);
                 CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
                         .getString(R.string.fuel_prefix);
@@ -196,7 +205,7 @@ public class TripProcessor {
             fuelSpent = fuelSpent + trip.getFuelSpent();
             fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
         }
-        float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent);
+        float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent,fuelPrice);
         fuelConsumption = fuelConsumption / tripData.getTrips().size();
 
         tripData.setDistanceTravelled(distanceTravelled);
@@ -342,6 +351,8 @@ public class TripProcessor {
             fileIsInWriteMode = false;
         }
     }
+
+
 }
 
 

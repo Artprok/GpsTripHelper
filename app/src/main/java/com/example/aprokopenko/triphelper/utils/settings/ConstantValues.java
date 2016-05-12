@@ -11,22 +11,24 @@ public class ConstantValues {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.getDefault());
 
-    public static final String FILE_NAME = "TripData";
+    public static final String INTERNAL_SETTING_FILE_NAME = "INTERNAL_DATA";
+    public static final String FILE_NAME                  = "TripData";
 
     public static final LatLng  BERMUDA_COORDINATES           = new LatLng(32.30, -64.78);
     public static final String  TRIP_INFO_FRAGMENT_TAG        = "TRIP_INFO_FRAGMENT";
     public static final String  TRIP_LIST_TAG                 = "TRIP_LIST_FRAGMENT";
+    public static final String  SETTINGS_FRAGMENT_TAG         = "SETTINGS_FRAGMENT";
     public static final String  MAIN_FRAGMENT_TAG             = "MAIN_FRAGMENT";
     public static final String  MAP_FRAGMENT_TAG              = "MAP_FRAGMENT";
     public static final float   SPEEDOMETER_HEIGHT            = 0.99f;
     public static final float   SPEEDOMETER_WIDTH             = 0.99f;
-    public static final float   FUEL_COST                     = 20.5f;
+    public static final float   FUEL_COST                     = 20.4f;// TODO: 12.05.2016  to settings, to file maybe?
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER = 3.6f;
     public static final int     TEXT_ANIM_DURATION            = 900;
     public static final boolean DEBUG_MODE                    = true; //todo change for release to false
     public static final int     START_VALUE                   = 0;
-    public static final int     FUEL_TANK_CAPACITY            = 60;
-    public static final float   FUEL_CONSUMPTION              = 11;
+    public static final int     FUEL_TANK_CAPACITY            = 60;// TODO: 12.05.2016  to settings, to file maybe?
+    public static final float   FUEL_CONSUMPTION              = 11;// TODO: 12.05.2016  to settings, to file maybe?
 
     public static final int   HIGHWAY_SPEED_AVG_SPEED           = 70;
     public static final int   LOW_TRAFFIC_AVG_SPEED             = 50;
