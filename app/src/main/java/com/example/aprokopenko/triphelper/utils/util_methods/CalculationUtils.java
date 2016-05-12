@@ -2,7 +2,6 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -15,7 +14,7 @@ import java.util.Calendar;
 
 public class CalculationUtils {
 
-    @Contract(pure = true) public static float calcMoneySpent(float fuelSpent,float fuelCost) {
+    @Contract(pure = true) public static float calcMoneySpent(float fuelSpent, float fuelCost) {
         return fuelSpent * fuelCost;
     }
 

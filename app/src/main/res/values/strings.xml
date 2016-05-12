@@ -60,7 +60,6 @@
     <string name="gps_first_fix_toast">Satellites connected</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fuel_price">fuelPrice</string>
     <string name="fuel_consumption">fuelConsFromSettings</string>
     <string name="fuel_capacity">fuelCapacity</string>

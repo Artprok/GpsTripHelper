@@ -57,15 +57,10 @@ import butterknife.ButterKnife;
     }
 
     public static SettingsFragment newInstance() {
-        SettingsFragment fragment = new SettingsFragment();
-        return fragment;
+        return new SettingsFragment();
     }
 
 
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -78,39 +73,6 @@ import butterknife.ButterKnife;
         context = getActivity();
         setupEditTextFields();
         readDataFromFile();
-    }
-
-    @Override public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override public void onDetach() {
-        super.onDetach();
-    }
-
-
-    public int getFuelTankCapacity() {
-        return fuelTankCapacity;
-    }
-
-    public void setFuelTankCapacity(int fuelTankCapacity) {
-        this.fuelTankCapacity = fuelTankCapacity;
-    }
-
-    public float getFuelConsumption() {
-        return fuelConsumption;
-    }
-
-    public void setFuelConsumption(float fuelConsumption) {
-        this.fuelConsumption = fuelConsumption;
-    }
-
-    public float getFuelCost() {
-        return fuelCost;
-    }
-
-    public void setFuelCost(float fuelCost) {
-        this.fuelCost = fuelCost;
     }
 
     private void setupTextFields() {
@@ -143,14 +105,14 @@ import butterknife.ButterKnife;
     }
 
     private void updateTextFields() {
-            String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
-            curFuelCons.setText(fuelCons);
+        String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
+        curFuelCons.setText(fuelCons);
 
-            String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
-            curFuelPrice.setText(fuelCost);
+        String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
+        curFuelPrice.setText(fuelCost);
 
-            String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
-            curFuelCapacity.setText(fuelCapacity);
+        String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
+        curFuelCapacity.setText(fuelCapacity);
 
     }
 
@@ -162,7 +124,7 @@ import butterknife.ButterKnife;
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
-                setFuelCost(Float.valueOf(s.toString()));
+                fuelCost = Float.valueOf(s.toString());
                 writeDataToFile();
             }
 
@@ -177,7 +139,7 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setFuelConsumption(Float.valueOf(s.toString()));
+                fuelConsumption = (Float.valueOf(s.toString()));
                 writeDataToFile();
             }
 
@@ -192,7 +154,7 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setFuelTankCapacity(Integer.valueOf(s.toString()));
+                fuelTankCapacity = (Integer.valueOf(s.toString()));
                 writeDataToFile();
             }
 
@@ -221,10 +183,10 @@ import butterknife.ButterKnife;
             }
             FileOutputStream fos;
 
-            float consumption = getFuelConsumption();
-            float price       = getFuelCost();
-            int   capacity    = getFuelTankCapacity();
-            Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled"+consumption+price+capacity);
+            float consumption = fuelConsumption;
+            float price       = fuelCost;
+            int   capacity    = fuelTankCapacity;
+            Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + consumption + price + capacity);
 
             try {
                 fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
@@ -267,8 +229,8 @@ import butterknife.ButterKnife;
                     int               capacity    = is.readInt();
 
                     fuelConsumption = consumption;
-                    fuelCost=fuelPrice;
-                    fuelTankCapacity=capacity;
+                    fuelCost = fuelPrice;
+                    fuelTankCapacity = capacity;
 
                     is.close();
                     fis.close();

@@ -127,7 +127,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         getContextIfNull();
 
 
-        tripProcessor = new TripProcessor(context,fuelConsFromSettings,fuelPriceFromSettings,fuelCapacityFromSettings);
+        tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
 
         gpsStatusListener(REGISTER);
         setupLocationService();
@@ -252,7 +252,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         if (avgSpeed == 0) {
             avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
         }
-        Log.d(LOG_TAG, "getDistanceToDriveLeft: "+fuelConsFromSettings);
+        Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings);
         float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
         return (fuelLeftVal / fuelConsLevel) * 100;
     }
@@ -322,7 +322,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (tripProcessor.isFileNotInWriteMode()) {
                     if (UtilMethods.eraseFile(context)) {
                         onPause();
-                        tripProcessor = new TripProcessor(context,fuelConsFromSettings,fuelPriceFromSettings,fuelCapacityFromSettings);
+                        tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
                         UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
                         onResume();
                     }
@@ -513,6 +513,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         float           maxSpeed     = ConstantValues.START_VALUE;
         ArrayList<Trip> allTrips     = tripData.getTrips();
         int             tripQuantity = allTrips.size();
+
         for (Trip trip : allTrips) {
             fuelSpent = fuelSpent + trip.getFuelSpent();
             timeSpent = timeSpent + trip.getTimeSpent();
@@ -520,6 +521,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
             maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
         }
+
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
         float distTravelled = CalculationUtils.calcDistTravelled(timeSpent, avgSpeed);
@@ -561,7 +563,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.i(LOG_TAG, "onServiceConnected: bounded");
                 }
-                                setupButtons();
+                setupButtons();
             }
 
             @Override public void onServiceDisconnected(ComponentName arg0) {

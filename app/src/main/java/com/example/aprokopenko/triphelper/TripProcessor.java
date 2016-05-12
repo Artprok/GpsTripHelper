@@ -33,9 +33,9 @@ public class TripProcessor {
     private final Context          context;
     private final ArrayList<Route> route;
 
-    private float fuelConsFromSettings;
-    private float fuelPrice;
-    private int   fuelCapacity;
+    private final float fuelConsFromSettings;
+    private final float fuelPrice;
+    private final int   fuelCapacity;
 
     public TripProcessor(Context context,float fuelConsFromSettings,float fuelPrice,int fuelCapacity) {
         this.fuelConsFromSettings=fuelConsFromSettings;
