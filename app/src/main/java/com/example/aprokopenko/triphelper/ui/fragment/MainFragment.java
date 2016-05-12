@@ -530,7 +530,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         tripData.setAvgFuelConsumption(avgFuelCons);
         tripData.setFuelSpent(fuelSpent);
         tripData.setGasTank(tripData.getGasTank() - fuelSpent);
-        tripData.setMoneyOnFuelSpent(fuelSpent * ConstantValues.FUEL_COST);
+        tripData.setMoneyOnFuelSpent(fuelSpent * fuelPriceFromSettings);
     }
 
     private void fillGasTank(float fuel) {

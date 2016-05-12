@@ -22,13 +22,14 @@ public class ConstantValues {
     public static final String  MAP_FRAGMENT_TAG              = "MAP_FRAGMENT";
     public static final float   SPEEDOMETER_HEIGHT            = 0.99f;
     public static final float   SPEEDOMETER_WIDTH             = 0.99f;
-    public static final float   FUEL_COST                     = 20.4f;// TODO: 12.05.2016  to settings, to file maybe?
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER = 3.6f;
     public static final int     TEXT_ANIM_DURATION            = 900;
-    public static final boolean DEBUG_MODE                    = true; //todo change for release to false
+    public static final boolean DEBUG_MODE                    = false; //todo change for release to false
     public static final int     START_VALUE                   = 0;
-    public static final int     FUEL_TANK_CAPACITY            = 60;// TODO: 12.05.2016  to settings, to file maybe?
-    public static final float   FUEL_CONSUMPTION              = 11;// TODO: 12.05.2016  to settings, to file maybe?
+
+    public static final float   FUEL_COST_DEFAULT             = 20.3f;
+    public static final int     FUEL_TANK_CAPACITY_DEFAULT    = 60;
+    public static final float   FUEL_CONSUMPTION_DEFAULT      = 11;
 
     public static final int   HIGHWAY_SPEED_AVG_SPEED           = 70;
     public static final int   LOW_TRAFFIC_AVG_SPEED             = 50;

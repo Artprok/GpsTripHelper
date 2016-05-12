@@ -47,9 +47,9 @@ import butterknife.ButterKnife;
     TextView curFuelPrice;
 
     public static final String LOG_TAG          = "Settings fragment";
-    private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY;
-    private             float  fuelConsumption  = ConstantValues.FUEL_CONSUMPTION;
-    private             float  fuelCost         = ConstantValues.FUEL_COST;
+    private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
+    private             float  fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
+    private             float  fuelCost         = ConstantValues.FUEL_COST_DEFAULT;
     private Context context;
 
     public SettingsFragment() {
@@ -114,8 +114,8 @@ import butterknife.ButterKnife;
     }
 
     private void setupTextFields() {
-        if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION) {
-            String fuelCons = ConstantValues.FUEL_CONSUMPTION + getString(R.string.fuel_cons_prefix);
+        if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION_DEFAULT) {
+            String fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
             curFuelCons.setText(fuelCons);
         }
         else {
@@ -123,8 +123,8 @@ import butterknife.ButterKnife;
             curFuelCons.setText(fuelCons);
         }
 
-        if (fuelCost == ConstantValues.FUEL_COST) {
-            String fuelCost = ConstantValues.FUEL_COST + getString(R.string.currency_prefix);
+        if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
+            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + getString(R.string.currency_prefix);
             curFuelPrice.setText(fuelCost);
         }
         else {
@@ -132,8 +132,8 @@ import butterknife.ButterKnife;
             curFuelPrice.setText(fuelCost);
         }
 
-        if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY) {
-            String fuelCap = ConstantValues.FUEL_TANK_CAPACITY + getString(R.string.fuel_prefix);
+        if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY_DEFAULT) {
+            String fuelCap = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
             curFuelCapacity.setText(fuelCap);
         }
         else {
@@ -278,9 +278,9 @@ import butterknife.ButterKnife;
                 }
             }
             else {
-                fuelConsumption = ConstantValues.FUEL_CONSUMPTION;
-                fuelCost = ConstantValues.FUEL_COST;
-                fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY;
+                fuelConsumption = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
+                fuelCost = ConstantValues.FUEL_COST_DEFAULT;
+                fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
                 return true;
             }
             return true;
