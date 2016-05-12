@@ -35,13 +35,13 @@ public class UtilMethods {
         if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
             return fuelCons + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
         }
-        else if (avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed < ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
             return fuelCons + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
         }
-        else if (avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed < ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
             return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
         }
-        else if (avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed < ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
             return fuelCons + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
         }
         else if (avgSpeed < ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
