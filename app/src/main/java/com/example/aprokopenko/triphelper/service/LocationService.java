@@ -40,17 +40,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     @Override public void onConnected(@Nullable Bundle bundle) {
-        Log.d(LOG_TAG, "onConnected: CONNECTED");
         UtilMethods.checkPermission(getApplicationContext());
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gpsList);
     }
 
     @Override public void onConnectionSuspended(int i) {
-
+        // TODO: 13.05.2016 AddAnother locListener maybe? reserve? toast that locServices not avaliable
     }
 
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        // TODO: 13.05.2016 if not connected, so we need or show toast or maybe go back to another LocationService?? But it'll broke some
+        // todo: functionality maybe.. need to check..
     }
 
 
@@ -130,6 +130,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private LocationRequest setupLocRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return LocationRequest.create();
     }
