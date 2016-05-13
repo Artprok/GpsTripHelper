@@ -123,7 +123,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         getContextIfNull();
         tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
 
-
         gpsStatusListener(REGISTER);
         setupLocationService();
         setupSpeedometer();

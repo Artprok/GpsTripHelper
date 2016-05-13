@@ -48,5 +48,5 @@ public class ConstantValues {
 
     public static final int TEXT_COLOR          = Color.parseColor("#EEEEEE");
     public static final int MIN_UPDATE_DISTANCE = 0;
-    public static final int MIN_UPDATE_TIME     = 1000;
+    public static final int MIN_UPDATE_TIME     = 0;
 }
