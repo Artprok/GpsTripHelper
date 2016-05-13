@@ -22,7 +22,7 @@
         android:layout_alignBottom="@+id/id"
         android:layout_alignStart="@+id/id"
         android:layout_marginStart="30dp"
-        android:background="@drawable/calendar_alt1"/>
+        android:background="@drawable/calendar_icon"/>
 
     <TextView
         android:id="@+id/content"

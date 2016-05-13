@@ -71,7 +71,7 @@ import dagger.Module;
     }
 
     private void setFabToMap(final MainFragment mainFragment) {
-        int res = R.drawable.map;
+        int res = R.drawable.map_black;
         fab.setImageResource(res);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -82,7 +82,7 @@ import dagger.Module;
     }
 
     private void setFabToSpeedometer() {
-        int res = R.drawable.highway_alt2;
+        int res = R.drawable.road_black;
         fab.setImageResource(res);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

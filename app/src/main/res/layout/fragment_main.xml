@@ -15,7 +15,7 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/statusImageView"
-        android:background="@android:drawable/ic_menu_sort_by_size"
+        android:background="@drawable/trip_list_button"
         />
 
     <ImageButton
@@ -25,7 +25,7 @@
         android:layout_alignBottom="@id/tripListButton"
         android:layout_marginTop="5dp"
         android:layout_toStartOf="@+id/tripListButton"
-        android:background="@drawable/settings"
+        android:background="@drawable/settings_button"
         />
 
     <RelativeLayout
@@ -85,7 +85,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/gas_station"
+            android:background="@drawable/gas_station_icon"
             />
 
         <TextView
@@ -123,7 +123,7 @@
                 android:id="@+id/refillButton"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@drawable/gas_pump"
+                android:background="@drawable/gas_pump_icon"
                 />
         </RelativeLayout>
     </RelativeLayout>
@@ -135,7 +135,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
-        android:background="@drawable/play_alt2"
+        android:background="@drawable/play_button"
         />
 
     <ImageButton
@@ -145,7 +145,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
-        android:background="@drawable/stop_alt1"
+        android:background="@drawable/stop_button"
         android:visibility="invisible"
         />
 </RelativeLayout>

@@ -348,7 +348,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupTripListButton();
         setupFillButton();
         setupSettingsButton();
-        // TODO: 28.04.2016 Erase button replace to some settings fragment of something
+        // TODO: 28.04.2016 Erase button replace to some settings_button fragment of something
         //        if (ConstantValues.DEBUG_MODE) {
 
 

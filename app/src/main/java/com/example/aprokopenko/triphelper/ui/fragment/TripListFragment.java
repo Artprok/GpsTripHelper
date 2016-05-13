@@ -122,6 +122,7 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     }
 
     @Override public void onListItemClick(Trip trip) {
+        progressBar.setVisibility(View.VISIBLE);
         float            fuelConsumed      = trip.getAvgFuelConsumption();
         float            distTravelled     = trip.getDistanceTravelled();
         float            timeSpentInMotion = trip.getTimeSpentInMotion();
@@ -139,8 +140,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
                         tripId, routes, moneyOnFuelSpent, maxSpeed);
-        progressBar.setVisibility(View.VISIBLE);
-
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 
