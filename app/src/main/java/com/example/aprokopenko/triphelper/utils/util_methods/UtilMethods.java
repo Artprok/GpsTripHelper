@@ -35,28 +35,27 @@ public class UtilMethods {
 
     public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
         if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD);
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: HighwayLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             return fuelCons + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + fuelCons+"avg"+avgSpeed + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD);
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: LowLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             return fuelCons + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + fuelCons +"avg"+avgSpeed+ ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD);
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: MediumLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + fuelCons +"avg"+avgSpeed+ ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD);
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: HighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             return fuelCons + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" +  fuelCons +"avg"+avgSpeed+ ConstantValues
-                    .CONSUMPTION_VERY_HIGH_TRAFFIC_ADD);
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: VeryHighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             return fuelCons + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
         }
         else {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!!"+fuelCons+avgSpeed);
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!!" + fuelCons + avgSpeed);
             return fuelCons;
         }
 
@@ -69,16 +68,16 @@ public class UtilMethods {
 
     public static String formatFloat(float speed) {
         DecimalFormat df = new DecimalFormat("#.#");
-        if (speed > 9) {
+        if (speed > 9.9) {
             df = new DecimalFormat("##.#");
         }
-        else if (speed > 99) {
+        else if (speed > 99.9) {
             df = new DecimalFormat("###.#");
         }
-        else if (speed > 999) {
+        else if (speed > 999.9) {
             df = new DecimalFormat("####.#");
         }
-        else if (speed > 9999) {
+        else if (speed > 9999.9) {
             df = new DecimalFormat("#####.#");
         }
         return df.format(speed);

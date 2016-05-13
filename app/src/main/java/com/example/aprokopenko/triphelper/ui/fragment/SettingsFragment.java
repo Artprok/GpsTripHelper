@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.text.TextWatcher;
 import android.content.Context;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.text.Editable;
@@ -14,8 +15,10 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
@@ -34,17 +37,19 @@ import butterknife.ButterKnife;
 @Singleton public class SettingsFragment extends Fragment {
 
     @Bind(R.id.fuelPriceEditText)
-    EditText fuelPriceEditText;
+    EditText    fuelPriceEditText;
     @Bind(R.id.fuelConsumptionEditText)
-    EditText fuelConsEditText;
+    EditText    fuelConsEditText;
     @Bind(R.id.fuelCapacityEditText)
-    EditText fuelCapacityEditText;
+    EditText    fuelCapacityEditText;
     @Bind(R.id.curFuelCapacity)
-    TextView curFuelCapacity;
+    TextView    curFuelCapacity;
     @Bind(R.id.curFuelCons)
-    TextView curFuelCons;
+    TextView    curFuelCons;
     @Bind(R.id.curFuelPrice)
-    TextView curFuelPrice;
+    TextView    curFuelPrice;
+    @Bind(R.id.eraseButton)
+    ImageButton eraseButton;
 
     public static final String LOG_TAG          = "Settings fragment";
     private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
@@ -60,8 +65,6 @@ import butterknife.ButterKnife;
         return new SettingsFragment();
     }
 
-
-
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
@@ -71,6 +74,7 @@ import butterknife.ButterKnife;
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         context = getActivity();
+        setupEraseButton();
         setupEditTextFields();
         readDataFromFile();
     }
@@ -175,6 +179,19 @@ import butterknife.ButterKnife;
 
     }
 
+    private void setupEraseButton() {
+        eraseButton.setVisibility(View.VISIBLE);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (UtilMethods.eraseFile(context)) {
+                    UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
+                }
+                else {
+                    UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
+                }
+            }
+        });
+    }
 
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
         @Override protected Boolean doInBackground(Void... params) {

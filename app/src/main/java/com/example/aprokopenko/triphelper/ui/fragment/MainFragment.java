@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.content.ServiceConnection;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.content.ComponentName;
 import android.view.LayoutInflater;
@@ -65,8 +66,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     ImageView      statusImage;
     @Bind(R.id.startButton)
     ImageButton    startButton;
-    @Bind(R.id.eraseButton)
-    ImageButton    eraseButton;
     @Bind(R.id.stopButton)
     ImageButton    stopButton;
     @Bind(R.id.fuelLayout)
@@ -123,6 +122,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         ButterKnife.bind(this, view);
         getContextIfNull();
         tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+
 
         gpsStatusListener(REGISTER);
         setupLocationService();
@@ -246,7 +246,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
         }
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings+"avgSped"+avgSpeed);
+            Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings + "avgSped" + avgSpeed);
         }
         float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
         return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100_KM;
@@ -305,26 +305,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         });
     }
 
-    private void setupEraseButton() {
-        eraseButton.setVisibility(View.VISIBLE);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (tripProcessor.isFileNotInWriteMode()) {
-                    if (UtilMethods.eraseFile(context)) {
-                        onPause();
-                        tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-                        UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
-                        onResume();
-                    }
-                    else {
-                        UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
-                    }
-
-                }
-            }
-        });
-    }
-
     private void setupStopButton() {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -368,7 +348,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupSettingsButton();
         // TODO: 28.04.2016 Erase button replace to some settings fragment of something
         //        if (ConstantValues.DEBUG_MODE) {
-        setupEraseButton();
+
 
         //        }
     }
@@ -427,7 +407,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void setButtonsVisibilityDuringWriteMode(int visibility) {
         tripListButton.setVisibility(visibility);
-        eraseButton.setVisibility(visibility);
         refillButtonLayout.setVisibility(visibility);
         settingsButton.setVisibility(visibility);
     }

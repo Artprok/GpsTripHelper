@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.animation.ObjectAnimator;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
@@ -101,6 +102,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<String> speedValues;
     private Context           context;
     private ArrayList<Route>  routes;
+    private ProgressBar       progressBar;
 
     private boolean mapOpened = false;
 
@@ -111,7 +113,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float averageFuelCons, float fuelSpent,
                                                int tripId, ArrayList<Route> routes, Float moneySpent, Float maxSpeed) {
-
         Log.d(LOG_TAG, "newInstance: CALLED");
         TripInfoFragment  fragment       = new TripInfoFragment();
         Bundle            args           = new Bundle();
@@ -229,6 +230,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
 
     private float getInMotionValue() {
         float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
@@ -236,7 +240,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         return timeSpent / 100 * percentInMotion;
     }
 
-    @Contract(pure = true) private float getWithoutMotionValue(float timeSpentInMotion) {
+    private float getWithoutMotionValue(float timeSpentInMotion) {
         return timeSpent - timeSpentInMotion;
     }
 

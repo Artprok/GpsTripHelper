@@ -30,16 +30,6 @@
 
         />
 
-    <ImageButton
-        android:id="@+id/eraseButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignStart="@+id/tripListButton"
-        android:layout_below="@+id/settingsButton"
-        android:layout_marginTop="5dp"
-        android:background="@android:drawable/ic_menu_delete"
-        android:visibility="invisible"
-        />
 
     <ImageButton
         android:id="@+id/stopButton"

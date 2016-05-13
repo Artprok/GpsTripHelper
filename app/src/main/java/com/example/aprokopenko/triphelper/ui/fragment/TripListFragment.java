@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.view.View;
@@ -45,6 +46,8 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     TextView     avgSpeedView;
     @Bind(R.id.maxSpeedListFrag)
     TextView     maxSpeedView;
+    @Bind(R.id.progressBar)
+    ProgressBar  progressBar;
 
 
     private static final String LOG_TAG = "TripListFragment";
@@ -135,6 +138,9 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
                         tripId, routes, moneyOnFuelSpent, maxSpeed);
+        progressBar.setVisibility(View.VISIBLE);
+        tripInfoFragment.setProgressBar(progressBar);
+
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

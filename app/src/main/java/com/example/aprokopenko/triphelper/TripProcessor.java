@@ -45,6 +45,7 @@ public class TripProcessor {
         this.fuelPrice = fuelPrice;
         this.fuelCapacity = fuelCapacity;
 
+
         fileIsInWriteMode = false;
         calendar = Calendar.getInstance();
         routes = new ArrayList<>();
@@ -293,7 +294,7 @@ public class TripProcessor {
         }
     }
 
-    private class ReadFileTask extends AsyncTask<String, Void, TripData> {
+    private class ReadFileTask extends AsyncTask<String, Integer, TripData> {
         @Override protected TripData doInBackground(String... params) {
             Log.d(LOG_TAG, "readFile");
             fileIsInWriteMode = true;
