@@ -63,6 +63,9 @@
     <string name="fuel_price">fuelPrice</string>
     <string name="fuel_consumption">fuelConsFromSettings</string>
     <string name="fuel_capacity">fuelCapacity</string>
+    <string name="gps_not_enabled_label">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="agree_gps_enable">Yes</string>
+    <string name="disagree_gps_enable">No</string>
 
 
 </resources>

@@ -231,7 +231,7 @@ public class Trip implements Parcelable {
                 os.writeDouble(tmpRoutePoint.longitude);
                 os.writeFloat(routePoint.getSpeed());
                 if (ConstantValues.DEBUG_MODE) {
-                    Log.d("Trip", "writeTrip: " + routePoint.getSpeed());
+                    Log.d("Trip", "writeTrip:routePoint speed- " + routePoint.getSpeed());
                 }
             }
             os.writeFloat(timeSpentInMotion);

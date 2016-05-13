@@ -31,24 +31,23 @@ public class TripProcessor {
     private final Calendar         calendar;
     private       TripData         tripData;
     private final Context          context;
-    private final ArrayList<Route> route;
+    private final ArrayList<Route> routes;
 
     private final float fuelConsFromSettings;
     private final float fuelPrice;
     private final int   fuelCapacity;
 
-    public TripProcessor(Context context,float fuelConsFromSettings,float fuelPrice,int fuelCapacity) {
-        this.fuelConsFromSettings=fuelConsFromSettings;
-        this.fuelPrice=fuelPrice;
-        this.fuelCapacity=fuelCapacity;
-
-        Log.d(LOG_TAG, "TripProcessor: fu"+fuelCapacity+fuelPrice+fuelConsFromSettings);
-        fileIsInWriteMode = false;
+    public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
         if (ConstantValues.DEBUG_MODE) {
             Log.i(LOG_TAG, "TripProcessor: IsConstructed");
         }
+        this.fuelConsFromSettings = fuelConsFromSettings;
+        this.fuelPrice = fuelPrice;
+        this.fuelCapacity = fuelCapacity;
+
+        fileIsInWriteMode = false;
         calendar = Calendar.getInstance();
-        route = new ArrayList<>();
+        routes = new ArrayList<>();
         this.context = context;
         if (tripData == null) {
             if (ConstantValues.DEBUG_MODE) {
@@ -63,7 +62,7 @@ public class TripProcessor {
     }
 
     public ArrayList<Route> getRoutes() {
-        return route;
+        return routes;
     }
 
     public TripData getTripData() {
@@ -100,16 +99,14 @@ public class TripProcessor {
         updateTrip(trip);
         long  timeSpent        = CalculationUtils.calcTimeInTrip(tripStartTime);
         float distanceTraveled = CalculationUtils.setDistanceCoveredForTrip(trip, timeSpent);
-        float fuelConsumption  = UtilMethods.getFuelConsumptionLevel(averageSpeed,fuelConsFromSettings);
+        float fuelConsumption  = UtilMethods.getFuelConsumptionLevel(averageSpeed, fuelConsFromSettings);
         float fuelSpent        = CalculationUtils.calcFuelSpent(distanceTraveled, fuelConsumption);
-        float moneySpent       = CalculationUtils.calcMoneySpent(fuelSpent,fuelPrice);
+        float moneySpent       = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
 
         trip.setMoneyOnFuelSpent(moneySpent);
         trip.setFuelSpent(fuelSpent);
         trip.setDistanceTravelled(distanceTraveled);
-        trip.setAvgSpeed(averageSpeed);
         trip.setTimeSpent(timeSpent);
-        trip.setRoute(route);
         trip.setAvgFuelConsumption(fuelConsumption);
         updateTripState();
         setTripFieldsToStartState();
@@ -124,13 +121,14 @@ public class TripProcessor {
 
     public void addRoutePoint(Route routePoint) {
         Trip trip = tripData.getTrip(currentTripId);
-        trip.setRoute(route);
-        route.add(routePoint);
+        trip.setRoute(routes);
+        routes.add(routePoint);
     }
 
     public void fillGasTank(float fuel) {
         if (tripData != null) {
             float gasTank = tripData.getGasTank();
+            Log.d(LOG_TAG, "fillGasTank: gasT" + gasTank + "fuel" + fuel + "fuelCap" + fuelCapacity);
             if (gasTank + fuel <= fuelCapacity) {
                 tripData.setGasTank(gasTank + fuel);
                 CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
@@ -205,7 +203,7 @@ public class TripProcessor {
             fuelSpent = fuelSpent + trip.getFuelSpent();
             fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
         }
-        float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent,fuelPrice);
+        float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
         fuelConsumption = fuelConsumption / tripData.getTrips().size();
 
         tripData.setDistanceTravelled(distanceTravelled);
@@ -219,8 +217,8 @@ public class TripProcessor {
             Log.d(LOG_TAG, "updateTrip: called");
         }
         trip.setAvgSpeed(averageSpeed);
-        if (route != null) {
-            trip.setRoute(route);
+        if (routes != null) {
+            trip.setRoute(routes);
         }
     }
 

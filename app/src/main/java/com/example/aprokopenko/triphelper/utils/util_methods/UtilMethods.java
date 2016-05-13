@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
 
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.view.animation.AccelerateInterpolator;
 import android.support.v4.app.FragmentTransaction;
@@ -30,27 +31,35 @@ import java.util.Date;
 import butterknife.ButterKnife;
 
 public class UtilMethods {
+    public static final String LOG_TAG = "UtilMethods";
 
     public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
-        if (avgSpeed > ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
+        if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD);
             return fuelCons + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
         }
-        else if (avgSpeed < ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed <= ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + fuelCons+"avg"+avgSpeed + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD);
             return fuelCons + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
         }
-        else if (avgSpeed < ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed <= ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + fuelCons +"avg"+avgSpeed+ ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD);
             return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
         }
-        else if (avgSpeed < ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" + fuelCons +"avg"+avgSpeed+ ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD);
             return fuelCons + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
         }
-        else if (avgSpeed < ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed <= ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: )+fuelCons" +  fuelCons +"avg"+avgSpeed+ ConstantValues
+                    .CONSUMPTION_VERY_HIGH_TRAFFIC_ADD);
             return fuelCons + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
         }
         else {
-            Log.d("Util methods", "getFuelConsumptionLevel: Impossible thing!");
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!!"+fuelCons+avgSpeed);
             return fuelCons;
         }
+
     }
 
     public static String parseDate(Date dateString) {
@@ -109,8 +118,7 @@ public class UtilMethods {
 
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {
         ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);
-        valueAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
-        valueAnimator.setInterpolator(new AccelerateInterpolator());
+        valueAnimator.setDuration(ConstantValues.SPEEDOMETER_TEXT_ANIM_DURATION);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 if (textview != null) {
@@ -128,7 +136,7 @@ public class UtilMethods {
 
     public static void checkIfGpsEnabled(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        String          LOG_TAG         = "GPS_CHECK";
+
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (ConstantValues.DEBUG_MODE) {
@@ -166,13 +174,13 @@ public class UtilMethods {
 
     private static void buildAlertMessageNoGps(final Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.gps_not_enabled_label).setCancelable(false)
+                .setPositiveButton(R.string.agree_gps_enable, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
-                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                }).setNegativeButton(R.string.disagree_gps_enable, new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                 dialog.cancel();
             }

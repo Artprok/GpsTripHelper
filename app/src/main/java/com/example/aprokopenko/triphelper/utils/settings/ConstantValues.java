@@ -14,20 +14,24 @@ public class ConstantValues {
     public static final String INTERNAL_SETTING_FILE_NAME = "INTERNAL_DATA";
     public static final String FILE_NAME                  = "TripData";
 
-    public static final LatLng  BERMUDA_COORDINATES           = new LatLng(32.30, -64.78);
-    public static final String  TRIP_INFO_FRAGMENT_TAG        = "TRIP_INFO_FRAGMENT";
-    public static final String  TRIP_LIST_TAG                 = "TRIP_LIST_FRAGMENT";
-    public static final String  SETTINGS_FRAGMENT_TAG         = "SETTINGS_FRAGMENT";
-    public static final String  MAIN_FRAGMENT_TAG             = "MAIN_FRAGMENT";
-    public static final String  MAP_FRAGMENT_TAG              = "MAP_FRAGMENT";
+    public static final LatLng BERMUDA_COORDINATES    = new LatLng(32.30, -64.78);
+    public static final String TRIP_INFO_FRAGMENT_TAG = "TRIP_INFO_FRAGMENT";
+    public static final String TRIP_LIST_TAG          = "TRIP_LIST_FRAGMENT";
+    public static final String SETTINGS_FRAGMENT_TAG  = "SETTINGS_FRAGMENT";
+    public static final String MAIN_FRAGMENT_TAG      = "MAIN_FRAGMENT";
+    public static final String MAP_FRAGMENT_TAG       = "MAP_FRAGMENT";
+
     public static final float   SPEEDOMETER_HEIGHT            = 0.99f;
     public static final float   SPEEDOMETER_WIDTH             = 0.99f;
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER = 3.6f;
-    public static final int     TEXT_ANIM_DURATION            = 900;
+    public static final int     PER_100_KM                    = 100;
     public static final boolean DEBUG_MODE                    = true; //todo change for release to false
-    public static final int     START_VALUE                   = 0;
 
-    public static final float FUEL_COST_DEFAULT          = 20.3f;
+    public static final int TEXT_ANIM_DURATION             = 900;
+    public static final int SPEEDOMETER_TEXT_ANIM_DURATION = 300;
+
+    public static final int   START_VALUE                = 0;
+    public static final float FUEL_COST_DEFAULT          = 20.4f;
     public static final int   FUEL_TANK_CAPACITY_DEFAULT = 60;
     public static final float FUEL_CONSUMPTION_DEFAULT   = 11;
 
@@ -42,8 +46,7 @@ public class ConstantValues {
     public static final float CONSUMPTION_HIGH_TRAFFIC_ADD      = 3;
     public static final float CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 5;
 
-    public static final int TEXT_COLOR = Color.parseColor("#EEEEEE");
-
+    public static final int TEXT_COLOR          = Color.parseColor("#EEEEEE");
     public static final int MIN_UPDATE_DISTANCE = 0;
     public static final int MIN_UPDATE_TIME     = 1;
 }

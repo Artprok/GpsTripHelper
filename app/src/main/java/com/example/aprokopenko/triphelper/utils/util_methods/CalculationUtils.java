@@ -19,7 +19,7 @@ public class CalculationUtils {
     }
 
     @Contract(pure = true) public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
-        return distanceTraveled * (fuelConsumption / 100);
+        return distanceTraveled * (fuelConsumption / ConstantValues.PER_100_KM);
     }
 
     public static String getTimeInNormalFormat(float timeInMills, @Nullable Resources res) {

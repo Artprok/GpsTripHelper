@@ -3,7 +3,6 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
-import android.support.annotation.NonNull;
 import android.graphics.drawable.Drawable;
 import android.content.ServiceConnection;
 import android.location.LocationManager;
@@ -42,8 +41,6 @@ import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.google.android.gms.maps.model.LatLng;
 import com.example.aprokopenko.triphelper.R;
-
-import org.jetbrains.annotations.Contract;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -112,7 +109,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         // Required empty public constructor
     }
 
-    @Contract(" -> !null") public static MainFragment newInstance() {
+    public static MainFragment newInstance() {
         return new MainFragment();
     }
 
@@ -125,8 +122,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         getContextIfNull();
-
-
         tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
 
         gpsStatusListener(REGISTER);
@@ -136,7 +131,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         if (savedInstanceState != null) {
             state = savedInstanceState;
         }
-
     }
 
     @Override public void onPause() {
@@ -168,7 +162,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         outState.putBoolean("ControlButtonVisibility", getButtonVisibility());
         outState.putBoolean("StatusImageState", getStatusImageState());
         outState.putBoolean("FirstStart", firstStart);
-        outState.putFloat("FuelLevel", getFuelLevelFieldValue());
     }
 
     @Override public void onDestroyView() {
@@ -227,7 +220,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context);
     }
 
-    @NonNull private Float getFuelLevelFieldValue() {
+    private Float getFuelLevelFieldValue() {
         if (tripProcessor != null) {
             return tripProcessor.getFuelLeft();
         }
@@ -236,10 +229,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-    @NonNull private String getFuelLeftString() {
+    private String getFuelLeftString() {
         float fuelLeftVal = tripProcessor.getFuelLeft();
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "getFuelLeftString: fuel written");
+            Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
         }
         tripProcessor.writeDataToFile();
         float distanceToDriveLeft = getDistanceToDriveLeft(fuelLeftVal);
@@ -252,15 +245,17 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         if (avgSpeed == 0) {
             avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
         }
-        Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings);
+        if (ConstantValues.DEBUG_MODE) {
+            Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings+"avgSped"+avgSpeed);
+        }
         float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
-        return (fuelLeftVal / fuelConsLevel) * 100;
+        return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100_KM;
     }
 
     private boolean getButtonVisibility() {
         Boolean visibility = true;
         if (startButton != null) {
-            visibility = startButton.getVisibility() == View.VISIBLE;
+            visibility = (startButton.getVisibility() == View.VISIBLE);
         }
         return visibility;
     }
@@ -269,12 +264,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         boolean result;
         getContextIfNull();
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
-        if (statusImage == null) {
-            result = false;
-        }
-        else {
-            result = (statusImage.getBackground() != greenSatellite);
-        }
+        result = (statusImage != null && (statusImage.getBackground() != greenSatellite));
         return result;
     }
 
@@ -395,7 +385,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setButtonsVisibilityDuringWriteMode(View.INVISIBLE);
     }
 
-    private void restoreFuelLevel(Float fuelLevel) {
+    private void restoreFuelLevel() {
         String fuelString = getFuelLeftString();
         fuelLeft.setText(fuelString);
     }
@@ -413,13 +403,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getFloat("FuelLevel"));
         }
 
         firstStart = savedInstanceState.getBoolean("FirstStart");
         restoreButtonsVisibility(savedInstanceState.getBoolean("ControlButtonVisibility"));
         restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
-        restoreFuelLevel(savedInstanceState.getFloat("FuelLevel"));
+        restoreFuelLevel();
 
         restoreFuelLayoutVisibility(firstStart);
         if (stopButton.getVisibility() == View.VISIBLE) {
@@ -430,11 +419,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void restoreButtonsVisibility(Boolean visibility) {
         if (visibility) {
             startButtonTurnActive();
-
         }
         else {
             stopButtonTurnActive();
-
         }
     }
 
@@ -461,14 +448,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void stopTracking() {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "stopTracking: +" + avgSpeedArrayList.size());
-
             for (float f : avgSpeedArrayList) {
                 Log.d(LOG_TAG, "stopTracking: " + f);
             }
         }
 
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
-
         // TODO: 12.05.2016 uncomment maxSpeedVal, sppedTick for tests
         //        float maximumSpeed = maxSpeedVal;
         float maximumSpeed = avgSpeedArrayList.size();
@@ -477,9 +462,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         tripProcessor.endTrip();
         setMetricFieldsToTripData();
 
-        if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "stopTracking: write FromStopTrack");
-        }
         tripProcessor.writeDataToFile();
         if (avgSpeedArrayList != null) {
             avgSpeedArrayList.clear();
@@ -493,10 +475,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setStatusImage() {
-        if (context == null) {
-            context = getActivity();
-            context = getContext();
-        }
+        getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage.getBackground() != greenSatellite) {
@@ -505,12 +484,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void setMetricFieldsToTripData() {
+        final float     startVal     = ConstantValues.START_VALUE;
         TripData        tripData     = tripProcessor.getTripData();
-        float           fuelSpent    = ConstantValues.START_VALUE;
-        float           timeSpent    = ConstantValues.START_VALUE;
-        float           avgSpeed     = ConstantValues.START_VALUE;
-        float           avgFuelCons  = ConstantValues.START_VALUE;
-        float           maxSpeed     = ConstantValues.START_VALUE;
+        float           fuelSpent    = startVal;
+        float           timeSpent    = startVal;
+        float           avgSpeed     = startVal;
+        float           avgFuelCons  = startVal;
+        float           maxSpeed     = startVal;
         ArrayList<Trip> allTrips     = tripData.getTrips();
         int             tripQuantity = allTrips.size();
 
@@ -549,7 +529,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
         else {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            UtilMethods.checkPermission(context);
             lm.removeGpsStatusListener(this);
         }
     }
@@ -560,10 +539,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
                 locationService = binder.getService();
                 configureGpsHandler();
+                setupButtons();
                 if (ConstantValues.DEBUG_MODE) {
                     Log.i(LOG_TAG, "onServiceConnected: bounded");
                 }
-                setupButtons();
             }
 
             @Override public void onServiceDisconnected(ComponentName arg0) {
@@ -698,12 +677,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
             }
 
-            @Override public void onNext(Float speed) {
+            @Override public void onNext(final Float speed) {
+                storeSpeedTicks(speed);
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
                 updateSpeed(speed);
-                storeSpeedTicks(speed);
             }
         };
     }
@@ -714,8 +693,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupMaxSpeedSubscriber();
     }
 
-    private void storeSpeedTicks(float speed) {
-        avgSpeedArrayList.add(speed);
+    private void storeSpeedTicks(final float speed) {
+        // TODO: 13.05.2016 runnable need??
+        Runnable runnable = new Runnable() {
+            @Override public void run() {
+                avgSpeedArrayList.add(speed);
+            }
+        };
+        runnable.run();
     }
 
     private void updatePointerLocation(float speed) {
@@ -724,9 +709,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateSpeedTextField(float speed) {
-        float  initialVal     = Float.valueOf(speedometerTextView.getText().toString());
         String formattedSpeed = UtilMethods.formatFloat(speed);
-        int    initialValue   = (int) initialVal;
+        int    initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
         int    finalValue     = Integer.valueOf(formattedSpeed);
         UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
         speedometerTextView.setText(formattedSpeed);
@@ -743,7 +727,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         updatePointerLocation(speed);
         updateSpeedTextField(speed);
     }
-
 
     private void getInternalSettings() {
         readInternalDataFromFile();
@@ -771,7 +754,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                     fuelConsFromSettings = consumption;
                     fuelPriceFromSettings = fuelPrice;
                     fuelCapacityFromSettings = capacity;
-
+                    Log.d(LOG_TAG, "doInBackground: EXIST");
                     is.close();
                     fis.close();
                 }
@@ -780,7 +763,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 }
             }
             else {
-                return false;
+                Log.d(LOG_TAG, "doInBackground: NOPE");
+                fuelConsFromSettings = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
+                fuelPriceFromSettings = ConstantValues.FUEL_COST_DEFAULT;
+                fuelCapacityFromSettings = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
+                Log.d(LOG_TAG, "doInBackground: " + fuelCapacityFromSettings);
+                return true;
             }
             return true;
         }
