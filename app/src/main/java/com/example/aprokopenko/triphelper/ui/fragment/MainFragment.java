@@ -725,6 +725,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         readInternalDataFromFile();
     }
 
+
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
             Log.d(LOG_TAG, "readFileSettings");
