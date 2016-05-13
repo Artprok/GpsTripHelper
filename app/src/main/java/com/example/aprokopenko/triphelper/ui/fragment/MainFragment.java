@@ -91,6 +91,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private GpsHandler       gpsHandler;
     private Context          context;
     private Bundle           state;
+    private Runnable         storeSpeedTicksRunnable;
 
     private static final boolean REMOVE     = false;
     private static final boolean REGISTER   = true;
@@ -173,6 +174,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         serviceConnection = null;
         gpsHandler = null;
         tripProcessor = null;
+        storeSpeedTicksRunnable = null;
         gpsStatusListener(REMOVE);
         super.onDetach();
     }
@@ -348,11 +350,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupTripListButton();
         setupFillButton();
         setupSettingsButton();
-        // TODO: 28.04.2016 Erase button replace to some settings_button fragment of something
-        //        if (ConstantValues.DEBUG_MODE) {
-
-
-        //        }
     }
 
 
@@ -685,13 +682,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void storeSpeedTicks(final float speed) {
-        // TODO: 13.05.2016 runnable need??
-        Runnable runnable = new Runnable() {
-            @Override public void run() {
-                avgSpeedArrayList.add(speed);
-            }
-        };
-        runnable.run();
+        // TODO: 13.05.2016 storeSpeedTicksRunnable need??
+        if (storeSpeedTicksRunnable == null) {
+            Log.d(LOG_TAG, "storeSpeedTicks: runable nul");
+            storeSpeedTicksRunnable = new Runnable() {
+                @Override public void run() {
+                    avgSpeedArrayList.add(speed);
+                }
+            };
+        }
+        storeSpeedTicksRunnable.run();
     }
 
     private void updatePointerLocation(float speed) {
@@ -724,7 +724,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void getInternalSettings() {
         readInternalDataFromFile();
     }
-
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
