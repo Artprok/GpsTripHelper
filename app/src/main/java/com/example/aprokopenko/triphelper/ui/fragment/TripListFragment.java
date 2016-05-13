@@ -92,13 +92,14 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         String    maxSpeed;
         float     timeSpentOnTrips;
 
-        distance = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
+        distance = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + getString(R.string.distance_prefix);
         avgFuelCons = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
         moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
         fuelSpent = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
         avgSpeed = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
         maxSpeed = UtilMethods.formatFloat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
         timeSpentOnTrips = tripData.getTimeSpentOnTrips();
+
 
         distanceTravelledView.setText(distance);
         avgFuelConsumptionView.setText(avgFuelCons);

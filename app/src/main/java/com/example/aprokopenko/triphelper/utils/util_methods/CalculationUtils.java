@@ -14,12 +14,12 @@ import java.util.Calendar;
 
 public class CalculationUtils {
 
-    public static float calcMoneySpent(float fuelSpent, float fuelCost) {
-        return fuelSpent * fuelCost;
+    public static float getSpeedInKilometerPerHour(float speed) {
+        return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
     }
 
-    public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
-        return distanceTraveled * (fuelConsumption / ConstantValues.PER_100_KM);
+    public static float calcMoneySpent(float fuelSpent, float fuelCost) {
+        return fuelSpent * fuelCost;
     }
 
     public static String getTimeInNormalFormat(float timeInMills, @Nullable Resources res) {
@@ -53,16 +53,8 @@ public class CalculationUtils {
         return resultString;
     }
 
-    @Contract(pure = true) public static float findMaxSpeed(float speed, float initialVal) {
-        float maxSpeed = initialVal;
-        if (speed > maxSpeed) {
-            maxSpeed = speed;
-        }
-        return maxSpeed;
-    }
-
-    @Contract(pure = true) public static float getSpeedInKilometerPerHour(float speed) {
-        return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
+    public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
+        return distanceTraveled * (fuelConsumption / ConstantValues.PER_100_KM);
     }
 
     public static float calcAvgSpeedForOneTrip(ArrayList<Float> avgSpeedArrayList) {
@@ -93,24 +85,20 @@ public class CalculationUtils {
         return distanceTravelled;
     }
 
+    public static float findMaxSpeed(float speed, float initialVal) {
+        float maxSpeed = initialVal;
+        if (speed > maxSpeed) {
+            maxSpeed = speed;
+        }
+        return maxSpeed;
+    }
+
     public static long calcTimeInTrip(long tripStartTime) {
         Calendar curCal  = Calendar.getInstance();
         long     endTime = curCal.getTime().getTime();
         return endTime - tripStartTime;
     }
 
-
-    private static int getSecondsFromMills(float timeInMills) {
-        return (int) (timeInMills / 1000) % 60;
-    }
-
-    private static int getMinutesFromMills(float timeInMills) {
-        return (int) ((timeInMills / (1000 * 60)) % 60);
-    }
-
-    private static int getHoursFromMills(float timeInMills) {
-        return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
-    }
 
     private static float getTimeFromMills(float timeInMills) {
         float result;
@@ -127,6 +115,18 @@ public class CalculationUtils {
             result = hours + minutes / 100 + seconds / 1000;
         }
         return result;
+    }
+
+    private static int getSecondsFromMills(float timeInMills) {
+        return (int) (timeInMills / 1000) % 60;
+    }
+
+    private static int getMinutesFromMills(float timeInMills) {
+        return (int) ((timeInMills / (1000 * 60)) % 60);
+    }
+
+    private static int getHoursFromMills(float timeInMills) {
+        return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
     }
 }
 

@@ -33,35 +33,6 @@ public class MapUtilMethods {
         return route;
     }
 
-    public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
-        LatLng previousLocation;
-        if (size > 1 && currentIndex > 1) {
-            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
-        }
-        else {
-            previousLocation = (routes.get(currentIndex).getRoutePoints());
-        }
-        return previousLocation;
-    }
-
-    public static boolean drawPathFromData(ArrayList<Route> routes, GoogleMap googleMap) {
-        boolean result = false;
-        if (routes != null) {
-            for (int i = 0; i < routes.size(); i++) {
-                LatLng currentLocation      = (routes.get(i).getRoutePoints());
-                LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
-                if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
-                }
-                MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
-            }
-            LatLng positionToAnimate = MapUtilMethods.getPositionForCamera(routes);
-            MapUtilMethods.animateCamera(null, positionToAnimate, googleMap);
-            result = true;
-        }
-        return result;
-    }
-
     public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
         int color = Color.BLACK;
         if (speed != null) {
@@ -91,20 +62,35 @@ public class MapUtilMethods {
         }
     }
 
-
-    @org.jetbrains.annotations.Contract(pure = true) private static int choseColorDependOnSpeed(float speed) {
-        int color = 0;
-        if (speed >= 0 && speed < 80) {
-            color = GoogleMapsSettings.polylineColorCity;
+    public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
+        LatLng previousLocation;
+        if (size > 1 && currentIndex > 1) {
+            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
         }
-        else if (speed > 80 && speed < 110) {
-            color = GoogleMapsSettings.polylineColorOutOfCity;
+        else {
+            previousLocation = (routes.get(currentIndex).getRoutePoints());
         }
-        else if (speed > 110) {
-            color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowedINT;
-        }
-        return color;
+        return previousLocation;
     }
+
+    public static boolean drawPathFromData(ArrayList<Route> routes, GoogleMap googleMap) {
+        boolean result = false;
+        if (routes != null) {
+            for (int i = 0; i < routes.size(); i++) {
+                LatLng currentLocation      = (routes.get(i).getRoutePoints());
+                LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
+                if (ConstantValues.DEBUG_MODE) {
+                    Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
+                }
+                MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
+            }
+            LatLng positionToAnimate = MapUtilMethods.getPositionForCamera(routes);
+            MapUtilMethods.animateCamera(null, positionToAnimate, googleMap);
+            result = true;
+        }
+        return result;
+    }
+
 
     private static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;
@@ -117,5 +103,19 @@ public class MapUtilMethods {
         else {
             return ConstantValues.BERMUDA_COORDINATES;
         }
+    }
+
+    private static int choseColorDependOnSpeed(float speed) {
+        int color = 0;
+        if (speed >= 0 && speed < 80) {
+            color = GoogleMapsSettings.polylineColorCity;
+        }
+        else if (speed > 80 && speed < 110) {
+            color = GoogleMapsSettings.polylineColorOutOfCity;
+        }
+        else if (speed > 110) {
+            color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowedINT;
+        }
+        return color;
     }
 }

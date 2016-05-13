@@ -33,61 +33,6 @@ import butterknife.ButterKnife;
 public class UtilMethods {
     public static final String LOG_TAG = "UtilMethods";
 
-    public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
-        if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: HighwayLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
-            return fuelCons + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
-        }
-        else if (avgSpeed <= ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: LowLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
-            return fuelCons + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
-        }
-        else if (avgSpeed <= ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: MediumLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
-            return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
-        }
-        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: HighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
-            return fuelCons + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
-        }
-        else if (avgSpeed <= ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: VeryHighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
-            return fuelCons + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
-        }
-        else {
-            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!!" + fuelCons + avgSpeed);
-            return fuelCons;
-        }
-
-    }
-
-    public static String parseDate(Date dateString) {
-        SimpleDateFormat sdf = ConstantValues.DATE_FORMAT;
-        return sdf.format(dateString);
-    }
-
-    public static String formatFloat(float speed) {
-        DecimalFormat df = new DecimalFormat("#.#");
-        if (speed > 9.9) {
-            df = new DecimalFormat("##.#");
-        }
-        else if (speed > 99.9) {
-            df = new DecimalFormat("###.#");
-        }
-        else if (speed > 999.9) {
-            df = new DecimalFormat("####.#");
-        }
-        else if (speed > 9999.9) {
-            df = new DecimalFormat("#####.#");
-        }
-        return df.format(speed);
-    }
-
-    public static boolean eraseFile(Context context) {
-        context.deleteFile(ConstantValues.INTERNAL_SETTING_FILE_NAME);
-        return context.deleteFile(ConstantValues.FILE_NAME);
-    }
-
     public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
         int orientation = fragmentActivity.getResources()
                 .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape
@@ -128,9 +73,62 @@ public class UtilMethods {
         valueAnimator.start();
     }
 
+    public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
+        if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: HighwayLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
+            return fuelCons + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
+        }
+        else if (avgSpeed <= ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: LowLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
+            return fuelCons + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
+        }
+        else if (avgSpeed <= ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: MediumLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
+            return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
+        }
+        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: HighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
+            return fuelCons + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
+        }
+        else if (avgSpeed <= ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: VeryHighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
+            return fuelCons + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
+        }
+        else {
+            Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!!" + fuelCons + avgSpeed);
+            return fuelCons;
+        }
+
+    }
+
     public static void showToast(Context context, CharSequence stringToShow) {
         Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    public static String formatFloat(Float floatToFormat) {
+        if (floatToFormat != null) {
+            DecimalFormat df = new DecimalFormat("#.#");
+            if (floatToFormat > 9.9) {
+                df = new DecimalFormat("##.#");
+            }
+            else if (floatToFormat > 99.9) {
+                df = new DecimalFormat("###.#");
+            }
+            else if (floatToFormat > 999.9) {
+                df = new DecimalFormat("####.#");
+            }
+            else if (floatToFormat > 9999.9) {
+                df = new DecimalFormat("#####.#");
+            }
+            return df.format(floatToFormat);
+        }
+        else {
+            if (ConstantValues.DEBUG_MODE) {
+                return "Null in format float!";
+            }
+            return "0.00";
+        }
     }
 
     public static void checkIfGpsEnabled(Context context) {
@@ -168,6 +166,16 @@ public class UtilMethods {
                 return;
             }
         }
+    }
+
+    public static boolean eraseFile(Context context) {
+        context.deleteFile(ConstantValues.INTERNAL_SETTING_FILE_NAME);
+        return context.deleteFile(ConstantValues.FILE_NAME);
+    }
+
+    public static String parseDate(Date dateString) {
+        SimpleDateFormat sdf = ConstantValues.DATE_FORMAT;
+        return sdf.format(dateString);
     }
 
 

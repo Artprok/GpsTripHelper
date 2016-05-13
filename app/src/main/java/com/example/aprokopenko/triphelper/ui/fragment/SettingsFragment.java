@@ -15,10 +15,9 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+import com.example.aprokopenko.triphelper.R;
 
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
@@ -168,17 +167,6 @@ import butterknife.ButterKnife;
         });
     }
 
-    private void writeDataToFile() {
-        WriteInternalFile writeFileTask = new WriteInternalFile();
-        writeFileTask.execute();
-    }
-
-    private void readDataFromFile() {
-        ReadInternalFile readFileTask = new ReadInternalFile();
-        readFileTask.execute();
-
-    }
-
     private void setupEraseButton() {
         eraseButton.setVisibility(View.VISIBLE);
         eraseButton.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +179,17 @@ import butterknife.ButterKnife;
                 }
             }
         });
+    }
+
+    private void readDataFromFile() {
+        ReadInternalFile readFileTask = new ReadInternalFile();
+        readFileTask.execute();
+
+    }
+
+    private void writeDataToFile() {
+        WriteInternalFile writeFileTask = new WriteInternalFile();
+        writeFileTask.execute();
     }
 
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
