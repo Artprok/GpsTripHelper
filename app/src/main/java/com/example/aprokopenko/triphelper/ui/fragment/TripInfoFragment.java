@@ -31,8 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.example.aprokopenko.triphelper.R;
 import com.google.android.gms.maps.MapView;
 
-import org.jetbrains.annotations.Contract;
-
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -102,7 +100,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<String> speedValues;
     private Context           context;
     private ArrayList<Route>  routes;
-    private ProgressBar       progressBar;
 
     private boolean mapOpened = false;
 
@@ -230,9 +227,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
 
     private float getInMotionValue() {
         float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();

@@ -39,4 +39,10 @@
     <string name="gps_first_fix_toast">Связь со спутниками установлена</string>
     <string name="trip_ended_toast">Поездка закончена</string>
     <string name="trip_started_toast">Поездка начата</string>
+    <string name="disagree_gps_enable">Нет</string>
+    <string name="agree_gps_enable">Увiмкнути</string>
+    <string name="gps_not_enabled_label">GPS выключен, чтобы продолжить его следует включить. Включить?</string>
+    <string name="fuel_price">Цiна палива</string>
+    <string name="fuel_consumption">Расход топлива</string>
+    <string name="fuel_capacity">Ёмкость бака</string>
 </resources>
