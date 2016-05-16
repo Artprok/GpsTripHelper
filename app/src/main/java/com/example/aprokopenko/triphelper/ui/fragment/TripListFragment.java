@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -115,9 +116,10 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     }
 
     @Override public void onDetach() {
-        super.onDetach();
         tripData = null;
         trips = null;
+        Log.d(LOG_TAG, "onDetach: OnDetach");
+        super.onDetach();
     }
 
     @Override public void onListItemClick(Trip trip) {

@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/headerForAllInfo"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -88,7 +88,7 @@
             android:layout_below="@+id/listDataLayout"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -146,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/listSpeedLayout"
             android:layout_marginBottom="@dimen/margin_between_data"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -237,6 +237,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
+            android:background="@drawable/blocks_with_shadow"
             android:id="@+id/tripList"
             android:name="com.example.aprokopenko.triphelper.ui.fragment.TripListFragment"
             android:layout_width="match_parent"

@@ -56,6 +56,10 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     }
 
     @Override public int getItemCount() {
+        if(tripList==null){
+            return 0;
+        }
+        else
         return tripList.size();
     }
 

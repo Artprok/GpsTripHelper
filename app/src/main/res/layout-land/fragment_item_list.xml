@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/headerForAllInfo"
                 android:layout_marginBottom="@dimen/margin_between_blocks_list"
-                android:background="@color/colorOfBlock"
+                android:background="@drawable/blocks_with_shadow"
                 android:padding="@dimen/block_padding"
                 >
 
@@ -95,9 +95,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/listDataLayout"
-
                 android:layout_marginBottom="@dimen/margin_between_blocks_list"
-                android:background="@color/colorOfBlock"
+                android:background="@drawable/blocks_with_shadow"
                 android:padding="@dimen/block_padding"
                 >
 
@@ -152,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/listSpeedLayout"
-                android:background="@color/colorOfBlock"
+                android:background="@drawable/blocks_with_shadow"
                 android:padding="@dimen/block_padding"
                 >
 
@@ -247,6 +246,7 @@
                 android:layout_alignStart="@+id/tripListHeader"
                 android:layout_below="@+id/tripListHeader"
                 app:layoutManager="LinearLayoutManager"
+                android:background="@drawable/blocks_with_shadow"
                 tools:context=".ui.fragment.TripListFragment"
                 tools:listitem="@layout/fragment_item"
                 />

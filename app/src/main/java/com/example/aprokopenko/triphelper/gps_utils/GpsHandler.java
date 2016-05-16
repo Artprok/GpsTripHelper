@@ -15,6 +15,8 @@ import javax.inject.Inject;
 import rx.Subscriber;
 import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class GpsHandler implements LocationListener, com.google.android.gms.location.LocationListener {
     @Inject
@@ -58,7 +60,9 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
                 sub.onNext(location);
             }
         });
-        speedObservable.subscribe(locationSubscriber);
+        speedObservable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(locationSubscriber);
     }
 
     private void setupMaxSpeedObservable(final float maxSpeed) {
@@ -76,10 +80,12 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
                 sub.onNext(speed);
             }
         });
-        speedObservable.subscribe(speedSubscriber);
+        speedObservable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(speedSubscriber);
     }
 
-    private void getMaxSpeed(float speed) {
+    private void getMaxSpeedAndSetupObservable(float speed) {
         maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
         setupMaxSpeedObservable(maxSpeed);
     }
@@ -92,7 +98,7 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
             if (speed != 0) {
                 tempVal[0] += 5;
             }
-            if (speed > 50) {
+            if (speed > 70) {
                 speed = 0;
             }
         }
@@ -101,7 +107,7 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
         }
         setupLocationObservable(location);
         setupSpeedObservable(speed);
-        getMaxSpeed(speed);
+        getMaxSpeedAndSetupObservable(speed);
     }
 
     @Override public void locationChanged(Location location) {
@@ -123,6 +129,6 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
         //        }
         //        setupLocationObservable(location);
         //        setupSpeedObservable(speed);
-        //        getMaxSpeed(speed);
+        //        getMaxSpeedAndSetupObservable(speed);
     }
 }

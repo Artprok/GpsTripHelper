@@ -19,7 +19,7 @@
             android:id="@+id/listDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -97,7 +97,7 @@
             android:layout_below="@+id/listDataLayout"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/listSpeedLayout"
             android:layout_marginBottom="10dp"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -230,7 +230,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tripFuelSpentLayout"
             android:layout_marginBottom="10dp"
-            android:background="@color/colorOfBlock"
+            android:background="@drawable/blocks_with_shadow"
             android:padding="@dimen/block_padding"
             >
 
@@ -308,7 +308,8 @@
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_centerInParent="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+      />
 
     <ImageButton
         android:id="@+id/mapTurnActiveButton"
