@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -650,19 +651,25 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void setupSpeedSubscriber() {
         speedSubscriber = new Subscriber<Float>() {
             @Override public void onCompleted() {
-
+//                Log.d(LOG_TAG, "complete: Complete?");
             }
 
             @Override public void onError(Throwable e) {
 
+//                Log.d(LOG_TAG, "onError: Er?" + e.toString());
+
             }
 
             @Override public void onNext(final Float speed) {
+//                Log.d(LOG_TAG, "onNext: ONNNNN NEXT");
                 storeSpeedTicks(speed);
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
-                updateSpeed(speed);
+//                Log.d(LOG_TAG, "onNext: GetSpTick" + Thread.currentThread());
+
+                animateSpeedUpdate(speed);
+//                Log.d(LOG_TAG, "onNext: spppp" + speed);
             }
         };
     }
@@ -679,7 +686,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void storeSpeedTicks(final float speed) {
-            avgSpeedArrayList.add(speed);
+//        Log.d(LOG_TAG, "storeSpeedTicks: "+Thread.currentThread());
+        avgSpeedArrayList.add(speed);
     }
 
     private void updatePointerLocation(float speed) {
@@ -688,19 +696,26 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateSpeedTextField(float speed) {
-        String formattedSpeed = UtilMethods.formatFloat(speed);
-        int    initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
-        int    finalValue     = Integer.valueOf(formattedSpeed);
+        String    formattedSpeed = UtilMethods.formatFloat(speed);
+        final int initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
+        final int finalValue     = Integer.valueOf(formattedSpeed);
         UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
         speedometerTextView.setText(formattedSpeed);
     }
 
-    private void updateSpeed(float speed) {
+    private void animateSpeedUpdate(final float speed) {
         if (ConstantValues.DEBUG_MODE) {
             Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
         }
-        updatePointerLocation(speed);
-        updateSpeedTextField(speed);
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override public void run() {
+                updatePointerLocation(speed);
+                updateSpeedTextField(speed);
+            }
+        });
+
+
     }
 
 
