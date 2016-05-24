@@ -115,8 +115,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private LocationRequest setupLocRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
+        locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
+        locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }

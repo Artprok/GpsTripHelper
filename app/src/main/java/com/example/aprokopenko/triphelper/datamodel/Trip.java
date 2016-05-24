@@ -245,7 +245,7 @@ public class Trip implements Parcelable {
             os.writeFloat(avgFuelConsumption);
             os.writeFloat(maxSpeed);
         }
-        catch (IOException e) {
+        catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
     }
