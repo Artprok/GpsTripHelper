@@ -111,7 +111,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
         gmsLocationListener = null;
         locationListener = null;
-        gmsLocationListener = null;
     }
 
     private LocationRequest setupLocRequest() {
@@ -119,6 +118,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return LocationRequest.create();
+        return locationRequest;
     }
 }
