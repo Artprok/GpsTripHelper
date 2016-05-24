@@ -22,11 +22,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private static final String  LOG_TAG = "LocationService:";
     private final        IBinder mBinder = new LocalBinder();
-    private LocationListener                                 locationListener;
+//    private LocationListener                                 locationListener;
     private GpsHandler                                       gpsHandler;
     private com.google.android.gms.location.LocationListener gmsLocationListener;
-    LocationRequest locationRequest;
-    GoogleApiClient googleApiClient;
+    private LocationRequest locationRequest;
+    private GoogleApiClient googleApiClient;
 
     public GpsHandler getGpsHandler() {
         return gpsHandler;
@@ -35,12 +35,15 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override public void onConnected(@Nullable Bundle bundle) {
         UtilMethods.checkPermission(getApplicationContext());
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
+        Log.d(LOG_TAG, "onConnected: "+googleApiClient+locationRequest+gmsLocationListener);
     }
 
     @Override public void onConnectionSuspended(int i) {
+        Log.d(LOG_TAG, "onConnectionSuspended: ");
     }
 
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(LOG_TAG, "onConnectionFailed: "+connectionResult);
     }
 
 
@@ -89,11 +92,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 
         // TODO: 13.05.2016 locManager based on gps
+        gmsLocationListener = gpsHandler;
+        setupLocRequest();
         googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
         googleApiClient.connect();
-        setupLocRequest();
-        gmsLocationListener = gpsHandler;
 
         return START_STICKY;
     }
@@ -110,13 +113,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             Log.i(LOG_TAG, "service OnDestroy");
         }
         gmsLocationListener = null;
-        locationListener = null;
+//        locationListener = null;
     }
 
     private LocationRequest setupLocRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
-        locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }

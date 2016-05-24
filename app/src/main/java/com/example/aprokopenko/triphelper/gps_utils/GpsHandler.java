@@ -12,7 +12,6 @@ import com.example.aprokopenko.triphelper.application.TripHelperApp;
 
 import javax.inject.Inject;
 
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.Observable;
 import rx.Observer;
@@ -29,6 +28,7 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
     private Observer<Location> locationSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
     private Observer<Float>    speedSubscriber;
+    Observable<Float> speedObservable;
 
     // FIXME: 14.04.2016 debug code remove
     private final float[] tempVal = {1};
@@ -75,9 +75,10 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
     }
 
     private void setupSpeedObservable(final float speed) {
-            Observable<Float> speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
+            speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
                 @Override public void call(Subscriber<? super Float> sub) {
                     sub.onNext(speed);
+                    Log.d(LOG_TAG, "call: ONnext!");
                 }
             }).repeat();
         speedObservable

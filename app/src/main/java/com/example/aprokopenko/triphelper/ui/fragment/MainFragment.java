@@ -655,7 +655,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
             @Override public void onError(Throwable e) {
                 Log.d(LOG_TAG, "onError: Er?" + e.toString());
-                Log.d(LOG_TAG, "AAAASaddPointToRouteList: speed in frag - WERROR" + e.toString());
+                Log.d(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
             }
 
             @Override public void onNext(final Float speed) {
@@ -663,7 +663,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
-                Log.d(LOG_TAG, "AAAASaddPointToRouteList: speed in frag - " + speed);
+                Log.d(LOG_TAG, "addPointToRouteList: speed in frag - " + speed);
                 animateSpeedUpdate(speed);
             }
         };
