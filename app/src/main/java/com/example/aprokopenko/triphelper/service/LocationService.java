@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.service;
 
-import android.location.Location;
 import android.content.Intent;
 import android.app.Service;
 import android.os.IBinder;
@@ -25,8 +24,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private final        IBinder mBinder = new LocalBinder();
     private LocationListener                                 locationListener;
     private GpsHandler                                       gpsHandler;
-    private com.google.android.gms.location.LocationListener gmsLocListener;
-    private com.google.android.gms.location.LocationListener locListener;
+    private com.google.android.gms.location.LocationListener gmsLocationListener;
     LocationRequest locationRequest;
     GoogleApiClient googleApiClient;
 
@@ -36,7 +34,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override public void onConnected(@Nullable Bundle bundle) {
         UtilMethods.checkPermission(getApplicationContext());
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, locListener);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
     }
 
     @Override public void onConnectionSuspended(int i) {
@@ -62,31 +60,32 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
         super.onStartCommand(intent, flags, startId);
         gpsHandler = new GpsHandler();
-//        // TODO: 13.05.2016 LocationListener on LocationManager
-//                locationListener = gpsHandler;
-//                LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-//                android.location.LocationListener locationListener = new android.location.LocationListener() {
-//                    @Override public void onLocationChanged(Location location) {
-//                        LocationService.this.locationListener.locationChanged(location);
-//                    }
-//
-//                    @Override public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//                    }
-//
-//                    @Override public void onProviderEnabled(String provider) {
-//
-//                    }
-//
-//                    @Override public void onProviderDisabled(String provider) {
-//
-//                    }
-//                };
-//                UtilMethods.checkPermission(getApplicationContext());
-//                locationManager
-//                        .requestLocationUpdates(LocationManager.GPS_PROVIDER, ConstantValues.MIN_UPDATE_TIME, ConstantValues
-//         .MIN_UPDATE_DISTANCE,
-//                                locationListener);
+        //        // TODO: 13.05.2016 LocationListener on LocationManager
+        //                locationListener = gpsHandler;
+        //                LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context
+        // .LOCATION_SERVICE);
+        //                android.location.LocationListener locationListener = new android.location.LocationListener() {
+        //                    @Override public void onLocationChanged(Location location) {
+        //                        LocationService.this.locationListener.locationChanged(location);
+        //                    }
+        //
+        //                    @Override public void onStatusChanged(String provider, int status, Bundle extras) {
+        //
+        //                    }
+        //
+        //                    @Override public void onProviderEnabled(String provider) {
+        //
+        //                    }
+        //
+        //                    @Override public void onProviderDisabled(String provider) {
+        //
+        //                    }
+        //                };
+        //                UtilMethods.checkPermission(getApplicationContext());
+        //                locationManager
+        //                        .requestLocationUpdates(LocationManager.GPS_PROVIDER, ConstantValues.MIN_UPDATE_TIME, ConstantValues
+        //         .MIN_UPDATE_DISTANCE,
+        //                                locationListener);
 
 
         // TODO: 13.05.2016 locManager based on gps
@@ -94,12 +93,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 .addOnConnectionFailedListener(this).build();
         googleApiClient.connect();
         setupLocRequest();
-        gmsLocListener = gpsHandler;
-        locListener = new com.google.android.gms.location.LocationListener() {
-            @Override public void onLocationChanged(Location location) {
-                LocationService.this.gmsLocListener.onLocationChanged(location);
-            }
-        };
+        gmsLocationListener = gpsHandler;
 
         return START_STICKY;
     }
@@ -115,10 +109,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if (ConstantValues.DEBUG_MODE) {
             Log.i(LOG_TAG, "service OnDestroy");
         }
-        gmsLocListener = null;
-        locListener = null;
+        gmsLocationListener = null;
         locationListener = null;
-        gmsLocListener = null;
+        gmsLocationListener = null;
     }
 
     private LocationRequest setupLocRequest() {
