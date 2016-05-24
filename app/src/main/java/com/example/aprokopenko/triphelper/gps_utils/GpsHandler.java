@@ -67,12 +67,12 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
 
 
     private void setupLocationObservable(final Location location) {
-        Observable<Location> speedObservable = Observable.create(new Observable.OnSubscribe<Location>() {
+        Observable<Location> locationObservable = Observable.create(new Observable.OnSubscribe<Location>() {
             @Override public void call(Subscriber<? super Location> sub) {
                 sub.onNext(location);
             }
         });
-        speedObservable.subscribe(locationSubscriber);
+        locationObservable.subscribe(locationSubscriber);
     }
 
     private void setupMaxSpeedObservable(final float maxSpeed) {
@@ -85,13 +85,9 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
     }
 
     private void setupSpeedObservable(final float speed) {
-//        Log.d(LOG_TAG, "setupSpeedObservable: SetupSpeedObservable");
-//        Log.d(LOG_TAG, "setupSpeedObservable: r"+r);
-//        Log.d(LOG_TAG, "setupSpeedObservable: speed"+speed);
             speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
                 @Override public void call(Subscriber<? super Float> sub) {
                     sub.onNext(speed);
-//                    Log.d(LOG_TAG, "call: inNextMaybe"+Thread.currentThread()+speed);
                 }
             }).repeat();
         speedObservable
@@ -114,13 +110,13 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
                 tempVal[0] += 5;
             }
             if (speed > 70) {
-                speed = 0;
+                speed = 45;
             }
         }
         else {
             speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
-
+        Log.d(LOG_TAG, "onLocationChanged: Sped Gps Utils"+speed);
         setupLocationObservable(location);
         setupSpeedObservable(speed);
         getMaxSpeedAndSetupObservable(speed);
