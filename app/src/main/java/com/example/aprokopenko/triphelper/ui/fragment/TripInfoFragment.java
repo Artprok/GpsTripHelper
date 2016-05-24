@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.animation.ObjectAnimator;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;

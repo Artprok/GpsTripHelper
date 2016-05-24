@@ -624,7 +624,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
             @Override public void onNext(Location location) {
                 if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "onNext: Location added to route list"+Thread.currentThread());
+                    Log.d(LOG_TAG, "onNext: Location added to route list" + Thread.currentThread());
                 }
                 addPointToRouteList(location);
             }
@@ -655,7 +655,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
             @Override public void onError(Throwable e) {
                 Log.d(LOG_TAG, "onError: Er?" + e.toString());
-                Log.d(LOG_TAG, "AAAASaddPointToRouteList: speed in frag - WERROR"+e.toString());
+                Log.d(LOG_TAG, "AAAASaddPointToRouteList: speed in frag - WERROR" + e.toString());
             }
 
             @Override public void onNext(final Float speed) {
@@ -663,7 +663,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
-                Log.d(LOG_TAG, "AAAASaddPointToRouteList: speed in frag - "+speed);
+                Log.d(LOG_TAG, "AAAASaddPointToRouteList: speed in frag - " + speed);
                 animateSpeedUpdate(speed);
             }
         };
@@ -681,10 +681,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void storeSpeedTicks(final float speed) {
-//        Log.d(LOG_TAG, "storeSpeedTicks: "+Thread.currentThread());
-        if(avgSpeedArrayList!=null){
+        if (avgSpeedArrayList != null) {
             avgSpeedArrayList.add(speed);
-            Log.d(LOG_TAG, "storeSpeedTicks: speed"+speed);
+            Log.d(LOG_TAG, "storeSpeedTicks: speed" + speed);
         }
     }
 
@@ -694,11 +693,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void updateSpeedTextField(float speed) {
-        String    formattedSpeed = UtilMethods.formatFloat(speed);
-        final int initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
-        final int finalValue     = Integer.valueOf(formattedSpeed);
-        UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
-        speedometerTextView.setText(formattedSpeed);
+        if (speedometerTextView != null) {
+            String    formattedSpeed = UtilMethods.formatFloat(speed);
+            final int initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
+            final int finalValue     = Integer.valueOf(formattedSpeed);
+            UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
+            speedometerTextView.setText(formattedSpeed);
+        }
     }
 
     private void animateSpeedUpdate(final float speed) {
@@ -708,7 +709,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-                UtilMethods.showToast(context,"spdInFrag"+speed);
+                UtilMethods.showToast(context, "spdInFrag" + speed);
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }

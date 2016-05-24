@@ -3,8 +3,6 @@ package com.example.aprokopenko.triphelper.gps_utils;
 import android.location.LocationManager;
 import android.location.Location;
 import android.content.Context;
-import android.support.annotation.FloatRange;
-import android.support.annotation.MainThread;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
@@ -12,17 +10,12 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.listener.LocationListener;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 public class GpsHandler implements LocationListener, com.google.android.gms.location.LocationListener {
@@ -36,8 +29,8 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
     private Observer<Location> locationSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
     private Observer<Float>    speedSubscriber;
-    private Observable<Float> speedObservable;
-    Scheduler r;
+    private Observable<Float>  speedObservable;
+    final   Scheduler          r;
 
     // FIXME: 14.04.2016 debug code remove
     private final float[] tempVal = {1};
