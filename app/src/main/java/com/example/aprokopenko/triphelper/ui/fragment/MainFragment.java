@@ -265,8 +265,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
         tripProcessor.writeDataToFile();
         float distanceToDriveLeft = getDistanceToDriveLeft(fuelLeftVal);
-        return (UtilMethods.formatFloatDecimalFormt(fuelLeftVal) + " (~" + UtilMethods.formatFloatDecimalFormt(distanceToDriveLeft) + getString(
-                R.string.distance_prefix) + ")");
+        return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
+                .formatFloatDecimalFormat(distanceToDriveLeft) + getString(R.string.distance_prefix) + ")");
     }
 
     private void fillGasTank(float fuel) {
@@ -688,15 +688,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private void updatePointerLocation(float speed) {
         CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
-        if(pointer!=null){
+        if (pointer != null) {
             pointer.setValue((double) speed);
         }
     }
 
     private void updateSpeedTextField(float speed) {
         if (speedometerTextView != null) {
-            String    formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
-            final int initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
+            String        formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
+            final int     initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
             final Integer finalValue     = Integer.valueOf(formattedSpeed);
             UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
             speedometerTextView.setText(formattedSpeed);
@@ -710,7 +710,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-//                UtilMethods.showToast(context, "spdInFrag" + speed);
+                //                UtilMethods.showToast(context, "spdInFrag" + speed);
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }

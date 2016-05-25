@@ -11,7 +11,6 @@ import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.listener.LocationListener;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;

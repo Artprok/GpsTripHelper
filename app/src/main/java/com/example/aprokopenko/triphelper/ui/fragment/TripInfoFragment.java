@@ -246,12 +246,12 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setDataToInfoFragmentFields() {
-        String avgFuelCons      = UtilMethods.formatFloatDecimalFormt(averageFuelConsumption) + " " + getString(R.string.fuel_prefix);
-        String fuelSpent        = UtilMethods.formatFloatDecimalFormt(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
-        String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormt(this.moneySpent) + " " + getString(R.string.currency_prefix);
-        String avgSpeed         = UtilMethods.formatFloatDecimalFormt(this.avgSpeed) + " " + getString(R.string.speed_prefix);
-        String maxSpeed         = UtilMethods.formatFloatDecimalFormt(this.maxSpeed) + " " + getString(R.string.speed_prefix);
-        String distance         = UtilMethods.formatFloatDecimalFormt(distTravelled) + " " + getString(R.string.distance_prefix);
+        String avgFuelCons      = UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_prefix);
+        String fuelSpent        = UtilMethods.formatFloatDecimalFormat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
+        String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + getString(R.string.currency_prefix);
+        String avgSpeed         = UtilMethods.formatFloatDecimalFormat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
+        String maxSpeed         = UtilMethods.formatFloatDecimalFormat(this.maxSpeed) + " " + getString(R.string.speed_prefix);
+        String distance         = UtilMethods.formatFloatDecimalFormat(distTravelled) + " " + getString(R.string.distance_prefix);
 
         for (String value : speedValues) {
             if (Float.valueOf(value) == 0) {
