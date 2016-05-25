@@ -117,7 +117,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<String> speedArray     = new ArrayList<>();
         for (Route tmpRoute : routes) {
             if (tmpRoute != null) {
-                // FIXME: 12.04.2016 ToString?? :(
                 LatLng tempLatLang = tmpRoute.getRoutePoints();
                 latitudeArray.add(String.valueOf(tempLatLang.latitude));
                 longitudeArray.add(String.valueOf(tempLatLang.longitude));

@@ -59,7 +59,6 @@
     <string name="trip_ended_toast">Trip ended</string>
     <string name="gps_first_fix_toast">Satellites connected</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="fuel_price">Fuel price</string>
     <string name="fuel_consumption">fuelConsFromSettings</string>
     <string name="fuel_capacity">fuelCapacity</string>
