@@ -47,6 +47,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -264,7 +265,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
         tripProcessor.writeDataToFile();
         float distanceToDriveLeft = getDistanceToDriveLeft(fuelLeftVal);
-        return (UtilMethods.formatFloat(fuelLeftVal) + " (~" + UtilMethods.formatFloat(distanceToDriveLeft) + getString(
+        return (UtilMethods.formatFloatDecimalFormt(fuelLeftVal) + " (~" + UtilMethods.formatFloatDecimalFormt(distanceToDriveLeft) + getString(
                 R.string.distance_prefix) + ")");
     }
 
@@ -580,12 +581,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         float  speed;
         // TODO: 10.05.2016 remove debug code
         if (ConstantValues.DEBUG_MODE) {//debug code for testing
+            Random r = new Random();
             speed = 0 + tempVal[0];
             if (speed != 0) {           //speed increment by 5 each tick
                 tempVal[0] += 5;
             }
-            if (speed > 50) {           //speed reaches 50 and then turn to 0
-                speed = 0;
+            if (speed > 70) {
+                speed = r.nextInt(200);
             }
         }
         else {
@@ -654,7 +656,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             }
 
             @Override public void onError(Throwable e) {
-                Log.d(LOG_TAG, "onError: Er?" + e.toString());
                 Log.d(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
             }
 
@@ -663,7 +664,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 if (ConstantValues.DEBUG_MODE) {
                     Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
                 }
-                Log.d(LOG_TAG, "addPointToRouteList: speed in frag - " + speed);
                 animateSpeedUpdate(speed);
             }
         };
@@ -683,20 +683,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void storeSpeedTicks(final float speed) {
         if (avgSpeedArrayList != null) {
             avgSpeedArrayList.add(speed);
-            Log.d(LOG_TAG, "storeSpeedTicks: speed" + speed);
         }
     }
 
     private void updatePointerLocation(float speed) {
         CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
-        pointer.setValue((double) speed);
+        if(pointer!=null){
+            pointer.setValue((double) speed);
+        }
     }
 
     private void updateSpeedTextField(float speed) {
         if (speedometerTextView != null) {
-            String    formattedSpeed = UtilMethods.formatFloat(speed);
+            String    formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
             final int initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
-            final int finalValue     = Integer.valueOf(formattedSpeed);
+            final Integer finalValue     = Integer.valueOf(formattedSpeed);
             UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
             speedometerTextView.setText(formattedSpeed);
         }
@@ -709,7 +710,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-                UtilMethods.showToast(context, "spdInFrag" + speed);
+//                UtilMethods.showToast(context, "spdInFrag" + speed);
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }
@@ -730,10 +731,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
-            Log.d(LOG_TAG, "readFileSettings");
+            Log.i(LOG_TAG, "readFileSettings");
             File file = context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME);
             if (file.exists()) {
-                Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
+                Log.i(LOG_TAG, "readTripDataFromFileSettings: ");
                 FileInputStream fis;
                 try {
                     fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
@@ -745,7 +746,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                     fuelConsFromSettings = consumption;
                     fuelPriceFromSettings = fuelPrice;
                     fuelCapacityFromSettings = capacity;
-                    Log.d(LOG_TAG, "doInBackground: EXIST");
                     is.close();
                     fis.close();
                 }
@@ -754,11 +754,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 }
             }
             else {
-                Log.d(LOG_TAG, "doInBackground: NOPE");
                 fuelConsFromSettings = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
                 fuelPriceFromSettings = ConstantValues.FUEL_COST_DEFAULT;
                 fuelCapacityFromSettings = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
-                Log.d(LOG_TAG, "doInBackground: " + fuelCapacityFromSettings);
                 return true;
             }
             return true;

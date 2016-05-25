@@ -92,12 +92,12 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         String    maxSpeed;
         float     timeSpentOnTrips;
 
-        distance = UtilMethods.formatFloat(tripData.getDistanceTravelled()) + getString(R.string.distance_prefix);
-        avgFuelCons = UtilMethods.formatFloat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
-        moneyOnFuelSpent = UtilMethods.formatFloat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
-        fuelSpent = UtilMethods.formatFloat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
-        avgSpeed = UtilMethods.formatFloat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
-        maxSpeed = UtilMethods.formatFloat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
+        distance = UtilMethods.formatFloatDecimalFormt(tripData.getDistanceTravelled()) + getString(R.string.distance_prefix);
+        avgFuelCons = UtilMethods.formatFloatDecimalFormt(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
+        moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormt(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
+        fuelSpent = UtilMethods.formatFloatDecimalFormt(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
+        avgSpeed = UtilMethods.formatFloatDecimalFormt(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
+        maxSpeed = UtilMethods.formatFloatDecimalFormt(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
         timeSpentOnTrips = tripData.getTimeSpentOnTrips();
 
 

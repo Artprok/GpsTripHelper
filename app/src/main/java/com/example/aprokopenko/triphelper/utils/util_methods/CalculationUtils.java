@@ -7,13 +7,14 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalculationUtils {
 
     public static float getSpeedInKilometerPerHour(float speed) {
-        return speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER;
+        return (speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER);
     }
 
     public static float calcMoneySpent(float fuelSpent, float fuelCost) {

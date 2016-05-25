@@ -23,6 +23,7 @@ import android.Manifest;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
 
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -105,9 +106,10 @@ public class UtilMethods {
         toast.show();
     }
 
-    public static String formatFloat(Float floatToFormat) {
+    public static String formatFloatDecimalFormt(Float floatToFormat) {
         if (floatToFormat != null) {
             DecimalFormat df = new DecimalFormat("#.#");
+            df.setRoundingMode(RoundingMode.FLOOR);
             if (floatToFormat > 9.9) {
                 df = new DecimalFormat("##.#");
             }
@@ -119,6 +121,34 @@ public class UtilMethods {
             }
             else if (floatToFormat > 9999.9) {
                 df = new DecimalFormat("#####.#");
+            }
+            return df.format(floatToFormat);
+        }
+        else {
+            if (ConstantValues.DEBUG_MODE) {
+                return "Null in format float!";
+            }
+            return "0.00";
+        }
+    }
+
+    public static String formatFloatToIntFormat(Float floatToFormat) {
+        if (floatToFormat != null) {
+            Log.d(LOG_TAG, "formatFloatToIntFormat inUtilMethod: " + floatToFormat);
+            DecimalFormat df = new DecimalFormat("#");
+            df.setRoundingMode(RoundingMode.FLOOR);
+            if (floatToFormat > 9.9) {
+                df = new DecimalFormat("##");
+                Log.d(LOG_TAG, "formatFloatToIntFormat: case ##/#" + df.format(floatToFormat));
+            }
+            else if (floatToFormat > 99.9) {
+                df = new DecimalFormat("###");
+            }
+            else if (floatToFormat > 999.9) {
+                df = new DecimalFormat("####");
+            }
+            else if (floatToFormat > 9999.9) {
+                df = new DecimalFormat("#####");
             }
             return df.format(floatToFormat);
         }
