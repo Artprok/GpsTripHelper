@@ -49,7 +49,6 @@
     <string name="fuel_spent_toast">Топлива заправлено -&#160;</string>
     <!--/toasts-->
 
-    <string name="action_settings">Настройки</string>
     <string name="app_name">Автопомощник</string>
 
 
@@ -58,11 +57,16 @@
     <string name="gps_first_fix_toast">Связь со спутниками установлена</string>
     <string name="trip_ended_toast">Поездка закончена</string>
     <string name="trip_started_toast">Поездка начата</string>
-    <string name="disagree_gps_enable">Нет</string>
-    <string name="agree_gps_enable">Включить</string>
+    <string name="gps_dialog_disagree_enable">Нет</string>
+    <string name="gps_dialog_agree_enable">Включить</string>
     <string name="fuel_capacity">Ёмкость бака</string>
-    <string name="gps_not_enabled_label">GPS выключен, чтобы продолжить его следует включить. Включить?</string>
+    <string name="gps_dialog_text_label">GPS выключен, чтобы продолжить его следует включить. Включить?</string>
     <string name="fuel_price">Цена топлива</string>
     <string name="fuel_consumption">Расход топлива</string>
+    <string name="gps_dialog_title">GPS выключен</string>
+    <string name="exit_dialog_no">Нет</string>
+    <string name="exit_dialog_string">Вы уверены что хотите выйти?</string>
+    <string name="exit_dialog_yes">Да</string>
+    <string name="exit_dialog_title">Выход</string>
 
 </resources>

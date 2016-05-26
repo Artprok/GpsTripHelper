@@ -10,7 +10,6 @@ import android.location.LocationManager;
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
-import android.app.AlertDialog;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
@@ -224,19 +223,21 @@ public class UtilMethods {
 
 
     private static void buildAlertMessageNoGps(final Context context) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(R.string.gps_not_enabled_label).setCancelable(false)
-                .setPositiveButton(R.string.agree_gps_enable, new DialogInterface.OnClickListener() {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.gps_icon);
+        builder.setTitle(context.getString(R.string.gps_dialog_title));
+        builder.setMessage(R.string.gps_dialog_text_label).setCancelable(false)
+                .setPositiveButton(R.string.gps_dialog_agree_enable, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
                         context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
-                }).setNegativeButton(R.string.disagree_gps_enable, new DialogInterface.OnClickListener() {
+                }).setNegativeButton(R.string.gps_dialog_disagree_enable, new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                 dialog.cancel();
             }
         });
-        final AlertDialog alert = builder.create();
+        final android.support.v7.app.AlertDialog alert = builder.create();
         alert.show();
     }
 }

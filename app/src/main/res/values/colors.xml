@@ -3,7 +3,6 @@
     <color name="colorPrimaryDark">#607D8B</color>
     <color name="backgroundColor">#212121</color>
     <color name="colorPrimary">#607D8B</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="textColor">#EEEEEE</color>
-    <color name="colorOfBlock">#424242</color>
+    <color name="textColor">#EEEEEE</color>        // text color for all text
+    <color name="colorOfBlock">#424242</color>     //color of infoBlocks in ListFrags
 </resources>

@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -36,7 +37,6 @@ import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
 import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
-import com.example.aprokopenko.triphelper.FuelFillDialog;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.google.android.gms.maps.model.LatLng;
@@ -170,6 +170,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         if (serviceConnection != null) {
             getActivity().unbindService(serviceConnection);
         }
+        locationService.onDestroy();
         locationService = null;
         mapFragment = null;
         serviceConnection = null;
@@ -328,7 +329,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         refillButtonLayout.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (tripProcessor.isFileNotInWriteMode()) {
-                    FuelFillDialog dialog = new FuelFillDialog();
+
+                    FuelFillDialog dialog = FuelFillDialog.newInstance();
                     dialog.setFuelChangeAmountListener(new FuelChangeAmountListener() {
                         @Override public void fuelFilled(float fuel) {
                             fillGasTank(fuel);

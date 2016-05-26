@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">TripHelper</string>
+
     <!--hints-->
     <string name="average_fuel_consumption_hint">Average fuel consumption -&#160;</string>
     <string name="time_spent_on_stop_hint">Time spent without motion -&#160;</string>
@@ -44,27 +46,43 @@
     <string name="refill_hint">Refill</string>
     <!--/fill_fuel_dialog-->
 
-    <!--toasts-->
+
+    <!--Toasts-->
+    <string name="file_not_erased_toast">Something went wrong with data_erasing</string>
+    <string name="gps_first_fix_toast">Satellites connected</string>
     <string name="fuel_spent_toast">Fuel filled -&#160;</string>
     <string name="fuel_overload_toast">Too much fuel</string>
-    <!--/toasts-->
-
-    <string name="initial_speedometer_val" translatable="false">0</string>
-    <string name="fuel_left_initial_val" translatable="false">0</string>
-    <string name="action_settings">Settings</string>
-    <string name="app_name">TripHelper</string>
-    <string name="file_erased_toast">Data erased</string>
-    <string name="file_not_erased_toast">Something went wrong with data_erasing</string>
     <string name="trip_started_toast">Trip started</string>
+    <string name="file_erased_toast">Data erased</string>
     <string name="trip_ended_toast">Trip ended</string>
-    <string name="gps_first_fix_toast">Satellites connected</string>
+    <!--/Toasts-->
 
+
+    <!--SettingsHints-->
     <string name="fuel_price">Fuel price</string>
     <string name="fuel_consumption">fuelConsFromSettings</string>
     <string name="fuel_capacity">fuelCapacity</string>
-    <string name="gps_not_enabled_label">Your GPS seems to be disabled, do you want to enable it?</string>
-    <string name="agree_gps_enable">Yes</string>
-    <string name="disagree_gps_enable">No</string>
+    <!--/SettingsHints-->
 
+
+    <!--GPS dialog-->
+    <string name="gps_dialog_text_label">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="gps_dialog_agree_enable">Yes</string>
+    <string name="gps_dialog_disagree_enable">No</string>
+    <string name="gps_dialog_title">Gps disabled</string>
+    <!--/GPS dialog-->
+
+
+    <!--Exit dialog-->
+    <string name="exit_dialog_string">Are you sure you want to exit?</string>
+    <string name="exit_dialog_title">Exit</string>
+    <string name="exit_dialog_yes">Yes</string>
+    <string name="exit_dialog_no">No</string>
+    <!--/Exit dialog-->
+
+    <!--InitialValues-->
+    <string name="initial_speedometer_val" translatable="false">0</string>
+    <string name="fuel_left_initial_val" translatable="false">0</string>
+    <!--/InitialValues-->
 
 </resources>

@@ -1,6 +1,10 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
+import android.content.DialogInterface;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.os.Bundle;
@@ -8,6 +12,7 @@ import android.view.View;
 import android.view.Menu;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
@@ -50,24 +55,31 @@ import dagger.Module;
         }
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    @Override public void onBackPressed() {
+        final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (f instanceof MainFragment) {
+            new AlertDialog.Builder(this).setIcon(R.drawable.exit_icon).setTitle(getString(R.string.exit_dialog_title))
+                    .setMessage(getString(R.string.exit_dialog_string))
+                    .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) {
+                            f.onDetach();
+                            finish();
+                            System.exit(0);
+                        }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                    }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialogInterface, int i) {
+                    UtilMethods.replaceFragment(f, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
+                }
+            }).show();
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            if (f instanceof TripInfoFragment) {
+                super.onBackPressed();
+                super.onBackPressed();
+            }
+            super.onBackPressed();
+        }
     }
 
     private void setFabToMap(final MainFragment mainFragment) {
