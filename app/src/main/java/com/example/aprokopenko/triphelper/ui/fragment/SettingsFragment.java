@@ -126,7 +126,9 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
+                }
                 fuelCost = Float.valueOf(s.toString());
                 writeDataToFile();
             }
@@ -194,15 +196,17 @@ import butterknife.ButterKnife;
 
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
         @Override protected Boolean doInBackground(Void... params) {
-            if (ConstantValues.DEBUG_MODE) {
-                Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
-            }
+
             FileOutputStream fos;
 
             float consumption = fuelConsumption;
             float price       = fuelCost;
             int   capacity    = fuelTankCapacity;
-            Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + consumption + price + capacity);
+
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
+                Log.d(LOG_TAG, "writeTripDataoFileSetting: writeCalled" + consumption + price + capacity);
+            }
 
             try {
                 fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
@@ -223,7 +227,7 @@ import butterknife.ButterKnife;
         @Override protected void onPostExecute(Boolean result) {
             if (result) {
                 updateTextFields();
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "file written successfully");
                 }
             }
@@ -232,10 +236,14 @@ import butterknife.ButterKnife;
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
-            Log.d(LOG_TAG, "readFileSettings");
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "readFileSettings");
+            }
             File file = context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME);
             if (file.exists()) {
-                Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
+                }
                 FileInputStream fis;
                 try {
                     fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);

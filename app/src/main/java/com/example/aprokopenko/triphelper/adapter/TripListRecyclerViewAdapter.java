@@ -22,8 +22,8 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     private final OnListFragmentInteractionListener onListFragmentInteractionListener;
 
     public TripListRecyclerViewAdapter(ArrayList<Trip> trips, OnListFragmentInteractionListener listener) {
-        tripList = trips;
         onListFragmentInteractionListener = listener;
+        tripList = trips;
     }
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,11 +36,9 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
         final String date    = curTrip.getTripDate();
         final int    id      = curTrip.getTripID();
 
-
         holder.idView.setText(String.valueOf(id));
         holder.contentView.setText(date);
         holder.trip = curTrip;
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (onListFragmentInteractionListener != null) {
@@ -56,11 +54,12 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     }
 
     @Override public int getItemCount() {
-        if(tripList==null){
+        if (tripList == null) {
             return 0;
         }
-        else
-        return tripList.size();
+        else {
+            return tripList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

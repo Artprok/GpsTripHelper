@@ -14,10 +14,10 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import rx.schedulers.Schedulers;
 import rx.Subscriber;
 import rx.Observable;
 import rx.Observer;
-import rx.schedulers.Schedulers;
 
 public class GpsHandler implements LocationListener, com.google.android.gms.location.LocationListener {
     @Inject
@@ -37,12 +37,10 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
 
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "GpsHandler: created,context - " + context);
             Log.d(LOG_TAG, "GpsHandler: created,locationManger - " + locationManager);
         }
-
-
     }
 
     public void setLocationSubscriber(Subscriber<Location> locationSubscriber) {
@@ -80,7 +78,9 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
         speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
             @Override public void call(Subscriber<? super Float> sub) {
                 sub.onNext(speed);
-                Log.d(LOG_TAG, "call: ONext!");
+                if(ConstantValues.LOGGING_ENABLED){
+                    Log.d(LOG_TAG, "call: On next! speedIn SetupObservable is"+speed);
+                }
             }
         }).repeat();
         speedObservable.subscribeOn(Schedulers.computation()).observeOn(Schedulers.computation()).subscribe(speedSubscriber);
@@ -92,10 +92,10 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
     }
 
     @Override public void onLocationChanged(Location location) {
-        Random r = new Random();
         // FIXME: 14.04.2016 debug code remove
         float speed;
         if (ConstantValues.DEBUG_MODE) {
+            Random r = new Random();
             speed = 0 + tempVal[0];
             if (speed != 0) {
                 tempVal[0] += 5;
@@ -109,8 +109,8 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
             speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
         setupLocationObservable(location);
-        setupSpeedObservable(speed);
         getMaxSpeedAndSetupObservable(speed);
+        setupSpeedObservable(speed);
     }
 
     @Override public void locationChanged(Location location) {

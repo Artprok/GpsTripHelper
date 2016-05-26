@@ -1,9 +1,9 @@
 package com.example.aprokopenko.triphelper;
 
 import android.support.v4.app.DialogFragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.os.Bundle;

@@ -2,11 +2,11 @@ package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -31,7 +31,7 @@ import dagger.Module;
         UtilMethods.setFabInvisible(this);
 
         if (savedInstanceState == null) {
-            if(ConstantValues.DEBUG_MODE){
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onCreate: new fragment");
             }
             mainFragment = MainFragment.newInstance();
@@ -41,7 +41,7 @@ import dagger.Module;
 
         }
         else {
-            if(ConstantValues.DEBUG_MODE){
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onCreate: old fragment");
             }
             mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);

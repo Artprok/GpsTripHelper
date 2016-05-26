@@ -79,7 +79,7 @@ public class MapUtilMethods {
             for (int i = 0; i < routes.size(); i++) {
                 LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
                 }
                 MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());

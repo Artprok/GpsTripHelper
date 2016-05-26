@@ -65,22 +65,6 @@ public class Trip implements Parcelable {
         dest.writeTypedList(route);
     }
 
-
-    private Trip(Parcel in) {
-        avgFuelConsumption = in.readFloat();
-        timeSpentInMotion = in.readFloat();
-        distanceTravelled = in.readFloat();
-        moneyOnFuelSpent = in.readFloat();
-        timeSpentOnStop = in.readFloat();
-        fuelSpent = in.readFloat();
-        timeSpent = in.readFloat();
-        tripDate = in.readString();
-        avgSpeed = in.readFloat();
-        maxSpeed = in.readFloat();
-        tripID = in.readInt();
-        route = in.createTypedArrayList(Route.CREATOR);
-    }
-
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {
         @Override public Trip createFromParcel(Parcel in) {
             return new Trip(in);
@@ -135,27 +119,6 @@ public class Trip implements Parcelable {
         return tripDate;
     }
 
-    public int getTripID() {
-        return tripID;
-    }
-
-    private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
-                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,
-                                    float maxSpeed) {
-        trip.setTripDate(date);
-        trip.setRoute(route);
-        trip.setDistanceTravelled(distanceTravelled);
-        trip.setTimeSpent(timeSpent);
-        trip.setTimeSpentInMotion(timeSpentInMotion);
-        trip.setTripID(tripID);
-        trip.setFuelSpent(fuelSpent);
-        trip.setAvgSpeed(avgSpeed);
-        trip.setMoneyOnFuelSpent(moneySpent);
-        trip.setAvgFuelConsumption(fuelConsumption);
-        trip.setMaxSpeed(maxSpeed);
-        return trip;
-    }
-
     public Trip readTrip(ObjectInputStream is) {
         ArrayList<Route> route = new ArrayList<>();
         int              routeSize;
@@ -188,6 +151,10 @@ public class Trip implements Parcelable {
             e.printStackTrace();
         }
         return trip;
+    }
+
+    public int getTripID() {
+        return tripID;
     }
 
     public void setAvgFuelConsumption(float avgFuelConsumption) {
@@ -250,6 +217,38 @@ public class Trip implements Parcelable {
         }
     }
 
+
+    private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
+                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,
+                                    float maxSpeed) {
+        trip.setTripDate(date);
+        trip.setRoute(route);
+        trip.setDistanceTravelled(distanceTravelled);
+        trip.setTimeSpent(timeSpent);
+        trip.setTimeSpentInMotion(timeSpentInMotion);
+        trip.setTripID(tripID);
+        trip.setFuelSpent(fuelSpent);
+        trip.setAvgSpeed(avgSpeed);
+        trip.setMoneyOnFuelSpent(moneySpent);
+        trip.setAvgFuelConsumption(fuelConsumption);
+        trip.setMaxSpeed(maxSpeed);
+        return trip;
+    }
+
+    private Trip(Parcel in) {
+        avgFuelConsumption = in.readFloat();
+        timeSpentInMotion = in.readFloat();
+        distanceTravelled = in.readFloat();
+        moneyOnFuelSpent = in.readFloat();
+        timeSpentOnStop = in.readFloat();
+        fuelSpent = in.readFloat();
+        timeSpent = in.readFloat();
+        tripDate = in.readString();
+        avgSpeed = in.readFloat();
+        maxSpeed = in.readFloat();
+        tripID = in.readInt();
+        route = in.createTypedArrayList(Route.CREATOR);
+    }
 
     private void setTimeSpentInMotion(float timeSpentInMotion) {
         this.timeSpentInMotion = timeSpentInMotion;

@@ -22,7 +22,7 @@ public class TripHelperApp extends Application {
         Context context = getApplicationContext();
         AppModule module = new AppModule(this);
         applicationComponent = DaggerApplicationComponent.builder().appModule(module).build();
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onCreate:Dagger2 testing,ApplicationCreated, context is "+context.toString());
         }
     }

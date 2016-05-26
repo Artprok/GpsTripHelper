@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
+    signingConfigs {
+        TripHelper {
+            keyAlias 'TripHelper'
+            keyPassword '6884882'
+            storeFile file('E:/projects/keystores/tripHelper-keystore.jks')
+            storePassword '6884882'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "24.0.0 rc2"
-
     defaultConfig {
         applicationId "com.example.aprokopenko.triphelper"
         minSdkVersion 17
@@ -14,8 +21,12 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.TripHelper
+        }
+        debug {
+            minifyEnabled false
         }
     }
     dexOptions {

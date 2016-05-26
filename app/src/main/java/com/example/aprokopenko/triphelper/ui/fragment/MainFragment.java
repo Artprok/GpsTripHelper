@@ -46,8 +46,8 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.io.File;
 import java.util.Random;
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -138,9 +138,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onSaveInstanceState(Bundle outState) {
-        Log.i(LOG_TAG, "onSaveInstanceState: Save called");
         super.onSaveInstanceState(outState);
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.i(LOG_TAG, "onSaveInstanceState: Save called");
             Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + getButtonVisibility());
             Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + getStatusImageState());
             Log.d(LOG_TAG, "onSaveInstanceState: FirstStart" + firstStart);
@@ -164,7 +164,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onDetach() {
-        Log.i(LOG_TAG, "onDetach: called");
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.i(LOG_TAG, "onDetach: called");
+        }
         if (serviceConnection != null) {
             getActivity().unbindService(serviceConnection);
         }
@@ -185,19 +187,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     @Override public void onGpsStatusChanged(int event) {
         switch (event) {
             case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventSatStatus");
                 }
                 break;
             case GpsStatus.GPS_EVENT_FIRST_FIX:
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
                 setStatusImage();
                 UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
                 break;
             case GpsStatus.GPS_EVENT_STARTED:
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: eventStarted");
                 }
                 break;
@@ -213,12 +215,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
     }
 
-
     private SfCircularGauge createSpeedometerGauge(Context context) {
         CircularGaugeFactory circularGaugeFactory = new CircularGaugeFactory();
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context);
     }
-
 
     private boolean getButtonVisibility() {
         Boolean visibility = true;
@@ -236,13 +236,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         return result;
     }
 
-
     private float getDistanceToDriveLeft(float fuelLeftVal) {
         float avgSpeed = tripProcessor.getTripData().getAvgSpeed();
         if (avgSpeed == 0) {
             avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
         }
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings + "avgSped" + avgSpeed);
         }
         float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
@@ -260,7 +259,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private String getFuelLeftString() {
         float fuelLeftVal = tripProcessor.getFuelLeft();
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
         }
         tripProcessor.writeDataToFile();
@@ -274,7 +273,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         String fuelLeftString = getFuelLeftString();
         fuelLeft.setText(fuelLeftString);
     }
-
 
     private void setupTripListButton() {
         tripListButton.setOnClickListener(new View.OnClickListener() {
@@ -350,7 +348,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         setupSettingsButton();
     }
 
-
     private void setButtonsVisibilityDuringWriteMode(int visibility) {
         tripListButton.setVisibility(visibility);
         refillButtonLayout.setVisibility(visibility);
@@ -373,9 +370,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        Log.i(LOG_TAG, "onViewCreated: calledRestore");
         getContextIfNull();
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.i(LOG_TAG, "onViewCreated: calledRestore");
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
             Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
@@ -415,7 +412,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         fuelLeft.setText(fuelString);
     }
 
-
     private void saveState() {
         if (state == null) {
             state = new Bundle();
@@ -424,7 +420,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void stopTracking() {
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "stopTracking: +" + avgSpeedArrayList.size());
             for (float f : avgSpeedArrayList) {
                 Log.d(LOG_TAG, "stopTracking: " + f);
@@ -511,7 +507,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         }
     }
 
-
     private void configureGpsHandler() {
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabled(context);
@@ -532,13 +527,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
                 locationService = binder.getService();
                 configureGpsHandler();
                 setupButtons();
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.i(LOG_TAG, "onServiceConnected: bounded");
                 }
             }
 
             @Override public void onServiceDisconnected(ComponentName arg0) {
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.i(LOG_TAG, "onServiceConnected: unbounded");
                 }
             }
@@ -553,7 +548,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         }
         else {
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onServiceConnected: service already exist");
             }
             configureGpsHandler();
@@ -625,8 +620,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
             }
 
             @Override public void onNext(Location location) {
-                if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "onNext: Location added to route list" + Thread.currentThread());
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "onNext: Location added to route list, thread - " + Thread.currentThread());
                 }
                 addPointToRouteList(location);
             }
@@ -652,17 +647,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void setupSpeedSubscriber() {
         speedSubscriber = new Subscriber<Float>() {
             @Override public void onCompleted() {
-                Log.d(LOG_TAG, "complete: Complete?");
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "complete: Complete?");
+                }
             }
 
             @Override public void onError(Throwable e) {
-                Log.d(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
+                }
             }
 
             @Override public void onNext(final Float speed) {
                 storeSpeedTicks(speed);
-                if (ConstantValues.DEBUG_MODE) {
-                    Log.d(LOG_TAG, "onNext: speed in MainFragment" + speed);
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "onNext: speed in MainFragment - " + speed);
                 }
                 animateSpeedUpdate(speed);
             }
@@ -704,19 +703,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private void animateSpeedUpdate(final float speed) {
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
         }
 
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-                //                UtilMethods.showToast(context, "spdInFrag" + speed);
+                if (ConstantValues.LOGGING_ENABLED) {
+                    UtilMethods.showToast(context, "spdInFrag" + speed);
+                }
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }
         });
-
-
     }
 
 
@@ -731,10 +730,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
-            Log.i(LOG_TAG, "readFileSettings");
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.i(LOG_TAG, "readFileSettings");
+            }
             File file = context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME);
             if (file.exists()) {
-                Log.i(LOG_TAG, "readTripDataFromFileSettings: ");
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.i(LOG_TAG, "readTripDataFromFileSettings: ");
+                }
                 FileInputStream fis;
                 try {
                     fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);

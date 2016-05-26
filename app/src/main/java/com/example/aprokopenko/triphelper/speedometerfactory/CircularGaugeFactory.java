@@ -25,7 +25,6 @@ public class CircularGaugeFactory {
         return speedometer;
     }
 
-
     private void setScale(SfCircularGauge gauge, CircularScale scale, ArrayList<CircularRange> ranges, ArrayList<CircularPointer> pointers,
                           ArrayList<TickSetting> tickSettings) {
         ArrayList<CircularScale> circularScales = new ArrayList<>();

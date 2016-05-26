@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
-
 import android.os.Parcelable;
 import android.os.Parcel;
 
@@ -144,7 +143,6 @@ public class TripData implements Parcelable {
     public void addTrip(Trip trip) {
         trips.add(trip);
     }
-
 
     private TripData(Parcel in) {
         avgFuelConsumption = in.readFloat();

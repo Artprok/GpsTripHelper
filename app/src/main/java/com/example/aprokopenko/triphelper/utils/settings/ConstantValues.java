@@ -26,6 +26,7 @@ public class ConstantValues {
     public static final float   KILOMETER_PER_HOUR_MULTIPLIER = 3.6f;
     public static final int     PER_100_KM                    = 100;
     public static final boolean DEBUG_MODE                    = false; //todo change for release to false
+    public static final boolean LOGGING_ENABLED               = false; //todo change for release to false
 
     public static final int TEXT_ANIM_DURATION             = 900;
     public static final int SPEEDOMETER_TEXT_ANIM_DURATION = 60;
@@ -46,7 +47,7 @@ public class ConstantValues {
     public static final float CONSUMPTION_HIGH_TRAFFIC_ADD      = 3;
     public static final float CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 5;
 
-    public static final int TEXT_COLOR          = Color.parseColor("#EEEEEE");
-    public static final int MIN_UPDATE_DISTANCE = 0;
-    public static final int MIN_UPDATE_TIME     = 1000;
+    public static final int  TEXT_COLOR          = Color.parseColor("#EEEEEE");
+    public static final int  MIN_UPDATE_DISTANCE = 0;
+    public static final long MIN_UPDATE_TIME     = 1000;
 }

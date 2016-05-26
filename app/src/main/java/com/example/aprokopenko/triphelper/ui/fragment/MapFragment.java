@@ -50,7 +50,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void setGpsHandler(GpsHandler GpsHandler) {
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "setGpsHandler: LocationStartTracking");
         }
         setupSubscribers();
@@ -167,7 +167,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void drawPathFromData() {
         if (routes != null) {
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "drawPathFromData: DrawFromData");
             }
             for (int i = 0; i < routes.size(); i++) {

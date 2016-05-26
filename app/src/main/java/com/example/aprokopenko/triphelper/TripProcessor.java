@@ -38,7 +38,7 @@ public class TripProcessor {
     private final int   fuelCapacity;
 
     public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "TripProcessor: IsConstructed");
         }
         this.fuelConsFromSettings = fuelConsFromSettings;
@@ -51,7 +51,7 @@ public class TripProcessor {
         routes = new ArrayList<>();
         this.context = context;
         if (tripData == null) {
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "TripProcessor: Reading data from file, file isn't empty");
             }
             tripData = readDataFromFile();
@@ -72,7 +72,7 @@ public class TripProcessor {
 
     public float getFuelLeft() {
         if (tripData != null) {
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelLeft: " + tripData.getGasTank());
             }
             return tripData.getGasTank();
@@ -93,7 +93,7 @@ public class TripProcessor {
     }
 
     public void endTrip() {
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "endTrip: end trip called");
         }
         Trip trip = getCurrentTrip();
@@ -214,7 +214,7 @@ public class TripProcessor {
     }
 
     private void updateTrip(Trip trip) {
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "updateTrip: called");
         }
         trip.setAvgSpeed(averageSpeed);
@@ -231,7 +231,7 @@ public class TripProcessor {
 
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
         @Override protected Boolean doInBackground(TripData... params) {
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
                 Log.d(LOG_TAG, "writeTripDataToFile: avgSpeed - " + tripData.getAvgSpeed());
             }
@@ -260,7 +260,7 @@ public class TripProcessor {
                 ObjectOutputStream os = new ObjectOutputStream(fos);
                 os.writeInt(tripsSize);
                 for (Trip trip : trips) {
-                    if (ConstantValues.DEBUG_MODE) {
+                    if (ConstantValues.LOGGING_ENABLED) {
                         Log.d(LOG_TAG, "writeTripDataToFile: trip to string - " + trip.toString());
                     }
                     writeTrip(trip, os);
@@ -279,7 +279,7 @@ public class TripProcessor {
             catch (IOException e) {
                 e.printStackTrace();
             }
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
             }
             return true;
@@ -287,7 +287,7 @@ public class TripProcessor {
 
         @Override protected void onPostExecute(Boolean result) {
             if (result) {
-                if (ConstantValues.DEBUG_MODE) {
+                if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "file written successfully");
                 }
             }
@@ -296,11 +296,15 @@ public class TripProcessor {
 
     private class ReadFileTask extends AsyncTask<String, Integer, TripData> {
         @Override protected TripData doInBackground(String... params) {
-            Log.d(LOG_TAG, "readFile");
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "readFile");
+            }
             fileIsInWriteMode = true;
             File file = context.getFileStreamPath(ConstantValues.FILE_NAME);
             if (file.exists()) {
-                Log.d(LOG_TAG, "readTripDataFromFile: ");
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "readTripDataFromFile: ");
+                }
                 ArrayList<Trip> trips = new ArrayList<>();
                 FileInputStream fis;
                 int             tripsSize;
@@ -339,7 +343,9 @@ public class TripProcessor {
                 }
             }
             else {
-                Log.d(LOG_TAG, "TripProcessor: file is empty");
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "TripProcessor: file is empty");
+                }
                 tripData = new TripData();
             }
             return tripData;
@@ -350,8 +356,6 @@ public class TripProcessor {
             fileIsInWriteMode = false;
         }
     }
-
-
 }
 
 

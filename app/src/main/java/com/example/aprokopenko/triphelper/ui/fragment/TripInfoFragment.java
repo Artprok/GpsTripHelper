@@ -109,7 +109,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
                                                float timeSpentInMotion, float timeSpentOnStop, float averageFuelCons, float fuelSpent,
                                                int tripId, ArrayList<Route> routes, Float moneySpent, Float maxSpeed) {
-        Log.d(LOG_TAG, "newInstance: CALLED");
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.d(LOG_TAG, "newInstance: CALLED");
+        }
         TripInfoFragment  fragment       = new TripInfoFragment();
         Bundle            args           = new Bundle();
         ArrayList<String> latitudeArray  = new ArrayList<>();
@@ -257,7 +259,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                 timeSpentOnStop++;
             }
         }
-        if (ConstantValues.DEBUG_MODE) {
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, null));

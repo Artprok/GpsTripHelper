@@ -5,13 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.view.View;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
@@ -100,7 +100,6 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
         maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
         timeSpentOnTrips = tripData.getTimeSpentOnTrips();
 
-
         distanceTravelledView.setText(distance);
         avgFuelConsumptionView.setText(avgFuelCons);
         moneyOnFuelView.setText(moneyOnFuelSpent);
@@ -118,7 +117,9 @@ public class TripListFragment extends Fragment implements OnListFragmentInteract
     @Override public void onDetach() {
         tripData = null;
         trips = null;
-        Log.d(LOG_TAG, "onDetach: OnDetach");
+        if(ConstantValues.LOGGING_ENABLED){
+            Log.d(LOG_TAG, "onDetach: OnDetach");
+        }
         super.onDetach();
     }
 
