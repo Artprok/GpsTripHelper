@@ -75,7 +75,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         googleApiClient.connect();
 
         return START_STICKY;
-
         //        // TODO: 13.05.2016 LocationListener on LocationManager
         //                locationListener = gpsHandler;
         //                LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context
@@ -102,8 +101,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         //                        .requestLocationUpdates(LocationManager.GPS_PROVIDER, ConstantValues.MIN_UPDATE_TIME, ConstantValues
         //         .MIN_UPDATE_DISTANCE,
         //                                locationListener);
-
-
         // TODO: 13.05.2016 locManager based on gps
     }
 

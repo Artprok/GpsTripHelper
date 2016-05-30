@@ -1,12 +1,15 @@
 package com.example.aprokopenko.triphelper;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.os.AsyncTask;
+import android.os.Parcel;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -22,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.io.File;
 
-public class TripProcessor {
+public class TripProcessor implements Parcelable {
     private static final String LOG_TAG = "TripProcessor";
     private       boolean          fileIsInWriteMode;
     private       long             tripStartTime;
@@ -55,6 +58,29 @@ public class TripProcessor {
             tripData = readDataFromFile();
         }
     }
+
+    protected TripProcessor(Parcel in) {
+        fileIsInWriteMode = in.readByte() != 0;
+        tripStartTime = in.readLong();
+        currentTripId = in.readInt();
+        averageSpeed = in.readFloat();
+        tripData = in.readParcelable(TripData.class.getClassLoader());
+        routes = in.createTypedArrayList(Route.CREATOR);
+        fuelConsFromSettings = in.readFloat();
+        fuelPrice = in.readFloat();
+        fuelCapacity = in.readInt();
+        context = TripHelperApp.getAppContext();
+    }
+
+    public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
+        @Override public TripProcessor createFromParcel(Parcel in) {
+            return new TripProcessor(in);
+        }
+
+        @Override public TripProcessor[] newArray(int size) {
+            return new TripProcessor[size];
+        }
+    };
 
     public boolean isFileNotInWriteMode() {
         return !fileIsInWriteMode;
@@ -127,7 +153,9 @@ public class TripProcessor {
     public void fillGasTank(float fuel) {
         if (tripData != null) {
             float gasTank = tripData.getGasTank();
-            Log.d(LOG_TAG, "fillGasTank: gasT" + gasTank + "fuel" + fuel + "fuelCap" + fuelCapacity);
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
+            }
             if (gasTank + fuel <= fuelCapacity) {
                 tripData.setGasTank(gasTank + fuel);
                 CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
@@ -226,6 +254,22 @@ public class TripProcessor {
         tripData.updateTrip(trip, currentTripId);
     }
 
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
+        parcel.writeLong(tripStartTime);
+        parcel.writeInt(currentTripId);
+        parcel.writeFloat(averageSpeed);
+        parcel.writeParcelable(tripData, i);
+        parcel.writeTypedList(routes);
+        parcel.writeFloat(fuelConsFromSettings);
+        parcel.writeFloat(fuelPrice);
+        parcel.writeInt(fuelCapacity);
+    }
+
 
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
         @Override protected Boolean doInBackground(TripData... params) {
@@ -236,7 +280,7 @@ public class TripProcessor {
             FileOutputStream fos;
             ArrayList<Trip>  trips = tripData.getTrips();
             getTripDataFieldsValues();
-            if (ConstantValues.DEBUG_MODE) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "WRITE: distTravelledForTripData " + tripData.getDistanceTravelled());
                 Log.d(LOG_TAG, "WRITE: avgConsForTripData " + tripData.getAvgFuelConsumption());
                 Log.d(LOG_TAG, "WRITE: fuelSpentForTripData " + tripData.getFuelSpent());
@@ -325,7 +369,7 @@ public class TripProcessor {
 
                     tripData = createTripData(trips, avgFuelConsumption, fuelSpent, distanceTravelled, moneyOnFuelSpent, avgSpeed,
                             timeSpent, gasTankCapacity, maxSpeed);
-                    if (ConstantValues.DEBUG_MODE) {
+                    if (ConstantValues.LOGGING_ENABLED) {
                         Log.d(LOG_TAG, "READ: avgFuelConsForTrip " + avgFuelConsumption);
                         Log.d(LOG_TAG, "READ: fuelSpentForTrip " + fuelSpent);
                         Log.d(LOG_TAG, "READ: distTravelledForTrip " + distanceTravelled);

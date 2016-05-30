@@ -13,7 +13,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 
-public class TripListFragment extends Fragment implements OnListFragmentInteractionListener {
+public class TripListFragment extends Fragment implements ListFragmentInteractionListener {
     @Bind(R.id.avgFuelConsListFrag)
     TextView     avgFuelConsumptionView;
     @Bind(R.id.distanceTravelledListFrag)

@@ -6,7 +6,7 @@ import android.widget.TextView;
 import android.view.ViewGroup;
 import android.view.View;
 
-import com.example.aprokopenko.triphelper.listener.OnListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.R;
@@ -18,11 +18,11 @@ import butterknife.Bind;
 
 public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRecyclerViewAdapter.ViewHolder> {
     public static final String LOG_TAG = "RECYCLER_ADAPTER";
-    private final ArrayList<Trip>                   tripList;
-    private final OnListFragmentInteractionListener onListFragmentInteractionListener;
+    private final ArrayList<Trip>                 tripList;
+    private final ListFragmentInteractionListener listFragmentInteractionListener;
 
-    public TripListRecyclerViewAdapter(ArrayList<Trip> trips, OnListFragmentInteractionListener listener) {
-        onListFragmentInteractionListener = listener;
+    public TripListRecyclerViewAdapter(ArrayList<Trip> trips, ListFragmentInteractionListener listener) {
+        listFragmentInteractionListener = listener;
         tripList = trips;
     }
 
@@ -41,13 +41,13 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
         holder.trip = curTrip;
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (onListFragmentInteractionListener != null) {
-                    onListFragmentInteractionListener.onListItemClick(holder.trip);
+                if (listFragmentInteractionListener != null) {
+                    listFragmentInteractionListener.onListItemClick(holder.trip);
                     TripInfoFragment tripInfoFragment = TripInfoFragment
                             .newInstance(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(), curTrip.getTimeSpent(),
                                     curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(), curTrip.getAvgFuelConsumption(),
                                     curTrip.getFuelSpent(), id, curTrip.getRoute(), curTrip.getMoneyOnFuelSpent(), curTrip.getMaxSpeed());
-                    onListFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
+                    listFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
                 }
             }
         });

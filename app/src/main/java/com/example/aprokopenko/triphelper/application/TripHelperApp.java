@@ -12,14 +12,19 @@ import com.example.aprokopenko.triphelper.ApplicationComponent;
 public class TripHelperApp extends Application {
     private static final String LOG_TAG = "TripHelperApp";
     private static ApplicationComponent applicationComponent;
+    private static Context context;
 
     public static ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
 
+    public static Context getAppContext() {
+        return context;
+    }
+
     @Override public void onCreate() {
         super.onCreate();
-        Context context = getApplicationContext();
+        context = getApplicationContext();
         AppModule module = new AppModule(this);
         applicationComponent = DaggerApplicationComponent.builder().appModule(module).build();
         if (ConstantValues.LOGGING_ENABLED) {

@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
@@ -33,7 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-@Singleton public class SettingsFragment extends Fragment {
+@Singleton public class SettingsFragment extends Fragment  {
 
     @Bind(R.id.fuelPriceEditText)
     EditText    fuelPriceEditText;
@@ -55,6 +57,7 @@ import butterknife.ButterKnife;
     private             float  fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
     private             float  fuelCost         = ConstantValues.FUEL_COST_DEFAULT;
     private Context context;
+    private FileEraseListener fileEraseListener;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -76,6 +79,10 @@ import butterknife.ButterKnife;
         setupEraseButton();
         setupEditTextFields();
         readDataFromFile();
+    }
+
+    public void setFileEraseListener(FileEraseListener fileEraseListener) {
+        this.fileEraseListener = fileEraseListener;
     }
 
     private void setupTextFields() {
@@ -129,8 +136,10 @@ import butterknife.ButterKnife;
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
                 }
-                fuelCost = Float.valueOf(s.toString());
-                writeDataToFile();
+                if(!TextUtils.equals(s,"")){
+                    fuelCost = Float.valueOf(s.toString());
+                    writeDataToFile();
+                }
             }
 
             @Override public void afterTextChanged(Editable s) {
@@ -144,8 +153,10 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                fuelConsumption = (Float.valueOf(s.toString()));
-                writeDataToFile();
+                if(!TextUtils.equals(s,"")){
+                    fuelConsumption = (Float.valueOf(s.toString()));
+                    writeDataToFile();
+                }
             }
 
             @Override public void afterTextChanged(Editable s) {
@@ -159,8 +170,10 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                fuelTankCapacity = (Integer.valueOf(s.toString()));
-                writeDataToFile();
+                if(!TextUtils.equals(s,"")){
+                    fuelTankCapacity = (Integer.valueOf(s.toString()));
+                    writeDataToFile();
+                }
             }
 
             @Override public void afterTextChanged(Editable s) {
@@ -174,6 +187,8 @@ import butterknife.ButterKnife;
         eraseButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (UtilMethods.eraseFile(context)) {
+                    fileEraseListener.onFileErased();
+                    readDataFromFile();
                     UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
                 }
                 else {
@@ -193,6 +208,8 @@ import butterknife.ButterKnife;
         WriteInternalFile writeFileTask = new WriteInternalFile();
         writeFileTask.execute();
     }
+
+
 
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
         @Override protected Boolean doInBackground(Void... params) {

@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.datamodel;
 
 import android.os.Parcelable;
 import android.os.Parcel;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
