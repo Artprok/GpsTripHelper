@@ -544,16 +544,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         ArrayList<Trip> allTrips     = tripData.getTrips();
         int             tripQuantity = allTrips.size();
 
+
         for (Trip trip : allTrips) {
             fuelSpent = fuelSpent + trip.getFuelSpent();
             timeSpent = timeSpent + trip.getTimeSpent();
-            avgSpeed = avgSpeed + trip.getAvgSpeed();
-            avgFuelCons = avgFuelCons + trip.getAvgFuelConsumption();
+
             maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
+        }
+
+        for (Trip trip : allTrips) {
+            float percent = (trip.getTimeSpent() * 100) / timeSpent;
+            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * percent) / 100;
+            avgSpeed = (avgSpeed + trip.getAvgSpeed() * percent) / 100;
         }
 
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
+
         float distTravelled = CalculationUtils.calcDistTravelled(timeSpent, avgSpeed);
         tripData.setMaxSpeed(maxSpeed);
         tripData.setAvgSpeed(avgSpeed);

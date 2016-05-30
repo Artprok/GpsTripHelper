@@ -100,7 +100,7 @@ public class CalculationUtils {
     }
 
 
-    private static float getTimeFromMills(float timeInMills) {
+    public static float getTimeFromMills(float timeInMills) {
         float result;
         float seconds = getSecondsFromMills(timeInMills);
         float minutes = getMinutesFromMills(timeInMills);
