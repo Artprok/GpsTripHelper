@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -167,16 +166,20 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onDetach: called");
         }
-        if (serviceConnection != null) {
-            getActivity().unbindService(serviceConnection);
+        if (stopButton.getVisibility() == View.VISIBLE) {
+            stopTracking();
         }
+        if (serviceConnection != null) {
+            context.unbindService(serviceConnection);
+        }
+        gpsStatusListener(REMOVE);
         locationService.onDestroy();
         locationService = null;
         mapFragment = null;
         serviceConnection = null;
         gpsHandler = null;
         tripProcessor = null;
-        gpsStatusListener(REMOVE);
+        context = null;
         super.onDetach();
     }
 
@@ -238,15 +241,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     private float getDistanceToDriveLeft(float fuelLeftVal) {
-        float avgSpeed = tripProcessor.getTripData().getAvgSpeed();
-        if (avgSpeed == 0) {
-            avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
+        if (tripProcessor.getTripData() != null) {
+            float avgSpeed = tripProcessor.getTripData().getAvgSpeed();
+            if (avgSpeed == 0) {
+                avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
+            }
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings + "avgSped" + avgSpeed);
+            }
+            float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
+            return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100_KM;
         }
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings + "avgSped" + avgSpeed);
+        else {
+            return 0f;
         }
-        float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
-        return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100_KM;
+
     }
 
     private Float getFuelLevelFieldValue() {
@@ -318,12 +327,17 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void setupStopButton() {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                stopTracking();
-                UtilMethods.showToast(context, context.getString(R.string.trip_ended_toast));
-                startButtonTurnActive();
+                endTrip();
             }
         });
     }
+
+    private void endTrip() {
+        stopTracking();
+        UtilMethods.showToast(context, context.getString(R.string.trip_ended_toast));
+        startButtonTurnActive();
+    }
+
 
     private void setupFillButton() {
         refillButtonLayout.setOnClickListener(new View.OnClickListener() {
@@ -690,7 +704,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     private void updatePointerLocation(float speed) {
         CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
         if (pointer != null) {
-            pointer.setValue((double) speed);
+            pointer.setValue(speed);
         }
     }
 

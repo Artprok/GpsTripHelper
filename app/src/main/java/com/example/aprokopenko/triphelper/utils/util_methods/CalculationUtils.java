@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -9,6 +10,7 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class CalculationUtils {
 
@@ -77,6 +79,7 @@ public class CalculationUtils {
 
     public static float calcDistTravelled(float timeSpent, float avgSpeed) {
         Float distanceTravelled = avgSpeed * getTimeFromMills(timeSpent);
+        Log.d("TIME", "calcDistTravelled: Timespent" + getTimeFromMills(timeSpent) + "timeSpent" + timeSpent);
         if (distanceTravelled.isNaN()) {
             distanceTravelled = (float) ConstantValues.START_VALUE;
         }
@@ -104,13 +107,13 @@ public class CalculationUtils {
         float minutes = getMinutesFromMills(timeInMills);
         float hours   = getHoursFromMills(timeInMills);
         if (hours == 0) {
-            result = minutes / 100 + seconds / 1000;
+            result = minutes / 60 + seconds / 3600;
             if (minutes == 0) {
-                result = seconds / 1000;
+                result = seconds / 3600;
             }
         }
         else {
-            result = hours + minutes / 100 + seconds / 1000;
+            result = hours + minutes / 60 + seconds / 3600;
         }
         return result;
     }

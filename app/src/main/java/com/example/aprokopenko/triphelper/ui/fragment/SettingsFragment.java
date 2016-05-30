@@ -3,10 +3,10 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.widget.ImageButton;
 import android.text.TextWatcher;
 import android.content.Context;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.text.Editable;
@@ -15,8 +15,8 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
 
 import java.io.ObjectOutputStream;

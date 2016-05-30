@@ -53,6 +53,10 @@
 -dontwarn butterknife.internal.**
 -keep class **$$ViewBinder { *; }
 
+-keep class SfCircularGauge{}
+-keep class Syncfusion.SfGauge.Android{}
+
+
 -dontwarn android.support.**
 
 -keepclasseswithmembernames class * {

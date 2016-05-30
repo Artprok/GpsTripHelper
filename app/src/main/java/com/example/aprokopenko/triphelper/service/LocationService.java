@@ -36,7 +36,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         UtilMethods.checkPermission(getApplicationContext());
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
         if (ConstantValues.LOGGING_ENABLED) {
-            Log.d(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
+            Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
         }
     }
 

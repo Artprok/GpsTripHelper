@@ -119,20 +119,6 @@ public class UtilMethods {
     public static String formatFloatDecimalFormat(Float floatToFormat) {
         if (floatToFormat != null) {
             DecimalFormat df = new DecimalFormat("#####.#");
-            //            DecimalFormat df = new DecimalFormat("#.#");
-            //            df.setRoundingMode(RoundingMode.FLOOR);
-            //            if (floatToFormat > 9.9) {
-            //                df = new DecimalFormat("##.#");
-            //            }
-            //            else if (floatToFormat > 99.9) {
-            //                df = new DecimalFormat("###.#");
-            //            }
-            //            else if (floatToFormat > 999.9) {
-            //                df = new DecimalFormat("####.#");
-            //            }
-            //            else if (floatToFormat > 9999.9) {
-            //                df = new DecimalFormat("#####.#");
-            //            }
             return df.format(floatToFormat);
         }
         else {
@@ -149,21 +135,6 @@ public class UtilMethods {
                 Log.d(LOG_TAG, "formatFloatToIntFormat inUtilMethod: " + floatToFormat);
             }
             DecimalFormat df = new DecimalFormat("#####");
-            //            DecimalFormat df = new DecimalFormat("#");
-            //            df.setRoundingMode(RoundingMode.FLOOR);
-            //            if (floatToFormat > 9.9) {
-            //                df = new DecimalFormat("##");
-            //                Log.d(LOG_TAG, "formatFloatToIntFormat: case ##/#" + df.format(floatToFormat));
-            //            }
-            //            else if (floatToFormat > 99.9) {
-            //                df = new DecimalFormat("###");
-            //            }
-            //            else if (floatToFormat > 999.9) {
-            //                df = new DecimalFormat("####");
-            //            }
-            //            else if (floatToFormat > 9999.9) {
-            //                df = new DecimalFormat("#####");
-            //            }
             return df.format(floatToFormat);
         }
         else {

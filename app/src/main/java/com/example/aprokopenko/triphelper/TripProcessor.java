@@ -28,7 +28,6 @@ public class TripProcessor {
     private       long             tripStartTime;
     private       int              currentTripId;
     private       float            averageSpeed;
-    private final Calendar         calendar;
     private       TripData         tripData;
     private final Context          context;
     private final ArrayList<Route> routes;
@@ -47,7 +46,6 @@ public class TripProcessor {
 
 
         fileIsInWriteMode = false;
-        calendar = Calendar.getInstance();
         routes = new ArrayList<>();
         this.context = context;
         if (tripData == null) {
@@ -83,12 +81,12 @@ public class TripProcessor {
     }
 
     public void startNewTrip() {
-        tripStartTime = calendar.getTime().getTime();
-        currentTripId = tripData.getTrips().size();
         Calendar currentCalendarInstance = Calendar.getInstance();
-        Date     date                    = currentCalendarInstance.getTime();
-        String   formattedDate           = UtilMethods.parseDate(date);
-        Trip     trip                    = new Trip(currentTripId, formattedDate);
+        tripStartTime = currentCalendarInstance.getTime().getTime();
+        currentTripId = tripData.getTrips().size();
+        Date   date          = currentCalendarInstance.getTime();
+        String formattedDate = UtilMethods.parseDate(date);
+        Trip   trip          = new Trip(currentTripId, formattedDate);
         tripData.addTrip(trip);
     }
 
@@ -340,6 +338,7 @@ public class TripProcessor {
                 }
                 catch (IOException e) {
                     e.printStackTrace();
+                    tripData = new TripData();
                 }
             }
             else {

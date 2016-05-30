@@ -76,7 +76,6 @@ import dagger.Module;
         else {
             if (f instanceof TripInfoFragment) {
                 super.onBackPressed();
-                super.onBackPressed();
             }
             super.onBackPressed();
         }

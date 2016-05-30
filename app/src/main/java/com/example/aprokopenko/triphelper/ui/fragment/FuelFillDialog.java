@@ -1,8 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.text.TextUtils;
@@ -11,8 +9,8 @@ import android.widget.Button;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
+import com.example.aprokopenko.triphelper.R;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;

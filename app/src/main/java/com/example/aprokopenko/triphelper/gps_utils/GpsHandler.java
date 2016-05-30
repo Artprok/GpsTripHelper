@@ -78,8 +78,8 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
         speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
             @Override public void call(Subscriber<? super Float> sub) {
                 sub.onNext(speed);
-                if(ConstantValues.LOGGING_ENABLED){
-                    Log.d(LOG_TAG, "call: On next! speedIn SetupObservable is"+speed);
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "call: On next! speedIn SetupObservable is" + speed);
                 }
             }
         }).repeat();

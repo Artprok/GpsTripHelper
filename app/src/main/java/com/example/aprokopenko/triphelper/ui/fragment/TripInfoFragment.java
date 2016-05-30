@@ -91,9 +91,9 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private float  moneySpent;
     private float  fuelSpent;
     private float  timeSpent;
-    private String tripDate;
     private float  avgSpeed;
     private float  maxSpeed;
+    private String tripDate;
     private int    tripId;
 
     private ArrayList<String> speedValues;
@@ -183,7 +183,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         openMapButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 int orientation = getActivity().getResources().getConfiguration().orientation;
-                if (orientation == 1) {
+                if (orientation == 1) {                    //animations for portrait orientation
                     if (mapOpened) {
                         animateMapClosingForPortrait(view);
                     }
@@ -192,7 +192,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
                 else {
-                    if (mapOpened) {
+                    if (mapOpened) {                         //animations for landscape orientation
                         animateMapClosingForLandscape(view);
                     }
                     else {
