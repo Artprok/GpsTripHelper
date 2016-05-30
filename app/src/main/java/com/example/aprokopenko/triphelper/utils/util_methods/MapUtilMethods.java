@@ -114,7 +114,7 @@ public class MapUtilMethods {
             color = GoogleMapsSettings.polylineColorOutOfCity;
         }
         else if (speed > 110) {
-            color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowedINT;
+            color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowed;
         }
         return color;
     }

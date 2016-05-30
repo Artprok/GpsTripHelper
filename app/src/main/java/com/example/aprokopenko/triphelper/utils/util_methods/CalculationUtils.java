@@ -79,7 +79,6 @@ public class CalculationUtils {
 
     public static float calcDistTravelled(float timeSpent, float avgSpeed) {
         Float distanceTravelled = avgSpeed * getTimeFromMills(timeSpent);
-        Log.d("TIME", "calcDistTravelled: Timespent" + getTimeFromMills(timeSpent) + "timeSpent" + timeSpent);
         if (distanceTravelled.isNaN()) {
             distanceTravelled = (float) ConstantValues.START_VALUE;
         }

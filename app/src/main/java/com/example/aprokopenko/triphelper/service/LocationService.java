@@ -52,7 +52,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
     }
 
-
     public class LocalBinder extends Binder {
         public LocationService getService() {
             return LocationService.this;

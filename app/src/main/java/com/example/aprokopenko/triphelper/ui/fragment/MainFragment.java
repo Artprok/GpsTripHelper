@@ -138,6 +138,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
 
     @Override public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        ArrayList<String> avgStrArrList = new ArrayList<>();
+        if (avgSpeedArrayList != null) {
+            for (float avgListItem : avgSpeedArrayList) {
+                avgStrArrList.add(String.valueOf(avgListItem));
+                Log.d(LOG_TAG, "onSaveInstanceState: " + String.valueOf(avgListItem));
+            }
+        }
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onSaveInstanceState: Save called");
             Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + getButtonVisibility());
@@ -148,14 +155,17 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         outState.putBoolean("ControlButtonVisibility", getButtonVisibility());
         outState.putBoolean("StatusImageState", getStatusImageState());
         outState.putBoolean("FirstStart", firstStart);
+        outState.putStringArrayList("AvgSpeedList", avgStrArrList);
     }
 
     @Override public void onPause() {
+        Log.d(LOG_TAG, "onPause: PAUSE");
         saveState();
         super.onPause();
     }
 
     @Override public void onResume() {
+        Log.d(LOG_TAG, "onResume: RESUME");
         if (state != null) {
             restoreState(state);
         }
@@ -163,10 +173,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
     }
 
     @Override public void onDetach() {
+        Log.d(LOG_TAG, "onDetach: ");
+
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onDetach: called");
         }
-        if (stopButton.getVisibility() == View.VISIBLE) {
+        if (stopButton != null && stopButton.getVisibility() == View.VISIBLE) {
             stopTracking();
         }
         if (serviceConnection != null) {
@@ -398,10 +410,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener {
         restoreButtonsVisibility(savedInstanceState.getBoolean("ControlButtonVisibility"));
         restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
         restoreFuelLevel();
+        restoreAvgSpeedList(savedInstanceState.getStringArrayList("AvgSpeedList"));
 
         restoreFuelLayoutVisibility(firstStart);
         if (stopButton.getVisibility() == View.VISIBLE) {
             UtilMethods.setFabVisible(getActivity());
+        }
+    }
+
+    private void restoreAvgSpeedList(ArrayList<String> avgSpeedList) {
+        avgSpeedArrayList = new ArrayList<>();
+        for (String tmpStr : avgSpeedList) {
+            Log.d(LOG_TAG, "restoreAvgSpeedList:" + Float.valueOf(tmpStr));
+            avgSpeedArrayList.add(Float.valueOf(tmpStr));
         }
     }
 
