@@ -99,7 +99,7 @@ public class Trip implements Parcelable {
         return fuelSpent;
     }
 
-    public float getTimeSpent() {
+    public float getTimeSpentForTrip() {
         return timeSpent;
     }
 

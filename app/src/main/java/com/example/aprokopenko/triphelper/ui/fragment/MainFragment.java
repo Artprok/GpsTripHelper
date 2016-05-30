@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -534,37 +533,37 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void setMetricFieldsToTripData() {
-        final float     startVal     = ConstantValues.START_VALUE;
-        TripData        tripData     = tripProcessor.getTripData();
-        float           fuelSpent    = startVal;
-        float           timeSpent    = startVal;
-        float           avgSpeed     = startVal;
-        float           avgFuelCons  = startVal;
-        float           maxSpeed     = startVal;
-        ArrayList<Trip> allTrips     = tripData.getTrips();
-        int             tripQuantity = allTrips.size();
+        final float     startVal             = ConstantValues.START_VALUE;
+        TripData        tripData             = tripProcessor.getTripData();
+        float           fuelSpent            = startVal;
+        float           timeSpentForAllTrips = startVal;
+        float           avgSpeed             = startVal;
+        float           avgFuelCons          = startVal;
+        float           maxSpeed             = startVal;
+        float           distTravelled        = startVal;
+        ArrayList<Trip> allTrips             = tripData.getTrips();
+        int             tripQuantity         = allTrips.size();
 
 
         for (Trip trip : allTrips) {
             fuelSpent = fuelSpent + trip.getFuelSpent();
-            timeSpent = timeSpent + trip.getTimeSpent();
-
+            timeSpentForAllTrips = timeSpentForAllTrips + trip.getTimeSpentForTrip();
             maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
         }
 
         for (Trip trip : allTrips) {
-            float percent = (trip.getTimeSpent() * 100) / timeSpent;
-            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * percent) / 100;
-            avgSpeed = (avgSpeed + trip.getAvgSpeed() * percent) / 100;
+            float multiplier = (trip.getTimeSpentForTrip() * 100) / timeSpentForAllTrips;
+            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * multiplier) / 100;
+            avgSpeed = (avgSpeed + trip.getAvgSpeed() * multiplier) / 100;
         }
 
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeed = avgSpeed / tripQuantity;
+        distTravelled = CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeed);
 
-        float distTravelled = CalculationUtils.calcDistTravelled(timeSpent, avgSpeed);
         tripData.setMaxSpeed(maxSpeed);
         tripData.setAvgSpeed(avgSpeed);
-        tripData.setTimeSpentOnTrips(timeSpent);
+        tripData.setTimeSpentOnTrips(timeSpentForAllTrips);
         tripData.setDistanceTravelled(distTravelled);
         tripData.setAvgFuelConsumption(avgFuelCons);
         tripData.setFuelSpent(fuelSpent);

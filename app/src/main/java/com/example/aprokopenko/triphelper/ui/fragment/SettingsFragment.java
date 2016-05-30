@@ -35,7 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-@Singleton public class SettingsFragment extends Fragment  {
+@Singleton public class SettingsFragment extends Fragment {
 
     @Bind(R.id.fuelPriceEditText)
     EditText    fuelPriceEditText;
@@ -56,7 +56,7 @@ import butterknife.ButterKnife;
     private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
     private             float  fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
     private             float  fuelCost         = ConstantValues.FUEL_COST_DEFAULT;
-    private Context context;
+    private Context           context;
     private FileEraseListener fileEraseListener;
 
     public SettingsFragment() {
@@ -136,7 +136,7 @@ import butterknife.ButterKnife;
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
                 }
-                if(!TextUtils.equals(s,"")){
+                if (!TextUtils.equals(s, "")) {
                     fuelCost = Float.valueOf(s.toString());
                     writeDataToFile();
                 }
@@ -153,7 +153,7 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!TextUtils.equals(s,"")){
+                if (!TextUtils.equals(s, "")) {
                     fuelConsumption = (Float.valueOf(s.toString()));
                     writeDataToFile();
                 }
@@ -170,7 +170,7 @@ import butterknife.ButterKnife;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!TextUtils.equals(s,"")){
+                if (!TextUtils.equals(s, "")) {
                     fuelTankCapacity = (Integer.valueOf(s.toString()));
                     writeDataToFile();
                 }
@@ -208,7 +208,6 @@ import butterknife.ButterKnife;
         WriteInternalFile writeFileTask = new WriteInternalFile();
         writeFileTask.execute();
     }
-
 
 
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {

@@ -12,7 +12,7 @@ import com.example.aprokopenko.triphelper.ApplicationComponent;
 public class TripHelperApp extends Application {
     private static final String LOG_TAG = "TripHelperApp";
     private static ApplicationComponent applicationComponent;
-    private static Context context;
+    private static Context              context;
 
     public static ApplicationComponent getApplicationComponent() {
         return applicationComponent;
@@ -28,7 +28,7 @@ public class TripHelperApp extends Application {
         AppModule module = new AppModule(this);
         applicationComponent = DaggerApplicationComponent.builder().appModule(module).build();
         if (ConstantValues.LOGGING_ENABLED) {
-            Log.i(LOG_TAG, "onCreate:Dagger2 testing,ApplicationCreated, context is "+context.toString());
+            Log.i(LOG_TAG, "onCreate:Dagger2 testing,ApplicationCreated, context is " + context.toString());
         }
     }
 }

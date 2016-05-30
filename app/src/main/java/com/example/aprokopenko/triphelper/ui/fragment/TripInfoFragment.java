@@ -247,7 +247,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setDataToInfoFragmentFields() {
-        String avgFuelCons      = UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_prefix);
+        String avgFuelCons      = UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_cons_prefix);
         String fuelSpent        = UtilMethods.formatFloatDecimalFormat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
         String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + getString(R.string.currency_prefix);
         String avgSpeed         = UtilMethods.formatFloatDecimalFormat(this.avgSpeed) + " " + getString(R.string.speed_prefix);

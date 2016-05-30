@@ -131,7 +131,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         float            moneyOnFuelSpent  = trip.getMoneyOnFuelSpent();
         float            timeSpentOnStop   = trip.getTimeSpentOnStop();
         float            fuelSpent         = trip.getFuelSpent();
-        float            timeSpent         = trip.getTimeSpent();
+        float            timeSpent         = trip.getTimeSpentForTrip();
         String           tripDate          = trip.getTripDate();
         float            avgSpeed          = trip.getAvgSpeed();
         float            maxSpeed          = trip.getMaxSpeed();
