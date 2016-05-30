@@ -1,15 +1,12 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.content.DialogInterface;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Menu;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;

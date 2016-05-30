@@ -2,7 +2,6 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -10,7 +9,6 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 public class CalculationUtils {
 

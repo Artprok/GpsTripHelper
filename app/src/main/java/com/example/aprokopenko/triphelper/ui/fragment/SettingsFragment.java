@@ -221,7 +221,7 @@ import butterknife.ButterKnife;
 
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
-                Log.d(LOG_TAG, "writeTripDataoFileSetting: writeCalled" + consumption + price + capacity);
+                Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + consumption + price + capacity);
             }
 
             try {

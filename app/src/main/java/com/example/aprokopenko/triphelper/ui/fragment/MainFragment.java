@@ -423,13 +423,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
 
         firstStart = savedInstanceState.getBoolean("FirstStart");
-        boolean           restoredButtonVisiblity = savedInstanceState.getBoolean("ControlButtonVisibility");
-        boolean           restorerdStatus         = savedInstanceState.getBoolean("StatusImageState");
+        boolean           restoredButtonVisibility = savedInstanceState.getBoolean("ControlButtonVisibility");
+        boolean           restoredStatus         = savedInstanceState.getBoolean("StatusImageState");
         ArrayList<String> restoredAvgSpeedList    = savedInstanceState.getStringArrayList("AvgSpeedList");
         TripProcessor     restoredTripProcessor   = savedInstanceState.getParcelable("TripProcessor");
 
-        restoreButtonsVisibility(restoredTripProcessor, restoredButtonVisiblity);
-        restoreStatus(restorerdStatus);
+        restoreButtonsVisibility(restoredTripProcessor, restoredButtonVisibility);
+        restoreStatus(restoredStatus);
         restoreAvgSpeedList(restoredAvgSpeedList);
         restoreTripProcessor(restoredTripProcessor);
         restoreFuelLevel();
@@ -440,9 +440,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    private void restoreTripProcessor(TripProcessor tripProc) {
-        if (tripProc != null) {
-            tripProcessor = tripProc;
+    private void restoreTripProcessor(TripProcessor restoredTripProcess) {
+        if (restoredTripProcess != null) {
+            tripProcessor = restoredTripProcess;
         }
         else {
             tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);

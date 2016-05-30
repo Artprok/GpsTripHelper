@@ -105,7 +105,7 @@ public class UtilMethods {
         else {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!! fuel cons - " +
-                        fuelCons + "avgspeed - " + avgSpeed);
+                        fuelCons + "average speed - " + avgSpeed);
             }
             return fuelCons;
         }
