@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -48,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.io.File;
+import java.util.prefs.Preferences;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -125,6 +127,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         ButterKnife.bind(this, view);
         getContextIfNull();
         tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+        // FIXME: 31.05.2016  ADD coldStart option to sharedPrefs.
+//        SharedPreferences preferences = this.getActivity().getSharedPreferences("tripPreferences", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor
 
 
         gpsStatusListener(REGISTER);
@@ -133,6 +138,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
         if (savedInstanceState != null) {
             state = savedInstanceState;
+        }
+        if (tripProcessor.getFirstStart()) {
+            Log.d(LOG_TAG, "onViewCreated: "+tripProcessor.getFirstStart());
+            UtilMethods.firstStartTutorialDialog(context);
         }
     }
 

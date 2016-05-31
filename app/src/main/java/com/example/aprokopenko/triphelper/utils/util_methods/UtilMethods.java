@@ -211,4 +211,65 @@ public class UtilMethods {
         final android.support.v7.app.AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public static void buildAndShowAboutDialog(final Context context) {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.about);
+        builder.setTitle(context.getString(R.string.aboutTitle));
+        builder.setMessage(R.string.aboutMainText).setCancelable(false)
+                .setPositiveButton(R.string.aboutRateButton, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                }).setNegativeButton(R.string.aboutNegativeButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                dialog.cancel();
+            }
+        }).setNeutralButton(R.string.aboutFeedbackButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+
+
+            }
+        });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public static void firstStartTutorialDialog(final Context context) {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.how_to_use);
+        builder.setTitle(context.getString(R.string.tutorialTitle));
+        builder.setMessage(R.string.tutorialWantToKnowInfo).setCancelable(false)
+                .setPositiveButton(R.string.tutorialNext, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        showTutorialDialog(context);
+                    }
+                }).setNegativeButton(R.string.tutorialNo, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                dialog.cancel();
+            }
+        });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private static void showTutorialDialog(Context context) {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.how_to_use);
+        builder.setTitle(context.getString(R.string.tutorialTitle));
+        builder.setMessage(R.string.tutorialInfo).setCancelable(false)
+                .setPositiveButton(R.string.tutorialThanks, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

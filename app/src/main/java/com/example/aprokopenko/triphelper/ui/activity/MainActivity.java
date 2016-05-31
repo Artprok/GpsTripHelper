@@ -31,10 +31,7 @@ import dagger.Module;
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
-        wakeLock.acquire();
-
+        setupWakeLock();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         MainFragment mainFragment;
@@ -60,6 +57,7 @@ import dagger.Module;
         }
     }
 
+
     @Override public void onBackPressed() {
         final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
@@ -67,10 +65,7 @@ import dagger.Module;
                     .setMessage(getString(R.string.exit_dialog_string))
                     .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
-                            wakeLock.release();
-                            f.onDetach();
-                            finish();
-                            System.exit(0);
+                            performExitFromApplication(f);
                         }
 
                     }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
@@ -85,6 +80,19 @@ import dagger.Module;
             }
             super.onBackPressed();
         }
+    }
+
+    private void setupWakeLock() {
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
+        wakeLock.acquire();
+    }
+
+    private void performExitFromApplication(Fragment f) {
+        wakeLock.release();
+        f.onDetach();
+        finish();
+        System.exit(0);
     }
 
     private void setFabToMap(final MainFragment mainFragment) {

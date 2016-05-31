@@ -69,4 +69,43 @@
     <string name="exit_dialog_yes">Да</string>
     <string name="exit_dialog_title">Выход</string>
 
+
+    <string name="aboutTitle">Про Автопомощника:</string>
+
+    <string name="aboutMainText">
+       Разработчик Автопомощника - Артур Прокопенко"\n"
+        "\n"
+        Версия 1.0
+        "\n"
+        "\n"
+        Автопомощник был создан для тех людей, кому важно знать основную информацию о их поездках и их показателях.
+        "\n"
+        "\n"
+        Автопомощник позволяет Вам:
+        "\n"
+        -Узнать расстояние пройденное Вами.
+        "\n"
+        -Узнать сколько топлива было потрачено и на сколько километров хватит остатка в баке.
+        "\n"
+        -Узнать скорость движения с помощью высокоточного спидометра.
+        "\n"
+        -Посмотреть на пройденные Вами маршруты на карте.
+        "\n"
+        -Посмотреть Ваши скоростные характеристики: среднюю скорость,максимальную скорость.
+        "\n"
+        -Посмотреть сколько денег Вы тратите на топливо.
+        "\n"
+        -Посмотреть сколько времени Вы находились в движении, а сколько простояли в пробке.
+    </string>
+
+    <string name="aboutNegativeButton">Cпасибо, может быть позже</string>
+    <string name="aboutRateButton">Круто, хочу оценить!</string>
+    <string name="aboutFeedbackButton">Послать отзыв разработчику</string>
+    <string name="tutorialTitle">Да, конечно!</string>
+    <string name="tutorialNext">Ещё</string>
+    <string name="tutorialInfo">Трип</string>
+    <string name="tutorialNo">Нет, спасибо, я умею пользоваться автомопощником!</string>
+    <string name="tutorialThanks">Я понял, спасибо!</string>
+    <string name="tutorialWantToKnowInfo">Хотите узнать как пользоваться автопомощником?</string>
+
 </resources>

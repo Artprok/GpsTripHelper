@@ -85,4 +85,72 @@
     <string name="fuel_left_initial_val" translatable="false">0</string>
     <!--/InitialValues-->
 
+    <!--AboutDialog-->
+    <string name="aboutTitle">About TripHelper app:</string>
+    <string name="aboutMainText">
+        TripHelper created by Artyr Prokopenko"\n"
+        "\n"
+        Version 1.0
+        "\n"
+        "\n"
+        Application was created for people who want track main info about their trips.
+        "\n"
+        "\n"
+        With help of TripHelper, You will be able to:
+        "\n"
+         -Know what distance You have travelled
+        "\n"
+        -Know how much fuel left in Your gasTank and what distance You can travel on it
+        "\n"
+        -Watch Your speed by high accurate speedometer
+        "\n"
+        -Watch Your tracks on map and check on what speed you have driven during those trips
+        "\n"
+        -Watch on Your speed performance: average speed,maximum speed
+        "\n"
+        -Watch on how much money You spent on fuel
+        "\n"
+        -Watch on how much time You spent in motion or in a traffic jam
+        "\n"
+        "\n"
+        Do you enjoy TripHelper? Please rate us on GooglePlay and help us to get better!
+    </string>
+    <string name="aboutRateButton">It\'s cool, I want to rate!</string>
+    <string name="aboutNegativeButton">Thanks, maybe later</string>
+    <string name="aboutFeedbackButton">Send a feedback to developer</string>
+    <!--/AboutDialog-->
+
+    <!--TutorialDialog-->
+    <string name="tutorialTitle">How to use TripHelper?</string>
+    <string name="tutorialNext">Yes, please tell me how to use it!</string>
+    <string name="tutorialNo">No thanks, I know how to use it!</string>
+    <string name="tutorialThanks">Ok, I got it!</string>
+    <string name="tutorialWantToKnowInfo">Do You want to read a small tutorial to know how to use TripHelper?</string>
+    <string name="tutorialInfo">
+        Hello! Thanks for using TripHelper, it will do it\'s best for You!
+        "\n"
+        To get TripHelper work properly you need to specify a few parameters in settings tab(setting tab looks like a gear):
+        "\n"
+        -Gastank capacity
+        "\n"
+        -Fuel consumption
+        "\n"
+        -Price of fuel in your region
+        "\n"
+        "\n"
+        Then all You need is check that GPS is ON and press "Play" button every time You going to drive somewhere and press "Stop" Button
+        when You arrived to destination place.
+        "\n"
+        "\n"
+        Highly recommended to plug in Your device when You using a TripHelper to get battery in charging state!
+        "\n"
+        "\n"
+        Hope you will like TripHelper!
+
+    </string>
+
+
+    <!--/TutorialDialog-->
+
+
 </resources>

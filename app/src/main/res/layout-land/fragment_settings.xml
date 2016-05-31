@@ -8,6 +8,7 @@
         android:id="@+id/eraseButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_margin="5dp"
         android:layout_alignParentEnd="true"
         android:background="@android:drawable/ic_menu_delete"
         />
@@ -76,7 +77,19 @@
 
             />
 
+
+
     </RelativeLayout>
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/aboutButton"
+        android:layout_margin="5dp"
+        android:background="@drawable/about"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        />
 
 
 </RelativeLayout>

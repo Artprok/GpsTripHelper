@@ -38,6 +38,7 @@ public class TripProcessor implements Parcelable {
     private final float fuelConsFromSettings;
     private final float fuelPrice;
     private final int   fuelCapacity;
+    private boolean firstStart;
 
     public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
         if (ConstantValues.LOGGING_ENABLED) {
@@ -81,6 +82,10 @@ public class TripProcessor implements Parcelable {
             return new TripProcessor[size];
         }
     };
+
+    public boolean getFirstStart(){
+        return firstStart;
+    }
 
     public boolean isFileNotInWriteMode() {
         return !fileIsInWriteMode;
@@ -379,6 +384,7 @@ public class TripProcessor implements Parcelable {
                     }
                     is.close();
                     fis.close();
+                    firstStart=false;
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -390,6 +396,7 @@ public class TripProcessor implements Parcelable {
                     Log.d(LOG_TAG, "TripProcessor: file is empty");
                 }
                 tripData = new TripData();
+                firstStart=true;
             }
             return tripData;
         }

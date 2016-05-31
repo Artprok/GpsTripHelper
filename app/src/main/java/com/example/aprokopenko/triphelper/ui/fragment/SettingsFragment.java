@@ -51,6 +51,8 @@ import butterknife.ButterKnife;
     TextView    curFuelPrice;
     @Bind(R.id.eraseButton)
     ImageButton eraseButton;
+    @Bind(R.id.aboutButton)
+    ImageButton aboutButton;
 
     public static final String LOG_TAG          = "Settings fragment";
     private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
@@ -77,8 +79,17 @@ import butterknife.ButterKnife;
         ButterKnife.bind(this, view);
         context = getActivity();
         setupEraseButton();
+        setupAboutButton();
         setupEditTextFields();
         readDataFromFile();
+    }
+
+    private void setupAboutButton() {
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                UtilMethods.buildAndShowAboutDialog(context);
+            }
+        });
     }
 
     public void setFileEraseListener(FileEraseListener fileEraseListener) {

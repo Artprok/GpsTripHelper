@@ -49,4 +49,15 @@
     <string name="exit_dialog_yes">Так</string>
     <string name="exit_dialog_title">Вихiд</string>
     <string name="exit_dialog_string">Ви впевненi що бажаэте вийти?</string>
+    <string name="aboutTitle">Про автопомiчнiка:</string>
+    <string name="aboutMainText">TripHelper created by Artyr Prokopenko"\n"Version 1.0"\n"Application was created for people         who want track main info about their trips."\n"Main features of this application:"\n"-speedometer"\n"-kilometer         counter"\n"</string>
+    <string name="aboutNegativeButton">Дякую, можливо пiзнiше</string>
+    <string name="aboutRateButton">Круто, хочу оценить!</string>
+    <string name="aboutFeedbackButton">Послать отзыв разработчику</string>
+    <string name="tutorialTitle">Так, бажаю!</string>
+    <string name="tutorialNext">Ще</string>
+    <string name="tutorialInfo">Трип</string>
+    <string name="tutorialNo">Нi, дякую, я вмiю користуватися автопомiчником</string>
+    <string name="tutorialThanks">Я зрозумiв, дякую!</string>
+    <string name="tutorialWantToKnowInfo">Бажаэте узнати як користуватися автопомiчником?</string>
 </resources>
