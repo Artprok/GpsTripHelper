@@ -134,4 +134,5 @@ public class GpsHandler implements LocationListener, com.google.android.gms.loca
         //        setupSpeedObservable(speed);
         //        getMaxSpeedAndSetupObservable(speed);
     }
+
 }

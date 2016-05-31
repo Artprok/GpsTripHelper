@@ -90,7 +90,7 @@ public class UtilMethods {
             }
             return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
         }
-        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: HighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
@@ -118,7 +118,7 @@ public class UtilMethods {
 
     public static String formatFloatDecimalFormat(Float floatToFormat) {
         if (floatToFormat != null) {
-            DecimalFormat df = new DecimalFormat("#####.#");
+            DecimalFormat df = new DecimalFormat("######.#");
             return df.format(floatToFormat);
         }
         else {
@@ -134,7 +134,7 @@ public class UtilMethods {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "formatFloatToIntFormat inUtilMethod: " + floatToFormat);
             }
-            DecimalFormat df = new DecimalFormat("#####");
+            DecimalFormat df = new DecimalFormat("######");
             return df.format(floatToFormat);
         }
         else {

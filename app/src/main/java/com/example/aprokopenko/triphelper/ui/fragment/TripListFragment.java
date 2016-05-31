@@ -106,6 +106,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         fuelSpentView.setText(fuelSpent);
         timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpentOnTrips, res));
         avgSpeedView.setText(avgSpeed);
+        // TODO: 31.05.2016 removeSpeedTicksLabel
         maxSpeedView.setText(maxSpeed);
     }
 
@@ -117,7 +118,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
     @Override public void onDetach() {
         tripData = null;
         trips = null;
-        if(ConstantValues.LOGGING_ENABLED){
+        if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "onDetach: OnDetach");
         }
         super.onDetach();

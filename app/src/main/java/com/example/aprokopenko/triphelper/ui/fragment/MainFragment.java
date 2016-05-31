@@ -25,12 +25,12 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.service.LocationService;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
@@ -424,9 +424,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
         firstStart = savedInstanceState.getBoolean("FirstStart");
         boolean           restoredButtonVisibility = savedInstanceState.getBoolean("ControlButtonVisibility");
-        boolean           restoredStatus         = savedInstanceState.getBoolean("StatusImageState");
-        ArrayList<String> restoredAvgSpeedList    = savedInstanceState.getStringArrayList("AvgSpeedList");
-        TripProcessor     restoredTripProcessor   = savedInstanceState.getParcelable("TripProcessor");
+        boolean           restoredStatus           = savedInstanceState.getBoolean("StatusImageState");
+        ArrayList<String> restoredAvgSpeedList     = savedInstanceState.getStringArrayList("AvgSpeedList");
+        TripProcessor     restoredTripProcessor    = savedInstanceState.getParcelable("TripProcessor");
 
         restoreButtonsVisibility(restoredTripProcessor, restoredButtonVisibility);
         restoreStatus(restoredStatus);
@@ -497,7 +497,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
 
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgSpeedArrayList);
-        // TODO: 12.05.2016 uncomment maxSpeedVal, sppedTick for tests
+        // TODO: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
         //        float maximumSpeed = maxSpeedVal;
         float maximumSpeed = avgSpeedArrayList.size();
 

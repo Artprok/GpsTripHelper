@@ -1,6 +1,8 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -22,11 +24,17 @@ import dagger.Module;
 @Module public class MainActivity extends AppCompatActivity {
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    PowerManager.WakeLock wakeLock;
 
     public static final String LOG_TAG = "MainActivity";
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
+        wakeLock.acquire();
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         MainFragment mainFragment;
@@ -59,6 +67,7 @@ import dagger.Module;
                     .setMessage(getString(R.string.exit_dialog_string))
                     .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
+                            wakeLock.release();
                             f.onDetach();
                             finish();
                             System.exit(0);
