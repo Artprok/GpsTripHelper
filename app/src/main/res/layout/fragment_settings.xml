@@ -53,28 +53,41 @@
             android:id="@+id/curFuelPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/fuelPriceEditText"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@id/fuelPriceEditText"
-            />
+            android:layout_alignBaseline="@+id/fuelPriceEditText"/>
 
         <TextView
             android:id="@+id/curFuelCons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/fuelConsumptionEditText"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@id/fuelConsumptionEditText"
-            />
+            android:layout_alignBaseline="@+id/fuelConsumptionEditText"/>
 
         <TextView
             android:id="@+id/curFuelCapacity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/fuelCapacityEditText"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@id/fuelCapacityEditText"
+            android:layout_alignBaseline="@+id/fuelCapacityEditText"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fuelCapacityEditText"
+            android:id="@+id/measurementUnitLabel"
+            android:textColor="@color/textColor"
+            android:layout_margin="5dp"
+            android:textSize="@dimen/metricPortraitTextSize"
+            android:text="@string/measurementUnitText"/>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/measurmentUnitSpinner"
+            android:layout_margin="5dp"
+            android:layout_alignBaseline="@id/measurementUnitLabel"
+            android:layout_alignParentEnd="true"
+            android:spinnerMode="dialog"
             />
 
     </RelativeLayout>
@@ -88,6 +101,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         />
+
 
 
 </RelativeLayout>

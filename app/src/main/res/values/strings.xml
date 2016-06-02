@@ -122,9 +122,9 @@
 
     <!--TutorialDialog-->
     <string name="tutorialTitle">How to use TripHelper?</string>
-    <string name="tutorialNext">Yes, please tell me how to use it!</string>
-    <string name="tutorialNo">No thanks, I know how to use it!</string>
-    <string name="tutorialThanks">Ok, I got it!</string>
+    <string name="tutorialNext">Yes, please tell me how to use it</string>
+    <string name="tutorialNo">No, thanks</string>
+    <string name="tutorialThanks">Ok, I got it</string>
     <string name="tutorialWantToKnowInfo">Do You want to read a small tutorial to know how to use TripHelper?</string>
     <string name="tutorialInfo">
         Hello! Thanks for using TripHelper, it will do it\'s best for You!
@@ -148,9 +148,19 @@
         Hope you will like TripHelper!
 
     </string>
-
-
     <!--/TutorialDialog-->
+
+    <string name="killometerUnit">km/h</string>
+    <string name="milesUnit">mph</string>
+    <string name="knots">knots</string>
+    <string name="measurementUnitSpinnerTitle">Please chose wanted measurement unit</string>
+    <string name="measurementUnitText">Measurement units</string>
+
+
+    <string name="emailForFeedback" translatable="false">artprok@gmail.com</string>
+    <string name="subjectForFeedback">Feedback for TripHelper</string>
+    <string name="extraTextInFeedback">Dear Dev, I have some sudjestion or problems with your app,</string>
+    <string name="sendWithFeedback">Send email with...?</string>
 
 
 </resources>

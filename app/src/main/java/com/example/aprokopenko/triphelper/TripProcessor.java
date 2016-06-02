@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper;
 
+import android.location.Location;
 import android.content.Context;
 import android.os.Parcelable;
 import android.os.AsyncTask;
@@ -9,10 +10,12 @@ import android.util.Log;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.concurrent.ExecutionException;
 import java.io.ObjectOutputStream;
@@ -22,23 +25,77 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.Date;
 import java.io.File;
 
+import rx.Subscriber;
+
 public class TripProcessor implements Parcelable {
     private static final String LOG_TAG = "TripProcessor";
-    private       boolean          fileIsInWriteMode;
-    private       long             tripStartTime;
-    private       int              currentTripId;
-    private       float            averageSpeed;
-    private       TripData         tripData;
+    private boolean          fileIsInWriteMode;
+    private long             tripStartTime;
+    private int              currentTripId;
+    private float            averageSpeed;
+    private TripData         tripData;
+    private ArrayList<Float> avgSpeedArrayList;
+
     private final Context          context;
     private final ArrayList<Route> routes;
+    private final float            fuelConsFromSettings;
+    private final float            fuelPrice;
+    private final int              fuelCapacity;
 
-    private final float fuelConsFromSettings;
-    private final float fuelPrice;
-    private final int   fuelCapacity;
-    private boolean firstStart;
+    private SpeedChangeListener speedChangeListener;
+
+    private Subscriber<Location> locationSubscriber;
+    private Subscriber<Float>    maxSpeedSubscriber;
+    private Subscriber<Float>    speedSubscriber;
+
+    //todo: tempVal is testing val REMOVE in release!
+    private float[] tempVal = {1};
+
+
+    protected TripProcessor(Parcel in) {
+        fileIsInWriteMode = in.readByte() != 0;
+        tripStartTime = in.readLong();
+        currentTripId = in.readInt();
+        averageSpeed = in.readFloat();
+        tripData = in.readParcelable(TripData.class.getClassLoader());
+        routes = in.createTypedArrayList(Route.CREATOR);
+        tempVal = in.createFloatArray();
+        fuelConsFromSettings = in.readFloat();
+        fuelPrice = in.readFloat();
+        fuelCapacity = in.readInt();
+        context = TripHelperApp.getAppContext();
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
+        dest.writeLong(tripStartTime);
+        dest.writeInt(currentTripId);
+        dest.writeFloat(averageSpeed);
+        dest.writeParcelable(tripData, flags);
+        dest.writeTypedList(routes);
+        dest.writeFloatArray(tempVal);
+        dest.writeFloat(fuelConsFromSettings);
+        dest.writeFloat(fuelPrice);
+        dest.writeInt(fuelCapacity);
+    }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
+        @Override public TripProcessor createFromParcel(Parcel in) {
+            return new TripProcessor(in);
+        }
+
+        @Override public TripProcessor[] newArray(int size) {
+            return new TripProcessor[size];
+        }
+    };
 
     public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
         if (ConstantValues.LOGGING_ENABLED) {
@@ -47,6 +104,7 @@ public class TripProcessor implements Parcelable {
         this.fuelConsFromSettings = fuelConsFromSettings;
         this.fuelPrice = fuelPrice;
         this.fuelCapacity = fuelCapacity;
+        setupSubscribers();
 
 
         fileIsInWriteMode = false;
@@ -60,35 +118,20 @@ public class TripProcessor implements Parcelable {
         }
     }
 
-    protected TripProcessor(Parcel in) {
-        fileIsInWriteMode = in.readByte() != 0;
-        tripStartTime = in.readLong();
-        currentTripId = in.readInt();
-        averageSpeed = in.readFloat();
-        tripData = in.readParcelable(TripData.class.getClassLoader());
-        routes = in.createTypedArrayList(Route.CREATOR);
-        fuelConsFromSettings = in.readFloat();
-        fuelPrice = in.readFloat();
-        fuelCapacity = in.readInt();
-        context = TripHelperApp.getAppContext();
+    public Subscriber<Location> getLocationSubscriber() {
+        return locationSubscriber;
     }
 
-    public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
-        @Override public TripProcessor createFromParcel(Parcel in) {
-            return new TripProcessor(in);
-        }
-
-        @Override public TripProcessor[] newArray(int size) {
-            return new TripProcessor[size];
-        }
-    };
-
-    public boolean getFirstStart(){
-        return firstStart;
+    public Subscriber<Float> getMaxSpeedSubscriber() {
+        return maxSpeedSubscriber;
     }
 
-    public boolean isFileNotInWriteMode() {
-        return !fileIsInWriteMode;
+    public Subscriber<Float> getSpeedSubscriber() {
+        return speedSubscriber;
+    }
+
+    public ArrayList<Float> getAvgSpeedArrayList() {
+        return avgSpeedArrayList;
     }
 
     public ArrayList<Route> getRoutes() {
@@ -97,6 +140,27 @@ public class TripProcessor implements Parcelable {
 
     public TripData getTripData() {
         return tripData;
+    }
+
+    public boolean isFileNotInWriteMode() {
+        return !fileIsInWriteMode;
+    }
+
+    public String getFuelLevel(float fuel, String prefix) {
+        fillGasTank(fuel);
+        String fuelLeftString = getFuelLeftString(prefix);
+        return fuelLeftString;
+    }
+
+    public String getFuelLeftString(String distancePrefix) {
+        float fuelLeftVal = getFuelLeft();
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
+        }
+        writeDataToFile();
+        float distanceToDriveLeft = getDistanceToDriveLeft(fuelLeftVal);
+        return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
+                .formatFloatDecimalFormat(distanceToDriveLeft) + distancePrefix + ")");
     }
 
     public float getFuelLeft() {
@@ -111,7 +175,57 @@ public class TripProcessor implements Parcelable {
         }
     }
 
+    public float getDistanceToDriveLeft(float fuelLeftVal) {
+        if (getTripData() != null) {
+            float avgSpeed = getTripData().getAvgSpeed();
+            if (avgSpeed == 0) {
+                avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
+            }
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings + "avgSped" + avgSpeed);
+            }
+            float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
+            return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100_KM;
+        }
+        else {
+            return 0f;
+        }
+    }
+
+    public void setSpeedChangeListener(SpeedChangeListener speedChangeListener) {
+        this.speedChangeListener = speedChangeListener;
+    }
+
+    public void setAvgSpeedArrayList(ArrayList<Float> avgSpeedArrayList) {
+        this.avgSpeedArrayList = avgSpeedArrayList;
+    }
+
+    public void stopTracking() {
+        ArrayList<Float> avgArrayList = getAvgSpeedArrayList();
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
+            for (float f : avgArrayList) {
+                Log.d(LOG_TAG, "stopTracking: " + f);
+            }
+        }
+
+        float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
+        // TODO: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
+        //        float maximumSpeed = maxSpeedVal;
+        float maximumSpeed = avgArrayList.size();
+
+        updateSpeed(averageSpeed, maximumSpeed);
+        endTrip();
+        setMetricFieldsToTripData(fuelPrice);
+
+        writeDataToFile();
+        if (avgArrayList != null) {
+            avgArrayList.clear();
+        }
+    }
+
     public void startNewTrip() {
+        avgSpeedArrayList = new ArrayList<>();
         Calendar currentCalendarInstance = Calendar.getInstance();
         tripStartTime = currentCalendarInstance.getTime().getTime();
         currentTripId = tripData.getTrips().size();
@@ -178,6 +292,48 @@ public class TripProcessor implements Parcelable {
         writeFileTask.execute(tripData);
     }
 
+    public void setMetricFieldsToTripData(float fuelPriceFromSettings) {
+        final float     startVal             = ConstantValues.START_VALUE;
+        TripData        tripData             = getTripData();
+        float           fuelSpent            = startVal;
+        float           timeSpentForAllTrips = startVal;
+        float           avgSpeedSum          = startVal;
+        float           avgFuelCons          = startVal;
+        float           maxSpeed             = startVal;
+        float           distTravelled        = startVal;
+        float           timeSum              = startVal;
+        ArrayList<Trip> allTrips             = tripData.getTrips();
+        int             tripQuantity         = allTrips.size();
+
+
+        for (Trip trip : allTrips) {
+            fuelSpent = fuelSpent + trip.getFuelSpent();
+            timeSpentForAllTrips = timeSpentForAllTrips + trip.getTimeSpentForTrip();
+            maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
+        }
+
+        for (Trip trip : allTrips) {
+            float multiplier  = (trip.getTimeSpentForTrip() * 100) / timeSpentForAllTrips;
+            float timeForTrip = trip.getTimeSpentForTrip() / 3600000;
+            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * multiplier) / 100;
+            avgSpeedSum = (avgSpeedSum + (trip.getDistanceTravelled() / (timeForTrip)) * timeForTrip);
+            timeSum = timeSum + timeForTrip;
+        }
+
+        avgFuelCons = avgFuelCons / tripQuantity;
+        avgSpeedSum = avgSpeedSum / timeSum;
+        distTravelled = CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeedSum);
+
+        tripData.setMaxSpeed(maxSpeed);
+        tripData.setAvgSpeed(avgSpeedSum);
+        tripData.setTimeSpentOnTrips(timeSpentForAllTrips);
+        tripData.setDistanceTravelled(distTravelled);
+        tripData.setAvgFuelConsumption(avgFuelCons);
+        tripData.setFuelSpent(fuelSpent);
+        tripData.setGasTank(tripData.getGasTank() - fuelSpent);
+        tripData.setMoneyOnFuelSpent(fuelSpent * fuelPriceFromSettings);
+    }
+
 
     private TripData createTripData(ArrayList<Trip> trips, float avgFuelConsumption, float fuelSpent, float distanceTravelled,
                                     float moneyOnFuelSpent, float avgSpeed, float timeSpent, float gasTank, float maxSpeed) {
@@ -215,6 +371,100 @@ public class TripProcessor implements Parcelable {
         return tripData;
     }
 
+    private void setupLocationSubscriber() {
+        locationSubscriber = new Subscriber<Location>() {
+            @Override public void onCompleted() {
+            }
+
+            @Override public void onError(Throwable e) {
+            }
+
+            @Override public void onNext(Location location) {
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "onNext: Location added to route list, thread - " + Thread.currentThread());
+                }
+                addPointToRouteList(location);
+            }
+        };
+    }
+
+    private void addPointToRouteList(Location location) {
+        LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
+        float  speed;
+        // TODO: 10.05.2016 remove debug code
+        if (ConstantValues.DEBUG_MODE) {//debug code for testing
+            Random r = new Random();
+            speed = 0 + tempVal[0];
+            if (speed != 0) {           //speed increment by 5 each tick
+                tempVal[0] += 5;
+            }
+            if (speed > 70) {
+                speed = r.nextInt(200);
+            }
+        }
+        else {
+            speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+        }
+        addRoutePoint(routePoints, speed);
+    }
+
+    private void addRoutePoint(LatLng routePoints, float speed) {
+        Route routePoint = new Route(routePoints, speed);
+        addRoutePoint(routePoint);
+    }
+
+    private void storeSpeedTicks(final float speed) {
+        if (avgSpeedArrayList != null) {
+            avgSpeedArrayList.add(speed);
+        }
+    }
+
+    private void setupMaxSpeedSubscriber() {
+        maxSpeedSubscriber = new Subscriber<Float>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(Float speed) {
+                speedChangeListener.maxSpeedChanged(speed);
+                //                updateMaxSpeed(speed);
+            }
+        };
+    }
+
+    private void setupSpeedSubscriber() {
+        speedSubscriber = new Subscriber<Float>() {
+            @Override public void onCompleted() {
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "complete: Complete?");
+                }
+            }
+
+            @Override public void onError(Throwable e) {
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
+                }
+            }
+
+            @Override public void onNext(final Float speed) {
+                storeSpeedTicks(speed);
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d(LOG_TAG, "onNext: speed in MainFragment - " + speed);
+                }
+                speedChangeListener.speedChanged(speed);
+            }
+        };
+    }
+
+    private void setupSubscribers() {
+        setupSpeedSubscriber();
+        setupLocationSubscriber();
+        setupMaxSpeedSubscriber();
+    }
 
     private void writeTrip(Trip trip, ObjectOutputStream os) {
         trip.writeTrip(os);
@@ -257,22 +507,6 @@ public class TripProcessor implements Parcelable {
     private void updateTripState() {
         Trip trip = tripData.getTrip(currentTripId);
         tripData.updateTrip(trip, currentTripId);
-    }
-
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
-        parcel.writeLong(tripStartTime);
-        parcel.writeInt(currentTripId);
-        parcel.writeFloat(averageSpeed);
-        parcel.writeParcelable(tripData, i);
-        parcel.writeTypedList(routes);
-        parcel.writeFloat(fuelConsFromSettings);
-        parcel.writeFloat(fuelPrice);
-        parcel.writeInt(fuelCapacity);
     }
 
 
@@ -384,7 +618,6 @@ public class TripProcessor implements Parcelable {
                     }
                     is.close();
                     fis.close();
-                    firstStart=false;
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -396,7 +629,6 @@ public class TripProcessor implements Parcelable {
                     Log.d(LOG_TAG, "TripProcessor: file is empty");
                 }
                 tripData = new TripData();
-                firstStart=true;
             }
             return tripData;
         }
@@ -406,6 +638,19 @@ public class TripProcessor implements Parcelable {
             fileIsInWriteMode = false;
         }
     }
+
+    //    protected TripProcessor(Parcel in) {
+    //        fileIsInWriteMode = in.readByte() != 0;
+    //        tripStartTime = in.readLong();
+    //        currentTripId = in.readInt();
+    //        averageSpeed = in.readFloat();
+    //        tripData = in.readParcelable(TripData.class.getClassLoader());
+    //        routes = in.createTypedArrayList(Route.CREATOR);
+    //        fuelConsFromSettings = in.readFloat();
+    //        fuelPrice = in.readFloat();
+    //        fuelCapacity = in.readInt();
+    //
+    //    }
 }
 
 

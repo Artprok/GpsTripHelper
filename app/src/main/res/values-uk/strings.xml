@@ -54,10 +54,18 @@
     <string name="aboutNegativeButton">Дякую, можливо пiзнiше</string>
     <string name="aboutRateButton">Круто, хочу оценить!</string>
     <string name="aboutFeedbackButton">Послать отзыв разработчику</string>
-    <string name="tutorialTitle">Так, бажаю!</string>
-    <string name="tutorialNext">Ще</string>
+    <string name="tutorialTitle">Як користуватися автопомiчником?</string>
+    <string name="tutorialNext">Да, конечно я хочу узнать что делать!</string>
     <string name="tutorialInfo">Трип</string>
     <string name="tutorialNo">Нi, дякую, я вмiю користуватися автопомiчником</string>
     <string name="tutorialThanks">Я зрозумiв, дякую!</string>
     <string name="tutorialWantToKnowInfo">Бажаэте узнати як користуватися автопомiчником?</string>
+    <string name="killometerUnit">км/год</string>
+    <string name="knots">вузлiв</string>
+    <string name="measurementUnitSpinnerTitle">Пожалуйста выберите единицы измерения скорости</string>
+    <string name="milesUnit">миль/год</string>
+    <string name="measurementUnitText">Единицы измерения</string>
+    <string name="extraTextInFeedback">Tr</string>
+    <string name="sendWithFeedback">Tr</string>
+    <string name="subjectForFeedback">Tr</string>
 </resources>

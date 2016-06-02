@@ -1,14 +1,18 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.support.annotation.Nullable;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.text.TextWatcher;
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.text.TextUtils;
+import android.widget.Spinner;
 import android.view.ViewGroup;
 import android.text.Editable;
 import android.os.AsyncTask;
@@ -16,9 +20,10 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.listener.FileEraseListener;
+import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.R;
 
 import java.io.ObjectOutputStream;
@@ -28,12 +33,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.File;
 
-
 import javax.inject.Singleton;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 
 @Singleton public class SettingsFragment extends Fragment {
 
@@ -53,6 +56,8 @@ import butterknife.ButterKnife;
     ImageButton eraseButton;
     @Bind(R.id.aboutButton)
     ImageButton aboutButton;
+    @Bind(R.id.measurmentUnitSpinner)
+    Spinner     measurementUnitSpinner;
 
     public static final String LOG_TAG          = "Settings fragment";
     private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
@@ -60,6 +65,7 @@ import butterknife.ButterKnife;
     private             float  fuelCost         = ConstantValues.FUEL_COST_DEFAULT;
     private Context           context;
     private FileEraseListener fileEraseListener;
+    private SharedPreferences preferences;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -77,12 +83,60 @@ import butterknife.ButterKnife;
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        preferences = TripHelperApp.getSharedPreferences();
         context = getActivity();
         setupEraseButton();
         setupAboutButton();
         setupEditTextFields();
         readDataFromFile();
+        setupSpinner();
     }
+
+    private void setupSpinner() {
+        final String kmh   = getString(R.string.killometerUnit);
+        final String mph   = getString(R.string.milesUnit);
+        final String knots = getString(R.string.knots);
+        String       title = getString(R.string.measurementUnitSpinnerTitle);
+
+        String[]             data    = {kmh, mph, knots};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        measurementUnitSpinner.setAdapter(adapter);
+        measurementUnitSpinner.setPrompt(title);
+
+        measurementUnitSpinner.setSelection(preferences.getInt("measurementUnitPosition", 0));
+        measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setMeasurementUnit(position, kmh, mph, knots);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+    }
+
+    private void setMeasurementUnit(int position, String kmh, String mph, String knots) {
+        SharedPreferences.Editor editor = preferences.edit();
+        switch (position) {
+            case 0:
+                editor.putString("measurementUnit", kmh);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+            case 1:
+                editor.putString("measurementUnit", mph);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+            case 2:
+                editor.putString("measurementUnit", knots);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+        }
+    }
+
 
     private void setupAboutButton() {
         aboutButton.setOnClickListener(new View.OnClickListener() {

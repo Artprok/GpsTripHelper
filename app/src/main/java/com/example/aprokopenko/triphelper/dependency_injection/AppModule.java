@@ -13,6 +13,7 @@ import dagger.Module;
 
     public AppModule(Application application) {
         context = application.getApplicationContext();
+
     }
 
     @Provides public Context provideApplicationContext() {
@@ -22,5 +23,4 @@ import dagger.Module;
     @Provides public LocationManager provideLocationManager() {
         return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
-
 }

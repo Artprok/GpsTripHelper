@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -11,9 +12,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalculationUtils {
+    private static float measurementUnitMultiplier = 3.6f;   //default val for KM/H
 
     public static float getSpeedInKilometerPerHour(float speed) {
-        return (speed * ConstantValues.KILOMETER_PER_HOUR_MULTIPLIER);
+        return (speed * measurementUnitMultiplier);
     }
 
     public static float calcMoneySpent(float fuelSpent, float fuelCost) {
@@ -113,6 +115,22 @@ public class CalculationUtils {
             result = hours + minutes / 60 + seconds / 3600;
         }
         return result;
+    }
+
+    public static void setMeasurementMultiplier(int position) {
+        float result = 3.6f;
+        switch (position) {
+            case 0:
+                result = 3.6f;
+                break;
+            case 1:
+                result = 2.23f;
+                break;
+            case 2:
+                result = 1.94f;
+                break;
+        }
+        measurementUnitMultiplier = result;
     }
 
     private static int getSecondsFromMills(float timeInMills) {

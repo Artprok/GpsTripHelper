@@ -96,16 +96,49 @@
         -Посмотреть сколько денег Вы тратите на топливо.
         "\n"
         -Посмотреть сколько времени Вы находились в движении, а сколько простояли в пробке.
+        "\n"
+        "\n"
+        Надеемся, что Вам понравился Автопомощник, оцените пожалуйста его на GooglePlay, чтобы помочь нам сделать его ещё лучше!
     </string>
 
     <string name="aboutNegativeButton">Cпасибо, может быть позже</string>
     <string name="aboutRateButton">Круто, хочу оценить!</string>
-    <string name="aboutFeedbackButton">Послать отзыв разработчику</string>
-    <string name="tutorialTitle">Да, конечно!</string>
-    <string name="tutorialNext">Ещё</string>
-    <string name="tutorialInfo">Трип</string>
-    <string name="tutorialNo">Нет, спасибо, я умею пользоваться автомопощником!</string>
-    <string name="tutorialThanks">Я понял, спасибо!</string>
+    <string name="aboutFeedbackButton">Написать отзыв разработчику</string>
+    <string name="tutorialTitle">Как пользовать автопомощником?</string>
+    <string name="tutorialNext">Да, конечно</string>
+    <string name="tutorialInfo">
+       Спасибо, что пользуетесь Автопомощником, он постарается сделать ваши поездки максимально комфортными!
+        "\n"
+        "\n"
+        Чтобы Автопомощник работал корректно, необходимо указать несколько параметров в настройках(значок в виде шестерёнки):
+        "\n"
+         "\n"
+        -Ёмкость бака
+        "\n"
+        -Средний расход топлива
+        "\n"
+        -Цену на топливо
+        "\n"
+        "\n"
+        Затем, всё что Вам нужно, это включить GPS и нажимать кнопку "Старт", каждый раз когда вы выезжаете куда-то и кнопку "Стоп" когда
+        добераетесь до места назначения.
+        "\n"
+        "\n"
+        Настоятельно рекомендуется подключить телефон к зарядному устройству, во избежание быстрой разрядки
+        "\n"
+        "\n"
+        Надеюсь, Вам понравится пользоваться Автопомощником!
+    </string>
+    <string name="tutorialNo">Нет, спасибо</string>
+    <string name="tutorialThanks">Я понял, спасибо</string>
     <string name="tutorialWantToKnowInfo">Хотите узнать как пользоваться автопомощником?</string>
+    <string name="killometerUnit">км/ч</string>
+    <string name="knots">узлов</string>
+    <string name="measurementUnitSpinnerTitle">Пожалуйста выберите единицы измерения скорости</string>
+    <string name="milesUnit">миль/ч</string>
+    <string name="measurementUnitText">Единицы измерения</string>
+    <string name="extraTextInFeedback">Tr</string>
+    <string name="sendWithFeedback">Tr</string>
+    <string name="subjectForFeedback">Tr</string>
 
 </resources>

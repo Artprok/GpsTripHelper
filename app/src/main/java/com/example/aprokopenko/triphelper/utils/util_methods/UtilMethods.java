@@ -1,7 +1,10 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
 
-import android.provider.Settings;
+import android.content.ActivityNotFoundException;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ActivityCompat;
@@ -10,6 +13,7 @@ import android.location.LocationManager;
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
+import android.provider.Settings;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
@@ -76,7 +80,7 @@ public class UtilMethods {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: HighwayLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
-            return fuelCons + ConstantValues.CONSUMPTION_HIGHWAY_TRAFFIC_ADD;
+            return fuelCons + ConstantValues.CONSUMPTION_VERY_LOW_ADD;
         }
         else if (avgSpeed <= ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
             if (ConstantValues.LOGGING_ENABLED) {
@@ -86,11 +90,17 @@ public class UtilMethods {
         }
         else if (avgSpeed <= ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
             if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "getFuelConsumptionLevel: NormalLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
+            }
+            return fuelCons + ConstantValues.CONSUMPTION_NORMAL_TRAFFIC_ADD;
+        }
+        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: MediumLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
         }
-        else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
+        else if (avgSpeed <= ConstantValues.HIGH_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: HighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
@@ -213,14 +223,16 @@ public class UtilMethods {
     }
 
     public static void buildAndShowAboutDialog(final Context context) {
+        final Resources                                  res     = context.getResources();
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.about);
         builder.setTitle(context.getString(R.string.aboutTitle));
-        builder.setMessage(R.string.aboutMainText).setCancelable(false)
+        builder.setMessage(R.string.aboutMainText).setCancelable(true)
                 .setPositiveButton(R.string.aboutRateButton, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
+                        // FIXME: 02.06.2016 add rateGooglePlay here!
+                        rateApp(context);
                     }
                 }).setNegativeButton(R.string.aboutNegativeButton, new DialogInterface.OnClickListener() {
             @Override
@@ -230,19 +242,41 @@ public class UtilMethods {
         }).setNeutralButton(R.string.aboutFeedbackButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-
-
+                Intent emailFeedback = new Intent(Intent.ACTION_SEND);
+                emailFeedback.setType("text/email");
+                emailFeedback.putExtra(Intent.EXTRA_EMAIL, new String[]{res.getString(R.string.emailForFeedback)});
+                emailFeedback.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.subjectForFeedback));
+                emailFeedback.putExtra(Intent.EXTRA_TEXT, res.getString(R.string.extraTextInFeedback) + "");
+                try {
+                    context.startActivity(Intent.createChooser(emailFeedback, res.getString(R.string.sendWithFeedback)));
+                }
+                catch (android.content.ActivityNotFoundException exception) {
+                    Log.d(LOG_TAG, "onClick: Nothing to send email :(");
+                    UtilMethods.showToast(context, "No email clients installed on device!");
+                }
+                context.startActivity(Intent.createChooser(emailFeedback, "Send Feedback:"));
             }
         });
         final android.support.v7.app.AlertDialog alert = builder.create();
         alert.show();
     }
 
+    public static void rateApp(Context context) {
+        try {
+            Intent rateIntent = rateIntentForUrl("market://details", context);
+            context.startActivity(rateIntent);
+        }
+        catch (ActivityNotFoundException e) {
+            Intent rateIntent = rateIntentForUrl("http://play.google.com/store/apps/details", context);
+            context.startActivity(rateIntent);
+        }
+    }
+
     public static void firstStartTutorialDialog(final Context context) {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.how_to_use);
         builder.setTitle(context.getString(R.string.tutorialTitle));
-        builder.setMessage(R.string.tutorialWantToKnowInfo).setCancelable(false)
+        builder.setMessage(R.string.tutorialWantToKnowInfo).setCancelable(true)
                 .setPositiveButton(R.string.tutorialNext, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
@@ -262,7 +296,7 @@ public class UtilMethods {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.how_to_use);
         builder.setTitle(context.getString(R.string.tutorialTitle));
-        builder.setMessage(R.string.tutorialInfo).setCancelable(false)
+        builder.setMessage(R.string.tutorialInfo).setCancelable(true)
                 .setPositiveButton(R.string.tutorialThanks, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
@@ -271,5 +305,19 @@ public class UtilMethods {
                 });
         final android.support.v7.app.AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private static Intent rateIntentForUrl(String url, Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, context.getPackageName())));
+        int    flags  = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+        if (Build.VERSION.SDK_INT >= 21) {
+            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+        }
+        else {
+            //noinspection deprecation
+            flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+        }
+        intent.addFlags(flags);
+        return intent;
     }
 }
