@@ -251,10 +251,9 @@ public class UtilMethods {
                     context.startActivity(Intent.createChooser(emailFeedback, res.getString(R.string.sendWithFeedback)));
                 }
                 catch (android.content.ActivityNotFoundException exception) {
-                    Log.d(LOG_TAG, "onClick: Nothing to send email :(");
+                    Log.e(LOG_TAG, "onClick: Nothing to send email :(");
                     UtilMethods.showToast(context, "No email clients installed on device!");
                 }
-                context.startActivity(Intent.createChooser(emailFeedback, "Send Feedback:"));
             }
         });
         final android.support.v7.app.AlertDialog alert = builder.create();

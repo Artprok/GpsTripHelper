@@ -27,7 +27,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="61dp"
             android:hint="@string/fuel_price"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             />
 
         <EditText
@@ -37,7 +37,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/fuelPriceEditText"
             android:hint="@string/fuel_consumption"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             />
 
         <EditText

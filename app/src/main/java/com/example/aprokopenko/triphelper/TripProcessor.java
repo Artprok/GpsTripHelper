@@ -42,9 +42,9 @@ public class TripProcessor implements Parcelable {
 
     private final Context          context;
     private final ArrayList<Route> routes;
-    private final float            fuelConsFromSettings;
-    private final float            fuelPrice;
-    private final int              fuelCapacity;
+    private       float            fuelConsFromSettings;
+    private       float            fuelPrice;
+    private       int              fuelCapacity;
 
     private SpeedChangeListener speedChangeListener;
 
@@ -105,8 +105,6 @@ public class TripProcessor implements Parcelable {
         this.fuelPrice = fuelPrice;
         this.fuelCapacity = fuelCapacity;
         setupSubscribers();
-
-
         fileIsInWriteMode = false;
         routes = new ArrayList<>();
         this.context = context;
@@ -116,6 +114,18 @@ public class TripProcessor implements Parcelable {
             }
             tripData = readDataFromFile();
         }
+    }
+
+    public void setFuelCapacity(int fuelCapacity) {
+        this.fuelCapacity = fuelCapacity;
+    }
+
+    public void setFuelConsFromSettings(float fuelConsFromSettings) {
+        this.fuelConsFromSettings = fuelConsFromSettings;
+    }
+
+    public void setFuelPrice(float fuelPrice) {
+        this.fuelPrice = fuelPrice;
     }
 
     public Subscriber<Location> getLocationSubscriber() {
@@ -269,12 +279,13 @@ public class TripProcessor implements Parcelable {
         routes.add(routePoint);
     }
 
-    public void fillGasTank(float fuel) {
+    private void fillGasTank(float fuel) {
         if (tripData != null) {
             float gasTank = tripData.getGasTank();
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
             }
+            Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
             if (gasTank + fuel <= fuelCapacity) {
                 tripData.setGasTank(gasTank + fuel);
                 CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()

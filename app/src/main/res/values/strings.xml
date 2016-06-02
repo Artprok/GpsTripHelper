@@ -146,21 +146,22 @@
         "\n"
         "\n"
         Hope you will like TripHelper!
-
     </string>
     <!--/TutorialDialog-->
 
+    <!--MeasurementsUnit-->
     <string name="killometerUnit">km/h</string>
     <string name="milesUnit">mph</string>
     <string name="knots">knots</string>
     <string name="measurementUnitSpinnerTitle">Please chose wanted measurement unit</string>
     <string name="measurementUnitText">Measurement units</string>
+    <!--/MeasurementsUnit-->
 
-
+    <!--Feedback-->
     <string name="emailForFeedback" translatable="false">artprok@gmail.com</string>
     <string name="subjectForFeedback">Feedback for TripHelper</string>
     <string name="extraTextInFeedback">Dear Dev, I have some sudjestion or problems with your app,</string>
-    <string name="sendWithFeedback">Send email with...?</string>
-
+    <string name="sendWithFeedback">Send email with…?</string>
+    <!--/Feedback-->
 
 </resources>

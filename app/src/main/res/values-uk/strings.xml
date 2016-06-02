@@ -65,7 +65,7 @@
     <string name="measurementUnitSpinnerTitle">Пожалуйста выберите единицы измерения скорости</string>
     <string name="milesUnit">миль/год</string>
     <string name="measurementUnitText">Единицы измерения</string>
-    <string name="extraTextInFeedback">Tr</string>
-    <string name="sendWithFeedback">Tr</string>
-    <string name="subjectForFeedback">Tr</string>
+    <string name="sendWithFeedback">Послати email з помiччю...?</string>
+    <string name="subjectForFeedback">Вiдкуг про Автопомiчника</string>
+    <string name="extraTextInFeedback">Добрый день, у меня возникли некоторые проблемы с приложением или у меня есть едеи как сделать его лучше</string>
 </resources>

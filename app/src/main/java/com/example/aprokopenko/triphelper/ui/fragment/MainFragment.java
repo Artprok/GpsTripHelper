@@ -183,7 +183,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         else {
             fileErasedFlag = false;
         }
+        setInternalToTripProcessor();
         super.onResume();
+    }
+
+    private void setInternalToTripProcessor() {
+        getInternalSettings();
+        tripProcessor.setFuelCapacity(fuelCapacityFromSettings);
+        tripProcessor.setFuelConsFromSettings(fuelConsFromSettings);
+        tripProcessor.setFuelPrice(fuelPriceFromSettings);
     }
 
     @Override public void onDetach() {
@@ -670,18 +678,20 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 catch (IOException e) {
                     e.printStackTrace();
                 }
+                return true;
             }
             else {
                 fuelConsFromSettings = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
                 fuelPriceFromSettings = ConstantValues.FUEL_COST_DEFAULT;
                 fuelCapacityFromSettings = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
-                return true;
+                return false;
             }
-            return true;
         }
 
         @Override protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
+            if (result) {
+                super.onPostExecute(result);
+            }
         }
     }
 
