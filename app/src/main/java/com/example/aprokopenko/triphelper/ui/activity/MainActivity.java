@@ -1,19 +1,19 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.content.Context;
+import android.os.PowerManager;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.R;
 
