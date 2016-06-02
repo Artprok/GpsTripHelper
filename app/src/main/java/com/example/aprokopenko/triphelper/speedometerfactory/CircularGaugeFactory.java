@@ -1,9 +1,9 @@
 package com.example.aprokopenko.triphelper.speedometerfactory;
 
+import android.support.annotation.Nullable;
 import android.graphics.PointF;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 
 import com.example.aprokopenko.triphelper.utils.settings.GaugeFactorySettings;
 import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
@@ -20,9 +20,9 @@ public class CircularGaugeFactory {
     public CircularGaugeFactory() {
     }
 
-    public SfCircularGauge getConfiguredSpeedometerGauge(Context context,String title) {
+    public SfCircularGauge getConfiguredSpeedometerGauge(Context context, String title) {
         SfCircularGauge speedometer = new SfCircularGauge(context);
-        configureSpeedometer(speedometer,title);
+        configureSpeedometer(speedometer, title);
         return speedometer;
     }
 
@@ -123,9 +123,9 @@ public class CircularGaugeFactory {
         scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
     }
 
-    private void configureSpeedometer(SfCircularGauge gauge,String title) {
+    private void configureSpeedometer(SfCircularGauge gauge, String title) {
         CircularScale circularScale = new CircularScale();
-        setHeader(gauge,title);
+        setHeader(gauge, title);
 
         ArrayList<CircularRange>   circularRangeArrayList   = setupRanges(circularScale);
         ArrayList<CircularPointer> circularPointerArrayList = setupPointer();
@@ -137,10 +137,10 @@ public class CircularGaugeFactory {
     private void setHeader(SfCircularGauge gauge, @Nullable String title) {
         ArrayList<Header> gaugeHeaders        = new ArrayList<>();
         Header            circularGaugeHeader = new Header();
-        if(title==null){
+        if (title == null) {
             circularGaugeHeader.setText(GaugeFactorySettings.speedometerHeaderText);
         }
-        else{
+        else {
             circularGaugeHeader.setText(title);
         }
 

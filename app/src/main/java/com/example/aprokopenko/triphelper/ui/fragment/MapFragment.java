@@ -97,6 +97,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         context = null;
     }
 
+
     public void setRoutes(ArrayList<Route> routes) {
         this.routes = routes;
     }
@@ -116,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         return previousLoc;
     }
+
 
     private void setPreviousLocationPoint(LatLng previousLocationPoint) {
         previousLocationFromData = previousLocationPoint;

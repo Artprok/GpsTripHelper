@@ -238,23 +238,6 @@ public class TripProcessor implements Parcelable {
         return tripData.getTrip(currentTripId);
     }
 
-    private Trip readTrip(ObjectInputStream is) {
-        Trip trip = new Trip();
-        trip = trip.readTrip(is);
-        return trip;
-    }
-
-    private TripData readDataFromFile() {
-        ReadFileTask readFileTask = new ReadFileTask();
-        try {
-            tripData = readFileTask.execute(ConstantValues.FILE_NAME).get();
-        }
-        catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return tripData;
-    }
-
     private float getDistanceToDriveLeft(float fuelLeftVal) {
         if (getTripData() != null) {
             float avgSpeed = getTripData().getAvgSpeed();
@@ -282,6 +265,23 @@ public class TripProcessor implements Parcelable {
         else {
             return ConstantValues.START_VALUE; // empty fuel tank
         }
+    }
+
+    private TripData readDataFromFile() {
+        ReadFileTask readFileTask = new ReadFileTask();
+        try {
+            tripData = readFileTask.execute(ConstantValues.FILE_NAME).get();
+        }
+        catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return tripData;
+    }
+
+    private Trip readTrip(ObjectInputStream is) {
+        Trip trip = new Trip();
+        trip = trip.readTrip(is);
+        return trip;
     }
 
 
