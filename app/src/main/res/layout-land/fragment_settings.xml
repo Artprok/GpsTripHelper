@@ -83,7 +83,7 @@
             android:textSize="@dimen/metricPortraitTextSize"/>
 
         <Spinner
-            android:id="@+id/measurmentUnitSpinner"
+            android:id="@+id/measurementUnitSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/measurementUnitLabel"

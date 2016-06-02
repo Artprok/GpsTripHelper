@@ -260,7 +260,7 @@ public class UtilMethods {
         alert.show();
     }
 
-    public static void rateApp(Context context) {
+    private static void rateApp(Context context) {
         try {
             Intent rateIntent = rateIntentForUrl("market://details", context);
             context.startActivity(rateIntent);

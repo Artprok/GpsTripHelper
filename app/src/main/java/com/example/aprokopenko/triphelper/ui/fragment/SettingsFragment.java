@@ -56,7 +56,7 @@ import butterknife.ButterKnife;
     ImageButton eraseButton;
     @Bind(R.id.aboutButton)
     ImageButton aboutButton;
-    @Bind(R.id.measurmentUnitSpinner)
+    @Bind(R.id.measurementUnitSpinner)
     Spinner     measurementUnitSpinner;
 
     public static final String LOG_TAG          = "Settings fragment";
@@ -93,7 +93,7 @@ import butterknife.ButterKnife;
     }
 
     private void setupSpinner() {
-        final String kmh   = getString(R.string.killometerUnit);
+        final String kmh   = getString(R.string.kilometreUnit);
         final String mph   = getString(R.string.milesUnit);
         final String knots = getString(R.string.knots);
         String       title = getString(R.string.measurementUnitSpinnerTitle);

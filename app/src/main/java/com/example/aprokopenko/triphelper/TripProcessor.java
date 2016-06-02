@@ -56,7 +56,7 @@ public class TripProcessor implements Parcelable {
     private float[] tempVal = {1};
 
 
-    protected TripProcessor(Parcel in) {
+    private TripProcessor(Parcel in) {
         fileIsInWriteMode = in.readByte() != 0;
         tripStartTime = in.readLong();
         currentTripId = in.readInt();
@@ -158,8 +158,7 @@ public class TripProcessor implements Parcelable {
 
     public String getFuelLevel(float fuel, String prefix) {
         fillGasTank(fuel);
-        String fuelLeftString = getFuelLeftString(prefix);
-        return fuelLeftString;
+        return getFuelLeftString(prefix);
     }
 
     public String getFuelLeftString(String distancePrefix) {
@@ -173,7 +172,7 @@ public class TripProcessor implements Parcelable {
                 .formatFloatDecimalFormat(distanceToDriveLeft) + distancePrefix + ")");
     }
 
-    public float getFuelLeft() {
+    private float getFuelLeft() {
         if (tripData != null) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "getFuelLeft: " + tripData.getGasTank());
@@ -185,7 +184,7 @@ public class TripProcessor implements Parcelable {
         }
     }
 
-    public float getDistanceToDriveLeft(float fuelLeftVal) {
+    private float getDistanceToDriveLeft(float fuelLeftVal) {
         if (getTripData() != null) {
             float avgSpeed = getTripData().getAvgSpeed();
             if (avgSpeed == 0) {
@@ -227,11 +226,8 @@ public class TripProcessor implements Parcelable {
         updateSpeed(averageSpeed, maximumSpeed);
         endTrip();
         setMetricFieldsToTripData(fuelPrice);
-
         writeDataToFile();
-        if (avgArrayList != null) {
-            avgArrayList.clear();
-        }
+        avgArrayList.clear();
     }
 
     public void startNewTrip() {
@@ -245,7 +241,7 @@ public class TripProcessor implements Parcelable {
         tripData.addTrip(trip);
     }
 
-    public void endTrip() {
+    private void endTrip() {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "endTrip: end trip called");
         }
@@ -266,14 +262,14 @@ public class TripProcessor implements Parcelable {
         setTripFieldsToStartState();
     }
 
-    public void updateSpeed(float avgSpeed, float maxSpd) {
+    private void updateSpeed(float avgSpeed, float maxSpd) {
         averageSpeed = avgSpeed;
         Trip trip = tripData.getTrip(currentTripId);
         trip.setAvgSpeed(averageSpeed);
         trip.setMaxSpeed(maxSpd);
     }
 
-    public void addRoutePoint(Route routePoint) {
+    private void addRoutePoint(Route routePoint) {
         Trip trip = tripData.getTrip(currentTripId);
         trip.setRoute(routes);
         routes.add(routePoint);
@@ -285,7 +281,6 @@ public class TripProcessor implements Parcelable {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
             }
-            Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
             if (gasTank + fuel <= fuelCapacity) {
                 tripData.setGasTank(gasTank + fuel);
                 CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
@@ -298,12 +293,12 @@ public class TripProcessor implements Parcelable {
         }
     }
 
-    public void writeDataToFile() {
+    private void writeDataToFile() {
         WriteFileTask writeFileTask = new WriteFileTask();
         writeFileTask.execute(tripData);
     }
 
-    public void setMetricFieldsToTripData(float fuelPriceFromSettings) {
+    private void setMetricFieldsToTripData(float fuelPriceFromSettings) {
         final float     startVal             = ConstantValues.START_VALUE;
         TripData        tripData             = getTripData();
         float           fuelSpent            = startVal;

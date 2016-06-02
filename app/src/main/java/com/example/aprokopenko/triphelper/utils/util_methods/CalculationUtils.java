@@ -2,7 +2,6 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.annotation.Nullable;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -100,7 +99,7 @@ public class CalculationUtils {
     }
 
 
-    public static float getTimeFromMills(float timeInMills) {
+    private static float getTimeFromMills(float timeInMills) {
         float result;
         float seconds = getSecondsFromMills(timeInMills);
         float minutes = getMinutesFromMills(timeInMills);

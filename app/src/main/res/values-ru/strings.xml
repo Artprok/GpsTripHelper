@@ -142,7 +142,7 @@
     <!--/TutorialDialog-->
 
     <!--MeasurementUnits-->
-    <string name="killometerUnit">км/ч</string>
+    <string name="kilometreUnit">км/ч</string>
     <string name="knots">узлов</string>
     <string name="measurementUnitSpinnerTitle">Пожалуйста выберите единицы измерения скорости</string>
     <string name="milesUnit">миль/ч</string>

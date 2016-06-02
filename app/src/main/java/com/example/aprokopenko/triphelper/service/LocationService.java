@@ -25,8 +25,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private LocationRequest                                  locationRequest;
     private GoogleApiClient                                  googleApiClient;
     private GpsHandler                                       gpsHandler;
-    //    private LocationListener                                 locationListener;
-
 
     public GpsHandler getGpsHandler() {
         return gpsHandler;
@@ -73,35 +71,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
         googleApiClient.connect();
-
         return START_STICKY;
-        //        // TODO: 13.05.2016 LocationListener on LocationManager
-        //                locationListener = gpsHandler;
-        //                LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context
-        // .LOCATION_SERVICE);
-        //                android.location.LocationListener locationListener = new android.location.LocationListener() {
-        //                    @Override public void onLocationChanged(Location location) {
-        //                        LocationService.this.locationListener.locationChanged(location);
-        //                    }
-        //
-        //                    @Override public void onStatusChanged(String provider, int status, Bundle extras) {
-        //
-        //                    }
-        //
-        //                    @Override public void onProviderEnabled(String provider) {
-        //
-        //                    }
-        //
-        //                    @Override public void onProviderDisabled(String provider) {
-        //
-        //                    }
-        //                };
-        //                UtilMethods.checkPermission(getApplicationContext());
-        //                locationManager
-        //                        .requestLocationUpdates(LocationManager.GPS_PROVIDER, ConstantValues.MIN_UPDATE_TIME, ConstantValues
-        //         .MIN_UPDATE_DISTANCE,
-        //                                locationListener);
-        // TODO: 13.05.2016 locManager based on gps
     }
 
     @Override public void onCreate() {
@@ -119,7 +89,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationRequest = null;
         gpsHandler = null;
         super.onDestroy();
-        //        locationListener = null;
     }
 
     private LocationRequest setupLocRequest() {
