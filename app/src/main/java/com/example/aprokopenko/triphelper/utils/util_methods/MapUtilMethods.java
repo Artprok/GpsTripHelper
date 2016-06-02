@@ -33,35 +33,6 @@ public class MapUtilMethods {
         return route;
     }
 
-    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
-        int color = Color.BLACK;
-        if (speed != null) {
-            color = choseColorDependOnSpeed(speed);
-        }
-        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
-    }
-
-    public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
-        if (location != null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))     // Sets the center of the map_icon to location user
-                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                            // Sets the zoom
-                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                      // Sets the orientation of the camera to east
-                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                            // Sets the tilt of the camera to 30 degrees
-                    .build();                                                                // Creates a CameraPosition from the builder
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        }
-        if (position != null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(position)                                                       // Sets the center of the map_icon to location user
-                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                           // Sets the zoom
-                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                     // Sets the orientation of the camera to east
-                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                           // Sets the tilt of the camera to 30 degrees
-                    .build();                                                               // Creates a CameraPosition from the builder
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        }
-    }
-
     public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
         LatLng previousLocation;
         if (size > 1 && currentIndex > 1) {
@@ -89,6 +60,37 @@ public class MapUtilMethods {
             result = true;
         }
         return result;
+    }
+
+
+    public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
+        if (location != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(),
+                    location.getLongitude()))     // Sets the center of the map_icon to location user
+                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                            // Sets the zoom
+                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                      // Sets the orientation of the camera to east
+                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                            // Sets the tilt of the camera to 30 degrees
+                    .build();                                                                // Creates a CameraPosition from the builder
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+        if (position != null) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(position)                                                       // Sets the center of the map_icon to
+                    // location user
+                    .zoom(GoogleMapsSettings.googleMapCameraZoom)                           // Sets the zoom
+                    .bearing(GoogleMapsSettings.googleMapCameraBearing)                     // Sets the orientation of the camera to east
+                    .tilt(GoogleMapsSettings.googleMapCameraTilt)                           // Sets the tilt of the camera to 30 degrees
+                    .build();                                                               // Creates a CameraPosition from the builder
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+    }
+
+    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
+        int color = Color.BLACK;
+        if (speed != null) {
+            color = choseColorDependOnSpeed(speed);
+        }
+        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
     }
 
 

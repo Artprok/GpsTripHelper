@@ -13,6 +13,7 @@ import java.util.Calendar;
 public class CalculationUtils {
     private static float measurementUnitMultiplier = 3.6f;   //default val for KM/H
 
+
     public static float getSpeedInKilometerPerHour(float speed) {
         return (speed * measurementUnitMultiplier);
     }
@@ -98,24 +99,6 @@ public class CalculationUtils {
         return endTime - tripStartTime;
     }
 
-
-    private static float getTimeFromMills(float timeInMills) {
-        float result;
-        float seconds = getSecondsFromMills(timeInMills);
-        float minutes = getMinutesFromMills(timeInMills);
-        float hours   = getHoursFromMills(timeInMills);
-        if (hours == 0) {
-            result = minutes / 60 + seconds / 3600;
-            if (minutes == 0) {
-                result = seconds / 3600;
-            }
-        }
-        else {
-            result = hours + minutes / 60 + seconds / 3600;
-        }
-        return result;
-    }
-
     public static void setMeasurementMultiplier(int position) {
         float result = 3.6f;
         switch (position) {
@@ -132,16 +115,34 @@ public class CalculationUtils {
         measurementUnitMultiplier = result;
     }
 
-    private static int getSecondsFromMills(float timeInMills) {
-        return (int) (timeInMills / 1000) % 60;
+
+    private static int getHoursFromMills(float timeInMills) {
+        return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
     }
 
     private static int getMinutesFromMills(float timeInMills) {
         return (int) ((timeInMills / (1000 * 60)) % 60);
     }
 
-    private static int getHoursFromMills(float timeInMills) {
-        return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
+    private static int getSecondsFromMills(float timeInMills) {
+        return (int) (timeInMills / 1000) % 60;
+    }
+
+    private static float getTimeFromMills(float timeInMills) {
+        float result;
+        float seconds = getSecondsFromMills(timeInMills);
+        float minutes = getMinutesFromMills(timeInMills);
+        float hours   = getHoursFromMills(timeInMills);
+        if (hours == 0) {
+            result = minutes / 60 + seconds / 3600;
+            if (minutes == 0) {
+                result = seconds / 3600;
+            }
+        }
+        else {
+            result = hours + minutes / 60 + seconds / 3600;
+        }
+        return result;
     }
 }
 

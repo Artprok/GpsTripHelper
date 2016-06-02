@@ -59,13 +59,14 @@ import butterknife.ButterKnife;
     @Bind(R.id.measurementUnitSpinner)
     Spinner     measurementUnitSpinner;
 
-    public static final String LOG_TAG          = "Settings fragment";
-    private             int    fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
-    private             float  fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
-    private             float  fuelCost         = ConstantValues.FUEL_COST_DEFAULT;
-    private Context           context;
+    public static final String LOG_TAG = "Settings fragment";
+
+    private int   fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
+    private float fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
+    private float fuelCost         = ConstantValues.FUEL_COST_DEFAULT;
     private FileEraseListener fileEraseListener;
     private SharedPreferences preferences;
+    private Context           context;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -92,6 +93,40 @@ import butterknife.ButterKnife;
         setupSpinner();
     }
 
+
+    public void setFileEraseListener(FileEraseListener fileEraseListener) {
+        this.fileEraseListener = fileEraseListener;
+    }
+
+    private void setMeasurementUnit(int position, String kmh, String mph, String knots) {
+        SharedPreferences.Editor editor = preferences.edit();
+        switch (position) {
+            case 0:
+                editor.putString("measurementUnit", kmh);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+            case 1:
+                editor.putString("measurementUnit", mph);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+            case 2:
+                editor.putString("measurementUnit", knots);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+        }
+    }
+
+    private void setupAboutButton() {
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                UtilMethods.buildAndShowAboutDialog(context);
+            }
+        });
+    }
+
     private void setupSpinner() {
         final String kmh   = getString(R.string.kilometreUnit);
         final String mph   = getString(R.string.milesUnit);
@@ -116,80 +151,6 @@ import butterknife.ButterKnife;
         });
     }
 
-    private void setMeasurementUnit(int position, String kmh, String mph, String knots) {
-        SharedPreferences.Editor editor = preferences.edit();
-        switch (position) {
-            case 0:
-                editor.putString("measurementUnit", kmh);
-                editor.putInt("measurementUnitPosition", position);
-                editor.apply();
-                break;
-            case 1:
-                editor.putString("measurementUnit", mph);
-                editor.putInt("measurementUnitPosition", position);
-                editor.apply();
-                break;
-            case 2:
-                editor.putString("measurementUnit", knots);
-                editor.putInt("measurementUnitPosition", position);
-                editor.apply();
-                break;
-        }
-    }
-
-
-    private void setupAboutButton() {
-        aboutButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                UtilMethods.buildAndShowAboutDialog(context);
-            }
-        });
-    }
-
-    public void setFileEraseListener(FileEraseListener fileEraseListener) {
-        this.fileEraseListener = fileEraseListener;
-    }
-
-    private void setupTextFields() {
-        if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION_DEFAULT) {
-            String fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
-            curFuelCons.setText(fuelCons);
-        }
-        else {
-            String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
-            curFuelCons.setText(fuelCons);
-        }
-
-        if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
-            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + getString(R.string.currency_prefix);
-            curFuelPrice.setText(fuelCost);
-        }
-        else {
-            String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
-            curFuelPrice.setText(fuelCost);
-        }
-
-        if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY_DEFAULT) {
-            String fuelCap = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
-            curFuelCapacity.setText(fuelCap);
-        }
-        else {
-            String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
-            curFuelCapacity.setText(fuelCapacity);
-        }
-    }
-
-    private void updateTextFields() {
-        String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
-        curFuelCons.setText(fuelCons);
-
-        String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
-        curFuelPrice.setText(fuelCost);
-
-        String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
-        curFuelCapacity.setText(fuelCapacity);
-
-    }
 
     private void setupEditTextFields() {
         fuelPriceEditText.addTextChangedListener(new TextWatcher() {
@@ -246,6 +207,48 @@ import butterknife.ButterKnife;
             }
         });
     }
+
+    private void updateTextFields() {
+        String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
+        curFuelCons.setText(fuelCons);
+
+        String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
+        curFuelPrice.setText(fuelCost);
+
+        String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
+        curFuelCapacity.setText(fuelCapacity);
+
+    }
+
+    private void setupTextFields() {
+        if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION_DEFAULT) {
+            String fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
+            curFuelCons.setText(fuelCons);
+        }
+        else {
+            String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
+            curFuelCons.setText(fuelCons);
+        }
+
+        if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
+            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + getString(R.string.currency_prefix);
+            curFuelPrice.setText(fuelCost);
+        }
+        else {
+            String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
+            curFuelPrice.setText(fuelCost);
+        }
+
+        if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY_DEFAULT) {
+            String fuelCap = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
+            curFuelCapacity.setText(fuelCap);
+        }
+        else {
+            String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
+            curFuelCapacity.setText(fuelCapacity);
+        }
+    }
+
 
     private void setupEraseButton() {
         eraseButton.setVisibility(View.VISIBLE);

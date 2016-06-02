@@ -72,42 +72,34 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Bind(R.id.settingsButton)
     ImageButton    settingsButton;
 
-    private static final String LOG_TAG = "MainFragment";
+    private static final String  LOG_TAG  = "MainFragment";
+    private static final boolean REMOVE   = false;
+    private static final boolean REGISTER = true;
+
+    private boolean fileErasedFlag = false;
+    private boolean firstStart     = true;
 
     private ServiceConnection serviceConnection;
     private LocationService   locationService;
-
     private TripProcessor     tripProcessor;
+    private SharedPreferences preferences;
     private SfCircularGauge   speedometer;
     private MapFragment       mapFragment;
     private float             maxSpeedVal;
     private GpsHandler        gpsHandler;
     private Context           context;
     private Bundle            state;
-    private SharedPreferences preferences;
 
-    private static final boolean REMOVE         = false;
-    private static final boolean REGISTER       = true;
-    private              boolean firstStart     = true;
-    private              boolean fileErasedFlag = false;
-
-    private float fuelConsFromSettings;
-    private float fuelPriceFromSettings;
     private int   fuelCapacityFromSettings;
-
-    //    private ArrayList<Float>  avgSpeedArrayList;
-    //    private Subscriber<Location> locationSubscriber;
-    //    private Subscriber<Float>    maxSpeedSubscriber;
-    //    private Subscriber<Float>    speedSubscriber;
-    //todo: tempVal is testing val REMOVE in release!
-    //    private final float[] tempVal = {1};
-
-    public MainFragment() {
-        // Required empty public constructor
-    }
+    private float fuelPriceFromSettings;
+    private float fuelConsFromSettings;
 
     public static MainFragment newInstance() {
         return new MainFragment();
+    }
+
+    public MainFragment() {
+        // Required empty public constructor
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -187,13 +179,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         super.onResume();
     }
 
-    private void setInternalToTripProcessor() {
-        getInternalSettings();
-        tripProcessor.setFuelCapacity(fuelCapacityFromSettings);
-        tripProcessor.setFuelConsFromSettings(fuelConsFromSettings);
-        tripProcessor.setFuelPrice(fuelPriceFromSettings);
-    }
-
     @Override public void onDetach() {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onDetach: called");
@@ -205,6 +190,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Override public void onDestroyView() {
         ButterKnife.unbind(this);
         super.onDestroyView();
+    }
+
+
+    @Override public void maxSpeedChanged(float maxSpeed) {
+        updateMaxSpeed(maxSpeed);
+    }
+
+    @Override public void speedChanged(float speed) {
+        animateSpeedUpdate(speed);
+    }
+
+    @Override public void onFileErased() {
+        fileErasedFlag = true;
     }
 
     @Override public void onGpsStatusChanged(int event) {
@@ -238,6 +236,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
     }
 
+
     private SfCircularGauge createSpeedometerGauge(Context context) {
         CircularGaugeFactory circularGaugeFactory = new CircularGaugeFactory();
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context, preferences.getString("measurementUnit", ""));
@@ -259,6 +258,29 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         return result;
     }
 
+
+    private void setFirstStartToFalse(SharedPreferences preferences) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("firstStart", false);
+        editor.apply();
+    }
+
+    private void getInternalSettings() {
+        readInternalDataFromFile();
+    }
+
+    private void setInternalToTripProcessor() {
+        getInternalSettings();
+        tripProcessor.setFuelCapacity(fuelCapacityFromSettings);
+        tripProcessor.setFuelConsFromSettings(fuelConsFromSettings);
+        tripProcessor.setFuelPrice(fuelPriceFromSettings);
+    }
+
+    private void readInternalDataFromFile() {
+        ReadInternalFile readFileTask = new ReadInternalFile();
+        readFileTask.execute();
+    }
+
     private void getStateFromPrefs() {
         preferences = TripHelperApp.getSharedPreferences();
         if (preferences.getBoolean("firstStart", true)) {
@@ -268,14 +290,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         CalculationUtils.setMeasurementMultiplier(preferences.getInt("measurementUnitPosition", 0));
     }
 
-    private void setFirstStartToFalse(SharedPreferences preferences) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("firstStart", false);
-        editor.apply();
+
+    private void setButtonsVisibilityDuringWriteMode(int visibility) {
+        tripListButton.setVisibility(visibility);
+        refillButtonLayout.setVisibility(visibility);
+        settingsButton.setVisibility(visibility);
     }
 
-    private void fillGasTank(float fuel) {
-        fuelLeft.setText(tripProcessor.getFuelLevel(fuel, getString(R.string.distance_prefix)));
+    private void startButtonTurnActive() {
+        startButton.setVisibility(View.VISIBLE);
+        stopButton.setVisibility(View.INVISIBLE);
+        setButtonsVisibilityDuringWriteMode(View.VISIBLE);
+    }
+
+    private void stopButtonTurnActive() {
+        startButton.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.VISIBLE);
+        setButtonsVisibilityDuringWriteMode(View.INVISIBLE);
     }
 
     private void setupTripListButton() {
@@ -324,20 +355,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         });
     }
 
-    private void startTrip() {
-        tripProcessor.startNewTrip();
-        UtilMethods.setFabVisible(getActivity());
-        UtilMethods.showToast(context, context.getString(R.string.trip_started_toast));
-        stopButtonTurnActive();
-        //                avgSpeedArrayList = new ArrayList<>();
-    }
-
-    private void endTrip() {
-        stopTracking();
-        UtilMethods.showToast(context, context.getString(R.string.trip_ended_toast));
-        startButtonTurnActive();
-    }
-
     private void setupFillButton() {
         refillButtonLayout.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -362,17 +379,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupSettingsButton();
     }
 
-    private void setButtonsVisibilityDuringWriteMode(int visibility) {
-        tripListButton.setVisibility(visibility);
-        refillButtonLayout.setVisibility(visibility);
-        settingsButton.setVisibility(visibility);
-    }
-
-    private void restoreFuelLayoutVisibility(boolean firstState) {
-        if (!firstState) {
-            fuelLayout.setVisibility(View.VISIBLE);
-        }
-    }
 
     private void restoreButtonsVisibility(TripProcessor restoredTripProcessor, Boolean visibility) {
         if (visibility || restoredTripProcessor == null) {
@@ -380,6 +386,31 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
         else {
             stopButtonTurnActive();
+        }
+    }
+
+    private void restoreTripProcessor(TripProcessor restoredTripProcess) {
+        if (restoredTripProcess != null) {
+            tripProcessor = restoredTripProcess;
+        }
+        else {
+            tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+        }
+    }
+
+    private void restoreAvgSpeedList(ArrayList<String> avgSpeedList) {
+        ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
+        if (avgSpeedList != null) {
+            for (String tmpStr : avgSpeedList) {
+                avgSpeedArrayList.add(Float.valueOf(tmpStr));
+            }
+        }
+        tripProcessor.setAvgSpeedArrayList(avgSpeedArrayList);
+    }
+
+    private void restoreFuelLayoutVisibility(boolean firstState) {
+        if (!firstState) {
+            fuelLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -409,41 +440,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    private void restoreTripProcessor(TripProcessor restoredTripProcess) {
-        if (restoredTripProcess != null) {
-            tripProcessor = restoredTripProcess;
-        }
-        else {
-            tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-        }
-    }
-
-    private void restoreAvgSpeedList(ArrayList<String> avgSpeedList) {
-        ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
-        if (avgSpeedList != null) {
-            for (String tmpStr : avgSpeedList) {
-                avgSpeedArrayList.add(Float.valueOf(tmpStr));
-            }
-        }
-        tripProcessor.setAvgSpeedArrayList(avgSpeedArrayList);
-    }
-
     private void restoreStatus(Boolean status) {
         if (status) {
             setStatusImage();
         }
     }
 
-    private void startButtonTurnActive() {
-        startButton.setVisibility(View.VISIBLE);
-        stopButton.setVisibility(View.INVISIBLE);
-        setButtonsVisibilityDuringWriteMode(View.VISIBLE);
-    }
 
-    private void stopButtonTurnActive() {
-        startButton.setVisibility(View.INVISIBLE);
-        stopButton.setVisibility(View.VISIBLE);
-        setButtonsVisibilityDuringWriteMode(View.INVISIBLE);
+    private void fillGasTank(float fuel) {
+        fuelLeft.setText(tripProcessor.getFuelLevel(fuel, getString(R.string.distance_prefix)));
     }
 
     private void restoreFuelLevel() {
@@ -451,11 +456,27 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         fuelLeft.setText(fuelString);
     }
 
-    private void saveState() {
-        if (state == null) {
-            state = new Bundle();
+    private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
+
+        GpsHandler.setSpeedSubscriber(tripProcessor.getSpeedSubscriber());
+        GpsHandler.setLocationSubscriber(tripProcessor.getLocationSubscriber());
+        GpsHandler.setMaxSpeedSubscriber(tripProcessor.getMaxSpeedSubscriber());
+
+        //        GpsHandler.setSpeedSubscriber(speedSubscriber);
+        //        GpsHandler.setLocationSubscriber(locationSubscriber);
+        //        GpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
+    }
+
+    private void gpsStatusListener(boolean register) {
+        if (register) {
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            UtilMethods.checkPermission(context);
+            lm.addGpsStatusListener(this);
         }
-        onSaveInstanceState(state);
+        else {
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            lm.removeGpsStatusListener(this);
+        }
     }
 
     private void stopTracking() {
@@ -467,6 +488,27 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             firstStart = false;
         }
         restoreFuelLevel();
+    }
+
+    private void startTrip() {
+        tripProcessor.startNewTrip();
+        UtilMethods.setFabVisible(getActivity());
+        UtilMethods.showToast(context, context.getString(R.string.trip_started_toast));
+        stopButtonTurnActive();
+        //                avgSpeedArrayList = new ArrayList<>();
+    }
+
+    private void endTrip() {
+        stopTracking();
+        UtilMethods.showToast(context, context.getString(R.string.trip_ended_toast));
+        startButtonTurnActive();
+    }
+
+    private void saveState() {
+        if (state == null) {
+            state = new Bundle();
+        }
+        onSaveInstanceState(state);
     }
 
     private void setStatusImage() {
@@ -481,18 +523,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void getContextIfNull() {
         if (context == null) {
             context = getActivity();
-        }
-    }
-
-    private void gpsStatusListener(boolean register) {
-        if (register) {
-            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            UtilMethods.checkPermission(context);
-            lm.addGpsStatusListener(this);
-        }
-        else {
-            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            lm.removeGpsStatusListener(this);
         }
     }
 
@@ -554,34 +584,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         speedometerTextView.setTypeface(tf);
     }
 
-    private void setRouteToMapFragment() {
-        if (tripProcessor.getRoutes() != null) {
-            mapFragment.setRoutes(tripProcessor.getRoutes());
-        }
-    }
-
-    private void configureMapFragment() {
-        mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
-        if (mapFragment == null) {
-            mapFragment = MapFragment.newInstance();
-        }
-    }
-
-    private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
-
-        GpsHandler.setSpeedSubscriber(tripProcessor.getSpeedSubscriber());
-        GpsHandler.setLocationSubscriber(tripProcessor.getLocationSubscriber());
-        GpsHandler.setMaxSpeedSubscriber(tripProcessor.getMaxSpeedSubscriber());
-
-        //        GpsHandler.setSpeedSubscriber(speedSubscriber);
-        //        GpsHandler.setLocationSubscriber(locationSubscriber);
-        //        GpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
-    }
-
-    private void updateMaxSpeed(float speed) {
-        maxSpeedVal = speed;
-    }
-
     private void cleanAllProcess() {
         if (isButtonVisible(stopButton)) {
             stopTracking();
@@ -602,21 +604,22 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         preferences = null;
     }
 
-    private void updatePointerLocation(float speed) {
-        CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
-        if (pointer != null) {
-            pointer.setValue(speed);
+    private void configureMapFragment() {
+        mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
+            mapFragment = MapFragment.newInstance();
         }
     }
 
-    private void updateSpeedTextField(float speed) {
-        if (speedometerTextView != null) {
-            String        formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
-            final int     initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
-            final Integer finalValue     = Integer.valueOf(formattedSpeed);
-            UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
-            speedometerTextView.setText(formattedSpeed);
+    private void setRouteToMapFragment() {
+        if (tripProcessor.getRoutes() != null) {
+            mapFragment.setRoutes(tripProcessor.getRoutes());
         }
+    }
+
+
+    private void updateMaxSpeed(float speed) {
+        maxSpeedVal = speed;
     }
 
     private void animateSpeedUpdate(final float speed) {
@@ -634,22 +637,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         });
     }
 
-    private void readInternalDataFromFile() {
-        ReadInternalFile readFileTask = new ReadInternalFile();
-        readFileTask.execute();
+    private void updatePointerLocation(float speed) {
+        CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
+        if (pointer != null) {
+            pointer.setValue(speed);
+        }
     }
 
-    private void getInternalSettings() {
-        readInternalDataFromFile();
+    private void updateSpeedTextField(float speed) {
+        if (speedometerTextView != null) {
+            String        formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
+            final int     initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
+            final Integer finalValue     = Integer.valueOf(formattedSpeed);
+            UtilMethods.animateTextView(initialValue, finalValue, speedometerTextView);
+            speedometerTextView.setText(formattedSpeed);
+        }
     }
 
-    @Override public void speedChanged(float speed) {
-        animateSpeedUpdate(speed);
-    }
-
-    @Override public void maxSpeedChanged(float maxSpeed) {
-        updateMaxSpeed(maxSpeed);
-    }
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
@@ -693,9 +697,5 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 super.onPostExecute(result);
             }
         }
-    }
-
-    @Override public void onFileErased() {
-        fileErasedFlag = true;
     }
 }

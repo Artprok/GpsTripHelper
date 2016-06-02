@@ -21,10 +21,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private static final String  LOG_TAG = "LocationService:";
     private final        IBinder mBinder = new LocalBinder();
+
+    private LocationRequest locationRequest;
+    private GoogleApiClient googleApiClient;
+    private GpsHandler      gpsHandler;
+
     private com.google.android.gms.location.LocationListener gmsLocationListener;
-    private LocationRequest                                  locationRequest;
-    private GoogleApiClient                                  googleApiClient;
-    private GpsHandler                                       gpsHandler;
 
     public GpsHandler getGpsHandler() {
         return gpsHandler;
@@ -47,12 +49,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onConnectionFailed: " + connectionResult);
-        }
-    }
-
-    public class LocalBinder extends Binder {
-        public LocationService getService() {
-            return LocationService.this;
         }
     }
 
@@ -91,11 +87,19 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         super.onDestroy();
     }
 
+
     private LocationRequest setupLocRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
         locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
+    }
+
+
+    public class LocalBinder extends Binder {
+        public LocationService getService() {
+            return LocationService.this;
+        }
     }
 }

@@ -57,7 +57,6 @@ import dagger.Module;
         }
     }
 
-
     @Override public void onBackPressed() {
         final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
@@ -82,18 +81,6 @@ import dagger.Module;
         }
     }
 
-    private void setupWakeLock() {
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
-        wakeLock.acquire();
-    }
-
-    private void performExitFromApplication(Fragment f) {
-        wakeLock.release();
-        f.onDetach();
-        finish();
-        System.exit(0);
-    }
 
     private void setFabToMap(final MainFragment mainFragment) {
         int res = R.drawable.map_black;
@@ -104,6 +91,13 @@ import dagger.Module;
                 setFabToSpeedometer();
             }
         });
+    }
+
+    private void performExitFromApplication(Fragment f) {
+        wakeLock.release();
+        f.onDetach();
+        finish();
+        System.exit(0);
     }
 
     private void setFabToSpeedometer() {
@@ -126,5 +120,11 @@ import dagger.Module;
                 }
             }
         });
+    }
+
+    private void setupWakeLock() {
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
+        wakeLock.acquire();
     }
 }

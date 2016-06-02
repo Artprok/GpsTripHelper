@@ -51,6 +51,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
 
 
     private static final String LOG_TAG = "TripListFragment";
+
     private TripData        tripData;
     private ArrayList<Trip> trips;
 
@@ -124,6 +125,11 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         super.onDetach();
     }
 
+
+    @Override public void onFragmentReplacing(TripInfoFragment tripInfoFragment) {
+        UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
+    }
+
     @Override public void onListItemClick(Trip trip) {
         progressBar.setVisibility(View.VISIBLE);
         float            fuelConsumed      = trip.getAvgFuelConsumption();
@@ -143,10 +149,6 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
                         tripId, routes, moneyOnFuelSpent, maxSpeed);
-        UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
-    }
-
-    @Override public void onFragmentReplacing(TripInfoFragment tripInfoFragment) {
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

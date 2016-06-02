@@ -35,11 +35,11 @@ public class ConstantValues {
     public static final int   FUEL_TANK_CAPACITY_DEFAULT = 60;
     public static final float FUEL_CONSUMPTION_DEFAULT   = 11;
 
-    public static final int   HIGHWAY_SPEED_AVG_SPEED           = 70;
-    public static final int   LOW_TRAFFIC_AVG_SPEED             = 50;
-    public static final int   MEDIUM_TRAFFIC_AVG_SPEED          = 30;
-    public static final int   HIGH_TRAFFIC_AVG_SPEED            = 15;
-    public static final int   VERY_HIGH_TRAFFIC_AVG_SPEED       = 10;
+    public static final int HIGHWAY_SPEED_AVG_SPEED     = 70;
+    public static final int LOW_TRAFFIC_AVG_SPEED       = 50;
+    public static final int MEDIUM_TRAFFIC_AVG_SPEED    = 30;
+    public static final int HIGH_TRAFFIC_AVG_SPEED      = 15;
+    public static final int VERY_HIGH_TRAFFIC_AVG_SPEED = 10;
 
     public static final float CONSUMPTION_VERY_LOW_ADD          = -3;
     public static final float CONSUMPTION_LOW_TRAFFIC_ADD       = -1;
