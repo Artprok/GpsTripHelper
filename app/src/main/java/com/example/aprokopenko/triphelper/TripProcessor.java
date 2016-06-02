@@ -437,7 +437,6 @@ public class TripProcessor implements Parcelable {
 
             @Override public void onNext(Float speed) {
                 speedChangeListener.maxSpeedChanged(speed);
-                //                updateMaxSpeed(speed);
             }
         };
     }
@@ -644,19 +643,6 @@ public class TripProcessor implements Parcelable {
             fileIsInWriteMode = false;
         }
     }
-
-    //    protected TripProcessor(Parcel in) {
-    //        fileIsInWriteMode = in.readByte() != 0;
-    //        tripStartTime = in.readLong();
-    //        currentTripId = in.readInt();
-    //        averageSpeed = in.readFloat();
-    //        tripData = in.readParcelable(TripData.class.getClassLoader());
-    //        routes = in.createTypedArrayList(Route.CREATOR);
-    //        fuelConsFromSettings = in.readFloat();
-    //        fuelPrice = in.readFloat();
-    //        fuelCapacity = in.readInt();
-    //
-    //    }
 }
 
 
