@@ -1,15 +1,16 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.content.Context;
+import android.os.PowerManager;
+import android.os.Bundle;
 import android.view.View;
+import android.util.Log;
 
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
@@ -89,6 +90,7 @@ import dagger.Module;
     private void setFabToMap(final MainFragment mainFragment) {
         int res = R.drawable.map_black;
         fab.setImageResource(res);
+        fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 mainFragment.openMapFragment();

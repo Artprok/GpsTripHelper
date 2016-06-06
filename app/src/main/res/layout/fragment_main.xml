@@ -14,6 +14,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
         android:layout_alignTop="@+id/statusImageView"
         android:background="@drawable/button_background"
         android:src="@drawable/trip_list_button"
@@ -67,7 +68,7 @@
         android:layout_above="@+id/startButton"
         android:layout_below="@+id/speedometerContainer"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginTop="-20dp"
         android:visibility="visible"
         >
 
@@ -172,7 +173,8 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="7dp"
         android:background="@drawable/button_background"
         android:text="@string/start"
         />

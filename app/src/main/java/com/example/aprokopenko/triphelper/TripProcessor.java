@@ -175,7 +175,6 @@ public class TripProcessor implements Parcelable {
 
 
     public void setAvgSpeedArrayList(ArrayList<Float> avgSpeedArrayList) {
-        Log.d(LOG_TAG, "setAvgSpeedArrayList: Working avgSpd setted");
         this.avgSpeedArrayList = avgSpeedArrayList;
     }
 
@@ -190,7 +189,6 @@ public class TripProcessor implements Parcelable {
 
 
     public void stopTracking() {
-        Log.d(LOG_TAG, "stopTracking: Working" + getAvgSpeedArrayList());
         ArrayList<Float> avgArrayList = getAvgSpeedArrayList();
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
@@ -438,7 +436,6 @@ public class TripProcessor implements Parcelable {
     }
 
     private void storeSpeedTicks(final float speed) {
-        Log.d(LOG_TAG, "storeSpeedTicks: Working" + avgSpeedArrayList);
         if (avgSpeedArrayList != null) {
             avgSpeedArrayList.add(speed);
         }

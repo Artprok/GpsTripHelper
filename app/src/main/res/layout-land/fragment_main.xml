@@ -26,6 +26,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
         android:layout_alignTop="@+id/statusImageView"
         android:background="@drawable/button_background"
         android:src="@drawable/trip_list_button"
@@ -80,13 +81,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/statusImageView"
         android:layout_marginLeft="5dp"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/fuelIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/gas_station_icon"
             />
 
@@ -113,6 +113,7 @@
 
         <RelativeLayout
             android:id="@+id/refillButtonLayout"
+            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_alignLeft="@id/fuelIcon"
