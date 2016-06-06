@@ -39,6 +39,7 @@ import dagger.Module;
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
         MainFragment mainFragment;
         UtilMethods.setFabInvisible(this);
 
@@ -86,11 +87,9 @@ import dagger.Module;
         }
     }
 
-
     private void setFabToMap(final MainFragment mainFragment) {
         int res = R.drawable.map_black;
         fab.setImageResource(res);
-        fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 mainFragment.openMapFragment();

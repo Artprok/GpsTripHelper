@@ -611,8 +611,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         mapFragment = null;
         serviceConnection = null;
         gpsHandler = null;
+        tripProcessor.setSpeedChangeListener(null);
         tripProcessor = null;
-
         context = null;
         preferences = null;
     }
