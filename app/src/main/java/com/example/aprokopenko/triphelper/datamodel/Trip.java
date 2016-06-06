@@ -126,13 +126,21 @@ public class Trip implements Parcelable {
         try {
             routeSize = is.readInt();
             for (int i = 0; i < routeSize; i++) {
+
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.d("Trip", "readTrip: Routes !NULL");
+                }
                 double tmpLatitude  = is.readDouble();
                 double tmpLongitude = is.readDouble();
                 float  tmpSpeed     = is.readFloat();
 
                 Route tmpRoutePoint = new Route(new LatLng(tmpLatitude, tmpLongitude), tmpSpeed);
                 route.add(tmpRoutePoint);
+                if (ConstantValues.DEBUG_MODE) {
+                    Log.d("Trip", "writeTrip:routePoint speedREAD- " + tmpRoutePoint.getSpeed());
+                }
             }
+
             float  timeSpentInMotion = is.readFloat();
             float  distanceTravelled = is.readFloat();
             float  fuelSpent         = is.readFloat();

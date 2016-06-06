@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.animation.ObjectAnimator;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
@@ -65,6 +66,8 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     TextView       tripIdView;
     @Bind(R.id.mapView)
     MapView        mapView;
+    @Bind(R.id.noneMapView)
+    ImageView      noneMapView;
 
 
     private static final String LOG_TAG = "TripInfoFragment";
@@ -84,17 +87,18 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAX_SPEED                 = "MaxSpeed";
     private static final String TRIP_ID                   = "TripId";
 
-    private float  averageFuelConsumption;
-    private float  timeSpentInMotion;
-    private float  timeSpentOnStop;
-    private float  distTravelled;
-    private float  moneySpent;
-    private float  fuelSpent;
-    private float  timeSpent;
-    private float  avgSpeed;
-    private float  maxSpeed;
-    private String tripDate;
-    private int    tripId;
+    private float   averageFuelConsumption;
+    private float   timeSpentInMotion;
+    private float   timeSpentOnStop;
+    private float   distTravelled;
+    private float   moneySpent;
+    private float   fuelSpent;
+    private float   timeSpent;
+    private float   avgSpeed;
+    private float   maxSpeed;
+    private String  tripDate;
+    private int     tripId;
+    private boolean drawMap;
 
     private ArrayList<String> speedValues;
     private Context           context;
@@ -117,12 +121,14 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<String> latitudeArray  = new ArrayList<>();
         ArrayList<String> longitudeArray = new ArrayList<>();
         ArrayList<String> speedArray     = new ArrayList<>();
-        for (Route tmpRoute : routes) {
-            if (tmpRoute != null) {
-                LatLng tempLatLang = tmpRoute.getRoutePoints();
-                latitudeArray.add(String.valueOf(tempLatLang.latitude));
-                longitudeArray.add(String.valueOf(tempLatLang.longitude));
-                speedArray.add(String.valueOf(tmpRoute.getSpeed()));
+        if (routes != null) {
+            for (Route tmpRoute : routes) {
+                if (tmpRoute != null) {
+                    LatLng tempLatLang = tmpRoute.getRoutePoints();
+                    latitudeArray.add(String.valueOf(tempLatLang.latitude));
+                    longitudeArray.add(String.valueOf(tempLatLang.longitude));
+                    speedArray.add(String.valueOf(tmpRoute.getSpeed()));
+                }
             }
         }
 
@@ -163,6 +169,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             maxSpeed = getArguments().getFloat(MAX_SPEED);
             tripId = getArguments().getInt(TRIP_ID);
             speedValues = speedArray;
+
             routes = MapUtilMethods.unwrapRoute(latitudeArray, longitudeArray, speedArray);
         }
     }
@@ -182,22 +189,27 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
         openMapButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                int orientation = getActivity().getResources().getConfiguration().orientation;
-                if (orientation == 1) {                    //animations for portrait orientation
-                    if (mapOpened) {
-                        animateMapClosingForPortrait(view);
+                if (drawMap) {
+                    int orientation = getActivity().getResources().getConfiguration().orientation;
+                    if (orientation == 1) {                    //animations for portrait orientation
+                        if (mapOpened) {
+                            animateMapClosingForPortrait(view);
+                        }
+                        else {
+                            animateMapOpeningForPortrait(view);
+                        }
                     }
                     else {
-                        animateMapOpeningForPortrait(view);
+                        if (mapOpened) {                         //animations for landscape orientation
+                            animateMapClosingForLandscape(view);
+                        }
+                        else {
+                            animateMapOpeningForLandscape(view);
+                        }
                     }
                 }
                 else {
-                    if (mapOpened) {                         //animations for landscape orientation
-                        animateMapClosingForLandscape(view);
-                    }
-                    else {
-                        animateMapOpeningForLandscape(view);
-                    }
+                    UtilMethods.MapNotAvalibleDialog(context);
                 }
             }
         });
@@ -214,15 +226,23 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override public void onMapReady(GoogleMap googleMap) {
-        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        UtilMethods.checkPermission(context);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setMapToolbarEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.setMyLocationEnabled(true);
-        boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
-        if (drawn) {
+        if (routes != null && routes.get(0).getSpeed() != 666) {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            UtilMethods.checkPermission(context);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setMapToolbarEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.setMyLocationEnabled(true);
+            Log.d(LOG_TAG, "onMapReady: ro" + routes);
+            boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
+            if (drawn) {
+                drawMap = true;
+                routes = null;
+            }
+        }
+        else {
+            drawMap = false;
             routes = null;
         }
     }

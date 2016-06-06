@@ -269,7 +269,6 @@ import butterknife.ButterKnife;
     private void readDataFromFile() {
         ReadInternalFile readFileTask = new ReadInternalFile();
         readFileTask.execute();
-
     }
 
     private void writeDataToFile() {

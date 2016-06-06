@@ -68,4 +68,9 @@
     <string name="sendWithFeedback">Послати email з помiччю…?</string>
     <string name="subjectForFeedback">Вiдкуг про Автопомiчника</string>
     <string name="extraTextInFeedback">Добрый день, у меня возникли некоторые проблемы с приложением или у меня есть едеи как сделать его лучше</string>
+    <string name="somethingWentWrongMessage">We can\'t draw your route on map, because we doesn\'t have any stored GPS data for this trip. Sorry :(</string>
+    <string name="somethingWentWrongOk">Ok</string>
+    <string name="somethingWentWrongTitle">Что-то пошло не так</string>
+    <string name="start">Старт</string>
+    <string name="stop">Стоп</string>
 </resources>

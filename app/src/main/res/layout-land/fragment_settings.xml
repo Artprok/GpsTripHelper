@@ -6,11 +6,12 @@
 
     <ImageButton
         android:id="@+id/eraseButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_margin="5dp"
-        android:background="@android:drawable/ic_menu_delete"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/button_background"
+        android:src="@drawable/erase_button"
         />
 
     <RelativeLayout
@@ -23,7 +24,7 @@
             android:id="@+id/fuelPriceEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="61dp"
             android:hint="@string/fuel_price"
@@ -34,7 +35,7 @@
             android:id="@+id/fuelConsumptionEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/fuelPriceEditText"
             android:hint="@string/fuel_consumption"
             android:inputType="numberDecimal"
@@ -44,7 +45,7 @@
             android:id="@+id/fuelCapacityEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/fuelConsumptionEditText"
             android:hint="@string/fuel_capacity"
             android:inputType="number"
@@ -55,14 +56,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/fuelPriceEditText"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentRight="true"/>
 
         <TextView
             android:id="@+id/curFuelCons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/fuelConsumptionEditText"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentRight="true"/>
 
         <TextView
             android:id="@+id/curFuelCapacity"
@@ -70,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/fuelCapacityEditText"
 
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentRight="true"/>
 
         <TextView
             android:id="@+id/measurementUnitLabel"
@@ -87,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/measurementUnitLabel"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             android:spinnerMode="dialog"
             />
@@ -99,7 +100,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_margin="5dp"
         android:background="@drawable/about"
         />

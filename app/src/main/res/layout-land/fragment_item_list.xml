@@ -22,7 +22,7 @@
             android:id="@+id/listTripInfoLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             >
 
             <TextView
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tripDataLayoutLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/time_spent_on_all_hint"
                     />
 
@@ -66,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/timeSpentOnAllTripsLabel"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     />
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/timeSpentOnAllTripsLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:layout_marginTop="@dimen/margin_between_items"
                     android:paddingBottom="@dimen/block_bottom_padding"
                     android:text="@string/distance_travelled_hint"
@@ -84,7 +84,7 @@
                     android:id="@+id/distanceTravelledListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/distanceTravelledLabel"
                     />
 
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/speedLayoutLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/maximum_speed_hint"
                     />
 
@@ -123,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/maxSpeedLabel"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     />
 
                 <TextView
@@ -131,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/maxSpeedLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:paddingBottom="@dimen/block_bottom_padding"
                     android:text="@string/average_speed_hint"
                     />
@@ -140,7 +140,7 @@
                     android:id="@+id/avgSpeedListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/tripAvgSpeedLabel"
                     />
 
@@ -169,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/fuelSpentLayoutLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/average_fuel_consumption_hint"
                     />
 
@@ -178,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/avgFuelConsumptionLabel"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     />
 
                 <TextView
@@ -186,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/avgFuelConsumptionLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/fuel_spent_hint"
                     />
 
@@ -195,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/fuelSpentLabel"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     />
 
                 <TextView
@@ -203,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fuelSpentLabel"
-                    android:layout_marginStart="@dimen/block_item_start_margin"
+                    android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:paddingBottom="@dimen/block_bottom_padding"
                     android:text="@string/money_on_fuel_spent_hint"
                     />
@@ -212,7 +212,7 @@
                     android:id="@+id/moneyOnFuelSpentListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/moneyOnFuelSpentLabel"
                     />
 
@@ -225,7 +225,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/listTripInfoLayout"
-            android:layout_toEndOf="@+id/listTripInfoLayout">
+            android:layout_toRightOf="@+id/listTripInfoLayout">
 
             <TextView
                 android:id="@+id/tripListHeader"
@@ -243,13 +243,13 @@
                 android:name="com.example.aprokopenko.triphelper.ui.fragment.TripListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignStart="@+id/tripListHeader"
+                android:layout_alignLeft="@+id/tripListHeader"
                 android:layout_below="@+id/tripListHeader"
-                app:layoutManager="LinearLayoutManager"
                 android:background="@drawable/blocks_with_shadow"
+                android:paddingBottom="5dp"
+                app:layoutManager="LinearLayoutManager"
                 tools:context=".ui.fragment.TripListFragment"
                 tools:listitem="@layout/fragment_item"
-                android:paddingBottom="5dp"
                 />
 
         </RelativeLayout>

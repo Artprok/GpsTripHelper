@@ -185,6 +185,21 @@ public class UtilMethods {
         alert.show();
     }
 
+    public static void MapNotAvalibleDialog(final Context context) {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.something_went_wrong);
+        builder.setTitle(context.getString(R.string.somethingWentWrongTitle));
+        builder.setMessage(R.string.somethingWentWrongMessage).setCancelable(true)
+                .setPositiveButton(R.string.somethingWentWrongOk, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     public static void buildAndShowAboutDialog(final Context context) {
         final Resources                                  res     = context.getResources();
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
@@ -259,6 +274,8 @@ public class UtilMethods {
             }
         }
     }
+
+
 
 
     private static Intent rateIntentForUrl(String url, Context context) {

@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 import android.view.ViewGroup;

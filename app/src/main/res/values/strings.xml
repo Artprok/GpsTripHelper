@@ -164,4 +164,29 @@
     <string name="sendWithFeedback">Send email with…?</string>
     <!--/Feedback-->
 
+    <!--SomethingWentWrongDialog-->
+    <string name="somethingWentWrongTitle">Something went wrong with map</string>
+    <string name="somethingWentWrongMessage">
+        We can\'t draw your route on map, because we doesn\'t have any stored GPS data for this trip.
+         "\n"
+        Sorry :(
+         "\n"
+         "\n"
+        Some reasons why it was happened:
+        -GPS was turned off during that trip
+         "\n"
+        -You forgot to press "Start" button at start of trip
+         "\n"
+        -You forgot to press "Stop" button when you arrived to your destination place
+         "\n"
+         "\n"
+        Don\'t worry, all be ok!
+    </string>
+
+    <string name="somethingWentWrongOk">Ok</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <!--/SomethingWentWrongDialog-->
+
+
 </resources>

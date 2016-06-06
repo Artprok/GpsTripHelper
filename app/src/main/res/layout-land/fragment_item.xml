@@ -19,8 +19,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignBottom="@+id/id"
-        android:layout_alignStart="@+id/id"
-        android:layout_marginStart="30dp"
+        android:layout_alignLeft="@+id/id"
+        android:layout_marginLeft="30dp"
         android:background="@drawable/calendar_icon"/>
 
     <TextView
@@ -28,6 +28,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/calendarIcon"
-        android:layout_toEndOf="@+id/calendarIcon"
+        android:layout_toRightOf="@+id/calendarIcon"
         android:textSize="@dimen/metricsTextSize"/>
 </RelativeLayout>

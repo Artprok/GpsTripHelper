@@ -33,11 +33,11 @@ import rx.Subscriber;
 
 public class TripProcessor implements Parcelable {
     private static final String LOG_TAG = "TripProcessor";
-    private final Context          context;
-    private final ArrayList<Route> routes;
+    private final Context context;
 
-    private boolean          fileIsInWriteMode;
+    private ArrayList<Route> routes;
     private ArrayList<Float> avgSpeedArrayList;
+    private boolean          fileIsInWriteMode;
     private long             tripStartTime;
     private int              currentTripId;
     private float            averageSpeed;
@@ -89,10 +89,12 @@ public class TripProcessor implements Parcelable {
 
     public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
         @Override public TripProcessor createFromParcel(Parcel in) {
+            Log.d(LOG_TAG, "restoreTripProcessor: fromParce" + this);
             return new TripProcessor(in);
         }
 
         @Override public TripProcessor[] newArray(int size) {
+            Log.d(LOG_TAG, "restoreTripProcessor: fromParceAr" + this);
             return new TripProcessor[size];
         }
     };
@@ -173,6 +175,7 @@ public class TripProcessor implements Parcelable {
 
 
     public void setAvgSpeedArrayList(ArrayList<Float> avgSpeedArrayList) {
+        Log.d(LOG_TAG, "setAvgSpeedArrayList: Working avgSpd setted");
         this.avgSpeedArrayList = avgSpeedArrayList;
     }
 
@@ -187,6 +190,7 @@ public class TripProcessor implements Parcelable {
 
 
     public void stopTracking() {
+        Log.d(LOG_TAG, "stopTracking: Working" + getAvgSpeedArrayList());
         ArrayList<Float> avgArrayList = getAvgSpeedArrayList();
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
@@ -209,13 +213,19 @@ public class TripProcessor implements Parcelable {
 
     public void startNewTrip() {
         avgSpeedArrayList = new ArrayList<>();
+        routes = new ArrayList<>();
         Calendar currentCalendarInstance = Calendar.getInstance();
         tripStartTime = currentCalendarInstance.getTime().getTime();
         currentTripId = tripData.getTrips().size();
         Date   date          = currentCalendarInstance.getTime();
         String formattedDate = UtilMethods.parseDate(date);
         Trip   trip          = new Trip(currentTripId, formattedDate);
+        trip.setRoute(routes);
         tripData.addTrip(trip);
+    }
+
+    public void eraseTripData() {
+        tripData = new TripData();
     }
 
 
@@ -343,9 +353,9 @@ public class TripProcessor implements Parcelable {
     }
 
     private void setupSubscribers() {
-        setupSpeedSubscriber();
         setupLocationSubscriber();
         setupMaxSpeedSubscriber();
+        setupSpeedSubscriber();
     }
 
 
@@ -428,14 +438,13 @@ public class TripProcessor implements Parcelable {
     }
 
     private void storeSpeedTicks(final float speed) {
+        Log.d(LOG_TAG, "storeSpeedTicks: Working" + avgSpeedArrayList);
         if (avgSpeedArrayList != null) {
             avgSpeedArrayList.add(speed);
         }
     }
 
     private void addRoutePoint(Route routePoint) {
-        Trip trip = tripData.getTrip(currentTripId);
-        trip.setRoute(routes);
         routes.add(routePoint);
     }
 
@@ -486,9 +495,11 @@ public class TripProcessor implements Parcelable {
             Log.d(LOG_TAG, "updateTrip: called");
         }
         trip.setAvgSpeed(averageSpeed);
-        if (routes != null) {
-            trip.setRoute(routes);
+        if (routes.size() == 0) {
+            Route tmpRoutePoint = new Route(ConstantValues.BERMUDA_COORDINATES, 666);
+            routes.add(tmpRoutePoint);
         }
+        trip.setRoute(routes);
     }
 
     private void updateTripState() {
@@ -521,7 +532,6 @@ public class TripProcessor implements Parcelable {
         updateTripState();
         setTripFieldsToStartState();
     }
-
 
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
         @Override protected Boolean doInBackground(TripData... params) {

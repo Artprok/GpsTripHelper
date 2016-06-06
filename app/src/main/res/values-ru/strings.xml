@@ -155,4 +155,26 @@
     <string name="subjectForFeedback">Отзыв о Автопомощнике</string>
     <!--/Feedback-->
 
+
+    <!--SomethingWentWrongDialog-->
+    <string name="somethingWentWrongTitle">Что-то пошло не так..</string>
+    <string name="somethingWentWrongMessage">
+        Автопомощник не может отобразить Ваш путь на карте, потому что у него нету ни одной записанной GPS координаты.
+         "\n"
+         "\n"
+        Причины почему это могло произойти:
+        -GPS был выключен в течении этой поездки
+         "\n"
+        -Вы забыли нажать кнопку Старт в начале поездки
+         "\n"
+        -Вы забыли нажать кнопку Стоп в конце поездки
+         "\n"
+         "\n"
+    </string>
+
+    <string name="somethingWentWrongOk">Ок</string>
+    <string name="start">Старт</string>
+    <string name="stop">Стоп</string>
+    <!--/SomethingWentWrongDialog-->
+
 </resources>

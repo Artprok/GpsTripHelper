@@ -145,7 +145,6 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         int              tripId            = trip.getTripID();
         ArrayList<Route> routes            = trip.getRoute();
 
-
         TripInfoFragment tripInfoFragment = TripInfoFragment
                 .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
                         tripId, routes, moneyOnFuelSpent, maxSpeed);

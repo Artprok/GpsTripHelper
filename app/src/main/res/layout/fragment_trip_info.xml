@@ -27,7 +27,7 @@
                 android:id="@+id/tripDataLayoutLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/block_label_start_margin"
+                android:layout_marginLeft="@dimen/block_label_start_margin"
                 android:text="@string/trip_data_layout_label"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_text_size"
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tripDataLayoutLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:text="@string/trip_date_label"
                 />
 
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/tripDateLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
 
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tripDateLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:text="@string/distance_travelled_hint"
                 />
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/tripDistanceTravelledLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
             <TextView
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tripDistanceTravelledLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:paddingBottom="@dimen/block_bottom_padding"
                 android:text="@string/trip_ID_hint"
@@ -84,7 +84,7 @@
                 android:id="@+id/tripId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tripIdLabel"
                 />
 
@@ -105,7 +105,7 @@
                 android:id="@+id/speedLayoutLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/block_label_start_margin"
+                android:layout_marginLeft="@dimen/block_label_start_margin"
                 android:text="@string/speed_layout_label"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_text_size"
@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/speedLayoutLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:text="@string/maximum_speed_hint"
                 />
 
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/maxSpeedLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
             <TextView
@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/maxSpeedLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:paddingBottom="@dimen/block_bottom_padding"
                 android:text="@string/average_speed_hint"
@@ -143,7 +143,7 @@
                 android:id="@+id/tripAvgSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tripAvgSpeedLabel"
                 />
         </RelativeLayout>
@@ -162,7 +162,7 @@
                 android:id="@+id/fuelSpentLayoutLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/block_label_start_margin"
+                android:layout_marginLeft="@dimen/block_label_start_margin"
                 android:text="@string/fuel_spent_layout_label"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_text_size"
@@ -173,7 +173,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/fuelSpentLayoutLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:text="@string/average_fuel_consumption_hint"
                 />
 
@@ -182,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/tripAvgFuelConsumptionLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
             <TextView
@@ -190,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tripAvgFuelConsumptionLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:text="@string/fuel_spent_hint"
                 />
@@ -200,7 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/fuelSpentLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
             <TextView
@@ -208,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fuelSpentLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:paddingBottom="@dimen/block_bottom_padding"
                 android:text="@string/money_on_fuel_spent_hint"
@@ -218,7 +218,7 @@
                 android:id="@+id/tripMoneyOnTripFuelSpent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/moneyOnTripFuelSpentLabel"
                 />
 
@@ -238,7 +238,7 @@
                 android:id="@+id/timeSpentLayoutLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/block_label_start_margin"
+                android:layout_marginLeft="@dimen/block_label_start_margin"
                 android:text="@string/time_spent_layout_label"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/label_text_size"
@@ -249,7 +249,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/timeSpentLayoutLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:text="@string/time_spent_on_trip_hint"
                 />
 
@@ -258,7 +258,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/timeSpentLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
 
@@ -267,7 +267,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/timeSpentLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:text="@string/time_spent_in_motion_hint"
                 />
@@ -277,7 +277,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/timeSpentInMotionLabel"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 />
 
 
@@ -286,7 +286,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/timeSpentInMotionLabel"
-                android:layout_marginStart="@dimen/block_item_start_margin"
+                android:layout_marginLeft="@dimen/block_item_start_margin"
                 android:layout_marginTop="@dimen/block_item_top_margin"
                 android:paddingBottom="@dimen/block_bottom_padding"
                 android:text="@string/time_spent_on_stop_hint"
@@ -296,7 +296,7 @@
                 android:id="@+id/tripTimeSpentOnStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/timeSpentOnStopLabel"
                 />
 
@@ -309,15 +309,25 @@
         android:layout_height="350dp"
         android:layout_centerInParent="true"
         android:visibility="invisible"
-      />
+        />
+
+    <ImageView
+        android:id="@+id/noneMapView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        />
+
 
     <ImageButton
         android:id="@+id/mapTurnActiveButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/map_icon"/>
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button_background"
+        android:src="@drawable/map_button"/>
 </RelativeLayout>
 
 

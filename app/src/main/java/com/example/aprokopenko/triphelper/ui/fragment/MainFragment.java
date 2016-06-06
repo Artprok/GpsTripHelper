@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
 import android.content.ComponentName;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.location.GpsStatus;
@@ -62,9 +63,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Bind(R.id.statusImageView)
     ImageView      statusImage;
     @Bind(R.id.startButton)
-    ImageButton    startButton;
+    Button    startButton;
     @Bind(R.id.stopButton)
-    ImageButton    stopButton;
+    Button         stopButton;
     @Bind(R.id.fuelLayout)
     RelativeLayout fuelLayout;
     @Bind(R.id.fuelLeftView)
@@ -103,16 +104,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getInternalSettings();
+
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getInternalSettings();
         ButterKnife.bind(this, view);
         getContextIfNull();
-        tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-        tripProcessor.setSpeedChangeListener(this);
 
         getStateFromPrefs();
 
@@ -124,8 +124,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             state = savedInstanceState;
         }
 
-        // FIXME: 31.05.2016 remove debug tutorial Show
-        UtilMethods.firstStartTutorialDialog(context);
+        if (tripProcessor == null) {
+            if (state != null) {
+                restoreState(state);
+            }
+            else {
+                tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+                tripProcessor.setSpeedChangeListener(this);
+            }
+        }
     }
 
     @Override public void onAttach(Context context) {
@@ -142,7 +149,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             if (avgSpeedArrayList != null) {
                 for (float avgListItem : avgSpeedArrayList) {
                     avgStrArrList.add(String.valueOf(avgListItem));
-                    Log.d(LOG_TAG, "onSaveInstanceState: " + String.valueOf(avgListItem));
                 }
             }
             if (ConstantValues.LOGGING_ENABLED) {
@@ -203,6 +209,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onFileErased() {
         fileErasedFlag = true;
+        tripProcessor.eraseTripData();
     }
 
     @Override public void onGpsStatusChanged(int event) {
@@ -211,6 +218,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventSatStatus");
                 }
+
                 break;
             case GpsStatus.GPS_EVENT_FIRST_FIX:
                 if (ConstantValues.LOGGING_ENABLED) {
@@ -242,7 +250,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context, preferences.getString("measurementUnit", ""));
     }
 
-    private boolean isButtonVisible(ImageButton button) {
+    private boolean isButtonVisible(Button button) {
         Boolean visibility = false;
         if (button != null) {
             visibility = (button.getVisibility() == View.VISIBLE);
@@ -390,22 +398,26 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void restoreTripProcessor(TripProcessor restoredTripProcess) {
-        if (restoredTripProcess != null) {
-            tripProcessor = restoredTripProcess;
-        }
-        else {
-            tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+        if (tripProcessor == null) {
+            if (restoredTripProcess != null) {
+                tripProcessor = restoredTripProcess;
+                tripProcessor.setSpeedChangeListener(this);
+            }
+            else {
+                tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+                tripProcessor.setSpeedChangeListener(this);
+            }
         }
     }
 
     private void restoreAvgSpeedList(ArrayList<String> avgSpeedList) {
-        ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
-        if (avgSpeedList != null) {
+        if (avgSpeedList.size() == 0 && avgSpeedList != null) {
+            ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
             for (String tmpStr : avgSpeedList) {
                 avgSpeedArrayList.add(Float.valueOf(tmpStr));
             }
+            tripProcessor.setAvgSpeedArrayList(avgSpeedArrayList);
         }
-        tripProcessor.setAvgSpeedArrayList(avgSpeedArrayList);
     }
 
     private void restoreFuelLayoutVisibility(boolean firstState) {
@@ -430,8 +442,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
         restoreButtonsVisibility(restoredTripProcessor, restoredButtonVisibility);
         restoreStatus(restoredStatus);
-        restoreAvgSpeedList(restoredAvgSpeedList);
         restoreTripProcessor(restoredTripProcessor);
+        restoreAvgSpeedList(restoredAvgSpeedList);
         restoreFuelLevel();
 
         restoreFuelLayoutVisibility(firstStart);
@@ -600,6 +612,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         serviceConnection = null;
         gpsHandler = null;
         tripProcessor = null;
+
         context = null;
         preferences = null;
     }
