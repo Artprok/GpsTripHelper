@@ -28,11 +28,14 @@ import com.example.aprokopenko.triphelper.R;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 
 public class UtilMethods {
-    public static final String LOG_TAG = "UtilMethods";
+    public static final  String  LOG_TAG = "UtilMethods";
+    private static final float[] tempVal = {1};
+    private static final Random  random  = new Random();
 
     public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
         if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
@@ -209,7 +212,6 @@ public class UtilMethods {
                 .setPositiveButton(R.string.aboutRateButton, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
-                        // FIXME: 02.06.2016 add rateGooglePlay here!
                         rateApp(context);
                     }
                 }).setNegativeButton(R.string.aboutNegativeButton, new DialogInterface.OnClickListener() {
@@ -276,8 +278,6 @@ public class UtilMethods {
     }
 
 
-
-
     private static Intent rateIntentForUrl(String url, Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, context.getPackageName())));
         int    flags  = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
@@ -328,6 +328,7 @@ public class UtilMethods {
 
     private static void rateApp(Context context) {
         try {
+            // FIXME: 02.06.2016 add rateGooglePlay here! Proper url.
             Intent rateIntent = rateIntentForUrl("market://details", context);
             context.startActivity(rateIntent);
         }
@@ -335,5 +336,18 @@ public class UtilMethods {
             Intent rateIntent = rateIntentForUrl("http://play.google.com/store/apps/details", context);
             context.startActivity(rateIntent);
         }
+    }
+
+    public static float generateRandomSpeed() {
+        float speed;
+        speed = 0 + tempVal[0];
+        if (speed != 0) {           //speed increment by 5 each tick
+            tempVal[0] += 5;
+        }
+        if (speed > 70) {
+            speed = random.nextInt(200);
+        }
+        speed = CalculationUtils.getSpeedInKilometerPerHour(speed);
+        return speed;
     }
 }

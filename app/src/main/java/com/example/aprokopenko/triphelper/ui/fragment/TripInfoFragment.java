@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.animation.ObjectAnimator;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
@@ -66,9 +65,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     TextView       tripIdView;
     @Bind(R.id.mapView)
     MapView        mapView;
-    @Bind(R.id.noneMapView)
-    ImageView      noneMapView;
-
 
     private static final String LOG_TAG = "TripInfoFragment";
 
@@ -234,7 +230,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             googleMap.getUiSettings().setMapToolbarEnabled(true);
             googleMap.getUiSettings().setCompassEnabled(true);
             googleMap.setMyLocationEnabled(true);
-            Log.d(LOG_TAG, "onMapReady: ro" + routes);
             boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
             if (drawn) {
                 drawMap = true;

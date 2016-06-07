@@ -6,10 +6,10 @@
 
     <ImageButton
         android:id="@+id/eraseButton"
-        android:layout_margin="5dp"
-        android:layout_alignParentRight="true"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
         android:background="@drawable/button_background"
         android:src="@drawable/erase_button"
 
@@ -55,55 +55,79 @@
             android:id="@+id/curFuelPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@+id/fuelPriceEditText"/>
+            android:layout_alignBaseline="@+id/fuelPriceEditText"
+            android:layout_alignParentRight="true"/>
 
         <TextView
             android:id="@+id/curFuelCons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@+id/fuelConsumptionEditText"/>
+            android:layout_alignBaseline="@+id/fuelConsumptionEditText"
+            android:layout_alignParentRight="true"/>
 
         <TextView
             android:id="@+id/curFuelCapacity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@+id/fuelCapacityEditText"/>
+            android:layout_alignBaseline="@+id/fuelCapacityEditText"
+            android:layout_alignParentRight="true"/>
 
         <TextView
+            android:id="@+id/measurementUnitLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/fuelCapacityEditText"
-            android:id="@+id/measurementUnitLabel"
-            android:textColor="@color/textColor"
             android:layout_margin="5dp"
-            android:textSize="@dimen/metricPortraitTextSize"
-            android:text="@string/measurementUnitText"/>
+            android:text="@string/measurementUnitText"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/metricPortraitTextSize"/>
 
         <Spinner
+            android:id="@+id/measurementUnitSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/measurementUnitSpinner"
-            android:layout_margin="5dp"
             android:layout_alignBaseline="@id/measurementUnitLabel"
             android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
             android:spinnerMode="dialog"
+            />
+
+        <Switch
+            android:visibility="invisible"
+            android:id="@+id/backgroundSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/measurementUnitLabel"
+            android:layout_margin="5dp"
+            android:showText="true"
+            android:textOff="@string/switchOff"
+            android:textOn="@string/switchOn"
+            />
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/backgroundSwitchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/backgroundSwitch"
+            android:layout_below="@id/measurementUnitLabel"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@id/backgroundSwitch"
+            android:text="@string/workInBackGround"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/metricPortraitTextSize"
             />
 
     </RelativeLayout>
 
     <ImageButton
+        android:id="@+id/aboutButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/aboutButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_margin="5dp"
         android:background="@drawable/about"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         />
-
-
-
 </RelativeLayout>

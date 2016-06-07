@@ -152,16 +152,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override public void onNext(Location location) {
                 locationList.add(location);
                 if (fragmentVisible) {
+                    float speed;
                     UtilMethods.checkPermission(context);
-                    // FIXME: 20.04.2016 DEBUG 101f
                     if (ConstantValues.DEBUG_MODE) {
-                        float testSpeed = 101f;
-                        locationTracking(googleMap, location, testSpeed);
+                        speed = UtilMethods.generateRandomSpeed();
                     }
                     else {
-                        float speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
-                        locationTracking(googleMap, location, speed);
+                        speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
                     }
+                    locationTracking(googleMap, location, speed);
                     MapUtilMethods.animateCamera(location, null, googleMap);
                 }
             }

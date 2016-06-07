@@ -176,6 +176,9 @@
     <string name="somethingWentWrongOk">Ок</string>
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
+    <string name="switchOff">Выкл</string>
+    <string name="switchOn">Вкл</string>
+    <string name="workInBackGround">Работа в фоне (увеличивает расход батареи)</string>
     <!--/SomethingWentWrongDialog-->
 
 </resources>

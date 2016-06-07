@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 import java.util.Date;
 import java.io.File;
 
@@ -53,9 +52,6 @@ public class TripProcessor implements Parcelable {
     private Subscriber<Float>    maxSpeedSubscriber;
     private Subscriber<Float>    speedSubscriber;
 
-    //todo: tempVal is testing val REMOVE in release!
-    private float[] tempVal = {1};
-
     private TripProcessor(Parcel in) {
         fileIsInWriteMode = in.readByte() != 0;
         tripStartTime = in.readLong();
@@ -63,7 +59,6 @@ public class TripProcessor implements Parcelable {
         averageSpeed = in.readFloat();
         tripData = in.readParcelable(TripData.class.getClassLoader());
         routes = in.createTypedArrayList(Route.CREATOR);
-        tempVal = in.createFloatArray();
         fuelConsFromSettings = in.readFloat();
         fuelPrice = in.readFloat();
         fuelCapacity = in.readInt();
@@ -77,7 +72,6 @@ public class TripProcessor implements Parcelable {
         dest.writeFloat(averageSpeed);
         dest.writeParcelable(tripData, flags);
         dest.writeTypedList(routes);
-        dest.writeFloatArray(tempVal);
         dest.writeFloat(fuelConsFromSettings);
         dest.writeFloat(fuelPrice);
         dest.writeInt(fuelCapacity);
@@ -89,12 +83,10 @@ public class TripProcessor implements Parcelable {
 
     public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
         @Override public TripProcessor createFromParcel(Parcel in) {
-            Log.d(LOG_TAG, "restoreTripProcessor: fromParce" + this);
             return new TripProcessor(in);
         }
 
         @Override public TripProcessor[] newArray(int size) {
-            Log.d(LOG_TAG, "restoreTripProcessor: fromParceAr" + this);
             return new TripProcessor[size];
         }
     };
@@ -198,7 +190,7 @@ public class TripProcessor implements Parcelable {
         }
 
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
-        // TODO: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
+        // fixme: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
         //        float maximumSpeed = maxSpeedVal;
         float maximumSpeed = avgArrayList.size();
 
@@ -369,8 +361,8 @@ public class TripProcessor implements Parcelable {
         float           avgSpeedSum          = startVal;
         float           avgFuelCons          = startVal;
         float           maxSpeed             = startVal;
-        float           distTravelled        = startVal;
         float           timeSum              = startVal;
+        float           distTravelled;
         ArrayList<Trip> allTrips             = tripData.getTrips();
         int             tripQuantity         = allTrips.size();
 
@@ -418,16 +410,9 @@ public class TripProcessor implements Parcelable {
     private void addPointToRouteList(Location location) {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
         float  speed;
-        // TODO: 10.05.2016 remove debug code
+        // fixme: 10.05.2016 remove debug code
         if (ConstantValues.DEBUG_MODE) {//debug code for testing
-            Random r = new Random();
-            speed = 0 + tempVal[0];
-            if (speed != 0) {           //speed increment by 5 each tick
-                tempVal[0] += 5;
-            }
-            if (speed > 70) {
-                speed = r.nextInt(200);
-            }
+            speed = UtilMethods.generateRandomSpeed();
         }
         else {
             speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());

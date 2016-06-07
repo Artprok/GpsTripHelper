@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.widget.Spinner;
 import android.view.ViewGroup;
 import android.text.Editable;
+import android.widget.Switch;
 import android.os.AsyncTask;
 import android.view.View;
 import android.os.Bundle;
@@ -58,6 +59,8 @@ import butterknife.ButterKnife;
     ImageButton aboutButton;
     @Bind(R.id.measurementUnitSpinner)
     Spinner     measurementUnitSpinner;
+    @Bind(R.id.backgroundSwitch)
+    Switch      backgroundSwitch;
 
     public static final String LOG_TAG = "Settings fragment";
 
@@ -91,6 +94,9 @@ import butterknife.ButterKnife;
         setupEditTextFields();
         readDataFromFile();
         setupSpinner();
+
+        // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+        //        setupBackgroundSwitch();
     }
 
 
@@ -150,7 +156,6 @@ import butterknife.ButterKnife;
             }
         });
     }
-
 
     private void setupEditTextFields() {
         fuelPriceEditText.addTextChangedListener(new TextWatcher() {
@@ -248,7 +253,6 @@ import butterknife.ButterKnife;
             curFuelCapacity.setText(fuelCapacity);
         }
     }
-
 
     private void setupEraseButton() {
         eraseButton.setVisibility(View.VISIBLE);
@@ -360,4 +364,23 @@ import butterknife.ButterKnife;
             super.onPostExecute(result);
         }
     }
+
+    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    //    private void setupBackgroundSwitch() {
+    //        boolean res = preferences.getBoolean("backgroundWork", false);
+    //        backgroundSwitch.setChecked(res);
+    //        backgroundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    //            SharedPreferences.Editor editor = preferences.edit();
+    //
+    //            @Override public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+    //                if (b) {
+    //                    editor.putBoolean("backgroundWork", true);
+    //                }
+    //                else {
+    //                    editor.putBoolean("backgroundWork", false);
+    //                }
+    //                editor.apply();
+    //            }
+    //        });
+    //    }
 }

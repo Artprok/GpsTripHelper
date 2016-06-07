@@ -187,6 +187,9 @@
     <string name="somethingWentWrongOk">Ok</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+    <string name="workInBackGround">work in background (increase discharging rate) </string>
+    <string name="switchOff">Off</string>
+    <string name="switchOn">On</string>
     <!--/SomethingWentWrongDialog-->
 
 

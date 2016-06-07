@@ -93,6 +93,31 @@
             android:spinnerMode="dialog"
             />
 
+        <Switch
+            android:visibility="invisible"
+            android:id="@+id/backgroundSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/measurementUnitLabel"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textOff="@string/switchOff"
+            android:textOn="@string/switchOn"
+            />
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/backgroundSwitchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/backgroundSwitch"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:text="@string/workInBackGround"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/metricPortraitTextSize"/>
+
     </RelativeLayout>
 
     <ImageButton

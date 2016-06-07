@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.os.PowerManager;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
@@ -25,14 +23,8 @@ import dagger.Module;
 @Module public class MainActivity extends AppCompatActivity {
     @Bind(R.id.fab)
     FloatingActionButton fab;
-    PowerManager.WakeLock wakeLock;
 
     public static final String LOG_TAG = "MainActivity";
-
-    @Override protected void onResume() {
-        super.onResume();
-        setupWakeLock();
-    }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +91,6 @@ import dagger.Module;
     }
 
     private void performExitFromApplication(Fragment f) {
-        wakeLock.release();
         f.onDetach();
         finish();
         System.exit(0);
@@ -125,11 +116,5 @@ import dagger.Module;
                 }
             }
         });
-    }
-
-    private void setupWakeLock() {
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
-        wakeLock.acquire();
     }
 }

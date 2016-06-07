@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
 import android.content.ComponentName;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.location.GpsStatus;
@@ -20,6 +19,7 @@ import android.widget.TextView;
 import android.view.ViewGroup;
 import android.text.TextUtils;
 import android.content.Intent;
+import android.widget.Button;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.view.View;
@@ -63,7 +63,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Bind(R.id.statusImageView)
     ImageView      statusImage;
     @Bind(R.id.startButton)
-    Button    startButton;
+    Button         startButton;
     @Bind(R.id.stopButton)
     Button         stopButton;
     @Bind(R.id.fuelLayout)
@@ -94,6 +94,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private int   fuelCapacityFromSettings;
     private float fuelPriceFromSettings;
     private float fuelConsFromSettings;
+
+    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    //    private PowerManager.WakeLock wakeLock;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -175,6 +178,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onResume() {
+        // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+        //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {
             restoreState(state);
         }
@@ -184,6 +189,24 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setInternalToTripProcessor();
         super.onResume();
     }
+
+    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    //    private void changeWakeLockStateAfterSettings() {
+    //
+    //        boolean res = preferences.getBoolean("backgroundWork", false);
+    //        if (res) {
+    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock ON");
+    //            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+    //            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
+    //            wakeLock.acquire();
+    //        }
+    //        else {
+    //            if(wakeLock!=null){
+    //                wakeLock.release();
+    //            }
+    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock OFF");
+    //        }
+    //    }
 
     @Override public void onDetach() {
         if (ConstantValues.LOGGING_ENABLED) {
@@ -218,7 +241,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventSatStatus");
                 }
-
                 break;
             case GpsStatus.GPS_EVENT_FIRST_FIX:
                 if (ConstantValues.LOGGING_ENABLED) {
@@ -297,7 +319,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
         CalculationUtils.setMeasurementMultiplier(preferences.getInt("measurementUnitPosition", 0));
     }
-
 
     private void setButtonsVisibilityDuringWriteMode(int visibility) {
         tripListButton.setVisibility(visibility);
@@ -386,7 +407,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupFillButton();
         setupSettingsButton();
     }
-
 
     private void restoreButtonsVisibility(TripProcessor restoredTripProcessor, Boolean visibility) {
         if (visibility || restoredTripProcessor == null) {
@@ -597,6 +617,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void cleanAllProcess() {
+        // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+        //        if(wakeLock!=null){
+        //            wakeLock.release();
+        //        }
         if (isButtonVisible(stopButton)) {
             stopTracking();
         }

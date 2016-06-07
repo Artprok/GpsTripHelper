@@ -107,7 +107,6 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         fuelSpentView.setText(fuelSpent);
         timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpentOnTrips, res));
         avgSpeedView.setText(avgSpeed);
-        // TODO: 31.05.2016 removeSpeedTicksLabel
         maxSpeedView.setText(maxSpeed);
     }
 

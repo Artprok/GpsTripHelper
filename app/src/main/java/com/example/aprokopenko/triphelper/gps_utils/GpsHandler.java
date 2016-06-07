@@ -8,9 +8,8 @@ import android.util.Log;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 //import com.example.aprokopenko.triphelper.listener.LocationListener;
-
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -30,10 +29,6 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     private Observer<Location> locationSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
     private Observer<Float>    speedSubscriber;
-    private Observable<Float>  speedObservable;
-
-    // FIXME: 14.04.2016 debug code remove
-    private final float[] tempVal = {1};
 
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
@@ -75,7 +70,7 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     }
 
     private void setupSpeedObservable(final float speed) {
-        speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
+        Observable<Float> speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
             @Override public void call(Subscriber<? super Float> sub) {
                 sub.onNext(speed);
                 if (ConstantValues.LOGGING_ENABLED) {
@@ -92,18 +87,11 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     }
 
     @Override public void onLocationChanged(Location location) {
-        // FIXME: 14.04.2016 debug code remove
         float speed;
+
+        // FIXME: 14.04.2016 debug code remove
         if (ConstantValues.DEBUG_MODE) {
-            Random r = new Random();
-            speed = 0 + tempVal[0];
-            if (speed != 0) {
-                tempVal[0] += 5;
-            }
-            if (speed > 70) {
-                speed = r.nextInt(200);
-            }
-            speed = CalculationUtils.getSpeedInKilometerPerHour(speed);
+            speed = UtilMethods.generateRandomSpeed();
         }
         else {
             speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());

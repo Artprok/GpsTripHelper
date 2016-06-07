@@ -24,7 +24,7 @@ public class TripHelperApp extends Application {
         return context;
     }
 
-    public static SharedPreferences getSharedPreferences(){
+    public static SharedPreferences getSharedPreferences() {
         return sharedPreferences;
     }
 
