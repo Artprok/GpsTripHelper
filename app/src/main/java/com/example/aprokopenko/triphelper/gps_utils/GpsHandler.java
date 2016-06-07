@@ -88,7 +88,7 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
 
     @Override public void onLocationChanged(Location location) {
         float speed;
-
+        Log.d(LOG_TAG, "onLocationChanged: TEST locaCha");
         // FIXME: 14.04.2016 debug code remove
         if (ConstantValues.DEBUG_MODE) {
             speed = UtilMethods.generateRandomSpeed();

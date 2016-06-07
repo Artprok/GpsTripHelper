@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
-import android.content.ComponentName;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.location.GpsStatus;
@@ -18,10 +17,8 @@ import android.content.Context;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import android.text.TextUtils;
-import android.content.Intent;
 import android.widget.Button;
 import android.os.AsyncTask;
-import android.os.IBinder;
 import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,8 +77,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private boolean fileErasedFlag = false;
     private boolean firstStart     = true;
 
-    private ServiceConnection serviceConnection;
-    private LocationService   locationService;
     private TripProcessor     tripProcessor;
     private SharedPreferences preferences;
     private SfCircularGauge   speedometer;
@@ -113,6 +108,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        configureMapFragment();
         getInternalSettings();
         ButterKnife.bind(this, view);
         getContextIfNull();
@@ -120,7 +116,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         getStateFromPrefs();
 
         gpsStatusListener(REGISTER);
-        setupLocationService();
+        setupButtons();
         setupSpeedometer();
 
         if (savedInstanceState != null) {
@@ -135,6 +131,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
                 tripProcessor.setSpeedChangeListener(this);
             }
+        }
+        setupFuelFields();
+    }
+
+    private void setupFuelFields() {
+        String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
+        fuelLeft.setText(fuelLeftString);
+        if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
+            fuelLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -181,9 +186,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {
+            Log.d(LOG_TAG, "TEST: StateResto&");
             restoreState(state);
         }
         else {
+            Log.d(LOG_TAG, "TEST: StateResto&nooooo");
             fileErasedFlag = false;
         }
         setInternalToTripProcessor();
@@ -212,7 +219,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onDetach: called");
         }
-        cleanAllProcess();
+        Log.d(LOG_TAG, "onDetach: TEST CALLED");
+
         super.onDetach();
     }
 
@@ -420,6 +428,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void restoreTripProcessor(TripProcessor restoredTripProcess) {
         if (tripProcessor == null) {
             if (restoredTripProcess != null) {
+                Log.d(LOG_TAG, "restoreTripProcessor: TEST notnull");
                 tripProcessor = restoredTripProcess;
                 tripProcessor.setSpeedChangeListener(this);
             }
@@ -431,13 +440,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void restoreAvgSpeedList(ArrayList<String> avgSpeedList) {
-        if (avgSpeedList.size() == 0 && avgSpeedList != null) {
-            ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
-            for (String tmpStr : avgSpeedList) {
-                avgSpeedArrayList.add(Float.valueOf(tmpStr));
-            }
-            tripProcessor.setAvgSpeedArrayList(avgSpeedArrayList);
-        }
+        tripProcessor.restoreAvgList(avgSpeedList);
     }
 
     private void restoreFuelLayoutVisibility(boolean firstState) {
@@ -486,17 +489,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void restoreFuelLevel() {
         String fuelString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
         fuelLeft.setText(fuelString);
-    }
-
-    private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
-
-        GpsHandler.setSpeedSubscriber(tripProcessor.getSpeedSubscriber());
-        GpsHandler.setLocationSubscriber(tripProcessor.getLocationSubscriber());
-        GpsHandler.setMaxSpeedSubscriber(tripProcessor.getMaxSpeedSubscriber());
-
-        //        GpsHandler.setSpeedSubscriber(speedSubscriber);
-        //        GpsHandler.setLocationSubscriber(locationSubscriber);
-        //        GpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
     }
 
     private void gpsStatusListener(boolean register) {
@@ -558,55 +550,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    private void configureGpsHandler() {
-        gpsHandler = locationService.getGpsHandler();
-        UtilMethods.checkIfGpsEnabled(context);
-        String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
-        fuelLeft.setText(fuelLeftString);
-        if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
-            fuelLayout.setVisibility(View.VISIBLE);
-        }
-        configureMapFragment();
-        setSubscribersToGpsHandler(gpsHandler);
-        //        setupSubscribers();
-    }
-
-    private void setupServiceConnection() {
-        serviceConnection = new ServiceConnection() {
-            @Override public void onServiceConnected(ComponentName className, IBinder service) {
-                LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
-                locationService = binder.getService();
-                configureGpsHandler();
-                setupButtons();
-                if (ConstantValues.LOGGING_ENABLED) {
-                    Log.i(LOG_TAG, "onServiceConnected: bounded");
-                }
-            }
-
-            @Override public void onServiceDisconnected(ComponentName arg0) {
-                if (ConstantValues.LOGGING_ENABLED) {
-                    Log.i(LOG_TAG, "onServiceConnected: unbounded");
-                }
-            }
-        };
-    }
-
-    private void setupLocationService() {
-        Intent intent = new Intent(context, LocationService.class);
-        if (serviceConnection == null) {
-            setupServiceConnection();
-            context.getApplicationContext().startService(intent);
-            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        }
-        else {
-            if (ConstantValues.LOGGING_ENABLED) {
-                Log.i(LOG_TAG, "onServiceConnected: service already exist");
-            }
-            configureGpsHandler();
-            setupButtons();
-        }
-    }
-
     private void setupSpeedometer() {
         speedometer = createSpeedometerGauge(context);
         speedometer.setScaleX(ConstantValues.SPEEDOMETER_WIDTH);
@@ -617,23 +560,25 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void cleanAllProcess() {
-        // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-        //        if(wakeLock!=null){
+        //        TODO:07.06 .2016 notworking due to problems with WakeLock that calling in OnLocationChanged, whatever you do..
+        //        if (wakeLock != null) {
         //            wakeLock.release();
         //        }
+        ServiceConnection serviceConnection = tripProcessor.getServiceConnection();
+        LocationService   locationService   = tripProcessor.getLocationService();
         if (isButtonVisible(stopButton)) {
             stopTracking();
         }
         if (serviceConnection != null) {
-            context.unbindService(serviceConnection);
+            Log.d(LOG_TAG, "cleanAllProcess: TEST serviceCon!");
+            tripProcessor.unregisterService();
         }
-        gpsStatusListener(REMOVE);
         if (locationService != null) {
             locationService.onDestroy();
-            locationService = null;
         }
+
+        gpsStatusListener(REMOVE);
         mapFragment = null;
-        serviceConnection = null;
         gpsHandler = null;
         tripProcessor.setSpeedChangeListener(null);
         tripProcessor = null;
@@ -691,6 +636,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
+    public void performExit() {
+        cleanAllProcess();
+    }
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {

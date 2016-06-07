@@ -27,8 +27,8 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.Random;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 

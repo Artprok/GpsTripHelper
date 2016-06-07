@@ -16,8 +16,8 @@ import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.Bind;
 import dagger.Module;
 
 @Module public class MainActivity extends AppCompatActivity {
@@ -62,7 +62,7 @@ import dagger.Module;
                     .setMessage(getString(R.string.exit_dialog_string))
                     .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
-                            performExitFromApplication(f);
+                            performExitFromApplication((MainFragment) f);
                         }
 
                     }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
@@ -90,7 +90,9 @@ import dagger.Module;
         });
     }
 
-    private void performExitFromApplication(Fragment f) {
+    private void performExitFromApplication(MainFragment f) {
+        Log.d(LOG_TAG, "performExitFromApplication: EXIT");
+        f.performExit();
         f.onDetach();
         finish();
         System.exit(0);

@@ -87,7 +87,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         super.onDestroy();
     }
 
-
     private LocationRequest setupLocRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
@@ -95,7 +94,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
-
 
     public class LocalBinder extends Binder {
         public LocationService getService() {

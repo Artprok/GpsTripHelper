@@ -222,7 +222,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override public void onMapReady(GoogleMap googleMap) {
-        if (routes != null && routes.get(0).getSpeed() != 666) {
+        if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != 666) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
             UtilMethods.checkPermission(context);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);

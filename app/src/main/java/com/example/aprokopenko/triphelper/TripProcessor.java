@@ -1,17 +1,24 @@
 package com.example.aprokopenko.triphelper;
 
+import android.content.ServiceConnection;
+import android.content.ComponentName;
 import android.location.Location;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Parcelable;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.util.Log;
+
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.example.aprokopenko.triphelper.service.LocationService;
+import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
@@ -34,13 +41,16 @@ public class TripProcessor implements Parcelable {
     private static final String LOG_TAG = "TripProcessor";
     private final Context context;
 
-    private ArrayList<Route> routes;
-    private ArrayList<Float> avgSpeedArrayList;
-    private boolean          fileIsInWriteMode;
-    private long             tripStartTime;
-    private int              currentTripId;
-    private float            averageSpeed;
-    private TripData         tripData;
+    private ArrayList<Float>  avgSpeedArrayList;
+    private ArrayList<Route>  routes;
+    private boolean           fileIsInWriteMode;
+    private long              tripStartTime;
+    private int               currentTripId;
+    private float             averageSpeed;
+    private TripData          tripData;
+    private ServiceConnection serviceConnection;
+    private GpsHandler        gpsHandler;
+    private LocationService   locationService;
 
     private float fuelConsFromSettings;
     private int   fuelCapacity;
@@ -52,33 +62,43 @@ public class TripProcessor implements Parcelable {
     private Subscriber<Float>    maxSpeedSubscriber;
     private Subscriber<Float>    speedSubscriber;
 
-    private TripProcessor(Parcel in) {
+
+    public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
+        Log.d(LOG_TAG, "TripProcessor: TEST CREATED");
+        if (ConstantValues.LOGGING_ENABLED) {
+            Log.i(LOG_TAG, "TripProcessor: IsConstructed");
+        }
+        setupSubscribers();
+        this.context = context;
+        setupLocationService();
+        routes = new ArrayList<>();
+
+        this.fuelConsFromSettings = fuelConsFromSettings;
+        this.fuelPrice = fuelPrice;
+        this.fuelCapacity = fuelCapacity;
+
+        fileIsInWriteMode = false;
+
+        if (tripData == null) {
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "TripProcessor: Reading data from file, file isn't empty");
+            }
+            tripData = readDataFromFile();
+        }
+    }
+
+    protected TripProcessor(Parcel in) {
+        routes = in.createTypedArrayList(Route.CREATOR);
         fileIsInWriteMode = in.readByte() != 0;
         tripStartTime = in.readLong();
         currentTripId = in.readInt();
         averageSpeed = in.readFloat();
         tripData = in.readParcelable(TripData.class.getClassLoader());
-        routes = in.createTypedArrayList(Route.CREATOR);
         fuelConsFromSettings = in.readFloat();
-        fuelPrice = in.readFloat();
         fuelCapacity = in.readInt();
+        fuelPrice = in.readFloat();
         context = TripHelperApp.getAppContext();
-    }
-
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
-        dest.writeLong(tripStartTime);
-        dest.writeInt(currentTripId);
-        dest.writeFloat(averageSpeed);
-        dest.writeParcelable(tripData, flags);
-        dest.writeTypedList(routes);
-        dest.writeFloat(fuelConsFromSettings);
-        dest.writeFloat(fuelPrice);
-        dest.writeInt(fuelCapacity);
-    }
-
-    @Override public int describeContents() {
-        return 0;
+        setupSubscribers();
     }
 
     public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
@@ -91,25 +111,62 @@ public class TripProcessor implements Parcelable {
         }
     };
 
-    public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.i(LOG_TAG, "TripProcessor: IsConstructed");
+    public ServiceConnection getServiceConnection() {
+        return serviceConnection;
+    }
+
+    public LocationService getLocationService() {
+        return locationService;
+    }
+
+    private void setupLocationService() {
+        Intent intent = new Intent(context, LocationService.class);
+        if (serviceConnection == null) {
+            setupServiceConnection();
+            context.getApplicationContext().startService(intent);
+            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         }
-        this.fuelConsFromSettings = fuelConsFromSettings;
-        this.fuelPrice = fuelPrice;
-        this.fuelCapacity = fuelCapacity;
-        setupSubscribers();
-        fileIsInWriteMode = false;
-        routes = new ArrayList<>();
-        this.context = context;
-        if (tripData == null) {
+        else {
             if (ConstantValues.LOGGING_ENABLED) {
-                Log.d(LOG_TAG, "TripProcessor: Reading data from file, file isn't empty");
+                Log.i(LOG_TAG, "onServiceConnected: service already exist");
             }
-            tripData = readDataFromFile();
+            configureGpsHandler();
         }
     }
 
+    private void setupServiceConnection() {
+        serviceConnection = new ServiceConnection() {
+            @Override public void onServiceConnected(ComponentName className, IBinder service) {
+                LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
+                locationService = binder.getService();
+                configureGpsHandler();
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.i(LOG_TAG, "onServiceConnected: bounded");
+                }
+                Log.i(LOG_TAG, "onServiceConnected:TEST bounded");
+            }
+
+            @Override public void onServiceDisconnected(ComponentName arg0) {
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.i(LOG_TAG, "onServiceConnected: unbounded");
+                }
+            }
+        };
+    }
+
+    private void configureGpsHandler() {
+        gpsHandler = locationService.getGpsHandler();
+        UtilMethods.checkIfGpsEnabled(context);
+        setSubscribersToGpsHandler(gpsHandler);
+        setupSubscribers();
+    }
+
+    private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
+
+        GpsHandler.setSpeedSubscriber(getSpeedSubscriber());
+        GpsHandler.setLocationSubscriber(getLocationSubscriber());
+        GpsHandler.setMaxSpeedSubscriber(getMaxSpeedSubscriber());
+    }
 
     public void setFuelConsFromSettings(float fuelConsFromSettings) {
         this.fuelConsFromSettings = fuelConsFromSettings;
@@ -342,7 +399,7 @@ public class TripProcessor implements Parcelable {
         };
     }
 
-    private void setupSubscribers() {
+    public void setupSubscribers() {
         setupLocationSubscriber();
         setupMaxSpeedSubscriber();
         setupSpeedSubscriber();
@@ -513,6 +570,36 @@ public class TripProcessor implements Parcelable {
         trip.setAvgFuelConsumption(fuelConsumption);
         updateTripState();
         setTripFieldsToStartState();
+    }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeTypedList(routes);
+        parcel.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
+        parcel.writeLong(tripStartTime);
+        parcel.writeInt(currentTripId);
+        parcel.writeFloat(averageSpeed);
+        parcel.writeParcelable(tripData, i);
+        parcel.writeFloat(fuelConsFromSettings);
+        parcel.writeInt(fuelCapacity);
+        parcel.writeFloat(fuelPrice);
+    }
+
+    public void unregisterService() {
+        context.unbindService(serviceConnection);
+    }
+
+    public void restoreAvgList(ArrayList<String> avgSpeedList) {
+            if (avgSpeedList != null && avgSpeedList.size() == 0) {
+                ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
+                for (String tmpStr : avgSpeedList) {
+                    avgSpeedArrayList.add(Float.valueOf(tmpStr));
+                }
+                setAvgSpeedArrayList(avgSpeedArrayList);
+            }
     }
 
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
