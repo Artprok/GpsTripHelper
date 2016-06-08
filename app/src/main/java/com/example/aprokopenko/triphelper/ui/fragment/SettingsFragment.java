@@ -125,38 +125,6 @@ import butterknife.ButterKnife;
         }
     }
 
-    private void setupAboutButton() {
-        aboutButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                UtilMethods.buildAndShowAboutDialog(context);
-            }
-        });
-    }
-
-    private void setupSpinner() {
-        final String kmh   = getString(R.string.kilometreUnit);
-        final String mph   = getString(R.string.milesUnit);
-        final String knots = getString(R.string.knots);
-        String       title = getString(R.string.measurementUnitSpinnerTitle);
-
-        String[]             data    = {kmh, mph, knots};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        measurementUnitSpinner.setAdapter(adapter);
-        measurementUnitSpinner.setPrompt(title);
-
-        measurementUnitSpinner.setSelection(preferences.getInt("measurementUnitPosition", 0));
-        measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setMeasurementUnit(position, kmh, mph, knots);
-            }
-
-            @Override public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
-    }
-
     private void setupEditTextFields() {
         fuelPriceEditText.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -213,16 +181,28 @@ import butterknife.ButterKnife;
         });
     }
 
-    private void updateTextFields() {
-        String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
-        curFuelCons.setText(fuelCons);
+    private void setupAboutButton() {
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                UtilMethods.buildAndShowAboutDialog(context);
+            }
+        });
+    }
 
-        String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
-        curFuelPrice.setText(fuelCost);
-
-        String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
-        curFuelCapacity.setText(fuelCapacity);
-
+    private void setupEraseButton() {
+        eraseButton.setVisibility(View.VISIBLE);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (UtilMethods.eraseFile(context)) {
+                    fileEraseListener.onFileErased();
+                    readDataFromFile();
+                    UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
+                }
+                else {
+                    UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
+                }
+            }
+        });
     }
 
     private void setupTextFields() {
@@ -254,20 +234,40 @@ import butterknife.ButterKnife;
         }
     }
 
-    private void setupEraseButton() {
-        eraseButton.setVisibility(View.VISIBLE);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (UtilMethods.eraseFile(context)) {
-                    fileEraseListener.onFileErased();
-                    readDataFromFile();
-                    UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
-                }
-                else {
-                    UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
-                }
+    private void setupSpinner() {
+        final String kmh   = getString(R.string.kilometreUnit);
+        final String mph   = getString(R.string.milesUnit);
+        final String knots = getString(R.string.knots);
+        String       title = getString(R.string.measurementUnitSpinnerTitle);
+
+        String[]             data    = {kmh, mph, knots};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        measurementUnitSpinner.setAdapter(adapter);
+        measurementUnitSpinner.setPrompt(title);
+
+        measurementUnitSpinner.setSelection(preferences.getInt("measurementUnitPosition", 0));
+        measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setMeasurementUnit(position, kmh, mph, knots);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+    }
+
+    private void updateTextFields() {
+        String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
+        curFuelCons.setText(fuelCons);
+
+        String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
+        curFuelPrice.setText(fuelCost);
+
+        String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
+        curFuelCapacity.setText(fuelCapacity);
+
     }
 
     private void readDataFromFile() {

@@ -3,7 +3,6 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.support.v4.app.Fragment;
@@ -31,8 +30,6 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
 import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.example.aprokopenko.triphelper.service.LocationService;
-import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
 import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
@@ -82,7 +79,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private SfCircularGauge   speedometer;
     private MapFragment       mapFragment;
     private float             maxSpeedVal;
-    private GpsHandler        gpsHandler;
     private Context           context;
     private Bundle            state;
 
@@ -108,21 +104,26 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        configureMapFragment();
-        getInternalSettings();
         ButterKnife.bind(this, view);
-        getContextIfNull();
-
-        getStateFromPrefs();
-
-        gpsStatusListener(REGISTER);
-        setupButtons();
-        setupSpeedometer();
-
         if (savedInstanceState != null) {
             state = savedInstanceState;
         }
+        getContextIfNull();
+        getInternalSettings();
+        getStateFromPrefs();
 
+        configureMapFragment();
+
+        gpsStatusListener(REGISTER);
+
+        setupButtons();
+        setupSpeedometer();
+        setupTripProcessor();
+        setupFuelFields();
+
+    }
+
+    private void setupTripProcessor() {
         if (tripProcessor == null) {
             if (state != null) {
                 restoreState(state);
@@ -132,7 +133,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 tripProcessor.setSpeedChangeListener(this);
             }
         }
-        setupFuelFields();
     }
 
     private void setupFuelFields() {
@@ -193,27 +193,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             Log.d(LOG_TAG, "TEST: StateResto&nooooo");
             fileErasedFlag = false;
         }
-        setInternalToTripProcessor();
+        setInternalSettingsToTripProcessor();
         super.onResume();
     }
-
-    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-    //    private void changeWakeLockStateAfterSettings() {
-    //
-    //        boolean res = preferences.getBoolean("backgroundWork", false);
-    //        if (res) {
-    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock ON");
-    //            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-    //            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
-    //            wakeLock.acquire();
-    //        }
-    //        else {
-    //            if(wakeLock!=null){
-    //                wakeLock.release();
-    //            }
-    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock OFF");
-    //        }
-    //    }
 
     @Override public void onDetach() {
         if (ConstantValues.LOGGING_ENABLED) {
@@ -239,8 +221,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onFileErased() {
-        fileErasedFlag = true;
         tripProcessor.eraseTripData();
+        fileErasedFlag = true;
     }
 
     @Override public void onGpsStatusChanged(int event) {
@@ -269,9 +251,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     public void openMapFragment() {
         saveState();
-        mapFragment.setGpsHandler(gpsHandler);
+        mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
         setRouteToMapFragment();
         UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
+    }
+
+    public void performExit() {
+        cleanAllProcess();
     }
 
 
@@ -307,7 +293,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         readInternalDataFromFile();
     }
 
-    private void setInternalToTripProcessor() {
+    private void setInternalSettingsToTripProcessor() {
         getInternalSettings();
         tripProcessor.setFuelCapacity(fuelCapacityFromSettings);
         tripProcessor.setFuelConsFromSettings(fuelConsFromSettings);
@@ -481,7 +467,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-
     private void fillGasTank(float fuel) {
         fuelLeft.setText(tripProcessor.getFuelLevel(fuel, getString(R.string.distance_prefix)));
     }
@@ -564,23 +549,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         //        if (wakeLock != null) {
         //            wakeLock.release();
         //        }
-        ServiceConnection serviceConnection = tripProcessor.getServiceConnection();
-        LocationService   locationService   = tripProcessor.getLocationService();
+        tripProcessor.performExit();
         if (isButtonVisible(stopButton)) {
             stopTracking();
         }
-        if (serviceConnection != null) {
-            Log.d(LOG_TAG, "cleanAllProcess: TEST serviceCon!");
-            tripProcessor.unregisterService();
-        }
-        if (locationService != null) {
-            locationService.onDestroy();
-        }
-
         gpsStatusListener(REMOVE);
         mapFragment = null;
-        gpsHandler = null;
-        tripProcessor.setSpeedChangeListener(null);
         tripProcessor = null;
         context = null;
         preferences = null;
@@ -598,7 +572,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             mapFragment.setRoutes(tripProcessor.getRoutes());
         }
     }
-
 
     private void updateMaxSpeed(float speed) {
         maxSpeedVal = speed;
@@ -636,9 +609,24 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    public void performExit() {
-        cleanAllProcess();
-    }
+    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    //    private void changeWakeLockStateAfterSettings() {
+    //
+    //        boolean res = preferences.getBoolean("backgroundWork", false);
+    //        if (res) {
+    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock ON");
+    //            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+    //            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
+    //            wakeLock.acquire();
+    //        }
+    //        else {
+    //            if(wakeLock!=null){
+    //                wakeLock.release();
+    //            }
+    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock OFF");
+    //        }
+    //    }
+
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
