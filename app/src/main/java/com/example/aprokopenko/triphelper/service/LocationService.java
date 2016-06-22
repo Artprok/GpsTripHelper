@@ -45,13 +45,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override public void onConnected(@Nullable Bundle bundle) {
         NotificationCompat.Builder builder = createNotification();
         createRestartAppIntent(builder);
-
         notify(builder);
 
-        UtilMethods.checkPermission(getApplicationContext());
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
+
+        if(!UtilMethods.checkPermission(getApplicationContext())){
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
+            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
+        }
+        else {
+            // TODO: 22.06.2016 ask for turnOn permission.
         }
     }
 
