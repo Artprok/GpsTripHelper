@@ -1,5 +1,8 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -78,9 +81,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private SharedPreferences preferences;
     private SfCircularGauge   speedometer;
     private MapFragment       mapFragment;
-    private float             maxSpeedVal;
-    private Context           context;
-    private Bundle            state;
+
+    private Context context;
+    private Bundle  state;
 
     private int   fuelCapacityFromSettings;
     private float fuelPriceFromSettings;
@@ -114,12 +117,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
         configureMapFragment();
 
-        gpsStatusListener(REGISTER);
 
         setupButtons();
         setupSpeedometer();
         setupTripProcessor();
         setupFuelFields();
+        gpsStatusListener(REGISTER);
 
     }
 
@@ -213,7 +216,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
 
     @Override public void maxSpeedChanged(float maxSpeed) {
-        updateMaxSpeed(maxSpeed);
+        //        updateMaxSpeed(maxSpeed);
     }
 
     @Override public void speedChanged(float speed) {
@@ -490,7 +493,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     private void stopTracking() {
         tripProcessor.stopTracking();
-        maxSpeedVal = 0f;
         if (firstStart) {
             Log.d(LOG_TAG, "stopTracking: WHY???? (firstStart?)");
             fuelLayout.setVisibility(View.VISIBLE);
@@ -573,9 +575,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    private void updateMaxSpeed(float speed) {
-        maxSpeedVal = speed;
-    }
+    //    private void updateMaxSpeed(float speed) {
+    //        maxSpeedVal = speed;
+    //    }
 
     private void animateSpeedUpdate(final float speed) {
         if (ConstantValues.LOGGING_ENABLED) {

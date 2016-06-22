@@ -1,6 +1,11 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
@@ -9,12 +14,15 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+
+import javax.annotation.Resource;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -25,13 +33,26 @@ import dagger.Module;
     FloatingActionButton fab;
 
     public static final String LOG_TAG = "MainActivity";
+    Bundle savedInstanceState;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (savedInstanceState != null) {
+            this.savedInstanceState = savedInstanceState;
+        }
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
+
+        if (UtilMethods.checkPermission(this)) {
+            requestMultiplePermissions();
+        }
+        else {
+            proceedToFragmentCreating(savedInstanceState);
+        }
+    }
+
+    private void proceedToFragmentCreating(Bundle savedInstanceState) {
         MainFragment mainFragment;
         UtilMethods.setFabInvisible(this);
 
@@ -53,6 +74,40 @@ import dagger.Module;
             assert fab != null;
             setFabToMap(mainFragment);
         }
+    }
+
+    public void requestMultiplePermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,}, 1);
+    }
+
+    public void requestPermissionWithRationale() {
+        Log.d(LOG_TAG, "requestPermissionWithRationale: AAAAAAAAAAAAAAAAA");
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            final String message = getResources().getString(R.string.permissionExplanation);
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).setAction("GRANT", new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    requestMultiplePermissions();
+                }
+            }).show();
+
+        }
+        else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1 && grantResults.length == 2) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                proceedToFragmentCreating(savedInstanceState);
+            }
+            else {
+                requestPermissionWithRationale();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override public void onBackPressed() {

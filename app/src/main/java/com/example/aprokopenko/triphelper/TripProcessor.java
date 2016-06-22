@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.Parcel;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
@@ -49,6 +50,7 @@ public class TripProcessor implements Parcelable {
     private long              tripStartTime;
     private int               currentTripId;
     private float             averageSpeed;
+    private float             maxSpeedVal;
     private GpsHandler        gpsHandler;
     private TripData          tripData;
 
@@ -56,11 +58,11 @@ public class TripProcessor implements Parcelable {
     private float fuelPrice;
     private int   fuelCapacity;
 
-    private SpeedChangeListener speedChangeListener;
-
     private Subscriber<Location> locationSubscriber;
     private Subscriber<Float>    maxSpeedSubscriber;
     private Subscriber<Float>    speedSubscriber;
+
+    private SpeedChangeListener speedChangeListener;
 
 
     public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
@@ -163,8 +165,8 @@ public class TripProcessor implements Parcelable {
 
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
         // fixme: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
-        //        float maximumSpeed = maxSpeedVal;
-        float maximumSpeed = avgArrayList.size();
+                float maximumSpeed = maxSpeedVal;
+//        float maximumSpeed = avgArrayList.size();
 
         updateSpeed(averageSpeed, maximumSpeed);
         endTrip();
@@ -390,7 +392,7 @@ public class TripProcessor implements Parcelable {
                 }
 
                 @Override public void onNext(Float speed) {
-                    speedChangeListener.maxSpeedChanged(speed);
+                    maxSpeedVal = speed;
                 }
             };
         }

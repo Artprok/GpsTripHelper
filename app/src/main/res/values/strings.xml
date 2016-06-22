@@ -190,6 +190,9 @@
     <string name="workInBackGround">work in background (increase discharging rate) </string>
     <string name="switchOff">Off</string>
     <string name="switchOn">On</string>
+    <string name="notificationTitle">TripHelper</string>
+    <string name="notificationContent">Touch to continue</string>
+    <string name="permissionExplanation">To proceed You need to allow App to get Your location</string>
     <!--/SomethingWentWrongDialog-->
 
 

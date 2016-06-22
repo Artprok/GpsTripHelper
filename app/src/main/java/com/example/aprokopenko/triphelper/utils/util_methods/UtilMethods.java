@@ -22,6 +22,7 @@ import android.os.Build;
 import android.Manifest;
 import android.net.Uri;
 
+import com.example.aprokopenko.triphelper.service.LocationService;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
 
@@ -267,14 +268,14 @@ public class UtilMethods {
         fab.setVisibility(View.VISIBLE);
     }
 
-    public static void checkPermission(Context context) {
+    public static boolean checkPermission(Context context) {
+        boolean result = true;
         if (context != null) {
-            if (ActivityCompat.checkSelfPermission(context,
+            result = ActivityCompat.checkSelfPermission(context,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat
-                    .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
+                    .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
         }
+        return result;
     }
 
 
