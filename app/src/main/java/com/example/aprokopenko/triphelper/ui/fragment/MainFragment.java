@@ -122,10 +122,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupSpeedometer();
         setupTripProcessor();
         setupFuelFields();
-        if(!UtilMethods.checkPermission(context)){
+        if (!UtilMethods.checkPermission(context)) {
             gpsStatusListener(REGISTER);
         }
-        else{
+        else {
             // TODO: 22.06.2016 explain that need to turnOn permi
         }
 
