@@ -22,7 +22,6 @@ import android.os.Build;
 import android.Manifest;
 import android.net.Uri;
 
-import com.example.aprokopenko.triphelper.service.LocationService;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
 
@@ -189,7 +188,7 @@ public class UtilMethods {
         alert.show();
     }
 
-    public static void MapNotAvalibleDialog(final Context context) {
+    public static void MapNotAvaliableDialog(final Context context) {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.something_went_wrong);
         builder.setTitle(context.getString(R.string.somethingWentWrongTitle));
@@ -268,7 +267,7 @@ public class UtilMethods {
         fab.setVisibility(View.VISIBLE);
     }
 
-    public static boolean checkPermission(Context context) {
+    public static boolean checkPermissionIsNeeded(Context context) {
         boolean result = true;
         if (context != null) {
             result = ActivityCompat.checkSelfPermission(context,

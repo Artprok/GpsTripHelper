@@ -181,7 +181,7 @@
     <string name="workInBackGround">Работа в фоне (увеличивает расход батареи)</string>
     <string name="notificationTitle">Автопомощник</string>
     <string name="notificationContent">Автопомощник до сих пор работает, если он Вам сейчас больше не нужен, рекомендуем выйти из приложения, чтобы предотвратить разряд батареи.</string>
-    <string name="permissionExplanation">To proceed You need to allow App to get Your location</string>
+    <string name="permissionExplanation">Чтобы Автопомощник мог определить Вашу скорость нужно разрешить использовать GPS</string>
     <!--/SomethingWentWrongDialog-->
 
 </resources>

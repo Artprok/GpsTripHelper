@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.Parcel;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
@@ -165,8 +164,8 @@ public class TripProcessor implements Parcelable {
 
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
         // fixme: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
-                float maximumSpeed = maxSpeedVal;
-//        float maximumSpeed = avgArrayList.size();
+        float maximumSpeed = maxSpeedVal;
+        //        float maximumSpeed = avgArrayList.size();
 
         updateSpeed(averageSpeed, maximumSpeed);
         endTrip();
@@ -552,7 +551,7 @@ public class TripProcessor implements Parcelable {
         }
         trip.setAvgSpeed(averageSpeed);
         if (routes.size() == 0) {
-            Route tmpRoutePoint = new Route(ConstantValues.BERMUDA_COORDINATES, 666);
+            Route tmpRoutePoint = new Route(ConstantValues.BERMUDA_COORDINATES, ConstantValues.SPEED_VALUE_WORKAROUND);
             routes.add(tmpRoutePoint);
         }
         trip.setRoute(routes);

@@ -95,7 +95,7 @@ import butterknife.ButterKnife;
         readDataFromFile();
         setupSpinner();
 
-        // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+        // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        setupBackgroundSwitch();
     }
 
@@ -365,7 +365,7 @@ import butterknife.ButterKnife;
         }
     }
 
-    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
     //    private void setupBackgroundSwitch() {
     //        boolean res = preferences.getBoolean("backgroundWork", false);
     //        backgroundSwitch.setChecked(res);

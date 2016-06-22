@@ -73,13 +73,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public void onMapReady(GoogleMap googleMap) {
         googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        UtilMethods.checkPermission(context);
+        UtilMethods.checkPermissionIsNeeded(context);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setAllGesturesEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.setMyLocationEnabled(true);
+        if (!UtilMethods.checkPermissionIsNeeded(context)) {
+            googleMap.setMyLocationEnabled(true);
+        }
         this.googleMap = googleMap;
     }
 
@@ -153,7 +155,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 locationList.add(location);
                 if (fragmentVisible) {
                     float speed;
-                    UtilMethods.checkPermission(context);
+                    UtilMethods.checkPermissionIsNeeded(context);
                     if (ConstantValues.DEBUG_MODE) {
                         speed = UtilMethods.generateRandomSpeed();
                     }
