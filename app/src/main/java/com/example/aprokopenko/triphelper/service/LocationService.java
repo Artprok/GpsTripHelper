@@ -47,8 +47,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         createRestartAppIntent(builder);
         notify(builder);
 
-
-        if(!UtilMethods.checkPermission(getApplicationContext())){
+        if (!UtilMethods.checkPermissionIsNeeded(getApplicationContext())) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
             }
@@ -122,9 +121,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     private void createRestartAppIntent(NotificationCompat.Builder builder) {
-        Intent        notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent contentIntent      = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                intent, 0);
+        builder.setContentIntent(pendingIntent);
     }
 
     private NotificationCompat.Builder createNotification() {
