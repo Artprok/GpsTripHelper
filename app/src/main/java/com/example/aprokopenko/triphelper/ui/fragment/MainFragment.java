@@ -1,8 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -89,7 +86,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private float fuelPriceFromSettings;
     private float fuelConsFromSettings;
 
-    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
     //    private PowerManager.WakeLock wakeLock;
 
     public static MainFragment newInstance() {
@@ -122,7 +119,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupSpeedometer();
         setupTripProcessor();
         setupFuelFields();
-        if (!UtilMethods.checkPermission(context)) {
+        if (!UtilMethods.checkPermissionIsNeeded(context)) {
             gpsStatusListener(REGISTER);
         }
         else {
@@ -191,14 +188,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onResume() {
-        // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+        // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {
-            Log.d(LOG_TAG, "TEST: StateResto&");
             restoreState(state);
         }
         else {
-            Log.d(LOG_TAG, "TEST: StateResto&nooooo");
             fileErasedFlag = false;
         }
         setInternalSettingsToTripProcessor();
@@ -209,7 +204,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onDetach: called");
         }
-        Log.d(LOG_TAG, "onDetach: TEST CALLED");
 
         super.onDetach();
     }
@@ -217,11 +211,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Override public void onDestroyView() {
         ButterKnife.unbind(this);
         super.onDestroyView();
-    }
-
-
-    @Override public void maxSpeedChanged(float maxSpeed) {
-        //        updateMaxSpeed(maxSpeed);
     }
 
     @Override public void speedChanged(float speed) {
@@ -487,7 +476,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void gpsStatusListener(boolean register) {
         if (register) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            UtilMethods.checkPermission(context);
+            UtilMethods.checkPermissionIsNeeded(context);
             lm.addGpsStatusListener(this);
         }
         else {
@@ -552,7 +541,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void cleanAllProcess() {
-        //        TODO:07.06 .2016 notworking due to problems with WakeLock that calling in OnLocationChanged, whatever you do..
+        //        TODO:07.06 .2016 not working due to problems with WakeLock that calling in OnLocationChanged, whatever you do..
         //        if (wakeLock != null) {
         //            wakeLock.release();
         //        }
@@ -616,7 +605,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    // TODO: 07.06.2016 notworking due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
     //    private void changeWakeLockStateAfterSettings() {
     //
     //        boolean res = preferences.getBoolean("backgroundWork", false);

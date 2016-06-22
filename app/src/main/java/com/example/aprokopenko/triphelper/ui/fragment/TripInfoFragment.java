@@ -205,7 +205,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
                 else {
-                    UtilMethods.MapNotAvalibleDialog(context);
+                    UtilMethods.MapNotAvaliableDialog(context);
                 }
             }
         });
@@ -222,14 +222,16 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override public void onMapReady(GoogleMap googleMap) {
-        if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != 666) {
+        if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            UtilMethods.checkPermission(context);
+            UtilMethods.checkPermissionIsNeeded(context);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.getUiSettings().setMapToolbarEnabled(true);
             googleMap.getUiSettings().setCompassEnabled(true);
-            googleMap.setMyLocationEnabled(true);
+            if (!UtilMethods.checkPermissionIsNeeded(context)) {
+                googleMap.setMyLocationEnabled(true);
+            }
             boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
             if (drawn) {
                 drawMap = true;
