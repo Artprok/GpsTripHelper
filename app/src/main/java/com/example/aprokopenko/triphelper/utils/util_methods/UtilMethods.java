@@ -33,9 +33,9 @@ import java.util.Date;
 import butterknife.ButterKnife;
 
 public class UtilMethods {
-    public static final  String  LOG_TAG = "UtilMethods";
-    private static final float[] tempVal = {1};
-    private static final Random  random  = new Random();
+    public static final  String  LOG_TAG        = "UtilMethods";
+    private static final float[] testingTempVal = {1};
+    private static final Random  random         = new Random();
 
     public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
         if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
@@ -341,9 +341,9 @@ public class UtilMethods {
 
     public static float generateRandomSpeed() {
         float speed;
-        speed = 0 + tempVal[0];
+        speed = 0 + testingTempVal[0];
         if (speed != 0) {           //speed increment by 5 each tick
-            tempVal[0] += 5;
+            testingTempVal[0] += 5;
         }
         if (speed > 70) {
             speed = random.nextInt(200);

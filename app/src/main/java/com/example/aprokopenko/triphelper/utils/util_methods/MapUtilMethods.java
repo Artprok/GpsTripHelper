@@ -109,13 +109,13 @@ public class MapUtilMethods {
 
     private static int choseColorDependOnSpeed(float speed) {
         int color = 0;
-        if (speed >= 0 && speed < 80) {
+        if (speed >= 0 && speed < ConstantValues.CITY_SPEED_LIMIT) {
             color = GoogleMapsSettings.polylineColorCity;
         }
-        else if (speed > 80 && speed < 110) {
+        else if (speed > ConstantValues.CITY_SPEED_LIMIT && speed < ConstantValues.OUTCITY_SPEED_LIMIT) {
             color = GoogleMapsSettings.polylineColorOutOfCity;
         }
-        else if (speed > 110) {
+        else if (speed > ConstantValues.OUTCITY_SPEED_LIMIT) {
             color = GoogleMapsSettings.polylineColorOutOfMaxSpeedAllowed;
         }
         return color;

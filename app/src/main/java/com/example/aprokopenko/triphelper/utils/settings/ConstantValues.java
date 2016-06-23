@@ -23,7 +23,7 @@ public class ConstantValues {
 
     public static final float   SPEEDOMETER_HEIGHT = 0.99f;
     public static final float   SPEEDOMETER_WIDTH  = 0.99f;
-    public static final int     PER_100_KM         = 100;
+    public static final int     PER_100            = 100;
     public static final boolean DEBUG_MODE         = false; //todo change for release to false
     public static final boolean LOGGING_ENABLED    = false; //todo change for release to false
 
@@ -53,4 +53,17 @@ public class ConstantValues {
     public static final int   MIN_UPDATE_DISTANCE    = 0;
     public static final long  MIN_UPDATE_TIME        = 1000;
     public static final float SPEED_VALUE_WORKAROUND = 666;
+
+    public static final float KMH_MULTIPLIER   = 3.6f;
+    public static final float MPH_MULTIPLIER   = 2.23f;
+    public static final float KNOTS_MULTIPLIER = 1.94f;
+
+    public static final float MILLISECONDS_IN_HOUR   = 3600000;
+    public static final int   MILLISECONDS_IN_SECOND = 1000;
+    public static final int   HOUR_IN_DAY            = 24;
+    public static final int   SECONDS_IN_HOUR        = 3600;
+
+    public static final int CITY_SPEED_LIMIT    = 80;
+    public static final int OUTCITY_SPEED_LIMIT = 110;
+
 }

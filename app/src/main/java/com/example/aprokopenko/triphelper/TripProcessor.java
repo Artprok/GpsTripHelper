@@ -117,7 +117,6 @@ public class TripProcessor implements Parcelable {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
         }
-        writeDataToFile();
         float distanceToDriveLeft = getDistanceToDriveLeft(fuelLeftVal);
         return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
                 .formatFloatDecimalFormat(distanceToDriveLeft) + distancePrefix + ")");
@@ -173,6 +172,7 @@ public class TripProcessor implements Parcelable {
         endTrip();
         setMetricFieldsToTripData(fuelPrice);
         writeDataToFile();
+        currentTripId = ConstantValues.START_VALUE;
         avgArrayList.clear();
     }
 
@@ -244,7 +244,7 @@ public class TripProcessor implements Parcelable {
                 Log.d(LOG_TAG, "getDistanceToDriveLeft: " + fuelConsFromSettings + "avgSped" + avgSpeed);
             }
             float fuelConsLevel = UtilMethods.getFuelConsumptionLevel(avgSpeed, fuelConsFromSettings);
-            return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100_KM;
+            return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100;
         }
         else {
             return 0f;
@@ -446,15 +446,13 @@ public class TripProcessor implements Parcelable {
             timeSpentForAllTrips = timeSpentForAllTrips + trip.getTimeSpentForTrip();
             maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
         }
-
         for (Trip trip : allTrips) {
-            float multiplier  = (trip.getTimeSpentForTrip() * 100) / timeSpentForAllTrips;
-            float timeForTrip = trip.getTimeSpentForTrip() / 3600000;
-            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * multiplier) / 100;
+            float multiplier  = (trip.getTimeSpentForTrip() * ConstantValues.PER_100) / timeSpentForAllTrips;
+            float timeForTrip = trip.getTimeSpentForTrip() / ConstantValues.MILLISECONDS_IN_HOUR;
+            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * multiplier) / ConstantValues.PER_100;
             avgSpeedSum = (avgSpeedSum + (trip.getDistanceTravelled() / (timeForTrip)) * timeForTrip);
             timeSum = timeSum + timeForTrip;
         }
-
         avgFuelCons = avgFuelCons / tripQuantity;
         avgSpeedSum = avgSpeedSum / timeSum;
         distTravelled = CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeedSum);
@@ -465,7 +463,7 @@ public class TripProcessor implements Parcelable {
         tripData.setDistanceTravelled(distTravelled);
         tripData.setAvgFuelConsumption(avgFuelCons);
         tripData.setFuelSpent(fuelSpent);
-        tripData.setGasTank(tripData.getGasTank() - fuelSpent);
+        tripData.setGasTank(tripData.getGasTank() - getCurrentTrip().getFuelSpent());
         tripData.setMoneyOnFuelSpent(fuelSpent * fuelPriceFromSettings);
     }
 
@@ -485,7 +483,7 @@ public class TripProcessor implements Parcelable {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
         float  speed;
         // fixme: 10.05.2016 remove debug code
-        if (ConstantValues.DEBUG_MODE) {//debug code for testing
+        if (ConstantValues.DEBUG_MODE) {//debug code for testing, adds random speedValue in each location tick
             speed = UtilMethods.generateRandomSpeed();
         }
         else {
@@ -505,7 +503,6 @@ public class TripProcessor implements Parcelable {
     }
 
     private void setTripFieldsToStartState() {
-        currentTripId = ConstantValues.START_VALUE;
         tripStartTime = ConstantValues.START_VALUE;
         averageSpeed = ConstantValues.START_VALUE;
     }
@@ -587,7 +584,6 @@ public class TripProcessor implements Parcelable {
         updateTripState();
         setTripFieldsToStartState();
     }
-
 
     @Override public int describeContents() {
         return 0;

@@ -411,7 +411,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void restoreTripProcessor(TripProcessor restoredTripProcess) {
         if (tripProcessor == null) {
             if (restoredTripProcess != null) {
-                Log.d(LOG_TAG, "restoreTripProcessor: TEST notnull");
                 tripProcessor = restoredTripProcess;
                 tripProcessor.setSpeedChangeListener(this);
             }
@@ -488,7 +487,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void stopTracking() {
         tripProcessor.stopTracking();
         if (firstStart) {
-            Log.d(LOG_TAG, "stopTracking: WHY???? (firstStart?)");
             fuelLayout.setVisibility(View.VISIBLE);
             firstStart = false;
         }

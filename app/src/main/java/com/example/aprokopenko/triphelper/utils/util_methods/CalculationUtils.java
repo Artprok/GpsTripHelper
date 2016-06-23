@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalculationUtils {
-    private static float measurementUnitMultiplier = 3.6f;   //default val for KM/H
-
+    private static float measurementUnitMultiplier = ConstantValues.KMH_MULTIPLIER;   //default val for KM/H
 
     public static float getSpeedInKilometerPerHour(float speed) {
         return (speed * measurementUnitMultiplier);
@@ -54,7 +53,7 @@ public class CalculationUtils {
     }
 
     public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
-        return distanceTraveled * (fuelConsumption / ConstantValues.PER_100_KM);
+        return distanceTraveled * (fuelConsumption / ConstantValues.PER_100);
     }
 
     public static float calcAvgSpeedForOneTrip(ArrayList<Float> avgSpeedArrayList) {
@@ -100,16 +99,16 @@ public class CalculationUtils {
     }
 
     public static void setMeasurementMultiplier(int position) {
-        float result = 3.6f;
+        float result = ConstantValues.KMH_MULTIPLIER;
         switch (position) {
             case 0:
-                result = 3.6f;
+                result = ConstantValues.KMH_MULTIPLIER;
                 break;
             case 1:
-                result = 2.23f;
+                result = ConstantValues.MPH_MULTIPLIER;
                 break;
             case 2:
-                result = 1.94f;
+                result = ConstantValues.KNOTS_MULTIPLIER;
                 break;
         }
         measurementUnitMultiplier = result;
@@ -117,30 +116,31 @@ public class CalculationUtils {
 
 
     private static int getHoursFromMills(float timeInMills) {
-        return (int) ((timeInMills / (1000 * 60 * 60)) % 24);
+        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60 * 60)) % ConstantValues.HOUR_IN_DAY);
     }
 
     private static int getMinutesFromMills(float timeInMills) {
-        return (int) ((timeInMills / (1000 * 60)) % 60);
+        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60)) % 60);
     }
 
     private static int getSecondsFromMills(float timeInMills) {
-        return (int) (timeInMills / 1000) % 60;
+        return (int) (timeInMills / ConstantValues.MILLISECONDS_IN_SECOND) % 60;
     }
 
     private static float getTimeFromMills(float timeInMills) {
         float result;
-        float seconds = getSecondsFromMills(timeInMills);
-        float minutes = getMinutesFromMills(timeInMills);
-        float hours   = getHoursFromMills(timeInMills);
+        int   secondsInHour = ConstantValues.SECONDS_IN_HOUR;
+        float seconds       = getSecondsFromMills(timeInMills);
+        float minutes       = getMinutesFromMills(timeInMills);
+        float hours         = getHoursFromMills(timeInMills);
         if (hours == 0) {
-            result = minutes / 60 + seconds / 3600;
+            result = (minutes / 60) + (seconds / secondsInHour);
             if (minutes == 0) {
-                result = seconds / 3600;
+                result = seconds / secondsInHour;
             }
         }
         else {
-            result = hours + minutes / 60 + seconds / 3600;
+            result = hours + (minutes / 60) + (seconds / secondsInHour);
         }
         return result;
     }
