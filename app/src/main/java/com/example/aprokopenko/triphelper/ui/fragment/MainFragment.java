@@ -124,8 +124,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         else {
             // TODO: 22.06.2016 explain that need to turnOn permi
         }
-        Log.d(LOG_TAG, "onViewCreated: MAIN");
-
     }
 
     private void setupTripProcessor() {
@@ -180,7 +178,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onPause() {
-        Log.d(LOG_TAG, "PAUSE: MAIN");
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f!=null && f instanceof MainFragment) {
             saveState();
@@ -189,7 +186,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onResume() {
-        Log.d(LOG_TAG, "RESUME: MAIN");
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {
@@ -550,10 +546,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         //        if (wakeLock != null) {
         //            wakeLock.release();
         //        }
-        tripProcessor.performExit();
         if (isButtonVisible(stopButton)) {
             stopTracking();
         }
+        tripProcessor.performExit();
         gpsStatusListener(REMOVE);
         mapFragment = null;
         tripProcessor = null;

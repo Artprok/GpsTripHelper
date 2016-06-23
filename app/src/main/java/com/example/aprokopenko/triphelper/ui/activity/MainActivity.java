@@ -140,7 +140,6 @@ import dagger.Module;
     }
 
     private void performExitFromApplication(MainFragment f) {
-        Log.d(LOG_TAG, "performExitFromApplication: EXIT");
         f.performExit();
         f.onDetach();
         finish();

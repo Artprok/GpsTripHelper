@@ -12,7 +12,6 @@ import android.os.Parcel;
 import android.util.Log;
 
 
-import com.example.aprokopenko.triphelper.ui.activity.MainActivity;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -68,7 +67,6 @@ public class TripProcessor implements Parcelable {
 
 
     public TripProcessor(Context context, float fuelConsFromSettings, float fuelPrice, int fuelCapacity) {
-        Log.d(LOG_TAG, "TripProcessor: TEST CREATED");
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "TripProcessor: IsConstructed");
         }
@@ -116,7 +114,6 @@ public class TripProcessor implements Parcelable {
 
     public String getFuelLeftString(String distancePrefix) {
         float fuelLeftVal = getFuelLeft();
-        Log.d(LOG_TAG, "getFuelLeftString: fuelLeft+" + fuelLeftVal);
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
         }
@@ -170,9 +167,7 @@ public class TripProcessor implements Parcelable {
         }
 
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
-        // fixme: 12.05.2016 uncomment maxSpeedVal, speedTick for tests
         float maximumSpeed = maxSpeedVal;
-        //        float maximumSpeed = avgArrayList.size();
 
         updateSpeed(averageSpeed, maximumSpeed);
         endTrip();
@@ -210,9 +205,7 @@ public class TripProcessor implements Parcelable {
 
     public void performExit() {
         if (serviceConnection != null) {
-            Log.d(LOG_TAG, "cleanAllProcess: TEST serviceCon!");
             unregisterService();
-
         }
         if (locationService != null) {
             locationService.onDestroy();
@@ -227,7 +220,6 @@ public class TripProcessor implements Parcelable {
         TripData tripData = new TripData();
         tripData.setTrips(trips);
         tripData.setDistanceTravelled(distanceTravelled);
-        Log.d(LOG_TAG, "createTripData: fuelSpent" + fuelSpent);
         tripData.setFuelSpent(fuelSpent);
         tripData.setMoneyOnFuelSpent(moneyOnFuelSpent);
         tripData.setAvgFuelConsumption(avgFuelConsumption);
@@ -322,7 +314,6 @@ public class TripProcessor implements Parcelable {
 
             @Override public void onServiceDisconnected(ComponentName arg0) {
                 serviceBound = false;
-                Log.e(LOG_TAG, "onServiceDisconnected: DISCON");
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.i(LOG_TAG, "onServiceConnected: unbounded");
                 }
@@ -539,7 +530,6 @@ public class TripProcessor implements Parcelable {
         }
         float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
         fuelConsumption = fuelConsumption / tripData.getTrips().size();
-
         tripData.setDistanceTravelled(distanceTravelled);
         tripData.setAvgFuelConsumption(fuelConsumption);
         tripData.setMoneyOnFuelSpent(moneySpent);

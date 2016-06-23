@@ -67,7 +67,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         ButterKnife.bind(this, view);
         getGoogleMap();
         context = getActivity();
-        Log.d(LOG_TAG, "onViewCreated: " + fragmentVisible + googleMap);
         fragmentVisible = true;
     }
 

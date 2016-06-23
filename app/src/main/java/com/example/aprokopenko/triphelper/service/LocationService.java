@@ -51,7 +51,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
         }
         else {
-            // TODO: 22.06.2016 ask for turnOn permission.
+            // TODO: 22.06.2016 ask for turningOn permission.
         }
     }
 
