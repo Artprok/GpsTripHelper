@@ -90,7 +90,7 @@ public class UtilMethods {
         }
         else {
             if (ConstantValues.LOGGING_ENABLED) {
-                Log.d(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
+                Log.e(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
             }
             return "0.00";
         }
@@ -106,7 +106,7 @@ public class UtilMethods {
         }
         else {
             if (ConstantValues.LOGGING_ENABLED) {
-                Log.d(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
+                Log.e(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
             }
             return "0.00";
         }

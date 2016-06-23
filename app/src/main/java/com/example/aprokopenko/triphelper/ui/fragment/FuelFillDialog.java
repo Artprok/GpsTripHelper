@@ -27,10 +27,6 @@ public class FuelFillDialog extends DialogFragment {
         return new FuelFillDialog();
     }
 
-    public FuelFillDialog() {
-    }
-
-
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_fill_dialog, container, false);
         ButterKnife.bind(this, view);
@@ -59,7 +55,6 @@ public class FuelFillDialog extends DialogFragment {
         super.onDetach();
         fuelChangeAmountListener = null;
     }
-
 
     public void setFuelChangeAmountListener(FuelChangeAmountListener listener) {
         fuelChangeAmountListener = listener;

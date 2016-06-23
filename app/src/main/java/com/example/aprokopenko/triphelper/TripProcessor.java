@@ -350,7 +350,7 @@ public class TripProcessor implements Parcelable {
     private void setupTripData() {
         if (tripData == null) {
             if (ConstantValues.LOGGING_ENABLED) {
-                Log.d(LOG_TAG, "TripProcessor: Reading data from file...");
+                Log.i(LOG_TAG, "TripProcessor: Reading data from file...");
             }
             tripData = readDataFromFile();
         }
@@ -380,9 +380,6 @@ public class TripProcessor implements Parcelable {
                 }
 
                 @Override public void onNext(Location location) {
-                    if (ConstantValues.LOGGING_ENABLED) {
-                        Log.d(LOG_TAG, "onNext: Location added to route list, thread - " + Thread.currentThread());
-                    }
                     addPointToRouteList(location);
                 }
             };
@@ -411,22 +408,16 @@ public class TripProcessor implements Parcelable {
         if (speedSubscriber == null) {
             speedSubscriber = new Subscriber<Float>() {
                 @Override public void onCompleted() {
-                    if (ConstantValues.LOGGING_ENABLED) {
-                        Log.d(LOG_TAG, "complete: Complete?");
-                    }
                 }
 
                 @Override public void onError(Throwable e) {
                     if (ConstantValues.LOGGING_ENABLED) {
-                        Log.d(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
+                        Log.e(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
                     }
                 }
 
                 @Override public void onNext(final Float speed) {
                     storeSpeedTicks(speed);
-                    if (ConstantValues.LOGGING_ENABLED) {
-                        Log.d(LOG_TAG, "onNext: speed in MainFragment - " + speed);
-                    }
                     speedChangeListener.speedChanged(speed);
                 }
             };

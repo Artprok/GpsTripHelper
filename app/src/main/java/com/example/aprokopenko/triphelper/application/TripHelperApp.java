@@ -34,8 +34,5 @@ public class TripHelperApp extends Application {
         sharedPreferences = this.getSharedPreferences("tripPreferences", Context.MODE_PRIVATE);
         AppModule module = new AppModule(this);
         applicationComponent = DaggerApplicationComponent.builder().appModule(module).build();
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.i(LOG_TAG, "onCreate:Dagger2 testing,ApplicationCreated, context is " + context.toString());
-        }
     }
 }

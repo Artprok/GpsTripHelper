@@ -72,9 +72,6 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
         Observable<Float> speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
             @Override public void call(Subscriber<? super Float> sub) {
                 sub.onNext(speed);
-                if (ConstantValues.LOGGING_ENABLED) {
-                    Log.d(LOG_TAG, "call: On next! speedIn SetupObservable is" + speed);
-                }
             }
         }).repeat();
         speedObservable.subscribeOn(Schedulers.computation()).observeOn(Schedulers.computation()).subscribe(speedSubscriber);
@@ -89,7 +86,6 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
         float speed;
         // FIXME: 14.04.2016 debug code remove
         if (ConstantValues.DEBUG_MODE) {
-            Log.d(LOG_TAG, "onLocationChanged: TEST locaCha");
             speed = UtilMethods.generateRandomSpeed();
         }
         else {
