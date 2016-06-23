@@ -78,9 +78,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private SharedPreferences preferences;
     private SfCircularGauge   speedometer;
     private MapFragment       mapFragment;
-
-    private Context context;
-    private Bundle  state;
+    private Context           context;
+    private Bundle            state;
 
     private int   fuelCapacityFromSettings;
     private float fuelPriceFromSettings;
@@ -179,7 +178,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onPause() {
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
-        if (f!=null && f instanceof MainFragment) {
+        if (f != null && f instanceof MainFragment) {
             saveState();
         }
         super.onPause();
@@ -321,7 +320,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         stopButton.setVisibility(View.INVISIBLE);
         setButtonsVisibilityDuringWriteMode(View.VISIBLE);
     }
-
 
 
     private void stopButtonTurnActive() {
@@ -570,10 +568,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    //    private void updateMaxSpeed(float speed) {
-    //        maxSpeedVal = speed;
-    //    }
-
     private void animateSpeedUpdate(final float speed) {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
@@ -605,25 +599,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             speedometerTextView.setText(formattedSpeed);
         }
     }
-
-    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-    //    private void changeWakeLockStateAfterSettings() {
-    //
-    //        boolean res = preferences.getBoolean("backgroundWork", false);
-    //        if (res) {
-    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock ON");
-    //            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-    //            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
-    //            wakeLock.acquire();
-    //        }
-    //        else {
-    //            if(wakeLock!=null){
-    //                wakeLock.release();
-    //            }
-    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock OFF");
-    //        }
-    //    }
-
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
@@ -668,4 +643,22 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             }
         }
     }
+
+    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+    //    private void changeWakeLockStateAfterSettings() {
+    //
+    //        boolean res = preferences.getBoolean("backgroundWork", false);
+    //        if (res) {
+    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock ON");
+    //            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+    //            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
+    //            wakeLock.acquire();
+    //        }
+    //        else {
+    //            if(wakeLock!=null){
+    //                wakeLock.release();
+    //            }
+    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock OFF");
+    //        }
+    //    }
 }
