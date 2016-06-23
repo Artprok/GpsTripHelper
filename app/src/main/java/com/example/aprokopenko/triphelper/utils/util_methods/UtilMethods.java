@@ -150,6 +150,7 @@ public class UtilMethods {
 
     }
 
+
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {
         ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);
         valueAnimator.setDuration(ConstantValues.SPEEDOMETER_TEXT_ANIM_DURATION);

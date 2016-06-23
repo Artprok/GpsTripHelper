@@ -12,6 +12,7 @@ import android.os.Parcel;
 import android.util.Log;
 
 
+import com.example.aprokopenko.triphelper.ui.activity.MainActivity;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -52,6 +53,8 @@ public class TripProcessor implements Parcelable {
     private float             maxSpeedVal;
     private GpsHandler        gpsHandler;
     private TripData          tripData;
+    private Intent            serviceIntent;
+    private boolean           serviceBound;
 
     private float fuelConsFromSettings;
     private float fuelPrice;
@@ -82,10 +85,13 @@ public class TripProcessor implements Parcelable {
         tripStartTime = in.readLong();
         currentTripId = in.readInt();
         averageSpeed = in.readFloat();
+        maxSpeedVal = in.readFloat();
         tripData = in.readParcelable(TripData.class.getClassLoader());
+        serviceIntent = in.readParcelable(Intent.class.getClassLoader());
         fuelConsFromSettings = in.readFloat();
-        fuelCapacity = in.readInt();
         fuelPrice = in.readFloat();
+        fuelCapacity = in.readInt();
+        serviceBound = in.readByte() != 0;
         context = TripHelperApp.getAppContext();
         setupSubscribers();
     }
@@ -110,6 +116,7 @@ public class TripProcessor implements Parcelable {
 
     public String getFuelLeftString(String distancePrefix) {
         float fuelLeftVal = getFuelLeft();
+        Log.d(LOG_TAG, "getFuelLeftString: fuelLeft+" + fuelLeftVal);
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
         }
@@ -205,6 +212,7 @@ public class TripProcessor implements Parcelable {
         if (serviceConnection != null) {
             Log.d(LOG_TAG, "cleanAllProcess: TEST serviceCon!");
             unregisterService();
+
         }
         if (locationService != null) {
             locationService.onDestroy();
@@ -219,6 +227,7 @@ public class TripProcessor implements Parcelable {
         TripData tripData = new TripData();
         tripData.setTrips(trips);
         tripData.setDistanceTravelled(distanceTravelled);
+        Log.d(LOG_TAG, "createTripData: fuelSpent" + fuelSpent);
         tripData.setFuelSpent(fuelSpent);
         tripData.setMoneyOnFuelSpent(moneyOnFuelSpent);
         tripData.setAvgFuelConsumption(avgFuelConsumption);
@@ -281,11 +290,10 @@ public class TripProcessor implements Parcelable {
 
 
     private void setupLocationService() {
-        Intent intent = new Intent(context, LocationService.class);
-        if (serviceConnection == null) {
+        serviceIntent = new Intent(context, LocationService.class);
+        if (serviceConnection == null && !serviceBound) {
             setupServiceConnection();
-            context.getApplicationContext().startService(intent);
-            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+            context.getApplicationContext().startService(serviceIntent);
         }
         else {
             if (ConstantValues.LOGGING_ENABLED) {
@@ -293,6 +301,7 @@ public class TripProcessor implements Parcelable {
             }
             configureGpsHandler();
         }
+        context.getApplicationContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void setAvgSpeedArrayList(ArrayList<Float> avgSpeedArrayList) {
@@ -302,16 +311,18 @@ public class TripProcessor implements Parcelable {
     private void setupServiceConnection() {
         serviceConnection = new ServiceConnection() {
             @Override public void onServiceConnected(ComponentName className, IBinder service) {
+                serviceBound = true;
                 LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
                 locationService = binder.getService();
                 configureGpsHandler();
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.i(LOG_TAG, "onServiceConnected: bounded");
                 }
-                Log.i(LOG_TAG, "onServiceConnected:TEST bounded");
             }
 
             @Override public void onServiceDisconnected(ComponentName arg0) {
+                serviceBound = false;
+                Log.e(LOG_TAG, "onServiceDisconnected: DISCON");
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.i(LOG_TAG, "onServiceConnected: unbounded");
                 }
@@ -320,11 +331,19 @@ public class TripProcessor implements Parcelable {
     }
 
     private void unregisterService() {
-        context.unbindService(serviceConnection);
+        if (serviceIntent == null) {
+            serviceIntent = new Intent(context, LocationService.class);
+        }
+        context.getApplicationContext().stopService(serviceIntent);
+        if (serviceConnection != null && serviceBound) {
+            serviceBound = false;
+            context.getApplicationContext().unbindService(serviceConnection);
+        }
+
+        serviceBound = false;
     }
 
     private void setupSubscribers() {
-        Log.d(LOG_TAG, "setupSubscribers: is called");
         setupLocationSubscriber();
         setupMaxSpeedSubscriber();
         setupSpeedSubscriber();

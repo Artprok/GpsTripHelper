@@ -113,7 +113,6 @@ import dagger.Module;
                 Log.i(LOG_TAG, "onCreate: new fragment");
             }
             mainFragment = MainFragment.newInstance();
-            UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             assert fab != null;
             setFabToMap(mainFragment);
 
@@ -126,6 +125,7 @@ import dagger.Module;
             assert fab != null;
             setFabToMap(mainFragment);
         }
+        UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
     }
 
     private void setFabToMap(final MainFragment mainFragment) {
@@ -134,7 +134,7 @@ import dagger.Module;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 mainFragment.openMapFragment();
-                setFabToSpeedometer();
+                setFabToSpeedometer(mainFragment);
             }
         });
     }
@@ -147,25 +147,25 @@ import dagger.Module;
         System.exit(0);
     }
 
-    private void setFabToSpeedometer() {
+    private void setFabToSpeedometer(final MainFragment mainFragment) {
         int res = R.drawable.road_black;
         fab.setImageResource(res);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-                if (mf == null) {
+
+                if (mf == null || !mf.equals(mainFragment)) {
                     mf = MainFragment.newInstance();
-                    UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
                     assert fab != null;
                     setFabToMap(mf);
                 }
                 else {
-                    mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
                     assert fab != null;
                     setFabToMap(mf);
-                    UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
                 }
+                UtilMethods.replaceFragment(mf, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
             }
         });
     }
+
 }

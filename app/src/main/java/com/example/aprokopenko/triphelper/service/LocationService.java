@@ -1,13 +1,10 @@
 package com.example.aprokopenko.triphelper.service;
 
-import android.Manifest;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.annotation.Nullable;
 import android.support.annotation.NonNull;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.app.Service;
@@ -125,8 +122,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         builder.setContentIntent(pendingIntent);
     }
 

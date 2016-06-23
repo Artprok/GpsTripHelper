@@ -114,7 +114,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
         configureMapFragment();
 
-
         setupButtons();
         setupSpeedometer();
         setupTripProcessor();
@@ -125,6 +124,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         else {
             // TODO: 22.06.2016 explain that need to turnOn permi
         }
+        Log.d(LOG_TAG, "onViewCreated: MAIN");
 
     }
 
@@ -180,14 +180,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onPause() {
+        Log.d(LOG_TAG, "PAUSE: MAIN");
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
-        if (f instanceof MainFragment) {
+        if (f!=null && f instanceof MainFragment) {
             saveState();
         }
         super.onPause();
     }
 
     @Override public void onResume() {
+        Log.d(LOG_TAG, "RESUME: MAIN");
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {
@@ -197,6 +199,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             fileErasedFlag = false;
         }
         setInternalSettingsToTripProcessor();
+        UtilMethods.setFabVisible(getActivity());
         super.onResume();
     }
 
@@ -323,6 +326,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setButtonsVisibilityDuringWriteMode(View.VISIBLE);
     }
 
+
+
     private void stopButtonTurnActive() {
         startButton.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.VISIBLE);
@@ -352,6 +357,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 saveState();
+                UtilMethods.setFabInvisible(getActivity());
                 SettingsFragment settingsFragment = SettingsFragment.newInstance();
                 settingsFragment.setFileEraseListener(MainFragment.this);
                 UtilMethods.replaceFragment(settingsFragment, ConstantValues.SETTINGS_FRAGMENT_TAG, getActivity());
@@ -500,7 +506,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         UtilMethods.setFabVisible(getActivity());
         UtilMethods.showToast(context, context.getString(R.string.trip_started_toast));
         stopButtonTurnActive();
-        //                avgSpeedArrayList = new ArrayList<>();
     }
 
     private void endTrip() {
