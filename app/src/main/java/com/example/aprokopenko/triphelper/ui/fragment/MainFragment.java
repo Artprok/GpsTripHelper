@@ -549,14 +549,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void animateSpeedUpdate(final float speed) {
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.d(LOG_TAG, "UpdateSpeed: speed in fragment" + speed);
-        }
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-                if (ConstantValues.LOGGING_ENABLED) {
-                    UtilMethods.showToast(context, "spdInFrag" + speed);
-                }
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }
