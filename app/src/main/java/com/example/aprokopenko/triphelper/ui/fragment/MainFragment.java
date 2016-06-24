@@ -219,24 +219,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onGpsStatusChanged(int event) {
         switch (event) {
-            case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                if (ConstantValues.LOGGING_ENABLED) {
-                    Log.d(LOG_TAG, "onGpsStatusChanged: EventSatStatus");
-                }
-                break;
             case GpsStatus.GPS_EVENT_FIRST_FIX:
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
                 setStatusImage();
                 UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
-                break;
-            case GpsStatus.GPS_EVENT_STARTED:
-                if (ConstantValues.LOGGING_ENABLED) {
-                    Log.d(LOG_TAG, "onGpsStatusChanged: eventStarted");
-                }
-                break;
-            case GpsStatus.GPS_EVENT_STOPPED:
                 break;
         }
     }
@@ -317,7 +305,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setButtonsVisibilityDuringWriteMode(View.VISIBLE);
     }
 
-
     private void stopButtonTurnActive() {
         startButton.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.VISIBLE);
@@ -395,8 +382,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupSettingsButton();
     }
 
-    private void restoreButtonsVisibility(TripProcessor restoredTripProcessor, Boolean visibility) {
-        if (visibility || restoredTripProcessor == null) {
+    private void restoreButtonsVisibility(Boolean visibility) {
+        if (visibility) {
             startButtonTurnActive();
         }
         else {
@@ -439,7 +426,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         ArrayList<String> restoredAvgSpeedList     = savedInstanceState.getStringArrayList("AvgSpeedList");
         TripProcessor     restoredTripProcessor    = savedInstanceState.getParcelable("TripProcessor");
 
-        restoreButtonsVisibility(restoredTripProcessor, restoredButtonVisibility);
+        restoreButtonsVisibility(restoredButtonVisibility);
         restoreStatus(restoredStatus);
         restoreTripProcessor(restoredTripProcessor);
         restoreAvgSpeedList(restoredAvgSpeedList);
