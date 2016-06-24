@@ -110,8 +110,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         getInternalSettings();
         getStateFromPrefs();
 
-        configureMapFragment();
-
         setupButtons();
         setupSpeedometer();
         setupTripProcessor();
@@ -230,6 +228,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     public void openMapFragment() {
+        configureMapFragment();
         saveState();
         mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
         setRouteToMapFragment();
