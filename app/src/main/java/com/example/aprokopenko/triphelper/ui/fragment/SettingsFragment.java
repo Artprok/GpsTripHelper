@@ -62,7 +62,7 @@ import butterknife.ButterKnife;
     @Bind(R.id.backgroundSwitch)
     Switch      backgroundSwitch;
 
-    public static final String LOG_TAG = "Settings fragment";
+    private static final String LOG_TAG = "Settings fragment";
 
     private int   fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
     private float fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;

@@ -42,22 +42,22 @@ public class TripProcessor implements Parcelable {
     private final Context context;
 
     private ArrayList<Float>  avgSpeedArrayList;
-    private ArrayList<Route>  routes;
     private boolean           fileIsInWriteMode;
     private ServiceConnection serviceConnection;
     private LocationService   locationService;
     private long              tripStartTime;
     private int               currentTripId;
+    private Intent            serviceIntent;
     private float             averageSpeed;
+    private boolean           serviceBound;
     private float             maxSpeedVal;
     private GpsHandler        gpsHandler;
     private TripData          tripData;
-    private Intent            serviceIntent;
-    private boolean           serviceBound;
+    private ArrayList<Route>  routes;
 
     private float fuelConsFromSettings;
-    private float fuelPrice;
     private int   fuelCapacity;
+    private float fuelPrice;
 
     private Subscriber<Location> locationSubscriber;
     private Subscriber<Float>    maxSpeedSubscriber;

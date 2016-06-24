@@ -23,8 +23,8 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     @Inject
     Context         context;
 
-    public static final String LOG_TAG  = "GPSHandler";
-    private             float  maxSpeed = ConstantValues.START_VALUE;
+    private static final String LOG_TAG  = "GPSHandler";
+    private              float  maxSpeed = ConstantValues.START_VALUE;
     private Observer<Location> locationSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
     private Observer<Float>    speedSubscriber;

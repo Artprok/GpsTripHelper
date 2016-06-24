@@ -15,7 +15,6 @@
         />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -108,7 +107,6 @@
 
         <TextView
             android:visibility="invisible"
-            android:id="@+id/backgroundSwitchText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/backgroundSwitch"

@@ -71,8 +71,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private static final boolean REMOVE   = false;
     private static final boolean REGISTER = true;
 
-    private boolean fileErasedFlag = false;
-    private boolean firstStart     = true;
+    private boolean firstStart = true;
+    private boolean fileErasedFlag;
 
     private TripProcessor     tripProcessor;
     private SharedPreferences preferences;
@@ -173,7 +173,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             outState.putStringArrayList("AvgSpeedList", avgStrArrList);
             outState.putParcelable("TripProcessor", tripProcessor);
         }
-
     }
 
     @Override public void onPause() {
@@ -202,7 +201,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (ConstantValues.LOGGING_ENABLED) {
             Log.i(LOG_TAG, "onDetach: called");
         }
-
         super.onDetach();
     }
 

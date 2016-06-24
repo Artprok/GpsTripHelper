@@ -100,7 +100,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private Context           context;
     private ArrayList<Route>  routes;
 
-    private boolean mapOpened = false;
+    private boolean mapOpened;
 
 
     public TripInfoFragment() {

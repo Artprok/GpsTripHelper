@@ -29,8 +29,9 @@ import dagger.Module;
     @Bind(R.id.fab)
     FloatingActionButton fab;
 
-    public static final String LOG_TAG = "MainActivity";
-    Bundle savedInstanceState;
+    private static final String LOG_TAG               = "MainActivity";
+    private static final int    LOCATION_REQUEST_CODE = 1;
+    private Bundle savedInstanceState;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,7 @@ import dagger.Module;
         fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
 
         if (UtilMethods.checkPermissionIsNeeded(this)) {
-            requestMultiplePermissions();
+            requestLocationPermissions();
         }
         else {
             proceedToFragmentCreating(savedInstanceState);
@@ -48,7 +49,7 @@ import dagger.Module;
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1 && grantResults.length == 2) {
+        if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 proceedToFragmentCreating(savedInstanceState);
             }
@@ -83,18 +84,18 @@ import dagger.Module;
         }
     }
 
-    public void requestMultiplePermissions() {
+    private void requestLocationPermissions() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,}, 1);
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,}, LOCATION_REQUEST_CODE);
     }
 
-    public void requestPermissionWithRationale() {
+    private void requestPermissionWithRationale() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             final String message = getResources().getString(R.string.permissionExplanation);
             Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE)
                     .setAction("GRANT", new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            requestMultiplePermissions();
+                            requestLocationPermissions();
                         }
                     }).show();
         }
@@ -115,7 +116,6 @@ import dagger.Module;
             mainFragment = MainFragment.newInstance();
             assert fab != null;
             setFabToMap(mainFragment);
-
         }
         else {
             if (ConstantValues.LOGGING_ENABLED) {

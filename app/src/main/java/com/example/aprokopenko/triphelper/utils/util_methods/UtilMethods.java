@@ -33,7 +33,7 @@ import java.util.Date;
 import butterknife.ButterKnife;
 
 public class UtilMethods {
-    public static final  String  LOG_TAG        = "UtilMethods";
+    private static final String  LOG_TAG        = "UtilMethods";
     private static final float[] testingTempVal = {1};
     private static final Random  random         = new Random();
 

@@ -39,7 +39,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Context              context;
     private ArrayList<Route>     routes;
 
-    private boolean fragmentVisible = false;
+    private boolean fragmentVisible;
 
     public MapFragment() {
         // Required empty public constructor

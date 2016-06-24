@@ -74,7 +74,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
         if (ConstantValues.LOGGING_ENABLED) {
-            Log.d(LOG_TAG, "onStartCommand");
+            Log.i(LOG_TAG, "onStartCommand");
         }
         super.onStartCommand(intent, flags, startId);
         gpsHandler = new GpsHandler();

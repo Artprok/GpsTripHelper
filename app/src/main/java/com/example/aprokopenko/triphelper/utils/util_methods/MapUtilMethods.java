@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class MapUtilMethods {
 
-    public static final String LOG_TAG = "MapUtilMethods";
+    private static final String LOG_TAG = "MapUtilMethods";
 
     public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
         ArrayList<Route> route = new ArrayList<>();

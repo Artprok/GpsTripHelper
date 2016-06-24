@@ -3,10 +3,8 @@ package com.example.aprokopenko.triphelper.application;
 import android.content.SharedPreferences;
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.example.aprokopenko.triphelper.dependency_injection.AppModule;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.DaggerApplicationComponent;
 import com.example.aprokopenko.triphelper.ApplicationComponent;
 
