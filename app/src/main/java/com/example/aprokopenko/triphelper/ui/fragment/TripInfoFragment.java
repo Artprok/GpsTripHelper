@@ -224,12 +224,12 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     @Override public void onMapReady(GoogleMap googleMap) {
         if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            UtilMethods.checkPermissionIsNeeded(context);
+            UtilMethods.isPermissionAllowed(context);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.getUiSettings().setMapToolbarEnabled(true);
             googleMap.getUiSettings().setCompassEnabled(true);
-            if (!UtilMethods.checkPermissionIsNeeded(context)) {
+            if (UtilMethods.isPermissionAllowed(context)) {
                 googleMap.setMyLocationEnabled(true);
             }
             boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);

@@ -97,7 +97,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -117,11 +116,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupSpeedometer();
         setupTripProcessor();
         setupFuelFields();
-        if (!UtilMethods.checkPermissionIsNeeded(context)) {
+        if (UtilMethods.isPermissionAllowed(context)) {
             gpsStatusListener(REGISTER);
         }
         else {
-            // TODO: 22.06.2016 explain that need to turnOn permi
+            // TODO: 22.06.2016 explain that need to turnOn permission and take those permission. Only After that gall gpsStatusList
         }
     }
 
@@ -132,8 +131,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             }
             else {
                 tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-                tripProcessor.setSpeedChangeListener(this);
             }
+            tripProcessor.setSpeedChangeListener(this);
         }
     }
 
@@ -275,7 +274,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         return result;
     }
 
-
     private void setFirstStartToFalse(SharedPreferences preferences) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("firstStart", false);
@@ -410,11 +408,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (tripProcessor == null) {
             if (restoredTripProcess != null) {
                 tripProcessor = restoredTripProcess;
-                tripProcessor.setSpeedChangeListener(this);
             }
             else {
                 tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-                tripProcessor.setSpeedChangeListener(this);
             }
         }
     }
@@ -448,8 +444,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         restoreTripProcessor(restoredTripProcessor);
         restoreAvgSpeedList(restoredAvgSpeedList);
         restoreFuelLevel();
-
         restoreFuelLayoutVisibility(firstStart);
+
         if (isButtonVisible(stopButton)) {
             UtilMethods.setFabVisible(getActivity());
         }
@@ -473,7 +469,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void gpsStatusListener(boolean register) {
         if (register) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            UtilMethods.checkPermissionIsNeeded(context);
+            // TODO: 24.06.2016 fix permission issue here. Need to addcondition when addListener is allowed
+            UtilMethods.isPermissionAllowed(context);
             lm.addGpsStatusListener(this);
         }
         else {

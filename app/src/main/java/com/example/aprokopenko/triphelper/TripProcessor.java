@@ -78,18 +78,18 @@ public class TripProcessor implements Parcelable {
     }
 
     protected TripProcessor(Parcel in) {
-        routes = in.createTypedArrayList(Route.CREATOR);
         fileIsInWriteMode = in.readByte() != 0;
         tripStartTime = in.readLong();
         currentTripId = in.readInt();
+        serviceIntent = in.readParcelable(Intent.class.getClassLoader());
         averageSpeed = in.readFloat();
+        serviceBound = in.readByte() != 0;
         maxSpeedVal = in.readFloat();
         tripData = in.readParcelable(TripData.class.getClassLoader());
-        serviceIntent = in.readParcelable(Intent.class.getClassLoader());
+        routes = in.createTypedArrayList(Route.CREATOR);
         fuelConsFromSettings = in.readFloat();
-        fuelPrice = in.readFloat();
         fuelCapacity = in.readInt();
-        serviceBound = in.readByte() != 0;
+        fuelPrice = in.readFloat();
         context = TripHelperApp.getAppContext();
         setupSubscribers();
     }
@@ -330,8 +330,6 @@ public class TripProcessor implements Parcelable {
             serviceBound = false;
             context.getApplicationContext().unbindService(serviceConnection);
         }
-
-        serviceBound = false;
     }
 
     private void setupSubscribers() {
@@ -475,7 +473,7 @@ public class TripProcessor implements Parcelable {
     private void updateSpeed(float avgSpeed, float maxSpd) {
         averageSpeed = avgSpeed;
         Trip trip = tripData.getTrip(currentTripId);
-        trip.setAvgSpeed(averageSpeed);
+        trip.setAvgSpeed(avgSpeed);
         trip.setMaxSpeed(maxSpd);
     }
 
@@ -508,18 +506,18 @@ public class TripProcessor implements Parcelable {
     }
 
     private void getTripDataFieldsValues() {
-        float distanceTravelled = ConstantValues.START_VALUE;
-        float fuelSpent         = ConstantValues.START_VALUE;
-        float fuelConsumption   = ConstantValues.START_VALUE;
+        float distanceTravelled  = ConstantValues.START_VALUE;
+        float fuelSpent          = ConstantValues.START_VALUE;
+        float avgFuelConsumption = ConstantValues.START_VALUE;
         for (Trip trip : tripData.getTrips()) {
             distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
             fuelSpent = fuelSpent + trip.getFuelSpent();
-            fuelConsumption = fuelConsumption + trip.getAvgFuelConsumption();
+            avgFuelConsumption = avgFuelConsumption + trip.getAvgFuelConsumption();
         }
         float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
-        fuelConsumption = fuelConsumption / tripData.getTrips().size();
+        avgFuelConsumption = avgFuelConsumption / tripData.getTrips().size();
         tripData.setDistanceTravelled(distanceTravelled);
-        tripData.setAvgFuelConsumption(fuelConsumption);
+        tripData.setAvgFuelConsumption(avgFuelConsumption);
         tripData.setMoneyOnFuelSpent(moneySpent);
         tripData.setFuelSpent(fuelSpent);
     }
@@ -590,17 +588,19 @@ public class TripProcessor implements Parcelable {
     }
 
     @Override public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeTypedList(routes);
         parcel.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
         parcel.writeLong(tripStartTime);
         parcel.writeInt(currentTripId);
+        parcel.writeParcelable(serviceIntent, i);
         parcel.writeFloat(averageSpeed);
+        parcel.writeByte((byte) (serviceBound ? 1 : 0));
+        parcel.writeFloat(maxSpeedVal);
         parcel.writeParcelable(tripData, i);
+        parcel.writeTypedList(routes);
         parcel.writeFloat(fuelConsFromSettings);
         parcel.writeInt(fuelCapacity);
         parcel.writeFloat(fuelPrice);
     }
-
 
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
         @Override protected Boolean doInBackground(TripData... params) {

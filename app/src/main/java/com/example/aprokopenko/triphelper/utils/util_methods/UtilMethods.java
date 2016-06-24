@@ -268,12 +268,17 @@ public class UtilMethods {
         fab.setVisibility(View.VISIBLE);
     }
 
-    public static boolean checkPermissionIsNeeded(Context context) {
-        boolean result = true;
-        if (context != null) {
-            result = ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat
-                    .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+    public static boolean isPermissionAllowed(Context context) {
+        boolean result = false;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        else {
+            if (context != null) {
+                result = ActivityCompat.checkSelfPermission(context,
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat
+                        .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            }
         }
         return result;
     }

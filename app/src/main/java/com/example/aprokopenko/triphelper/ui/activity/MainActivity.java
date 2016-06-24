@@ -40,7 +40,7 @@ import dagger.Module;
         ButterKnife.bind(this);
         fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
 
-        if (UtilMethods.checkPermissionIsNeeded(this)) {
+        if (UtilMethods.isPermissionAllowed(this)) {
             requestLocationPermissions();
         }
         else {
