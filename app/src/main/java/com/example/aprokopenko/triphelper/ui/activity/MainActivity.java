@@ -15,12 +15,14 @@ import android.view.View;
 import android.Manifest;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
+import io.fabric.sdk.android.Fabric;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 import dagger.Module;
@@ -35,6 +37,7 @@ import dagger.Module;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

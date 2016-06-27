@@ -24,9 +24,8 @@ public class ConstantValues {
     public static final float   SPEEDOMETER_HEIGHT = 0.99f;
     public static final float   SPEEDOMETER_WIDTH  = 0.99f;
     public static final int     PER_100            = 100;
-    public static final boolean DEBUG_MODE         = true; //todo change for release to false
+    public static final boolean DEBUG_MODE         = false; //todo change for release to false
     public static final boolean LOGGING_ENABLED    = false; //todo change for release to false
-
 
     public static final int TEXT_ANIM_DURATION             = 900;
     public static final int SPEEDOMETER_TEXT_ANIM_DURATION = 900;
@@ -60,7 +59,7 @@ public class ConstantValues {
 
     public static final float MILLISECONDS_IN_HOUR   = 3600000;
     public static final int   MILLISECONDS_IN_SECOND = 1000;
-    public static final int   HOUR_IN_DAY            = 24;
+    public static final int   HOURS_IN_DAY           = 24;
     public static final int   SECONDS_IN_HOUR        = 3600;
 
     public static final int CITY_SPEED_LIMIT    = 80;

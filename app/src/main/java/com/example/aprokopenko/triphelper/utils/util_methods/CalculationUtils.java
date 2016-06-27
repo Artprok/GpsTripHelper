@@ -116,7 +116,7 @@ public class CalculationUtils {
 
 
     private static int getHoursFromMills(float timeInMills) {
-        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60 * 60)) % ConstantValues.HOUR_IN_DAY);
+        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60 * 60)) % ConstantValues.HOURS_IN_DAY);
     }
 
     private static int getMinutesFromMills(float timeInMills) {

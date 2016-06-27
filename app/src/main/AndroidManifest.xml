@@ -12,9 +12,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
-        android:fullBackupContent="true"
         android:name=".application.TripHelperApp"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -30,9 +30,14 @@
             </intent-filter>
         </activity>
         <service android:name=".service.LocationService"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCXxEJzazi5BSP07xBKTGwZdeMNktnZekA"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b37d202ce9072757d659fa6c30fde3a8f4320af6"
+            />
     </application>
 
 </manifest>
