@@ -5,7 +5,6 @@ import android.os.Parcel;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
-import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
@@ -51,11 +50,11 @@ public class TripData implements Parcelable {
 
 
     public static final Creator<TripData> CREATOR = new Creator<TripData>() {
-        @Contract("_ -> !null") @Override public TripData createFromParcel(Parcel in) {
+        public TripData createFromParcel(Parcel in) {
             return new TripData(in);
         }
 
-        @Contract(value = "_ -> !null", pure = true) @Override public TripData[] newArray(int size) {
+        @Override public TripData[] newArray(int size) {
             return new TripData[size];
         }
     };

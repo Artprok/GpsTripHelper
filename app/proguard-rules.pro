@@ -82,3 +82,7 @@
     public static int d(...);
     public static int e(...);
 }
+
+#crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

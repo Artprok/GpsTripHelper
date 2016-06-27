@@ -5,7 +5,6 @@ import android.os.Parcel;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.jetbrains.annotations.Contract;
 
 public class Route implements Parcelable {
     private final LatLng routePoints;
@@ -31,11 +30,11 @@ public class Route implements Parcelable {
     }
 
     public static final Creator<Route> CREATOR = new Creator<Route>() {
-        @Contract("_ -> !null") @Override public Route createFromParcel(Parcel in) {
+        @Override public Route createFromParcel(Parcel in) {
             return new Route(in);
         }
 
-        @Contract(value = "_ -> !null", pure = true) @Override public Route[] newArray(int size) {
+        @Override public Route[] newArray(int size) {
             return new Route[size];
         }
     };

@@ -7,9 +7,6 @@
     <uses-permission android:name="com.example.googlemaps.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".application.TripHelperApp"
@@ -19,25 +16,29 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <service android:name=".service.LocationService"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCXxEJzazi5BSP07xBKTGwZdeMNktnZekA"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b37d202ce9072757d659fa6c30fde3a8f4320af6"
             />
+
     </application>
 
 </manifest>

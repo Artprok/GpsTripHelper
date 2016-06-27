@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.GoogleMap;
 import com.example.aprokopenko.triphelper.R;
 
-import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
@@ -45,7 +44,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
-    @Contract(" -> !null") public static MapFragment newInstance() {
+    public static MapFragment newInstance() {
         return new MapFragment();
     }
 
