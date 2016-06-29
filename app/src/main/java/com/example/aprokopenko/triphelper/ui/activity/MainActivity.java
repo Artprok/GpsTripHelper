@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
+import android.os.Debug;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,9 @@ import dagger.Module;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        Debug.startMethodTracing("Bottlenecks");
+
         Fabric.with(this, new Crashlytics());
         this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_main);
@@ -143,6 +147,7 @@ import dagger.Module;
     }
 
     private void performExitFromApplication(MainFragment f) {
+//        Debug.stopMethodTracing();
         f.performExit();
         f.onDetach();
         finish();

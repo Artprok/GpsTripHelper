@@ -210,6 +210,7 @@ public class TripProcessor implements Parcelable {
         if (locationService != null) {
             locationService.onDestroy();
         }
+        gpsHandler.performExit();
         gpsHandler = null;
         setSpeedChangeListener(null);
     }

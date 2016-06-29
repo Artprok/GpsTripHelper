@@ -221,8 +221,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
-                setStatusImage();
                 UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
+                setStatusImage();
                 break;
         }
     }
@@ -498,8 +498,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
-        if (statusImage.getBackground() != greenSatellite) {
-            statusImage.setBackground(greenSatellite);
+        if (statusImage != null) {
+            if (statusImage.getBackground() != greenSatellite) {
+                statusImage.setBackground(greenSatellite);
+            }
         }
     }
 

@@ -10,8 +10,16 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
+import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
+import rx.Scheduler;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.Subscriber;
 import rx.Observable;
@@ -28,6 +36,8 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     private Observer<Location> locationSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
     private Observer<Float>    speedSubscriber;
+    private Thread             locationThread;
+
 
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
@@ -70,29 +80,61 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
 
     private void setupSpeedObservable(final float speed) {
         Observable<Float> speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-            @Override public void call(Subscriber<? super Float> sub) {
+            @Override public void call(final Subscriber<? super Float> sub) {
                 sub.onNext(speed);
             }
-        }).repeat();
-        speedObservable.subscribeOn(Schedulers.computation()).observeOn(Schedulers.computation()).subscribe(speedSubscriber);
+        });
+        speedObservable.observeOn(Schedulers.immediate()).subscribe(speedSubscriber);
     }
+
 
     private void getMaxSpeedAndSetupObservable(float speed) {
         maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
         setupMaxSpeedObservable(maxSpeed);
     }
 
-    @Override public void onLocationChanged(Location location) {
-        float speed;
-        // FIXME: 14.04.2016 debug code remove
-        if (ConstantValues.DEBUG_MODE) {
-            speed = UtilMethods.generateRandomSpeed();
+    @Override public void onLocationChanged(final Location location) {
+        if (locationThread == null) {
+            locationThread = new Thread(new Runnable() {
+                @Override public void run() {
+                    float speed;
+                    // FIXME: 14.04.2016 debug code remove
+                    if (ConstantValues.DEBUG_MODE) {
+                        speed = UtilMethods.generateRandomSpeed();
+                    }
+                    else {
+                        speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+                    }
+                    setupLocationObservable(location);
+                    getMaxSpeedAndSetupObservable(speed);
+                    setupSpeedObservable(speed);
+                    synchronized (locationThread) {
+                        try {
+                            locationThread.wait();
+                            locationThread.run();
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            locationThread.start();
         }
         else {
-            speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+            synchronized (locationThread) {
+                locationThread.notify();
+            }
         }
-        setupLocationObservable(location);
-        getMaxSpeedAndSetupObservable(speed);
-        setupSpeedObservable(speed);
+    }
+
+    public void performExit() {
+        locationThread.interrupt();
+        locationThread = null;
+        context = null;
+        locationManager = null;
+        locationSubscriber = null;
+        speedSubscriber = null;
+        maxSpeedSubscriber = null;
     }
 }
