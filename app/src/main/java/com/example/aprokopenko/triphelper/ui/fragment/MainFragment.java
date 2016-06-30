@@ -73,6 +73,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     private boolean firstStart = true;
     private boolean fileErasedFlag;
+    private boolean gpsIsActive;
 
     private TripProcessor     tripProcessor;
     private SharedPreferences preferences;
@@ -103,6 +104,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        gpsIsActive = false;
         if (savedInstanceState != null) {
             state = savedInstanceState;
         }
@@ -161,11 +163,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onSaveInstanceState: Save called");
                 Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + isButtonVisible(startButton));
-                Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + getStatusImageState());
+                Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + gpsIsActive);
                 Log.d(LOG_TAG, "onSaveInstanceState: FirstStart" + firstStart);
             }
             outState.putBoolean("ControlButtonVisibility", isButtonVisible(startButton));
-            outState.putBoolean("StatusImageState", getStatusImageState());
+            outState.putBoolean("StatusImageState", gpsIsActive);
             outState.putBoolean("FirstStart", firstStart);
             outState.putStringArrayList("AvgSpeedList", avgStrArrList);
             outState.putParcelable("TripProcessor", tripProcessor);
@@ -175,6 +177,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Override public void onPause() {
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f != null && f instanceof MainFragment) {
+            checkGpsStatus();
             saveState();
         }
         super.onPause();
@@ -191,6 +194,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
         setInternalSettingsToTripProcessor();
         UtilMethods.setFabVisible(getActivity());
+        checkGpsStatus();
+
         super.onResume();
     }
 
@@ -222,7 +227,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
                 UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
-                setStatusImage();
+                setGpsIconActive();
                 break;
         }
     }
@@ -253,12 +258,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         return visibility;
     }
 
-    private boolean getStatusImageState() {
-        boolean result;
-        getContextIfNull();
-        Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
-        result = (statusImage != null && (statusImage.getBackground() != greenSatellite));
-        return result;
+    private void checkGpsStatus() {
+        if (!UtilMethods.checkIfGpsEnabled(context)) {
+            setGpsIconTurnedOff();
+        }
+        else {
+            gpsIsActive = true;
+        }
     }
 
     private void setFirstStartToFalse(SharedPreferences preferences) {
@@ -439,7 +445,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     private void restoreStatus(Boolean status) {
         if (status) {
-            setStatusImage();
+            setGpsIconActive();
         }
     }
 
@@ -494,14 +500,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         onSaveInstanceState(state);
     }
 
-    private void setStatusImage() {
+    private void setGpsIconActive() {
         getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage != null) {
-            if (statusImage.getBackground() != greenSatellite) {
-                statusImage.setBackground(greenSatellite);
-            }
+            statusImage.setBackground(greenSatellite);
+            gpsIsActive = true;
+        }
+    }
+
+    private void setGpsIconTurnedOff() {
+        getContextIfNull();
+        ButterKnife.bind(R.id.statusImageView, getActivity());
+        Drawable redSattelite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
+        if (statusImage != null) {
+            statusImage.setBackground(redSattelite);
+            gpsIsActive = false;
         }
     }
 
@@ -552,6 +567,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void animateSpeedUpdate(final float speed) {
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
+                UtilMethods.showToast(context, "speed is - " + speed);
+                Log.d(LOG_TAG, "run: speed" + speed);
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }

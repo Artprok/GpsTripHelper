@@ -241,19 +241,23 @@ public class UtilMethods {
         alert.show();
     }
 
-    public static void checkIfGpsEnabled(Context context) {
+    public static boolean checkIfGpsEnabled(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
 
+    public static void checkIfGpsEnabledAndShowDialogs(Context context) {
+        boolean isGpsEnabled = checkIfGpsEnabled(context);
 
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!isGpsEnabled) {
             if (ConstantValues.LOGGING_ENABLED) {
-                Log.i(LOG_TAG, "checkIfGpsEnabled: NotEnabled");
+                Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: NotEnabled");
             }
             buildAlertMessageNoGps(context);
         }
         else {
             if (ConstantValues.LOGGING_ENABLED) {
-                Log.i(LOG_TAG, "checkIfGpsEnabled: Gps Enabled");
+                Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: Gps Enabled");
             }
         }
     }

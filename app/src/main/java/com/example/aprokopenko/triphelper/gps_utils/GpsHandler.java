@@ -3,6 +3,7 @@ package com.example.aprokopenko.triphelper.gps_utils;
 import android.location.LocationManager;
 import android.location.Location;
 import android.content.Context;
+import android.support.annotation.UiThread;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
