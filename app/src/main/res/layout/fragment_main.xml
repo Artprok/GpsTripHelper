@@ -81,7 +81,8 @@
             android:textSize="@dimen/metricPortraitTextSize"
             android:textStyle="bold|italic"
             android:typeface="sans"
-            />
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"/>
 
         <ImageView
             android:id="@+id/fuelIcon"
@@ -121,7 +122,8 @@
                 android:textStyle="bold|italic"
                 android:typeface="sans"
 
-                />
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"/>
 
             <ImageButton
                 android:id="@+id/refillButton"

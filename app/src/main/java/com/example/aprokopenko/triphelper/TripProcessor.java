@@ -538,6 +538,8 @@ public class TripProcessor implements Parcelable {
             else {
                 UtilMethods.showToast(context, context.getString(R.string.fuel_overload_toast));
             }
+
+            writeDataToFile();
         }
     }
 

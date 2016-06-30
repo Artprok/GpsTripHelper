@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="@dimen/metricsTextSize"/>
+        android:textSize="@dimen/metricsTextSize"
+        />
 
     <ImageView
         android:id="@+id/calendarIcon"
@@ -20,8 +21,9 @@
         android:layout_height="35dp"
         android:layout_alignBottom="@+id/id"
         android:layout_alignLeft="@+id/id"
-        android:layout_marginLeft="30dp"
-        android:background="@drawable/calendar_icon"/>
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/calendar_icon"
+        android:layout_marginRight="5dp"/>
 
     <TextView
         android:id="@+id/content"

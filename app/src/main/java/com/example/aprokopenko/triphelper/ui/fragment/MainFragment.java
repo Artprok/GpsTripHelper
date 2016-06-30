@@ -105,7 +105,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         gpsIsActive = false;
-        if (savedInstanceState != null) {
+
+        if (savedInstanceState != null && savedStateIsCorrect(savedInstanceState)) {
             state = savedInstanceState;
         }
         getContextIfNull();
@@ -122,6 +123,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         else {
             // TODO: 22.06.2016 explain that need to turnOn permission and take those permission. Only After that gall gpsStatusList
         }
+    }
+
+    private boolean savedStateIsCorrect(Bundle savedState) {
+        return savedState.containsKey("ControlButtonVisibility");
     }
 
     private void setupTripProcessor() {
@@ -152,15 +157,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Override public void onSaveInstanceState(Bundle outState) {
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
-            ArrayList<Float> avgSpeedArrayList = tripProcessor.getAvgSpeedArrayList();
-            super.onSaveInstanceState(outState);
-            ArrayList<String> avgStrArrList = new ArrayList<>();
+            ArrayList<Float>  avgSpeedArrayList = tripProcessor.getAvgSpeedArrayList();
+            ArrayList<String> avgStrArrList     = new ArrayList<>();
             if (avgSpeedArrayList != null) {
                 for (float avgListItem : avgSpeedArrayList) {
                     avgStrArrList.add(String.valueOf(avgListItem));
                 }
             }
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (!ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onSaveInstanceState: Save called");
                 Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + isButtonVisible(startButton));
                 Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + gpsIsActive);
@@ -171,6 +175,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             outState.putBoolean("FirstStart", firstStart);
             outState.putStringArrayList("AvgSpeedList", avgStrArrList);
             outState.putParcelable("TripProcessor", tripProcessor);
+            super.onSaveInstanceState(outState);
         }
     }
 
@@ -261,9 +266,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void checkGpsStatus() {
         if (!UtilMethods.checkIfGpsEnabled(context)) {
             setGpsIconTurnedOff();
-        }
-        else {
-            gpsIsActive = true;
         }
     }
 
@@ -418,28 +420,32 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        getContextIfNull();
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.i(LOG_TAG, "onViewCreated: calledRestore");
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
-            Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
-        }
-        firstStart = savedInstanceState.getBoolean("FirstStart");
-        boolean           restoredButtonVisibility = savedInstanceState.getBoolean("ControlButtonVisibility");
-        boolean           restoredStatus           = savedInstanceState.getBoolean("StatusImageState");
-        ArrayList<String> restoredAvgSpeedList     = savedInstanceState.getStringArrayList("AvgSpeedList");
-        TripProcessor     restoredTripProcessor    = savedInstanceState.getParcelable("TripProcessor");
+        Log.d(LOG_TAG, "restore: INSTANCE" + state.describeContents());
+        final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (f instanceof MainFragment) {
+            getContextIfNull();
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.i(LOG_TAG, "onViewCreated: calledRestore");
+                Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
+                Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
+                Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
+            }
+            firstStart = savedInstanceState.getBoolean("FirstStart");
+            boolean           restoredButtonVisibility = savedInstanceState.getBoolean("ControlButtonVisibility");
+            boolean           restoredStatus           = savedInstanceState.getBoolean("StatusImageState");
+            ArrayList<String> restoredAvgSpeedList     = savedInstanceState.getStringArrayList("AvgSpeedList");
+            TripProcessor     restoredTripProcessor    = savedInstanceState.getParcelable("TripProcessor");
 
-        restoreButtonsVisibility(restoredButtonVisibility);
-        restoreStatus(restoredStatus);
-        restoreTripProcessor(restoredTripProcessor);
-        restoreAvgSpeedList(restoredAvgSpeedList);
-        restoreFuelLevel();
-        restoreFuelLayoutVisibility(firstStart);
+            restoreButtonsVisibility(restoredButtonVisibility);
+            restoreStatus(restoredStatus);
+            restoreTripProcessor(restoredTripProcessor);
+            restoreAvgSpeedList(restoredAvgSpeedList);
+            restoreFuelLevel();
+            restoreFuelLayoutVisibility(firstStart);
 
-        if (isButtonVisible(stopButton)) {
-            UtilMethods.setFabVisible(getActivity());
+            if (isButtonVisible(stopButton)) {
+                UtilMethods.setFabVisible(getActivity());
+            }
         }
     }
 

@@ -130,8 +130,10 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     }
 
     public void performExit() {
-        locationThread.interrupt();
-        locationThread = null;
+        if (locationThread != null) {
+            locationThread.interrupt();
+            locationThread = null;
+        }
         context = null;
         locationManager = null;
         locationSubscriber = null;

@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        />
 
     <ImageView
         android:id="@+id/calendarIcon"
@@ -19,8 +20,9 @@
         android:layout_height="45dp"
         android:layout_alignBottom="@+id/id"
         android:layout_alignLeft="@+id/id"
-        android:layout_marginLeft="30dp"
-        android:background="@drawable/calendar_icon"/>
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/calendar_icon"
+        android:layout_marginRight="5dp"/>
 
     <TextView
         android:id="@+id/content"
@@ -28,5 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/calendarIcon"
         android:layout_toRightOf="@+id/calendarIcon"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        />
 </RelativeLayout>

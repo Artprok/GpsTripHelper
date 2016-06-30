@@ -99,7 +99,8 @@
             android:textSize="@dimen/metricsTextSize"
             android:textStyle="bold|italic"
             android:typeface="sans"
-            />
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"/>
 
         <TextView
             android:id="@+id/fuelLeftView"
@@ -137,7 +138,8 @@
                 android:textSize="@dimen/metricsTextSize"
                 android:textStyle="bold|italic"
                 android:typeface="sans"
-                />
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"/>
         </RelativeLayout>
 
     </RelativeLayout>

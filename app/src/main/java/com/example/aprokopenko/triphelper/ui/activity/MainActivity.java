@@ -39,7 +39,7 @@ import dagger.Module;
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Debug.startMethodTracing("Bottlenecks");
+        //        Debug.startMethodTracing("Bottlenecks");
 
         Fabric.with(this, new Crashlytics());
         this.savedInstanceState = savedInstanceState;
@@ -115,7 +115,6 @@ import dagger.Module;
     private void proceedToFragmentCreating(Bundle savedInstanceState) {
         MainFragment mainFragment;
         UtilMethods.setFabInvisible(this);
-
         if (savedInstanceState == null) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onCreate: new fragment");
@@ -123,16 +122,19 @@ import dagger.Module;
             mainFragment = MainFragment.newInstance();
             assert fab != null;
             setFabToMap(mainFragment);
+            UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
         }
         else {
-            if (ConstantValues.LOGGING_ENABLED) {
-                Log.i(LOG_TAG, "onCreate: old fragment");
+            final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+            if (fragment instanceof MainFragment) {
+                if (ConstantValues.LOGGING_ENABLED) {
+                    Log.i(LOG_TAG, "onCreate: old fragment");
+                }
+                assert fab != null;
+                setFabToMap((MainFragment) fragment);
+                UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             }
-            mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-            assert fab != null;
-            setFabToMap(mainFragment);
         }
-        UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
     }
 
     private void setFabToMap(final MainFragment mainFragment) {
@@ -147,7 +149,7 @@ import dagger.Module;
     }
 
     private void performExitFromApplication(MainFragment f) {
-//        Debug.stopMethodTracing();
+        //        Debug.stopMethodTracing();
         f.performExit();
         f.onDetach();
         finish();
