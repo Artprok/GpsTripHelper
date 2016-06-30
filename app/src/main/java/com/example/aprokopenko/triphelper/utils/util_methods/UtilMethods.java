@@ -122,7 +122,6 @@ public class UtilMethods {
         return sdf.format(dateString);
     }
 
-
     public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
         int orientation = fragmentActivity.getResources()
                 .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape
@@ -148,7 +147,6 @@ public class UtilMethods {
         fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
         fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commit();
     }
-
 
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {
         ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);

@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
-import android.os.Debug;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -76,7 +75,6 @@ import dagger.Module;
                         @Override public void onClick(DialogInterface dialog, int which) {
                             performExitFromApplication((MainFragment) f);
                         }
-
                     }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialogInterface, int i) {
                     UtilMethods.replaceFragment(f, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
@@ -108,7 +106,8 @@ import dagger.Module;
         }
         else {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST_CODE);
         }
     }
 

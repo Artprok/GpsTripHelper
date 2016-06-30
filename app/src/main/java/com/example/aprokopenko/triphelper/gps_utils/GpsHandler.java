@@ -3,24 +3,15 @@ package com.example.aprokopenko.triphelper.gps_utils;
 import android.location.LocationManager;
 import android.location.Location;
 import android.content.Context;
-import android.support.annotation.UiThread;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-
-import java.util.Calendar;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import rx.Scheduler;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.Subscriber;
 import rx.Observable;

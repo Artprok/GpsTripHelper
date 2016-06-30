@@ -265,7 +265,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     private void checkGpsStatus() {
         if (!UtilMethods.checkIfGpsEnabled(context)) {
-            setGpsIconTurnedOff();
+            setGpsIconNotActive();
         }
     }
 
@@ -375,7 +375,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                             fillGasTank(fuel);
                         }
                     });
-                    dialog.show(getChildFragmentManager(), "DIALOG");
+                    dialog.show(getChildFragmentManager(), "FILL_DIALOG");
                 }
             }
         });
@@ -420,7 +420,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "restore: INSTANCE" + state.describeContents());
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
             getContextIfNull();
@@ -516,7 +515,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
     }
 
-    private void setGpsIconTurnedOff() {
+    private void setGpsIconNotActive() {
         getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable redSattelite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
@@ -551,10 +550,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         }
         tripProcessor.performExit();
         gpsStatusListener(REMOVE);
-        mapFragment = null;
         tripProcessor = null;
-        context = null;
+        mapFragment = null;
         preferences = null;
+        context = null;
     }
 
     private void configureMapFragment() {
@@ -573,8 +572,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void animateSpeedUpdate(final float speed) {
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
+                //fixme !!! TODO: 30.06.2016 REMOVE THIS TOAST
                 UtilMethods.showToast(context, "speed is - " + speed);
-                Log.d(LOG_TAG, "run: speed" + speed);
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }
