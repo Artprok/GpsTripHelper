@@ -1,7 +1,5 @@
 package com.example.aprokopenko.triphelper.service;
 
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.annotation.Nullable;
