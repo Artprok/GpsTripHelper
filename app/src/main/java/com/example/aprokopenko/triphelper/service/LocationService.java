@@ -1,5 +1,8 @@
 package com.example.aprokopenko.triphelper.service;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.annotation.Nullable;
 import android.support.annotation.NonNull;
@@ -32,6 +35,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private LocationRequest locationRequest;
     private GoogleApiClient googleApiClient;
     private GpsHandler      gpsHandler;
+    private Thread          locationServiceThread;
+    private Runnable        locationUpdateRunnable;
 
     private com.google.android.gms.location.LocationListener gmsLocationListener;
 
@@ -44,15 +49,25 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         createRestartAppIntent(builder);
         notify(builder);
 
-        if (UtilMethods.isPermissionAllowed(getApplicationContext())) {
-            if (ConstantValues.LOGGING_ENABLED) {
-                Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
+
+        locationUpdateRunnable = new Runnable() {
+            public void run() {
+                Looper.prepare();
+                if (UtilMethods.isPermissionAllowed(getApplicationContext())) {
+                    if (ConstantValues.LOGGING_ENABLED) {
+                        Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
+                    }
+                    LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
+                }
+                else {
+                    // TODO: 22.06.2016 ask for turningOn permission.
+                }
+                Looper.loop();
             }
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
-        }
-        else {
-            // TODO: 22.06.2016 ask for turningOn permission.
-        }
+        };
+
+        locationServiceThread = new Thread(locationUpdateRunnable);
+        locationServiceThread.start();
     }
 
 
@@ -101,6 +116,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         gmsLocationListener = null;
         locationRequest = null;
         gpsHandler = null;
+        locationServiceThread = null;
+        locationUpdateRunnable = null;
         super.onDestroy();
     }
 

@@ -572,8 +572,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void animateSpeedUpdate(final float speed) {
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-                //fixme !!! TODO: 30.06.2016 REMOVE THIS TOAST
-                UtilMethods.showToast(context, "speed is - " + speed);
                 updatePointerLocation(speed);
                 updateSpeedTextField(speed);
             }

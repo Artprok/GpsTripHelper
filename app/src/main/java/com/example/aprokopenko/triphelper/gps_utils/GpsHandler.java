@@ -3,12 +3,15 @@ package com.example.aprokopenko.triphelper.gps_utils;
 import android.location.LocationManager;
 import android.location.Location;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -86,9 +89,9 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
     }
 
     @Override public void onLocationChanged(final Location location) {
-        if (locationThread == null) {
-            locationThread = new Thread(new Runnable() {
-                @Override public void run() {
+//        if (locationThread == null) {
+//            locationThread = new Thread(new Runnable() {
+//                @Override public void run() {
                     float speed;
                     // FIXME: 14.04.2016 debug code remove
                     if (ConstantValues.DEBUG_MODE) {
@@ -97,27 +100,31 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
                     else {
                         speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
                     }
+
+
+                    Log.d(LOG_TAG, "GPS HANDLER SPEED: "+speed);
+                    Log.d(LOG_TAG, "GPS HANDLER SPEED: "+Thread.currentThread().getName());
                     setupLocationObservable(location);
                     getMaxSpeedAndSetupObservable(speed);
                     setupSpeedObservable(speed);
-                    synchronized (locationThread) {
-                        try {
-                            locationThread.wait();
-                            locationThread.run();
-                        }
-                        catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-            locationThread.start();
-        }
-        else {
-            synchronized (locationThread) {
-                locationThread.notify();
-            }
-        }
+//                    synchronized (locationThread) {
+//                        try {
+//                            locationThread.wait();
+//                            locationThread.run();
+//                        }
+//                        catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            });
+//            locationThread.start();
+//        }
+//        else {
+//            synchronized (locationThread) {
+//                locationThread.notify();
+//            }
+//        }
     }
 
     public void performExit() {

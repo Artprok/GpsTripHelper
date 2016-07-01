@@ -164,6 +164,7 @@ public class UtilMethods {
     public static void showToast(Context context, CharSequence stringToShow) {
         Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
         toast.show();
+
     }
 
     public static void firstStartTutorialDialog(final Context context) {
