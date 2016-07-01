@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.support.v4.app.ActivityCompat;
@@ -145,7 +146,7 @@ public class UtilMethods {
 
         FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
-        fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commit();
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commitAllowingStateLoss();
     }
 
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {

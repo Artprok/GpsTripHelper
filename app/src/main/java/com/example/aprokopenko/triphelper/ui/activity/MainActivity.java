@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -46,18 +47,13 @@ import dagger.Module;
         ButterKnife.bind(this);
         fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
 
-        if (UtilMethods.isPermissionAllowed(this)) {
-            requestLocationPermissions();
-        }
-        else {
-            proceedToFragmentCreating(savedInstanceState);
-        }
+        proceedToFragmentCreating(savedInstanceState);
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                proceedToFragmentCreating(savedInstanceState);
+
             }
             else {
                 requestPermissionWithRationale();

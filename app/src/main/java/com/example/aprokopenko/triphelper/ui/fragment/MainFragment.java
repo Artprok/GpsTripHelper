@@ -1,5 +1,11 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.Nullable;
 import android.graphics.drawable.Drawable;
@@ -67,9 +73,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @Bind(R.id.settingsButton)
     ImageButton    settingsButton;
 
-    private static final String  LOG_TAG  = "MainFragment";
-    private static final boolean REMOVE   = false;
-    private static final boolean REGISTER = true;
+    public static final  int     LOCATION_REQUEST_CODE = 1;
+    private static final String  LOG_TAG               = "MainFragment";
+    private static final boolean REMOVE                = false;
+    private static final boolean REGISTER              = true;
 
     private boolean firstStart = true;
     private boolean fileErasedFlag;
@@ -115,37 +122,29 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
         setupButtons();
         setupSpeedometer();
+
         setupTripProcessor();
         setupFuelFields();
-        if (UtilMethods.isPermissionAllowed(context)) {
-            gpsStatusListener(REGISTER);
-        }
-        else {
-            // TODO: 22.06.2016 explain that need to turnOn permission and take those permission. Only After that gall gpsStatusList
-        }
     }
 
-    private boolean savedStateIsCorrect(Bundle savedState) {
-        return savedState.containsKey("ControlButtonVisibility");
-    }
-
-    private void setupTripProcessor() {
-        if (tripProcessor == null) {
-            if (state != null) {
-                restoreState(state);
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(LOG_TAG, "onRequestPermissionsResult: IfACALEDD&");
+        if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG_TAG, "setSpeedChangeListener: LISTENER MUUUUUUUUST BE!!!! SETTED!!!!!!");
+                tripProcessor.performExit();
+                tripProcessor = null;
+                if (tripProcessor == null) {
+                    Log.d(LOG_TAG, "setupTripProcessor: new?");
+                    tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+                    tripProcessor.setSpeedChangeListener(this);
+                    gpsStatusListener(REGISTER);
+                }
             }
             else {
-                tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+                requestPermissionWithRationale();
             }
-            tripProcessor.setSpeedChangeListener(this);
-        }
-    }
-
-    private void setupFuelFields() {
-        String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
-        fuelLeft.setText(fuelLeftString);
-        if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
-            fuelLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -164,7 +163,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                     avgStrArrList.add(String.valueOf(avgListItem));
                 }
             }
-            if (!ConstantValues.LOGGING_ENABLED) {
+            if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onSaveInstanceState: Save called");
                 Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + isButtonVisible(startButton));
                 Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + gpsIsActive);
@@ -263,9 +262,65 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         return visibility;
     }
 
+    private boolean savedStateIsCorrect(Bundle savedState) {
+        return savedState.containsKey("ControlButtonVisibility");
+    }
+
     private void checkGpsStatus() {
         if (!UtilMethods.checkIfGpsEnabled(context)) {
             setGpsIconNotActive();
+        }
+    }
+
+    private void requestLocationPermissions() {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,},
+                LOCATION_REQUEST_CODE);
+    }
+
+    private void requestPermissionWithRationale() {
+        Activity activity = getActivity();
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            final String message = getResources().getString(R.string.permissionExplanation);
+            Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("GRANT", new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            requestLocationPermissions();
+                        }
+                    }).show();
+        }
+        else {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST_CODE);
+        }
+    }
+
+    private void setupTripProcessor() {
+        if (tripProcessor == null) {
+            if (state != null) {
+                restoreState(state);
+                Log.d(LOG_TAG, "setupTripProcessor: resto?");
+            }
+            else {
+                Log.d(LOG_TAG, "setupTripProcessor: new?");
+                tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+            }
+            if (UtilMethods.isPermissionAllowed(context)) {
+                Log.d(LOG_TAG, "setSpeedChangeListener: allowed seettted!");
+                tripProcessor.setSpeedChangeListener(this);
+                gpsStatusListener(REGISTER);
+            }
+            else {
+                requestLocationPermissions();
+            }
+        }
+    }
+
+    private void setupFuelFields() {
+        String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
+        fuelLeft.setText(fuelLeftString);
+        if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
+            fuelLayout.setVisibility(View.VISIBLE);
         }
     }
 
