@@ -65,4 +65,6 @@ public class ConstantValues {
     public static final int CITY_SPEED_LIMIT    = 80;
     public static final int OUTCITY_SPEED_LIMIT = 110;
 
+    public static int FAB_TRANSITION_VALUE = -125;
+
 }

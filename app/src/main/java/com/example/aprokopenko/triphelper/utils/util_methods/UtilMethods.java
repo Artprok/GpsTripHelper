@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
+import android.animation.Animator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
@@ -162,6 +163,30 @@ public class UtilMethods {
         valueAnimator.start();
     }
 
+    public static void animateFabTransition(final FloatingActionButton fab, final int transitionX) {
+        fab.animate()
+                .setListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override public void onAnimationEnd(Animator animator) {
+                fab.setTranslationX(transitionX);
+            }
+
+            @Override public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animator) {
+
+            }
+        })
+                .setDuration(ConstantValues.TEXT_ANIM_DURATION)
+                .translationX(transitionX)
+                .start();
+    }
+
     public static void showToast(Context context, CharSequence stringToShow) {
         Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
         toast.show();
@@ -247,7 +272,6 @@ public class UtilMethods {
 
     public static void checkIfGpsEnabledAndShowDialogs(Context context) {
         boolean isGpsEnabled = checkIfGpsEnabled(context);
-
         if (!isGpsEnabled) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: NotEnabled");

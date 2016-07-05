@@ -69,14 +69,13 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
         @BindView(R.id.content)
         TextView contentView;
 
-        public       Trip     trip;
-        public final View     mView;
-        private      Unbinder unbinder;
+        public        Trip     trip;
+        public final  View     mView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            unbinder = ButterKnife.bind(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

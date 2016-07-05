@@ -25,7 +25,6 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 
-import butterknife.Unbinder;
 import rx.Subscriber;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -95,11 +94,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         context = null;
     }
 
-
     public void setRoutes(ArrayList<Route> routes) {
         this.routes = routes;
     }
-
 
     private LatLng getStartingPosition(Location location) {
         LatLng previousLoc;
@@ -115,7 +112,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         return previousLoc;
     }
-
 
     private void setPreviousLocationPoint(LatLng previousLocationPoint) {
         previousLocationFromData = previousLocationPoint;

@@ -106,6 +106,7 @@ import dagger.Module;
     private void setFabToMap(final MainFragment mainFragment) {
         int res = R.drawable.map_black;
         fab.setImageResource(res);
+        UtilMethods.animateFabTransition(fab,0);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 mainFragment.openMapFragment();
@@ -125,6 +126,10 @@ import dagger.Module;
     private void setFabToSpeedometer(final MainFragment mainFragment) {
         int res = R.drawable.road_black;
         fab.setImageResource(res);
+
+        UtilMethods.animateFabTransition(fab,ConstantValues.FAB_TRANSITION_VALUE);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);

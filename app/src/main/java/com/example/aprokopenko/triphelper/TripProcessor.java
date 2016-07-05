@@ -345,8 +345,6 @@ public class TripProcessor implements Parcelable {
         setupSubscribers();
         gpsHandler = locationService.getGpsHandler();
         UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
-
-
         setSubscribersToGpsHandler(gpsHandler);
     }
 

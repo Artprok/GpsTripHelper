@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -95,10 +94,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private int   fuelCapacityFromSettings;
     private float fuelPriceFromSettings;
     private float fuelConsFromSettings;
-
-
-    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-    //    private PowerManager.WakeLock wakeLock;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -559,6 +554,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void setGpsIconActive() {
+        Log.d(LOG_TAG, "setGpsIconActive: Actice?");
         getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
@@ -691,22 +687,4 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             }
         }
     }
-
-    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-    //    private void changeWakeLockStateAfterSettings() {
-    //
-    //        boolean res = preferences.getBoolean("backgroundWork", false);
-    //        if (res) {
-    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock ON");
-    //            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-    //            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WakeLockForBackgroundWork");
-    //            wakeLock.acquire();
-    //        }
-    //        else {
-    //            if(wakeLock!=null){
-    //                wakeLock.release();
-    //            }
-    //            Log.d(LOG_TAG, "changeWakeLockStateAfterSettings: wakeLock OFF");
-    //        }
-    //    }
 }
