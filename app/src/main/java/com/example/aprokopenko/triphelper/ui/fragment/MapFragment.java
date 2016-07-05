@@ -83,6 +83,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public void onDestroyView() {
         super.onDestroyView();
+        locationSubscriber.unsubscribe();
         Fragment f = getChildFragmentManager().findFragmentById(R.id.mapFragment);
         if (f != null) {
             getChildFragmentManager().beginTransaction().remove(f).commitAllowingStateLoss();

@@ -204,6 +204,7 @@ public class TripProcessor implements Parcelable {
     }
 
     public void performExit() {
+        unsubscribeRx();
         if (serviceConnection != null) {
             unregisterService();
         }
@@ -215,6 +216,12 @@ public class TripProcessor implements Parcelable {
             gpsHandler = null;
         }
         setSpeedChangeListener(null);
+    }
+
+    private void unsubscribeRx() {
+        maxSpeedSubscriber.unsubscribe();
+        locationSubscriber.unsubscribe();
+        speedSubscriber.unsubscribe();
     }
 
 
