@@ -62,8 +62,8 @@ import dagger.Module;
                 super.onBackPressed();
             }
             if(f instanceof MapFragment){
-                Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-                setFabToMap((MainFragment) fragment);
+                MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
+                setFabToMap(mainFragment);
             }
             super.onBackPressed();
         }

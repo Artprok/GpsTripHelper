@@ -3,12 +3,15 @@ package com.example.aprokopenko.triphelper.gps_utils;
 import android.location.LocationManager;
 import android.location.Location;
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.google.android.gms.location.LocationListener;
 
 import javax.inject.Inject;
 
@@ -17,7 +20,7 @@ import rx.Subscriber;
 import rx.Observable;
 import rx.Observer;
 
-public class GpsHandler implements com.google.android.gms.location.LocationListener {
+public class GpsHandler implements LocationListener, Parcelable {
     @Inject
     LocationManager locationManager;
     @Inject
@@ -38,6 +41,20 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
             Log.d(LOG_TAG, "GpsHandler: created,locationManger - " + locationManager);
         }
     }
+
+    protected GpsHandler(Parcel in) {
+        maxSpeed = in.readFloat();
+    }
+
+    public static final Creator<GpsHandler> CREATOR = new Creator<GpsHandler>() {
+        @Override public GpsHandler createFromParcel(Parcel in) {
+            return new GpsHandler(in);
+        }
+
+        @Override public GpsHandler[] newArray(int size) {
+            return new GpsHandler[size];
+        }
+    };
 
     public void setLocationSubscriber(Subscriber<Location> locationSubscriber) {
         this.locationSubscriber = locationSubscriber;
@@ -109,5 +126,13 @@ public class GpsHandler implements com.google.android.gms.location.LocationListe
         locationSubscriber = null;
         speedSubscriber = null;
         maxSpeedSubscriber = null;
+    }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeFloat(maxSpeed);
     }
 }

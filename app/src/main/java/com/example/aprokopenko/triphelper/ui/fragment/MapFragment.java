@@ -36,6 +36,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap            googleMap;
     private Context              context;
     private ArrayList<Route>     routes;
+    private GpsHandler           gpsHandler;
 
     private boolean fragmentVisible;
 
@@ -47,12 +48,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return new MapFragment();
     }
 
-    public void setGpsHandler(GpsHandler GpsHandler) {
+    public void setGpsHandler(GpsHandler gpsHandler) {
+        this.gpsHandler = gpsHandler;
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "setGpsHandler: LocationStartTracking");
         }
         setupSubscribers();
-        setSubscribersToGpsHandler(GpsHandler);
+        setSubscribersToGpsHandler(gpsHandler);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,7 +65,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         locationList = new ArrayList<>();
         getGoogleMap();
-        context = getActivity();
+        if (context == null) {
+            context = getActivity();
+        }
         fragmentVisible = true;
     }
 
@@ -83,7 +87,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        locationSubscriber.unsubscribe();
+        if (locationSubscriber != null) {
+            locationSubscriber.unsubscribe();
+        }
         Fragment f = getChildFragmentManager().findFragmentById(R.id.mapFragment);
         if (f != null) {
             getChildFragmentManager().beginTransaction().remove(f).commitAllowingStateLoss();
@@ -93,6 +99,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override public void onDetach() {
         super.onDetach();
         context = null;
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("routes", routes);
+        outState.putParcelableArrayList("locations", locationList);
+        outState.putParcelable("gpsHandler", gpsHandler);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            routes = savedInstanceState.getParcelableArrayList("routes");
+            locationList = savedInstanceState.getParcelableArrayList("locations");
+            gpsHandler = savedInstanceState.getParcelable("gpsHandler");
+        }
+    }
+
+    @Override public void onResume() {
+        if (locationSubscriber == null && gpsHandler != null) {
+            setupSubscribers();
+            setSubscribersToGpsHandler(gpsHandler);
+        }
+        super.onResume();
+    }
+
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     public void setRoutes(ArrayList<Route> routes) {
@@ -146,14 +181,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 locationList.add(location);
                 if (fragmentVisible) {
                     final float speed;
-                    UtilMethods.isPermissionAllowed(context);
                     if (ConstantValues.DEBUG_MODE) {
                         speed = UtilMethods.generateRandomSpeed();
                     }
+
                     else {
                         speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
                     }
-
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override public void run() {
@@ -161,7 +195,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             MapUtilMethods.animateCamera(location, null, googleMap);
                         }
                     });
-
                 }
             }
         };
