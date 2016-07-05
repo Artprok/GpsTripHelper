@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +18,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
+import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -129,6 +129,11 @@ import dagger.Module;
                 setFabToMap((MainFragment) fragment);
                 UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             }
+            if (fragment instanceof MapFragment) {
+                MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
+                setFabToSpeedometer(mf);
+                fab.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -157,7 +162,6 @@ import dagger.Module;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-
                 if (mf == null || !mf.equals(mainFragment)) {
                     mf = MainFragment.newInstance();
                     assert fab != null;
