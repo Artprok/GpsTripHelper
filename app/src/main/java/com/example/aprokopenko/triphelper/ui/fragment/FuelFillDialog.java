@@ -12,16 +12,18 @@ import android.view.View;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.Unbinder;
 
 public class FuelFillDialog extends DialogFragment {
-    @Bind(R.id.refillButton)
+    @BindView(R.id.refillButton)
     Button   fillButton;
-    @Bind(R.id.fuelToFill)
+    @BindView(R.id.fuelToFill)
     EditText fuelToFill;
 
     private FuelChangeAmountListener fuelChangeAmountListener;
+    private Unbinder                 unbinder;
 
     static FuelFillDialog newInstance() {
         return new FuelFillDialog();
@@ -29,7 +31,7 @@ public class FuelFillDialog extends DialogFragment {
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fuel_fill_dialog, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         fillButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
@@ -48,7 +50,7 @@ public class FuelFillDialog extends DialogFragment {
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override public void onDetach() {

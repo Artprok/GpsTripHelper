@@ -1,65 +1,45 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.content.pm.PackageManager;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
-import android.Manifest;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
+import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
 import io.fabric.sdk.android.Fabric;
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.Unbinder;
 import dagger.Module;
 
 @Module public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    private static final String LOG_TAG               = "MainActivity";
-    private static final int    LOCATION_REQUEST_CODE = 1;
-    private Bundle savedInstanceState;
+
+    private static final String LOG_TAG = "MainActivity";
+    private Unbinder unbinder;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
+        unbinder = ButterKnife.bind(this);
         //        Debug.startMethodTracing("Bottlenecks");
 
         Fabric.with(this, new Crashlytics());
-        this.savedInstanceState = savedInstanceState;
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        fab.setBackgroundColor((ContextCompat.getColor(this, R.color.colorPrimary)));
 
         proceedToFragmentCreating(savedInstanceState);
-    }
-
-    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
-            }
-            else {
-                requestPermissionWithRationale();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override public void onBackPressed() {
@@ -85,42 +65,26 @@ import dagger.Module;
         }
     }
 
-    private void requestLocationPermissions() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,}, LOCATION_REQUEST_CODE);
-    }
-
-    private void requestPermissionWithRationale() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            final String message = getResources().getString(R.string.permissionExplanation);
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("GRANT", new View.OnClickListener() {
-                        @Override public void onClick(View v) {
-                            requestLocationPermissions();
-                        }
-                    }).show();
-        }
-        else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_REQUEST_CODE);
-        }
+    @Override protected void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     private void proceedToFragmentCreating(Bundle savedInstanceState) {
-        MainFragment mainFragment;
+        Log.d(LOG_TAG, "proceedToFragmentCreating: CreatingProceed");
         UtilMethods.setFabInvisible(this);
         if (savedInstanceState == null) {
             if (ConstantValues.LOGGING_ENABLED) {
                 Log.i(LOG_TAG, "onCreate: new fragment");
             }
-            mainFragment = MainFragment.newInstance();
+            MainFragment mainFragment = MainFragment.newInstance();
             assert fab != null;
             setFabToMap(mainFragment);
             UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
         }
         else {
-            final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+            Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+            MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
             if (fragment instanceof MainFragment) {
                 if (ConstantValues.LOGGING_ENABLED) {
                     Log.i(LOG_TAG, "onCreate: old fragment");
@@ -130,9 +94,11 @@ import dagger.Module;
                 UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             }
             if (fragment instanceof MapFragment) {
-                MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-                setFabToSpeedometer(mf);
+                setFabToSpeedometer(mainFragment);
                 fab.setVisibility(View.VISIBLE);
+            }
+            else {
+                setFabToMap(mainFragment);
             }
         }
     }

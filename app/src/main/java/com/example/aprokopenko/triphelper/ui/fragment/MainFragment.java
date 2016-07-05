@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -48,29 +49,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.io.File;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.Unbinder;
 
 public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
-    @Bind(R.id.speedometerContainer)
+    @BindView(R.id.speedometerContainer)
     RelativeLayout speedometerContainer;
-    @Bind(R.id.speedometerTextView)
+    @BindView(R.id.speedometerTextView)
     TextView       speedometerTextView;
-    @Bind(R.id.refillButtonLayout)
+    @BindView(R.id.refillButtonLayout)
     RelativeLayout refillButtonLayout;
-    @Bind(R.id.tripListButton)
+    @BindView(R.id.tripListButton)
     ImageButton    tripListButton;
-    @Bind(R.id.statusImageView)
+    @BindView(R.id.statusImageView)
     ImageView      statusImage;
-    @Bind(R.id.startButton)
+    @BindView(R.id.startButton)
     Button         startButton;
-    @Bind(R.id.stopButton)
+    @BindView(R.id.stopButton)
     Button         stopButton;
-    @Bind(R.id.fuelLayout)
+    @BindView(R.id.fuelLayout)
     RelativeLayout fuelLayout;
-    @Bind(R.id.fuelLeftView)
+    @BindView(R.id.fuelLeftView)
     TextView       fuelLeft;
-    @Bind(R.id.settingsButton)
+    @BindView(R.id.settingsButton)
     ImageButton    settingsButton;
 
     public static final  int     LOCATION_REQUEST_CODE = 1;
@@ -88,10 +90,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private MapFragment       mapFragment;
     private Context           context;
     private Bundle            state;
+    private Unbinder          unbinder;
 
     private int   fuelCapacityFromSettings;
     private float fuelPriceFromSettings;
     private float fuelConsFromSettings;
+
 
     // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
     //    private PowerManager.WakeLock wakeLock;
@@ -110,7 +114,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         gpsIsActive = false;
 
         if (savedInstanceState != null && savedStateIsCorrect(savedInstanceState)) {
@@ -129,14 +133,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(LOG_TAG, "onRequestPermissionsResult: IfACALEDD&");
         if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(LOG_TAG, "setSpeedChangeListener: LISTENER MUUUUUUUUST BE!!!! SETTED!!!!!!");
                 tripProcessor.performExit();
                 tripProcessor = null;
                 if (tripProcessor == null) {
-                    Log.d(LOG_TAG, "setupTripProcessor: new?");
                     tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
                     tripProcessor.setSpeedChangeListener(this);
                     gpsStatusListener(REGISTER);
@@ -211,7 +212,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     @Override public void onDestroyView() {
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         super.onDestroyView();
     }
 
@@ -299,14 +300,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (tripProcessor == null) {
             if (state != null) {
                 restoreState(state);
-                Log.d(LOG_TAG, "setupTripProcessor: resto?");
             }
             else {
-                Log.d(LOG_TAG, "setupTripProcessor: new?");
                 tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
             }
             if (UtilMethods.isPermissionAllowed(context)) {
-                Log.d(LOG_TAG, "setSpeedChangeListener: allowed seettted!");
                 tripProcessor.setSpeedChangeListener(this);
                 gpsStatusListener(REGISTER);
             }

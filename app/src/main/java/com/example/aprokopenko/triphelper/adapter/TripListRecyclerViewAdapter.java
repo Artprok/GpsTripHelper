@@ -13,8 +13,9 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.Unbinder;
 
 public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRecyclerViewAdapter.ViewHolder> {
     public static final String LOG_TAG = "RECYCLER_ADAPTER";
@@ -63,18 +64,19 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.id)
+        @BindView(R.id.id)
         TextView idView;
-        @Bind(R.id.content)
+        @BindView(R.id.content)
         TextView contentView;
 
-        public       Trip trip;
-        public final View mView;
+        public       Trip     trip;
+        public final View     mView;
+        private      Unbinder unbinder;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            ButterKnife.bind(this, view);
+            unbinder = ButterKnife.bind(this, view);
         }
     }
 }

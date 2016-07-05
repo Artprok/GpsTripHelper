@@ -26,27 +26,28 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.Unbinder;
 
 public class TripListFragment extends Fragment implements ListFragmentInteractionListener {
-    @Bind(R.id.avgFuelConsListFrag)
+    @BindView(R.id.avgFuelConsListFrag)
     TextView     avgFuelConsumptionView;
-    @Bind(R.id.distanceTravelledListFrag)
+    @BindView(R.id.distanceTravelledListFrag)
     TextView     distanceTravelledView;
-    @Bind(R.id.moneyOnFuelSpentListFrag)
+    @BindView(R.id.moneyOnFuelSpentListFrag)
     TextView     moneyOnFuelView;
-    @Bind(R.id.timeSpentOnAllTripsListFrag)
+    @BindView(R.id.timeSpentOnAllTripsListFrag)
     TextView     timeSpentView;
-    @Bind(R.id.fuelSpentListFrag)
+    @BindView(R.id.fuelSpentListFrag)
     TextView     fuelSpentView;
-    @Bind(R.id.tripList)
+    @BindView(R.id.tripList)
     RecyclerView tripListView;
-    @Bind(R.id.avgSpeedListFrag)
+    @BindView(R.id.avgSpeedListFrag)
     TextView     avgSpeedView;
-    @Bind(R.id.maxSpeedListFrag)
+    @BindView(R.id.maxSpeedListFrag)
     TextView     maxSpeedView;
-    @Bind(R.id.progressBar)
+    @BindView(R.id.progressBar)
     ProgressBar  progressBar;
 
 
@@ -54,6 +55,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
 
     private TripData        tripData;
     private ArrayList<Trip> trips;
+    private Unbinder        unbinder;
 
     public TripListFragment() {
     }
@@ -64,7 +66,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         if (savedInstanceState != null) {
             tripData = savedInstanceState.getParcelable("tripData");
             if (tripData != null) {
@@ -112,7 +114,7 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override public void onDetach() {

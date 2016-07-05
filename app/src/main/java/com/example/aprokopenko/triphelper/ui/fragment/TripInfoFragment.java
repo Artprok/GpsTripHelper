@@ -32,38 +32,39 @@ import com.google.android.gms.maps.MapView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.Unbinder;
 
 public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
-    @Bind(R.id.tripAvgFuelConsumption)
+    @BindView(R.id.tripAvgFuelConsumption)
     TextView       tripAvgFuelConsumptionView;
-    @Bind(R.id.tripDistanceTravelled)
+    @BindView(R.id.tripDistanceTravelled)
     TextView       tripDistanceTravelledView;
-    @Bind(R.id.tripTimeSpentInMotion)
+    @BindView(R.id.tripTimeSpentInMotion)
     TextView       tripTimeSpentInMotionView;
-    @Bind(R.id.tripTimeSpentOnStop)
+    @BindView(R.id.tripTimeSpentOnStop)
     TextView       tripTimeSpentOnStopView;
-    @Bind(R.id.tripMoneyOnTripFuelSpent)
+    @BindView(R.id.tripMoneyOnTripFuelSpent)
     TextView       tripMoneySpentView;
-    @Bind(R.id.tripFuelSpent)
+    @BindView(R.id.tripFuelSpent)
     TextView       tripFuelSpentView;
-    @Bind(R.id.tripTimeSpent)
+    @BindView(R.id.tripTimeSpent)
     TextView       tripTimeSpentView;
-    @Bind(R.id.tripAvgSpeed)
+    @BindView(R.id.tripAvgSpeed)
     TextView       tripAvgSpeedView;
-    @Bind(R.id.tripMaxSpeed)
+    @BindView(R.id.tripMaxSpeed)
     TextView       tripMaxSpeedView;
-    @Bind(R.id.mapTurnActiveButton)
+    @BindView(R.id.mapTurnActiveButton)
     ImageButton    openMapButton;
-    @Bind(R.id.textDataContainer)
+    @BindView(R.id.textDataContainer)
     RelativeLayout dataContainer;
-    @Bind(R.id.tripDate)
+    @BindView(R.id.tripDate)
     TextView       tripDateView;
-    @Bind(R.id.tripId)
+    @BindView(R.id.tripId)
     TextView       tripIdView;
-    @Bind(R.id.mapView)
+    @BindView(R.id.mapView)
     MapView        mapView;
 
     private static final String LOG_TAG = "TripInfoFragment";
@@ -83,18 +84,19 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAX_SPEED                 = "MaxSpeed";
     private static final String TRIP_ID                   = "TripId";
 
-    private float   averageFuelConsumption;
-    private float   timeSpentInMotion;
-    private float   timeSpentOnStop;
-    private float   distTravelled;
-    private float   moneySpent;
-    private float   fuelSpent;
-    private float   timeSpent;
-    private float   avgSpeed;
-    private float   maxSpeed;
-    private String  tripDate;
-    private int     tripId;
-    private boolean drawMap;
+    private float    averageFuelConsumption;
+    private float    timeSpentInMotion;
+    private float    timeSpentOnStop;
+    private float    distTravelled;
+    private float    moneySpent;
+    private float    fuelSpent;
+    private float    timeSpent;
+    private float    avgSpeed;
+    private float    maxSpeed;
+    private String   tripDate;
+    private int      tripId;
+    private boolean  drawMap;
+    private Unbinder unbinder;
 
     private ArrayList<String> speedValues;
     private Context           context;
@@ -172,7 +174,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_trip_info, container, false);
-        ButterKnife.bind(this, v);
+        unbinder = ButterKnife.bind(this, v);
         setupMapView(savedInstanceState);
         return v;
     }
@@ -205,7 +207,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
                 else {
-                    UtilMethods.MapNotAvaliableDialog(context);
+                    UtilMethods.MapNotAvailableDialog(context);
                 }
             }
         });
@@ -213,7 +215,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override public void onDetach() {

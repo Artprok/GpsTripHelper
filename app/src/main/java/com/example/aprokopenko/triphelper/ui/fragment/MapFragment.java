@@ -1,7 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.location.Location;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.ui.activity.MainActivity;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -27,8 +25,7 @@ import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Subscriber;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {

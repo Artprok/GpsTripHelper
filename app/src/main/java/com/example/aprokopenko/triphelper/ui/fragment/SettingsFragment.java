@@ -1,65 +1,66 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.support.annotation.Nullable;
-import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.text.TextWatcher;
 import android.content.Context;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.text.TextUtils;
-import android.widget.Spinner;
-import android.view.ViewGroup;
-import android.text.Editable;
-import android.widget.Switch;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.view.View;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
-import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.listener.FileEraseListener;
-import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.example.aprokopenko.triphelper.listener.FileEraseListener;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.inject.Singleton;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 @Singleton public class SettingsFragment extends Fragment {
 
-    @Bind(R.id.fuelPriceEditText)
+    @BindView(R.id.fuelPriceEditText)
     EditText    fuelPriceEditText;
-    @Bind(R.id.fuelConsumptionEditText)
+    @BindView(R.id.fuelConsumptionEditText)
     EditText    fuelConsEditText;
-    @Bind(R.id.fuelCapacityEditText)
+    @BindView(R.id.fuelCapacityEditText)
     EditText    fuelCapacityEditText;
-    @Bind(R.id.curFuelCapacity)
+    @BindView(R.id.curFuelCapacity)
     TextView    curFuelCapacity;
-    @Bind(R.id.curFuelCons)
+    @BindView(R.id.curFuelCons)
     TextView    curFuelCons;
-    @Bind(R.id.curFuelPrice)
+    @BindView(R.id.curFuelPrice)
     TextView    curFuelPrice;
-    @Bind(R.id.eraseButton)
+    @BindView(R.id.eraseButton)
     ImageButton eraseButton;
-    @Bind(R.id.aboutButton)
+    @BindView(R.id.aboutButton)
     ImageButton aboutButton;
-    @Bind(R.id.measurementUnitSpinner)
+    @BindView(R.id.measurementUnitSpinner)
     Spinner     measurementUnitSpinner;
-    @Bind(R.id.backgroundSwitch)
+    @BindView(R.id.backgroundSwitch)
     Switch      backgroundSwitch;
 
     private static final String LOG_TAG = "Settings fragment";
@@ -70,6 +71,7 @@ import butterknife.ButterKnife;
     private FileEraseListener fileEraseListener;
     private SharedPreferences preferences;
     private Context           context;
+    private Unbinder          unbinder;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -86,7 +88,7 @@ import butterknife.ButterKnife;
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         preferences = TripHelperApp.getSharedPreferences();
         context = getActivity();
         setupEraseButton();
@@ -97,6 +99,11 @@ import butterknife.ButterKnife;
 
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        setupBackgroundSwitch();
+    }
+
+    @Override public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
     }
 
 

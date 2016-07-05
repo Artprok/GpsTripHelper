@@ -1,7 +1,6 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.support.v4.app.ActivityCompat;
@@ -146,7 +145,8 @@ public class UtilMethods {
 
         FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
-        fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag()).commitAllowingStateLoss();
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag())
+                .commitAllowingStateLoss();
     }
 
     public static void animateTextView(int initialValue, int finalValue, final TextView textview) {
@@ -188,7 +188,7 @@ public class UtilMethods {
         alert.show();
     }
 
-    public static void MapNotAvaliableDialog(final Context context) {
+    public static void MapNotAvailableDialog(final Context context) {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.something_went_wrong);
         builder.setTitle(context.getString(R.string.somethingWentWrongTitle));
