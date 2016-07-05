@@ -49,12 +49,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void setGpsHandler(GpsHandler gpsHandler) {
-        this.gpsHandler = gpsHandler;
-        if (ConstantValues.LOGGING_ENABLED) {
-            Log.d(LOG_TAG, "setGpsHandler: LocationStartTracking");
+        if (this.gpsHandler == null) {
+            this.gpsHandler = gpsHandler;
+            if (ConstantValues.LOGGING_ENABLED) {
+                Log.d(LOG_TAG, "setGpsHandler: LocationStartTracking");
+            }
+            setupSubscribers();
+            setSubscribersToGpsHandler(gpsHandler);
         }
-        setupSubscribers();
-        setSubscribersToGpsHandler(gpsHandler);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +100,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override public void onDetach() {
         super.onDetach();
+        gpsHandler = null;
         context = null;
     }
 
