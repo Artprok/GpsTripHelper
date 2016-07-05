@@ -61,6 +61,10 @@ import dagger.Module;
             if (f instanceof TripInfoFragment) {
                 super.onBackPressed();
             }
+            if(f instanceof MapFragment){
+                Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+                setFabToMap((MainFragment) fragment);
+            }
             super.onBackPressed();
         }
     }

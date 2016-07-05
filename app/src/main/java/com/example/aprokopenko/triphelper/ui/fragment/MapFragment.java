@@ -136,17 +136,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void setupLocationSubscriber() {
         locationSubscriber = new Subscriber<Location>() {
             @Override public void onCompleted() {
-
             }
 
             @Override public void onError(Throwable e) {
-
             }
 
-            @Override public void onNext(Location location) {
+            @Override public void onNext(final Location location) {
                 locationList.add(location);
                 if (fragmentVisible) {
-                    float speed;
+                    final float speed;
                     UtilMethods.isPermissionAllowed(context);
                     if (ConstantValues.DEBUG_MODE) {
                         speed = UtilMethods.generateRandomSpeed();
@@ -154,8 +152,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     else {
                         speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
                     }
-                    locationTracking(googleMap, location, speed);
-                    MapUtilMethods.animateCamera(location, null, googleMap);
+
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            locationTracking(googleMap, location, speed);
+                            MapUtilMethods.animateCamera(location, null, googleMap);
+                        }
+                    });
+
                 }
             }
         };
