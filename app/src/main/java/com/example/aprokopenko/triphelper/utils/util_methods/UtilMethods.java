@@ -4,7 +4,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -306,21 +305,6 @@ public class UtilMethods {
         return result;
     }
 
-
-    private static Intent rateIntentForUrl(String url, Context context) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, context.getPackageName())));
-        int    flags  = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-        if (Build.VERSION.SDK_INT >= 21) {
-            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-        }
-        else {
-            //noinspection deprecation
-            flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
-        }
-        intent.addFlags(flags);
-        return intent;
-    }
-
     private static void buildAlertMessageNoGps(final Context context) {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.gps_icon);
@@ -357,13 +341,18 @@ public class UtilMethods {
 
     private static void rateApp(Context context) {
         try {
-            // FIXME: 02.06.2016 add rateGooglePlay here! Proper url.
-            Intent rateIntent = rateIntentForUrl("market://details", context);
-            context.startActivity(rateIntent);
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
         }
-        catch (ActivityNotFoundException e) {
-            Intent rateIntent = rateIntentForUrl("http://play.google.com/store/apps/details", context);
-            context.startActivity(rateIntent);
+        catch (android.content.ActivityNotFoundException anfe) {
+            // FIXME: 02.06.2016 add rateGooglePlay here! Proper url.
+            viewInBrowser(context, "https://play.google.com/store/apps/details?id=" + context.getPackageName());
+        }
+    }
+
+    private static void viewInBrowser(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        if (null != intent.resolveActivity(context.getPackageManager())) {
+            context.startActivity(intent);
         }
     }
 

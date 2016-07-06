@@ -1,12 +1,15 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
@@ -28,6 +31,8 @@ import io.fabric.sdk.android.Fabric;
     FloatingActionButton fab;
 
     private static final String LOG_TAG = "MainActivity";
+    private int width;
+    private int widthDelimeter;
 
     private Unbinder unbinder;
 
@@ -38,7 +43,25 @@ import io.fabric.sdk.android.Fabric;
         //        Debug.startMethodTracing("Bottlenecks");
         Fabric.with(this, new Crashlytics());
 
+        getDataForFABanimation();
+
         proceedToFragmentCreating(savedInstanceState);
+    }
+
+    private void getDataForFABanimation() {
+        Point   sizePoint      = new Point();
+        Display defaultDisplay = getWindowManager().getDefaultDisplay();
+        defaultDisplay.getSize(sizePoint);
+        width = sizePoint.x;
+        getDelimeterDependsOnOrientation(defaultDisplay);
+    }
+
+    private void getDelimeterDependsOnOrientation(Display defaultDisplay) {
+        widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
+        int rotation = defaultDisplay.getRotation();
+        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+            widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
+        }
     }
 
     @Override public void onBackPressed() {
@@ -129,7 +152,7 @@ import io.fabric.sdk.android.Fabric;
         int res = R.drawable.road_black;
         fab.setImageResource(res);
 
-        UtilMethods.animateFabTransition(fab, ConstantValues.FAB_TRANSITION_VALUE);
+        UtilMethods.animateFabTransition(fab, -width / widthDelimeter);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

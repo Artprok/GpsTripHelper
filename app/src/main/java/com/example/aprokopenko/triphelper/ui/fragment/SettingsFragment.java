@@ -191,7 +191,7 @@ import butterknife.Unbinder;
     private void setupAboutButton() {
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                UtilMethods.buildAndShowAboutDialog(context);
+                UtilMethods.buildAndShowAboutDialog(getActivity());
             }
         });
     }

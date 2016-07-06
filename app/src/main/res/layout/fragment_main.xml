@@ -13,7 +13,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="9dp"
         android:layout_alignTop="@+id/statusImageView"
         android:background="@drawable/button_background"
         android:src="@drawable/trip_list_button"
@@ -24,8 +24,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignBottom="@id/tripListButton"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="7dp"
         android:layout_toLeftOf="@+id/tripListButton"
         android:background="@drawable/button_background"
         android:src="@drawable/settings_button"
@@ -55,8 +55,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="7dp"
         android:background="@drawable/red_satellite"
         />
 
@@ -66,10 +66,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/startButton"
         android:layout_below="@+id/speedometerContainer"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="-20dp"
+        android:layout_marginLeft="9dp"
         android:visibility="visible"
-        >
+        android:layout_marginTop="-25dp">
 
         <TextView
             android:id="@+id/fuelLeftHint"
@@ -174,7 +173,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="7dp"
-        android:layout_marginLeft="7dp"
+        android:layout_marginLeft="9dp"
         android:background="@drawable/button_background"
         android:text="@string/start"
         />
