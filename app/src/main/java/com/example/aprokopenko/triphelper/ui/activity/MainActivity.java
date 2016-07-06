@@ -31,8 +31,7 @@ import io.fabric.sdk.android.Fabric;
     FloatingActionButton fab;
 
     private static final String LOG_TAG = "MainActivity";
-    private int width;
-    private int widthDelimeter;
+    private int fabTransitionValue;
 
     private Unbinder unbinder;
 
@@ -43,25 +42,9 @@ import io.fabric.sdk.android.Fabric;
         //        Debug.startMethodTracing("Bottlenecks");
         Fabric.with(this, new Crashlytics());
 
-        getDataForFABanimation();
+        fabTransitionValue = getDataForFABanimation();
 
         proceedToFragmentCreating(savedInstanceState);
-    }
-
-    private void getDataForFABanimation() {
-        Point   sizePoint      = new Point();
-        Display defaultDisplay = getWindowManager().getDefaultDisplay();
-        defaultDisplay.getSize(sizePoint);
-        width = sizePoint.x;
-        getDelimeterDependsOnOrientation(defaultDisplay);
-    }
-
-    private void getDelimeterDependsOnOrientation(Display defaultDisplay) {
-        widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
-        int rotation = defaultDisplay.getRotation();
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
-        }
     }
 
     @Override public void onBackPressed() {
@@ -128,6 +111,26 @@ import io.fabric.sdk.android.Fabric;
         }
     }
 
+    private int getDataForFABanimation() {
+        Display defaultDisplay = getWindowManager().getDefaultDisplay();
+        Point   sizePoint      = new Point();
+        defaultDisplay.getSize(sizePoint);
+
+        int delimeter = getDelimeterDependsOnOrientation(defaultDisplay);
+        int width     = sizePoint.x;
+
+        return -(width / delimeter);
+    }
+
+    private int getDelimeterDependsOnOrientation(Display defaultDisplay) {
+        int widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
+        int rotation       = defaultDisplay.getRotation();
+        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+            widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
+        }
+        return widthDelimeter;
+    }
+
     private void setFabToMap(final MainFragment mainFragment) {
         int res = R.drawable.map_black;
         fab.setImageResource(res);
@@ -152,7 +155,7 @@ import io.fabric.sdk.android.Fabric;
         int res = R.drawable.road_black;
         fab.setImageResource(res);
 
-        UtilMethods.animateFabTransition(fab, -width / widthDelimeter);
+        UtilMethods.animateFabTransition(fab, fabTransitionValue);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

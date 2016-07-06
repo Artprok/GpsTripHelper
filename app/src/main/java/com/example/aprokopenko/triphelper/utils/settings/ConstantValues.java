@@ -65,7 +65,6 @@ public class ConstantValues {
     public static final int CITY_SPEED_LIMIT    = 80;
     public static final int OUTCITY_SPEED_LIMIT = 110;
 
-    public static final int FAB_TRANSITION_VALUE                  = -125;
     public static final int NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE = 666;
 
     public static final int WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
