@@ -15,7 +15,6 @@ import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
 import com.example.aprokopenko.triphelper.service.LocationService;

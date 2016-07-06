@@ -146,9 +146,9 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         int              tripId            = trip.getTripID();
         ArrayList<Route> routes            = trip.getRoute();
 
-        TripInfoContainer tripInfoConatiner = new TripInfoContainer(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion,
+        TripInfoContainer tripInfoContainer = new TripInfoContainer(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion,
                 timeSpentOnStop, fuelConsumed, fuelSpent, tripId, routes, moneyOnFuelSpent, maxSpeed, trip);
-        TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoConatiner);
+        TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoContainer);
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

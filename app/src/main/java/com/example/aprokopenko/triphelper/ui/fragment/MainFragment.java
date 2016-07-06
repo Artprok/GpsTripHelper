@@ -555,7 +555,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void setGpsIconActive() {
-        Log.d(LOG_TAG, "setGpsIconActive: Actice?");
         getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
@@ -568,9 +567,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     private void setGpsIconNotActive() {
         getContextIfNull();
         ButterKnife.bind(R.id.statusImageView, getActivity());
-        Drawable redSattelite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
+        Drawable redSatellite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
         if (statusImage != null) {
-            statusImage.setBackground(redSattelite);
+            statusImage.setBackground(redSatellite);
             gpsIsActive = false;
         }
     }
