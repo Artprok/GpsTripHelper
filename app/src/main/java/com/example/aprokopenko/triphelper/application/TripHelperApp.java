@@ -1,15 +1,16 @@
 package com.example.aprokopenko.triphelper.application;
 
-import android.content.SharedPreferences;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
-import com.example.aprokopenko.triphelper.dependency_injection.AppModule;
-import com.example.aprokopenko.triphelper.DaggerApplicationComponent;
 import com.example.aprokopenko.triphelper.ApplicationComponent;
+import com.example.aprokopenko.triphelper.DaggerApplicationComponent;
+import com.example.aprokopenko.triphelper.dependency_injection.AppModule;
 
 public class TripHelperApp extends Application {
     private static final String LOG_TAG = "TripHelperApp";
+
     private static ApplicationComponent applicationComponent;
     private static Context              context;
     private static SharedPreferences    sharedPreferences;

@@ -1,14 +1,14 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
-import android.os.Parcelable;
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class Trip implements Parcelable {
@@ -144,8 +144,10 @@ public class Trip implements Parcelable {
             float  fuelConsumption   = is.readFloat();
             float  maxSpeed          = is.readFloat();
 
-            trip = createTripFromData(date, trip, route, timeSpentInMotion, distanceTravelled, fuelSpent, timeSpent, tripID, avgSpeed,
-                    moneySpent, fuelConsumption, maxSpeed);
+            TripInfoContainer tripInfoContainer = new TripInfoContainer(date, distanceTravelled, avgSpeed, timeSpent, timeSpentInMotion, 0,
+                    fuelConsumption, fuelSpent, tripID, route, moneySpent, maxSpeed, trip);
+
+            trip = createTripFromData(tripInfoContainer);
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -215,20 +217,19 @@ public class Trip implements Parcelable {
     }
 
 
-    private Trip createTripFromData(String date, Trip trip, ArrayList<Route> route, float timeSpentInMotion, float distanceTravelled,
-                                    float fuelSpent, float timeSpent, int tripID, float avgSpeed, float moneySpent, float fuelConsumption,
-                                    float maxSpeed) {
-        trip.setTripDate(date);
-        trip.setRoute(route);
-        trip.setDistanceTravelled(distanceTravelled);
-        trip.setTimeSpent(timeSpent);
-        trip.setTimeSpentInMotion(timeSpentInMotion);
-        trip.setTripID(tripID);
-        trip.setFuelSpent(fuelSpent);
-        trip.setAvgSpeed(avgSpeed);
-        trip.setMoneyOnFuelSpent(moneySpent);
-        trip.setAvgFuelConsumption(fuelConsumption);
-        trip.setMaxSpeed(maxSpeed);
+    private Trip createTripFromData(TripInfoContainer tripInfoContainer) {
+        Trip trip = tripInfoContainer.getTrip();
+        trip.setTripDate(tripInfoContainer.getDate());
+        trip.setRoute(tripInfoContainer.getRoutes());
+        trip.setDistanceTravelled(tripInfoContainer.getDistanceTravelled());
+        trip.setTimeSpent(tripInfoContainer.getTimeSpentForTrip());
+        trip.setTimeSpentInMotion(tripInfoContainer.getTimeSpentInMotion());
+        trip.setTripID(tripInfoContainer.getId());
+        trip.setFuelSpent(tripInfoContainer.getFuelSpent());
+        trip.setAvgSpeed(tripInfoContainer.getAvgSpeed());
+        trip.setMoneyOnFuelSpent(tripInfoContainer.getMoneyOnFuelSpent());
+        trip.setAvgFuelConsumption(tripInfoContainer.getAvgFuelConsumption());
+        trip.setMaxSpeed(tripInfoContainer.getMaxSpeed());
         return trip;
     }
 

@@ -2,51 +2,51 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.location.GpsStatus;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.annotation.Nullable;
-import android.graphics.drawable.Drawable;
-import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.support.v4.app.Fragment;
-import android.widget.RelativeLayout;
-import android.view.LayoutInflater;
-import android.location.GpsStatus;
-import android.widget.ImageButton;
-import android.graphics.Typeface;
-import android.widget.ImageView;
-import android.content.Context;
-import android.widget.TextView;
-import android.view.ViewGroup;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.widget.Button;
-import android.os.AsyncTask;
-import android.view.View;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
-import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
-import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
-import com.example.aprokopenko.triphelper.listener.FileEraseListener;
-import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
-import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
-import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.TripProcessor;
+import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.example.aprokopenko.triphelper.datamodel.TripData;
+import com.example.aprokopenko.triphelper.listener.FileEraseListener;
+import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
+import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
+import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
+import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
 
-import java.io.ObjectInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -515,8 +515,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (register) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             // TODO: 24.06.2016 fix permission issue here. Need to addcondition when addListener is allowed
-            UtilMethods.isPermissionAllowed(context);
-            lm.addGpsStatusListener(this);
+            if (UtilMethods.isPermissionAllowed(context)) {
+                lm.addGpsStatusListener(this);
+            }
         }
         else {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -590,10 +591,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void cleanAllProcess() {
-        //        TODO:07.06 .2016 not working due to problems with WakeLock that calling in OnLocationChanged, whatever you do..
-        //        if (wakeLock != null) {
-        //            wakeLock.release();
-        //        }
         if (isButtonVisible(stopButton)) {
             stopTracking();
         }

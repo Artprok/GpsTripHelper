@@ -1,11 +1,11 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
-import android.support.annotation.Nullable;
 import android.content.res.Resources;
+import android.support.annotation.Nullable;
 
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.datamodel.Trip;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;
 import java.util.Calendar;

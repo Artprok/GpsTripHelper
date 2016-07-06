@@ -1,11 +1,11 @@
 package com.example.aprokopenko.triphelper.dependency_injection;
 
-import android.location.LocationManager;
 import android.app.Application;
 import android.content.Context;
+import android.location.LocationManager;
 
-import dagger.Provides;
 import dagger.Module;
+import dagger.Provides;
 
 @Module public class AppModule {
     private static final String LOG_TAG = "AppModule";

@@ -2,25 +2,26 @@ package com.example.aprokopenko.triphelper.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.widget.TextView;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.datamodel.Trip;
+import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
 import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
-import com.example.aprokopenko.triphelper.datamodel.Trip;
-import com.example.aprokopenko.triphelper.R;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRecyclerViewAdapter.ViewHolder> {
     public static final String LOG_TAG = "RECYCLER_ADAPTER";
-    private final ArrayList<Trip>                 tripList;
+
     private final ListFragmentInteractionListener listFragmentInteractionListener;
+    private final ArrayList<Trip>                 tripList;
 
     public TripListRecyclerViewAdapter(ArrayList<Trip> trips, ListFragmentInteractionListener listener) {
         listFragmentInteractionListener = listener;
@@ -44,10 +45,13 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
             @Override public void onClick(View v) {
                 if (listFragmentInteractionListener != null) {
                     listFragmentInteractionListener.onListItemClick(holder.trip);
-                    TripInfoFragment tripInfoFragment = TripInfoFragment
-                            .newInstance(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(), curTrip.getTimeSpentForTrip(),
-                                    curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(), curTrip.getAvgFuelConsumption(),
-                                    curTrip.getFuelSpent(), id, curTrip.getRoute(), curTrip.getMoneyOnFuelSpent(), curTrip.getMaxSpeed());
+
+                    TripInfoContainer tripInfoConatiner = new TripInfoContainer(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(),
+                            curTrip.getTimeSpentForTrip(), curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(),
+                            curTrip.getAvgFuelConsumption(), curTrip.getFuelSpent(), id, curTrip.getRoute(), curTrip.getMoneyOnFuelSpent(),
+                            curTrip.getMaxSpeed(), null);
+
+                    TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoConatiner);
                     listFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
                 }
             }
@@ -69,8 +73,8 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
         @BindView(R.id.content)
         TextView contentView;
 
-        public        Trip     trip;
-        public final  View     mView;
+        public       Trip trip;
+        public final View mView;
 
         public ViewHolder(View view) {
             super(view);

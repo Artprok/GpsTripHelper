@@ -1,28 +1,28 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.content.res.Resources;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.view.ViewGroup;
-import android.view.View;
-import android.os.Bundle;
-import android.util.Log;
 
-import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
-import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
-import com.example.aprokopenko.triphelper.R;
-
+import com.example.aprokopenko.triphelper.datamodel.TripData;
+import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
+import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
 import java.util.ArrayList;
 
@@ -146,9 +146,9 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         int              tripId            = trip.getTripID();
         ArrayList<Route> routes            = trip.getRoute();
 
-        TripInfoFragment tripInfoFragment = TripInfoFragment
-                .newInstance(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion, timeSpentOnStop, fuelConsumed, fuelSpent,
-                        tripId, routes, moneyOnFuelSpent, maxSpeed);
+        TripInfoContainer tripInfoConatiner = new TripInfoContainer(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion,
+                timeSpentOnStop, fuelConsumed, fuelSpent, tripId, routes, moneyOnFuelSpent, maxSpeed, trip);
+        TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoConatiner);
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 

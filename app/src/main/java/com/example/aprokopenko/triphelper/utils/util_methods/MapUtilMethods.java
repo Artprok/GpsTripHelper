@@ -1,18 +1,18 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
-import android.support.annotation.Nullable;
-import android.location.Location;
 import android.graphics.Color;
+import android.location.Location;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.datamodel.Route;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
@@ -92,7 +92,6 @@ public class MapUtilMethods {
         }
         googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
     }
-
 
     private static LatLng getPositionForCamera(ArrayList<Route> routes) {
         LatLng lastPoint;

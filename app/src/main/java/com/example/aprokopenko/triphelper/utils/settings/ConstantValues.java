@@ -24,7 +24,7 @@ public class ConstantValues {
     public static final float   SPEEDOMETER_HEIGHT = 0.99f;
     public static final float   SPEEDOMETER_WIDTH  = 0.99f;
     public static final int     PER_100            = 100;
-    public static final boolean DEBUG_MODE         = false; //todo change for release to false
+    public static final boolean DEBUG_MODE         = true; //todo change for release to false
     public static final boolean LOGGING_ENABLED    = false; //todo change for release to false
 
     public static final int TEXT_ANIM_DURATION             = 600;
@@ -65,6 +65,7 @@ public class ConstantValues {
     public static final int CITY_SPEED_LIMIT    = 80;
     public static final int OUTCITY_SPEED_LIMIT = 110;
 
-    public static int FAB_TRANSITION_VALUE = -125;
+    public static final int FAB_TRANSITION_VALUE                  = -125;
+    public static final int NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE = 666;
 
 }

@@ -1,7 +1,7 @@
 package com.example.aprokopenko.triphelper.datamodel;
 
-import android.os.Parcelable;
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -20,13 +20,13 @@ public class Route implements Parcelable {
         speed = in.readFloat();
     }
 
-    @Override public int describeContents() {
-        return 0;
-    }
-
     @Override public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(routePoints, flags);
         dest.writeFloat(speed);
+    }
+
+    @Override public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Route> CREATOR = new Creator<Route>() {
@@ -46,6 +46,4 @@ public class Route implements Parcelable {
     public float getSpeed() {
         return speed;
     }
-
-
 }

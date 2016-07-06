@@ -371,23 +371,4 @@ import butterknife.Unbinder;
             super.onPostExecute(result);
         }
     }
-
-    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-    //    private void setupBackgroundSwitch() {
-    //        boolean res = preferences.getBoolean("backgroundWork", false);
-    //        backgroundSwitch.setChecked(res);
-    //        backgroundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-    //            SharedPreferences.Editor editor = preferences.edit();
-    //
-    //            @Override public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-    //                if (b) {
-    //                    editor.putBoolean("backgroundWork", true);
-    //                }
-    //                else {
-    //                    editor.putBoolean("backgroundWork", false);
-    //                }
-    //                editor.apply();
-    //            }
-    //        });
-    //    }
 }

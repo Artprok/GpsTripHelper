@@ -1,35 +1,35 @@
 package com.example.aprokopenko.triphelper.utils.util_methods;
 
-import android.animation.Animator;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
-import android.content.ActivityNotFoundException;
-import android.support.v4.app.ActivityCompat;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.animation.ValueAnimator;
-import android.content.DialogInterface;
-import android.support.v4.app.Fragment;
-import android.content.res.Resources;
-import android.provider.Settings;
-import android.widget.TextView;
-import android.content.Context;
-import android.content.Intent;
-import android.widget.Toast;
-import android.app.Activity;
-import android.view.View;
-import android.util.Log;
-import android.os.Build;
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
-import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
-import java.util.Random;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 
@@ -164,8 +164,7 @@ public class UtilMethods {
     }
 
     public static void animateFabTransition(final FloatingActionButton fab, final int transitionX) {
-        fab.animate()
-                .setListener(new Animator.AnimatorListener() {
+        fab.animate().setListener(new Animator.AnimatorListener() {
             @Override public void onAnimationStart(Animator animator) {
 
             }
@@ -181,10 +180,7 @@ public class UtilMethods {
             @Override public void onAnimationRepeat(Animator animator) {
 
             }
-        })
-                .setDuration(ConstantValues.TEXT_ANIM_DURATION)
-                .translationX(transitionX)
-                .start();
+        }).setDuration(ConstantValues.TEXT_ANIM_DURATION).translationX(transitionX).start();
     }
 
     public static void showToast(Context context, CharSequence stringToShow) {

@@ -1,34 +1,35 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
-import android.support.annotation.Nullable;
-import android.animation.ObjectAnimator;
-import android.support.v4.app.Fragment;
-import android.content.res.Resources;
-import android.widget.RelativeLayout;
-import android.view.LayoutInflater;
 import android.widget.ImageButton;
-import android.animation.Animator;
-import android.content.Context;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.view.ViewGroup;
-import android.os.Bundle;
-import android.view.View;
-import android.util.Log;
 
+import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.datamodel.Route;
+import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.datamodel.Route;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.GoogleMap;
-import com.example.aprokopenko.triphelper.R;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -108,9 +109,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     public TripInfoFragment() {
     }
 
-    public static TripInfoFragment newInstance(String tripDate, float distTravelled, float avgSpeed, float timeSpent,
-                                               float timeSpentInMotion, float timeSpentOnStop, float averageFuelCons, float fuelSpent,
-                                               int tripId, ArrayList<Route> routes, Float moneySpent, Float maxSpeed) {
+    public static TripInfoFragment newInstance(TripInfoContainer tripInfoContainer) {
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "newInstance: CALLED");
         }
@@ -119,6 +118,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<String> latitudeArray  = new ArrayList<>();
         ArrayList<String> longitudeArray = new ArrayList<>();
         ArrayList<String> speedArray     = new ArrayList<>();
+        ArrayList<Route>  routes         = tripInfoContainer.getRoutes();
         if (routes != null) {
             for (Route tmpRoute : routes) {
                 if (tmpRoute != null) {
@@ -130,20 +130,20 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-        args.putFloat(TIME_SPENT_WITHOUT_MOTION, timeSpentOnStop);
-        args.putFloat(TIME_SPENT_IN_MOTION, timeSpentInMotion);
+        args.putFloat(TIME_SPENT_WITHOUT_MOTION, tripInfoContainer.getTimeSpentOnStop());
+        args.putFloat(TIME_SPENT_IN_MOTION, tripInfoContainer.getTimeSpentInMotion());
         args.putStringArrayList(LONGITUDE_ARR, longitudeArray);
         args.putStringArrayList(LATITUDE_ARR, latitudeArray);
-        args.putFloat(AVERAGE_FUEL_CONS, averageFuelCons);
-        args.putFloat(DISTANCE_TRAVELLED, distTravelled);
+        args.putFloat(AVERAGE_FUEL_CONS, tripInfoContainer.getAvgFuelConsumption());
+        args.putFloat(DISTANCE_TRAVELLED, tripInfoContainer.getDistanceTravelled());
         args.putStringArrayList(SPEED_ARR, speedArray);
-        args.putFloat(AVERAGE_SPEED, avgSpeed);
-        args.putFloat(MONEY_SPENT, moneySpent);
-        args.putFloat(TIME_SPENT, timeSpent);
-        args.putFloat(FUEL_SPENT, fuelSpent);
-        args.putString(TRIP_DATE, tripDate);
-        args.putFloat(MAX_SPEED, maxSpeed);
-        args.putInt(TRIP_ID, tripId);
+        args.putFloat(AVERAGE_SPEED, tripInfoContainer.getAvgSpeed());
+        args.putFloat(MONEY_SPENT, tripInfoContainer.getMoneyOnFuelSpent());
+        args.putFloat(TIME_SPENT, tripInfoContainer.getTimeSpentForTrip());
+        args.putFloat(FUEL_SPENT, tripInfoContainer.getFuelSpent());
+        args.putString(TRIP_DATE, tripInfoContainer.getDate());
+        args.putFloat(MAX_SPEED, tripInfoContainer.getMaxSpeed());
+        args.putInt(TRIP_ID, tripInfoContainer.getId());
 
         fragment.setArguments(args);
         return fragment;

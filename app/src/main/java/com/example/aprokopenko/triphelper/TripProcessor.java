@@ -1,39 +1,39 @@
 package com.example.aprokopenko.triphelper;
 
-import android.content.ServiceConnection;
 import android.content.ComponentName;
-import android.location.Location;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
+import android.content.ServiceConnection;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
-
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
-import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.example.aprokopenko.triphelper.service.LocationService;
-import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
-import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
+import com.example.aprokopenko.triphelper.datamodel.TripData;
+import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
+import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
+import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
+import com.example.aprokopenko.triphelper.service.LocationService;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
+import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
+import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.concurrent.ExecutionException;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 import rx.Subscriber;
 

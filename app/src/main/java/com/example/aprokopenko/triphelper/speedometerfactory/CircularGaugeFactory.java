@@ -1,18 +1,18 @@
 package com.example.aprokopenko.triphelper.speedometerfactory;
 
-import android.support.annotation.Nullable;
-import android.graphics.PointF;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PointF;
+import android.support.annotation.Nullable;
 
 import com.example.aprokopenko.triphelper.utils.settings.GaugeFactorySettings;
 import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
-import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
 import com.syncfusion.gauges.SfCircularGauge.CircularRange;
 import com.syncfusion.gauges.SfCircularGauge.CircularScale;
-import com.syncfusion.gauges.SfCircularGauge.NeedlePointer;
-import com.syncfusion.gauges.SfCircularGauge.TickSetting;
 import com.syncfusion.gauges.SfCircularGauge.Header;
+import com.syncfusion.gauges.SfCircularGauge.NeedlePointer;
+import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
+import com.syncfusion.gauges.SfCircularGauge.TickSetting;
 
 import java.util.ArrayList;
 

@@ -1,27 +1,26 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.content.Context;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.location.Location;
-import android.content.Context;
-import android.view.ViewGroup;
-import android.view.View;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.datamodel.Route;
+import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
+import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
-import com.example.aprokopenko.triphelper.datamodel.Route;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.GoogleMap;
-import com.example.aprokopenko.triphelper.R;
-
 
 import java.util.ArrayList;
 
