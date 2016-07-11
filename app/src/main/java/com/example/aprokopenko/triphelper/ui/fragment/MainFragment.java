@@ -74,10 +74,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     @BindView(R.id.settingsButton)
     ImageButton    settingsButton;
 
-    public static final  int     LOCATION_REQUEST_CODE = 1;
-    private static final String  LOG_TAG               = "MainFragment";
-    private static final boolean REMOVE                = false;
-    private static final boolean REGISTER              = true;
+    public static final int LOCATION_REQUEST_CODE = 1;
+
+    private static final String  LOG_TAG  = "MainFragment";
+    private static final boolean REMOVE   = false;
+    private static final boolean REGISTER = true;
 
     private boolean firstStart = true;
     private boolean fileErasedFlag;
