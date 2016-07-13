@@ -14,14 +14,14 @@ import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
 
 public class PointerRender extends View {
 
-    GaugePointer    mGaugePointer;
+    GaugePointer mGaugePointer;
     private GaugeScale      mGaugeScale;
     private boolean         mEnableAnimation;
     private TripHelperGauge mGauge;
     private Paint           paint;
     private RectF           rectF;
 
-    float           value;
+    float value;
 
     public PointerRender(Context context, TripHelperGauge mGauge, GaugeScale mGaugeScale, GaugePointer mGaugePointer) {
         this(context, null);
@@ -420,7 +420,7 @@ public class PointerRender extends View {
             this.paint.setStrokeWidth((float) this.mGaugePointer.width);
             canvas.drawArc(rectF, (float) gaugeScale.startAngle,
                     (float) ((getPointerAngle((double) this.value, gaugeScale) - getPointerAngle(gaugeScale.getStartValue(),
-                            gaugeScale)) / 0.017453292519943295d), false, this.paint);
+                            gaugeScale)) / GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY), false, this.paint);
             return;
         }
         double x0;
@@ -575,9 +575,9 @@ public class PointerRender extends View {
         }
         if (((NeedlePointer) this.mGaugePointer).type != NeedleType.Bar) {
             Path   path         = new Path();
-            double pointerAngle = angle / 0.017453292519943295d;
-            if (pointerAngle > 360.0d) {
-                pointerAngle %= 360.0d;
+            double pointerAngle = angle / GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+            if (pointerAngle > GaugeConstants.ANGLE_360) {
+                pointerAngle %= GaugeConstants.ANGLE_360;
             }
             path.moveTo((float) x0, (float) y0);
             path.lineTo((float) x1, (float) y1);
@@ -705,11 +705,11 @@ public class PointerRender extends View {
         if (pointerValue > gaugeScale.endValue) {
             pointerValue = gaugeScale.endValue;
         }
-        double startAngle = gaugeScale.startAngle * 0.017453292519943295d;
+        double startAngle = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
         if (pointerValue < gaugeScale.startValue) {
             pointerValue = gaugeScale.startValue;
         }
         return startAngle + (((pointerValue - gaugeScale.startValue) * (gaugeScale.sweepAngle / (gaugeScale.endValue - gaugeScale
-                .startValue))) * 0.017453292519943295d);
+                .startValue))) * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY);
     }
 }

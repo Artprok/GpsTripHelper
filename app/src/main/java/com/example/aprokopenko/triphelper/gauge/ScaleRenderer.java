@@ -82,8 +82,8 @@ class ScaleRenderer extends View {
     }
 
     private void onDrawLabels(Canvas canvas, Paint paint, double totalTicks, GaugeScale gaugeScale) {
-        double anglularSpace = gaugeScale.sweepAngle / totalTicks * 0.017453292519943295D;
-        double angle         = gaugeScale.startAngle * 0.017453292519943295D;
+        double anglularSpace = gaugeScale.sweepAngle / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double angle         = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
         double var10000      = this.gauge.mInnerBevelWidth;
         this.gauge.getClass();
         double tempGaugeSize = (var10000 - 10.0D) / 2.0D;
@@ -217,8 +217,8 @@ class ScaleRenderer extends View {
     }
 
     private void onDrawTicks(Canvas canvas, Paint paint, double totalTicks, GaugeScale gaugeScale) {
-        double angularSpace = gaugeScale.sweepAngle / totalTicks * 0.017453292519943295D;
-        double angle        = gaugeScale.startAngle * 0.017453292519943295D;
+        double angularSpace = gaugeScale.sweepAngle / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double angle        = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
         double var10000     = this.gauge.mInnerBevelWidth;
         this.gauge.getClass();
         double tempGaugeSize = (var10000 - 10.0D) / 2.0D;
@@ -415,7 +415,7 @@ class ScaleRenderer extends View {
             angle += angularSpace;
         }
 
-        angle = gaugeScale.startAngle * 0.017453292519943295D;
+        angle = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
         double var33          = totalTicks * gaugeScale.minorTicksPerInterval;
         double minorTickAngle = angularSpace / (gaugeScale.minorTicksPerInterval + 1.0D);
         paint.setStrokeWidth((float) gaugeScale.minorTickSettings.width);
@@ -425,7 +425,7 @@ class ScaleRenderer extends View {
             paint.setAntiAlias(true);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(gaugeScale.minorTickSettings.color);
-            minorTickPosition = 0.0D;
+            minorTickPosition = GaugeConstants.ZERO;
             outerSize = tempGaugeSize - gaugeScale.minorTickSettings.offset * this.gauge.mCentreX + this.arcAliasing * gaugeScale
                     .rimWidth - minorTickPosition - gaugeScale.rimWidth / 2.0D;
             tickLength1 = this.gauge.mMinSize / 2.0D - tempGaugeSize + gaugeScale.minorTickSettings.offset * this.gauge.mCentreX - this
@@ -509,7 +509,7 @@ class ScaleRenderer extends View {
                 }
             }
 
-            innerSize = 0.0D;
+            innerSize = GaugeConstants.ZERO;
             innerSize = tempGaugeSize - gaugeScale.minorTickSettings.size - gaugeScale.minorTickSettings.offset * this.gauge.mCentreX +
                     this.arcAliasing * gaugeScale.rimWidth - minorTickPosition - gaugeScale.rimWidth / 2.0D;
             tickLength1 = this.gauge.mMinSize / 2.0D - tempGaugeSize + gaugeScale.minorTickSettings.size + gaugeScale.minorTickSettings
@@ -597,7 +597,7 @@ class ScaleRenderer extends View {
             }
 
             canvas.drawLine((float) x1, (float) y1, (float) x2, (float) y2, paint);
-            if ((double) i % gaugeScale.minorTicksPerInterval == 0.0D) {
+            if ((double) i % gaugeScale.minorTicksPerInterval == GaugeConstants.ZERO) {
                 angle += minorTickAngle;
             }
         }
@@ -623,7 +623,7 @@ class ScaleRenderer extends View {
                 endtArc = this.getRangeAngle(gaugeRange.endValue, gaugeScale) - this.getRangeAngle(gaugeRange.startValue, gaugeScale);
                 this.gauge.calculateMargin(this.gauge.mInnerBevelWidth - this.gauge.mInnerBevelWidth * gaugeScale.radiusFactor,
                         this.gauge.mInnerBevelWidth - this.gauge.mInnerBevelWidth * gaugeScale.radiusFactor);
-                double var10000 = this.gauge.mMinSize - this.gauge.mRimWidth;
+                double var10000;
                 double rimSize;
                 if (gaugeScale.radiusFactor > 0.0D) {
                     this.gauge.calculateMargin(this.gauge.mMinSize - this.gauge.mMinSize * gaugeScale.radiusFactor,
@@ -797,7 +797,7 @@ class ScaleRenderer extends View {
         double var10001 = this.gauge.mInnerBevelWidth;
         this.gauge.getClass();
         double rimSize = var10000 - (var10001 - 10.0D) + this.gaugeScale.rimWidth / 2.0D;
-        if (radiusFactor > 0.0D) {
+        if (radiusFactor > GaugeConstants.ZERO) {
             this.gauge.calculateMargin(this.gauge.mMinSize / 2.0D - this.gauge.mCentreX * radiusFactor,
                     this.gauge.mMinSize / 2.0D - this.gauge.mCentreX * radiusFactor);
             var10000 = this.gauge.mRangePathWidth - this.gauge.mRimWidth;

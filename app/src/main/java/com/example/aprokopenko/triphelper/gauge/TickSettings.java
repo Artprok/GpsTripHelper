@@ -8,10 +8,10 @@ public class TickSettings {
     double          width;
 
     public TickSettings() {
-        this.size = 7.0d;
-        this.width = 3.0d;
-        this.color = -1;
-        this.offset = 0.1d;
+        this.size = GaugeConstants.DEFAULT_TICK_SETTINGS_SIZE;
+        this.width = GaugeConstants.DEFAULT_TICK_SETTINGS_WIDTH;
+        this.color = GaugeConstants.DEFAULT_TICK_SETTINGS_COLOR;
+        this.offset = GaugeConstants.DEFAULT_TICK_SETTINGS_OFFSET;
     }
 
     public double getSize() {

@@ -1,7 +1,6 @@
 package com.example.aprokopenko.triphelper.gauge;
 
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 
 import java.util.ArrayList;
@@ -33,29 +32,30 @@ public class GaugeScale {
     double                  sweepAngle;
 
     public GaugeScale() {
+        this.showRim = true;
+        this.showTicks = true;
+        this.showLabels = true;
         this.gaugeRanges = new ArrayList<>();
         this.GaugePointers = new ArrayList<>();
-        this.startValue = GaugeConstants.ZERO;
-        this.endValue = 100.0d;
-        this.startAngle = 130.0d;
-        this.sweepAngle = 280.0d;
-        this.interval = 10.0d;
-        this.labelPrefix = "";
-        this.labelPostfix = "";
-        this.rimColor = Color.parseColor("#FFDCDCE0");
-        this.rimWidth = 10.0d;
-        this.labelTextSize = 12.0d;
-        this.labelTextStyle = Typeface.create("Helvetica", 0);
-        this.labelColor = Color.parseColor("#FF5B5B5B");
-        this.minorTicksPerInterval = 2.0d;
-        this.showLabels = true;
-        this.showTicks = true;
-        this.showRim = true;
         this.majorTickSettings = new TickSettings();
         this.minorTickSettings = new TickSettings();
-        this.radiusFactor = GaugeConstants.ZERO;
-        this.numberOfDecimalDigits = -1;
-        this.LabelOffset = 0.1d;
+
+        this.startValue = GaugeConstants.SCALE_INIT_START_VALUE;
+        this.endValue = GaugeConstants.SCALE_INIT_END_VALUE;
+        this.startAngle = GaugeConstants.SCALE_INIT_START_ANGLE;
+        this.sweepAngle = GaugeConstants.SCALE_INIT_SWEEP_ANGLE;
+        this.interval = GaugeConstants.SCALE_INIT_INTERVAL;
+        this.labelPrefix = GaugeConstants.SCALE_INIT_PREFIX;
+        this.labelPostfix = GaugeConstants.SCALE_INIT_POSTFIX;
+        this.rimColor = GaugeConstants.SCALE_INIT_RIM_COLOR;
+        this.rimWidth = GaugeConstants.SCALE_INIT_RIM_WIDTH;
+        this.labelTextSize = GaugeConstants.SCALE_INIT_LABEL_TEXT_SIZE;
+        this.labelTextStyle = GaugeConstants.SCALE_INIT_LABEL_TEXT_STYLE;
+        this.labelColor = GaugeConstants.SCALE_INIT_LABEL_COLOR;
+        this.minorTicksPerInterval = GaugeConstants.SCALE_INIT_MINOR_TICK_INTERVAL;
+        this.radiusFactor = GaugeConstants.SCALE_INIT_RADIUS_FACTOR;
+        this.numberOfDecimalDigits = GaugeConstants.SCALE_INIT_NUMBER_OF_DECIMAL_DIGITS;
+        this.LabelOffset = GaugeConstants.SCALE_INIT_LABEL_OFFSET;
     }
 
     public ArrayList<GaugeRange> getGaugeRanges() {

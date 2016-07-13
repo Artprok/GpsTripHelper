@@ -1,7 +1,5 @@
 package com.example.aprokopenko.triphelper.gauge;
 
-import android.graphics.Color;
-
 import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
 
 public class NeedlePointer extends GaugePointer {
@@ -11,10 +9,10 @@ public class NeedlePointer extends GaugePointer {
     NeedleType type;
 
     public NeedlePointer() {
-        this.knobColor = Color.parseColor("#FF777777");
-        this.knobRadius = 15.0d;
+        this.knobRadius = GaugeConstants.DEFAULT_KNOB_RADIUS;
+        this.knobColor = GaugeConstants.DEFAULT_KNOB_COLOR;
+        this.lengthFactor = GaugeConstants.LENGHT_FACTOR;
         this.type = NeedleType.Bar;
-        this.lengthFactor = 1.0d;
     }
 
     public int getKnobColor() {

@@ -1,10 +1,9 @@
 package com.example.aprokopenko.triphelper.gauge;
 
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
 
 public class GaugePointer {
-    int             color;
+    int color;
     private boolean enableAnimation;
     TripHelperGauge mBaseGauge;
     GaugeScale      mGaugeScale;
@@ -13,9 +12,9 @@ public class GaugePointer {
     double          width;
 
     GaugePointer() {
-        this.value = GaugeConstants.ZERO;
-        this.width = 3.0d;
-        this.color = Color.parseColor("#FF777777");
+        this.value = GaugeConstants.POINTER_INIT_HEIGHT_VALUE;
+        this.width = GaugeConstants.POINTER_INIT_WIDTH_VALUE;
+        this.color = GaugeConstants.POINTER_INIT_COLOR;
         this.enableAnimation = true;
     }
 
@@ -25,9 +24,8 @@ public class GaugePointer {
 
     public void setValue(double newValue) {
         if (this.mPointerRender != null) {
-            ObjectAnimator animator = ObjectAnimator
-                    .ofFloat(this.mPointerRender, "value", (float) this.value, (float) newValue);
-            animator.setDuration(1500);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(this.mPointerRender, "value", (float) this.value, (float) newValue);
+            animator.setDuration(GaugeConstants.GAUGE_ANIMATION_TIME);
             animator.start();
         }
         this.value = newValue;

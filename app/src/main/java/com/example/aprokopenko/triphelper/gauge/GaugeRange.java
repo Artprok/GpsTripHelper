@@ -1,19 +1,20 @@
 package com.example.aprokopenko.triphelper.gauge;
 
 public class GaugeRange {
-    int             color;
-    double          endValue;
     TripHelperGauge mGauge;
-    double          offset;
-    double          startValue;
-    double          width;
+
+    int    color;
+    double endValue;
+    double offset;
+    double startValue;
+    double width;
 
     public GaugeRange() {
-        this.color = -16711681;
-        this.startValue = GaugeConstants.ZERO;
-        this.endValue = GaugeConstants.ZERO;
-        this.width = 7.0d;
-        this.offset = 0.4d;
+        this.color = GaugeConstants.RANGE_INIT_COLOR;
+        this.startValue = GaugeConstants.RANGE_INIT_START_VALUE;
+        this.endValue = GaugeConstants.RANGE_INIT_END_VALUE;
+        this.width = GaugeConstants.RANGE_INIT_WIDTH;
+        this.offset = GaugeConstants.RANGE_INIT_OFFSET;
     }
 
     public int getColor() {

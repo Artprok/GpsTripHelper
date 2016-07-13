@@ -18,13 +18,13 @@ public class TripHelperGauge extends FrameLayout {
 
     private final ArrayList<ScaleRenderer> mScaleRenderers;
     private final ArrayList<PointerRender> mPointerRenderes;
-    private ArrayList<GaugeScale>    gaugeScales;
-    ArrayList<Header>        headers;
+    private       ArrayList<GaugeScale>    gaugeScales;
+    ArrayList<Header> headers;
 
     private GaugeHeaderRenderer mGaugeHeader;
 
-    RectF  mVisualRect;
-    RectF  mRangeFrame;
+    RectF mVisualRect;
+    RectF mRangeFrame;
     private int    frameBackgroundColor;
     private double mAvailableHeight;
     private double mAvailableWidth;
@@ -48,6 +48,7 @@ public class TripHelperGauge extends FrameLayout {
     double mRangePathWidth;
     double mCentreX;
     double mCentreY;
+    private double marginSubtrahend;
 
     public TripHelperGauge(Context context) {
         this(context, null);
@@ -60,10 +61,10 @@ public class TripHelperGauge extends FrameLayout {
         this.mPointerRenderes = new ArrayList<>();
         this.gaugeScales = new ArrayList<>();
         this.GaugeType = com.example.aprokopenko.triphelper.gauge.enums.GaugeType.Default;
-        this.frameBackgroundColor = -16777216;
+        this.frameBackgroundColor = GaugeConstants.FRAME_BACKGROUND_COLOR;
         this.headers = new ArrayList<>();
-        this.mGaugeHeight = 0.0D;
-        this.mGaugeWidth = 0.0D;
+        this.mGaugeHeight = GaugeConstants.ZERO;
+        this.mGaugeWidth = GaugeConstants.ZERO;
         this.mGap = 10.0D;
         DENSITY = this.getContext().getResources().getDisplayMetrics().density;
     }
@@ -84,7 +85,6 @@ public class TripHelperGauge extends FrameLayout {
         if (this.mGaugeHeader == null) {
             this.init();
         }
-
     }
 
     private GaugeType getGaugeType() {
@@ -213,8 +213,8 @@ public class TripHelperGauge extends FrameLayout {
                 }
                 else {
                     removedPointerRender.remove(pointRen1);
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(pointRen1, "Value", pointRen1.value, (float) poinRen3.value);
-                    anim3.setDuration(1500L);
+                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(pointRen1, "", pointRen1.value, (float) poinRen3.value);
+                    anim3.setDuration(GaugeConstants.GAUGE_ANIMATION_TIME);
                     anim3.start();
                     pointRen1.invalidate();
                 }
@@ -234,7 +234,6 @@ public class TripHelperGauge extends FrameLayout {
             this.mGaugeHeader.requestLayout();
             this.mGaugeHeader.invalidate();
         }
-
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -244,14 +243,14 @@ public class TripHelperGauge extends FrameLayout {
         w = w < 50 ? 50 : w;
         this.mAvailableHeight = (double) h;
         this.mAvailableWidth = (double) w;
-        if (this.mGaugeHeight > 0.0D) {
+        if (this.mGaugeHeight > GaugeConstants.ZERO) {
             this.mGaugeHeight = this.mGaugeHeight > this.mAvailableHeight ? this.mAvailableHeight : this.mGaugeHeight;
         }
         else {
             this.mGaugeHeight = this.mAvailableHeight;
         }
 
-        if (this.mGaugeWidth > 0.0D) {
+        if (this.mGaugeWidth > GaugeConstants.ZERO) {
             this.mGaugeWidth = this.mGaugeWidth > this.mAvailableWidth ? this.mAvailableWidth : this.mGaugeWidth;
         }
         else {
@@ -271,7 +270,7 @@ public class TripHelperGauge extends FrameLayout {
                 var10000 = this.getGaugeType();
                 var10001 = this.GaugeType;
                 if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
-                    if (this.mKnobDiameter == 0.0D) {
+                    if (this.mKnobDiameter == GaugeConstants.ZERO) {
                         rectCanvas = Math.max(this.mGaugeHeight - 30.0D, this.mGaugeWidth);
                     }
                     else if (this.mKnobDiameter <= 25.0D) {
@@ -284,7 +283,7 @@ public class TripHelperGauge extends FrameLayout {
                 }
             }
 
-            if (this.mKnobDiameter == 0.0D) {
+            if (this.mKnobDiameter == GaugeConstants.ZERO) {
                 rectCanvas = Math.max(this.mGaugeHeight, this.mGaugeWidth - 30.0D);
             }
             else if (this.mKnobDiameter <= 25.0D) {
@@ -313,7 +312,7 @@ public class TripHelperGauge extends FrameLayout {
                     }
 
                     if (this.mAvailableWidth / 2.0D > this.mAvailableHeight) {
-                        if (this.mKnobDiameter == 0.0D) {
+                        if (this.mKnobDiameter == GaugeConstants.ZERO) {
                             this.mAvailableWidth = this.mAvailableHeight * 2.0D - 20.0D;
                             var10000 = this.getGaugeType();
                             var10001 = this.GaugeType;
@@ -397,7 +396,7 @@ public class TripHelperGauge extends FrameLayout {
                     }
 
                     if (this.mAvailableHeight / 2.0D > this.mAvailableWidth) {
-                        if (this.mKnobDiameter == 0.0D) {
+                        if (this.mKnobDiameter == GaugeConstants.ZERO) {
                             this.mAvailableHeight = (this.mAvailableWidth - 10.0D) * 2.0D;
                             var10000 = this.getGaugeType();
                             var10001 = this.GaugeType;
@@ -490,28 +489,29 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     void calculateMargin(double height, double width) {
+        marginSubtrahend = 2.0D * 10.0D;
         this.getClass();
         this.mRimHeight = height - 10.0D;
         this.getClass();
         this.mRimWidth = width - 10.0D;
         double var10001 = this.mRimHeight;
         this.getClass();
-        this.mTicksPathHeight = var10001 - 2.0D * 10.0D;
+        this.mTicksPathHeight = var10001 - marginSubtrahend;
         var10001 = this.mRimWidth;
         this.getClass();
-        this.mTicksPathWidth = var10001 - 2.0D * 10.0D;
+        this.mTicksPathWidth = var10001 - marginSubtrahend;
         var10001 = this.mTicksPathHeight;
         this.getClass();
-        this.mLabelsPathHeight = var10001 - 2.0D * 10.0D;
+        this.mLabelsPathHeight = var10001 - marginSubtrahend;
         var10001 = this.mTicksPathWidth;
         this.getClass();
-        this.mLabelsPathWidth = var10001 - 2.0D * 10.0D;
+        this.mLabelsPathWidth = var10001 - marginSubtrahend;
         var10001 = this.mLabelsPathHeight;
         this.getClass();
-        this.mRangePathHeight = var10001 - 2.0D * 10.0D;
+        this.mRangePathHeight = var10001 - marginSubtrahend;
         var10001 = this.mLabelsPathWidth;
         this.getClass();
-        this.mRangePathWidth = var10001 - 2.0D * 10.0D;
+        this.mRangePathWidth = var10001 - marginSubtrahend;
     }
 }
 

@@ -14,7 +14,6 @@ import com.example.aprokopenko.triphelper.gauge.TickSettings;
 import com.example.aprokopenko.triphelper.gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.utils.settings.GaugeFactorySettings;
 
-
 import java.util.ArrayList;
 
 public class CircularGaugeFactory {

@@ -7,19 +7,20 @@ import com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment;
 
 public class Header {
     com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment HeaderAlignment;
-    TripHelperGauge                                                gauge;
-    PointF                                                         position;
-    String                                                         text;
-    int                                                            textColor;
-    double                                                         textSize;
-    Typeface                                                       textStyle;
+
+    TripHelperGauge gauge;
+    PointF          position;
+    String          text;
+    int             textColor;
+    double          textSize;
+    Typeface        textStyle;
 
     public Header() {
         this.text = "headerText";
-        this.textSize = 12.0d;
-        this.textStyle = Typeface.create("Helvetica", 0);
-        this.textColor = -1;
-        this.position = new PointF(50.0f, 70.0f);
+        this.textSize = GaugeConstants.DEFAULT_HEADER_TEXT_SIZE;
+        this.textStyle = GaugeConstants.DEFAULT_HEADER_TEXT_STYLE;
+        this.textColor = GaugeConstants.DEFAULT_HEADER_TEXT_COLOR;
+        this.position = GaugeConstants.DEFAULT_HEADER_POSITION;
         this.HeaderAlignment = com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment.Custom;
     }
 
