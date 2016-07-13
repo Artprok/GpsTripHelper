@@ -2,7 +2,7 @@ package com.example.aprokopenko.triphelper.utils.settings;
 
 import android.graphics.Color;
 
-import com.syncfusion.gauges.SfCircularGauge.enums.NeedleType;
+import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
 
 public class GaugeFactorySettings {
     public static final int startAngle            = 120;

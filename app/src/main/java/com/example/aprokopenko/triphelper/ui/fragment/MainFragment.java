@@ -32,6 +32,8 @@ import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
+import com.example.aprokopenko.triphelper.gauge.TripHelperGauge;
+import com.example.aprokopenko.triphelper.gauge.GaugePointer;
 import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
@@ -39,8 +41,6 @@ import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactor
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-import com.syncfusion.gauges.SfCircularGauge.CircularPointer;
-import com.syncfusion.gauges.SfCircularGauge.SfCircularGauge;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,7 +86,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
     private TripProcessor     tripProcessor;
     private SharedPreferences preferences;
-    private SfCircularGauge   speedometer;
+    private TripHelperGauge   speedometer;
     private MapFragment       mapFragment;
     private Context           context;
     private Bundle            state;
@@ -246,7 +246,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
 
-    private SfCircularGauge createSpeedometerGauge(Context context) {
+    private TripHelperGauge createSpeedometerGauge(Context context) {
         CircularGaugeFactory circularGaugeFactory = new CircularGaugeFactory();
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context, preferences.getString("measurementUnit", ""));
     }
@@ -625,7 +625,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
 
     private void updatePointerLocation(float speed) {
-        CircularPointer pointer = speedometer.getCircularScales().get(0).getCircularPointers().get(0);
+        GaugePointer pointer = speedometer.getGaugeScales().get(0).getGaugePointers().get(0);
         if (pointer != null) {
             pointer.setValue(speed);
         }
