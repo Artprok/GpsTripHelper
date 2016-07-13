@@ -27,7 +27,6 @@ public class GaugeConstants {
     public static final double POINTER_INIT_HEIGHT_VALUE = 0.0;
     public static final int    POINTER_INIT_COLOR        = Color.parseColor("#FF777777");
 
-
     public static final int    RANGE_INIT_COLOR       = -16711681;
     public static final double RANGE_INIT_START_VALUE = 0.0;
     public static final double RANGE_INIT_END_VALUE   = 0.0;
@@ -50,7 +49,6 @@ public class GaugeConstants {
     public static final double   SCALE_INIT_RADIUS_FACTOR            = 0.0;
     public static final int      SCALE_INIT_NUMBER_OF_DECIMAL_DIGITS = -1;
     public static final double   SCALE_INIT_LABEL_OFFSET             = 0.1;
-
 
     public static final double DEFAULT_TICK_SETTINGS_SIZE   = 7.0;
     public static final double DEFAULT_TICK_SETTINGS_WIDTH  = 3.0;
