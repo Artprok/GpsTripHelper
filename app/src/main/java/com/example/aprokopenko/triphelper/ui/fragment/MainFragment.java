@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.location.GpsStatus;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -560,7 +561,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage != null) {
-            statusImage.setBackground(greenSatellite);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                statusImage.setBackground(greenSatellite);
+            }
+            else {
+                statusImage.setImageDrawable(greenSatellite);
+            }
             gpsIsActive = true;
         }
     }
@@ -570,7 +576,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         ButterKnife.bind(R.id.statusImageView, getActivity());
         Drawable redSatellite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
         if (statusImage != null) {
-            statusImage.setBackground(redSatellite);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                statusImage.setBackground(redSatellite);
+            }
+            else {
+                statusImage.setImageDrawable(redSatellite);
+            }
             gpsIsActive = false;
         }
     }

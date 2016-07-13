@@ -104,7 +104,7 @@ class ScaleRenderer extends View {
                 }
             }
             else {
-                value = String.format("%." + String.valueOf(fractionalDigit) + "f", Double.valueOf(i));
+                value = String.format("%." + String.valueOf(fractionalDigit) + "f", i);
                 label = gaugeScale.labelPrefix + value + gaugeScale.labelPostfix;
             }
 
