@@ -20,6 +20,9 @@
 -dontskipnonpubliclibraryclasses
 -forceprocessing
 -optimizationpasses 5
+-allowaccessmodification
+-dontskipnonpubliclibraryclasses
+-repackageclasses ''
 
 
 # rxjava
@@ -86,3 +89,6 @@
 #crashlytics
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
