@@ -14,25 +14,24 @@ import java.util.Iterator;
 public class TripHelperGauge extends FrameLayout {
     com.example.aprokopenko.triphelper.gauge.enums.GaugeType GaugeType;
     static float DENSITY = -1.0F;
-    private final double                   mGap;
-    private final ArrayList<ScaleRenderer> mScaleRenderers;
-    private final ArrayList<PointerRender> mPointerRenderes;
-    private       ArrayList<GaugeScale>    gaugeScales;
-    protected     ArrayList<Header>        headers;
-    private       GaugeHeaderRenderer      mGaugeHeader;
-    protected     RectF                    mVisualRect;
-    protected     RectF                    mRangeFrame;
-    private       int                      frameBackgroundColor;
-    protected     double                   mGaugeHeight;
-    protected     double                   mGaugeWidth;
-    protected     double                   mMinSize;
-    protected     double                   mInnerBevelWidth;
-    protected     double                   mKnobDiameter;
-    protected     double                   mRimWidth;
-    protected     double                   mLabelsPathHeight;
-    protected     double                   mRangePathWidth;
-    protected     double                   mCentreX;
-    protected     double                   mCentreY;
+    private final   ArrayList<ScaleRenderer> mScaleRenderers;
+    private final   ArrayList<PointerRender> mPointerRenderes;
+    private         ArrayList<GaugeScale>    gaugeScales;
+    protected       ArrayList<Header>        headers;
+    private         GaugeHeaderRenderer      mGaugeHeader;
+    protected       RectF                    mVisualRect;
+    protected       RectF                    mRangeFrame;
+    private         int                      frameBackgroundColor;
+    protected       double                   mGaugeHeight;
+    protected       double                   mGaugeWidth;
+    protected       double                   mMinSize;
+    protected       double                   mInnerBevelWidth;
+    protected       double                   mKnobDiameter;
+    protected       double                   mRimWidth;
+    protected       double                   mLabelsPathHeight;
+    protected       double                   mRangePathWidth;
+    protected       double                   mCentreX;
+    protected       double                   mCentreY;
 
     public TripHelperGauge(Context context) {
         this(context, null);
@@ -49,7 +48,6 @@ public class TripHelperGauge extends FrameLayout {
         headers = new ArrayList<>();
         mGaugeHeight = GaugeConstants.ZERO;
         mGaugeWidth = GaugeConstants.ZERO;
-        mGap = 10.0D;
         DENSITY = this.getContext().getResources().getDisplayMetrics().density;
     }
 

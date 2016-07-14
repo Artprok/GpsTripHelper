@@ -3,7 +3,7 @@ package com.example.aprokopenko.triphelper.gauge;
 public class TickSettings {
     protected TripHelperGauge mGauge;
     protected int             color;
-    protected  double          offset;
+    protected double          offset;
     protected double          size;
     protected double          width;
 
