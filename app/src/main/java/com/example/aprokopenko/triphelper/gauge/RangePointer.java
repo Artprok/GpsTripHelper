@@ -1,7 +1,7 @@
 package com.example.aprokopenko.triphelper.gauge;
 
 class RangePointer extends GaugePointer {
-    double offset;
+    protected double offset;
 
     public RangePointer() {
         this.offset = GaugeConstants.ZERO;

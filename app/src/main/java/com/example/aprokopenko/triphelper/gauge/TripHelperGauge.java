@@ -14,28 +14,25 @@ import java.util.Iterator;
 public class TripHelperGauge extends FrameLayout {
     com.example.aprokopenko.triphelper.gauge.enums.GaugeType GaugeType;
     static float DENSITY = -1.0F;
-    private final double mGap;
-
+    private final double                   mGap;
     private final ArrayList<ScaleRenderer> mScaleRenderers;
     private final ArrayList<PointerRender> mPointerRenderes;
     private       ArrayList<GaugeScale>    gaugeScales;
-    ArrayList<Header> headers;
-
-    private GaugeHeaderRenderer mGaugeHeader;
-
-    RectF mVisualRect;
-    RectF mRangeFrame;
-    private int    frameBackgroundColor;
-    double mGaugeHeight;
-    double mGaugeWidth;
-    double mMinSize;
-    double mInnerBevelWidth;
-    double mKnobDiameter;
-    double mRimWidth;
-    double mLabelsPathHeight;
-    double mRangePathWidth;
-    double mCentreX;
-    double mCentreY;
+    protected     ArrayList<Header>        headers;
+    private       GaugeHeaderRenderer      mGaugeHeader;
+    protected     RectF                    mVisualRect;
+    protected     RectF                    mRangeFrame;
+    private       int                      frameBackgroundColor;
+    protected     double                   mGaugeHeight;
+    protected     double                   mGaugeWidth;
+    protected     double                   mMinSize;
+    protected     double                   mInnerBevelWidth;
+    protected     double                   mKnobDiameter;
+    protected     double                   mRimWidth;
+    protected     double                   mLabelsPathHeight;
+    protected     double                   mRangePathWidth;
+    protected     double                   mCentreX;
+    protected     double                   mCentreY;
 
     public TripHelperGauge(Context context) {
         this(context, null);
@@ -227,7 +224,7 @@ public class TripHelperGauge extends FrameLayout {
         h = h < 50 ? 50 : h;
         w = w < 50 ? 50 : w;
         double mAvailableHeight = (double) h;
-        double mAvailableWidth = (double) w;
+        double mAvailableWidth  = (double) w;
         if (mGaugeHeight > GaugeConstants.ZERO) {
             mGaugeHeight = mGaugeHeight > mAvailableHeight ? mAvailableHeight : mGaugeHeight;
         }
@@ -474,7 +471,7 @@ public class TripHelperGauge extends FrameLayout {
         mCentreX = mScaleCentreX;
         double mOuterBevelHeight = (double) mVisualRect.height();
         double mOuterBevelWidth  = (double) mVisualRect.width();
-        double dimensionVar = mOuterBevelHeight;
+        double dimensionVar      = mOuterBevelHeight;
         double mInnerBevelHeight = dimensionVar + 10.0D;
         dimensionVar = mOuterBevelWidth;
         mInnerBevelWidth = dimensionVar + 10.0D;

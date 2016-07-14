@@ -1,13 +1,13 @@
 package com.example.aprokopenko.triphelper.gauge;
 
 public class GaugeRange {
-    TripHelperGauge mGauge;
+    protected TripHelperGauge mGauge;
 
-    int    color;
-    double endValue;
-    double offset;
-    double startValue;
-    double width;
+    protected int    color;
+    protected double endValue;
+    protected double offset;
+    protected double startValue;
+    protected double width;
 
     public GaugeRange() {
         color = GaugeConstants.RANGE_INIT_COLOR;

@@ -9,8 +9,8 @@ import android.view.View;
 import com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment;
 
 class GaugeHeaderRenderer extends View {
-    TripHelperGauge mGauge;
-    private Paint mPaint;
+    protected TripHelperGauge mGauge;
+    private   Paint           mPaint;
 
     public GaugeHeaderRenderer(Context context) {
         this(context, null);

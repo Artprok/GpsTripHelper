@@ -1,11 +1,11 @@
 package com.example.aprokopenko.triphelper.gauge;
 
 public class TickSettings {
-    TripHelperGauge mGauge;
-    int             color;
-    double          offset;
-    double          size;
-    double          width;
+    protected TripHelperGauge mGauge;
+    protected int             color;
+    protected  double          offset;
+    protected double          size;
+    protected double          width;
 
     public TickSettings() {
         size = GaugeConstants.DEFAULT_TICK_SETTINGS_SIZE;

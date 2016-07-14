@@ -145,9 +145,10 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="7dp"
         android:background="@drawable/button_background"
         android:text="@string/stop"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="9dp"
         android:visibility="invisible"
         />
 

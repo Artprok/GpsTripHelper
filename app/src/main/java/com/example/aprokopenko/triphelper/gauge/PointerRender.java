@@ -14,12 +14,12 @@ import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
 
 public class PointerRender extends View {
 
-    GaugePointer mGaugePointer;
-    private GaugeScale      mGaugeScale;
-    private boolean         mEnableAnimation;
-    private TripHelperGauge mGauge;
+    protected GaugePointer    mGaugePointer;
+    private   GaugeScale      mGaugeScale;
+    private   boolean         mEnableAnimation;
+    private   TripHelperGauge mGauge;
 
-    float value;
+    protected float value;
 
     //modif parameters
     private double modif_minSizeDivideBy4;
@@ -558,7 +558,7 @@ public class PointerRender extends View {
             }
         }
         if (((NeedlePointer) mGaugePointer).type != NeedleType.Bar) {
-            Path   path         = new Path();
+            Path path = new Path();
             path.moveTo((float) x0, (float) y0);
             path.lineTo((float) x1, (float) y1);
             path.lineTo((float) x2, (float) y2);

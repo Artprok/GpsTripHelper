@@ -3,10 +3,10 @@ package com.example.aprokopenko.triphelper.gauge;
 import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
 
 public class NeedlePointer extends GaugePointer {
-    int        knobColor;
-    double     knobRadius;
-    double     lengthFactor;
-    NeedleType type;
+    protected int        knobColor;
+    protected double     knobRadius;
+    protected double     lengthFactor;
+    protected NeedleType type;
 
     public NeedlePointer() {
         knobRadius = GaugeConstants.DEFAULT_KNOB_RADIUS;

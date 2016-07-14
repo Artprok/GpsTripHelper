@@ -13,11 +13,11 @@ import java.util.Iterator;
 
 class ScaleRenderer extends View {
 
-    private TripHelperGauge gauge;
-    GaugeScale gaugeScale;
-    private       RectF  rectF;
-    private       Paint  paint;
-    private final double arcAliasing;
+    private       TripHelperGauge gauge;
+    protected     GaugeScale      gaugeScale;
+    private       RectF           rectF;
+    private       Paint           paint;
+    private final double          arcAliasing;
 
     private double modifMinSizeDivideBy4;
     private double modifMinSizeDivideBy2;

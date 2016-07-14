@@ -8,12 +8,12 @@ import com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment;
 public class Header {
     com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment HeaderAlignment;
 
-    TripHelperGauge gauge;
-    PointF          position;
-    String          text;
-    int             textColor;
-    double          textSize;
-    Typeface        textStyle;
+    protected TripHelperGauge gauge;
+    protected PointF          position;
+    protected String          text;
+    protected int             textColor;
+    protected double          textSize;
+    protected Typeface        textStyle;
 
     public Header() {
         text = "headerText";
