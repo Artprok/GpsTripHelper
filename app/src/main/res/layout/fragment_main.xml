@@ -13,8 +13,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="9dp"
         android:layout_alignTop="@+id/statusImageView"
+        android:layout_marginRight="9dp"
         android:background="@drawable/button_background"
         android:src="@drawable/trip_list_button"
         />
@@ -34,21 +34,25 @@
     <RelativeLayout
         android:id="@+id/speedometerContainer"
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
-        android:layout_below="@id/statusImageView"
-        android:layout_marginTop="-40dp"
-        />
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fuelLayout"
+        android:layout_below="@+id/statusImageView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingLeft="3dp">
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/speedometerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/speedometerContainer"
+        android:layout_above="@+id/fuelLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-70dp"
+        android:layout_marginBottom="30dp"
+        android:paddingLeft="3dp"
         android:text="@string/initial_speedometer_val"
-        android:textSize="@dimen/speedometerTextViewSize"
-        />
+        android:textSize="@dimen/speedometerTextViewSize"/>
 
     <ImageView
         android:id="@+id/statusImageView"
@@ -65,23 +69,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/startButton"
-        android:layout_below="@+id/speedometerContainer"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="9dp"
-        android:visibility="visible"
-        android:layout_marginTop="-25dp">
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/fuelLeftHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/fuelIcon"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout_toRightOf="@+id/fuelIcon"
             android:text="@string/fuel_left_label"
             android:textSize="@dimen/metricPortraitTextSize"
             android:textStyle="bold|italic"
-            android:typeface="sans"
-            android:layout_marginRight="2dp"
-            android:layout_marginLeft="2dp"/>
+            android:typeface="sans"/>
 
         <ImageView
             android:id="@+id/fuelIcon"
@@ -115,14 +120,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/refillButton"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:layout_toRightOf="@id/refillButton"
                 android:text="@string/refill_hint"
                 android:textSize="@dimen/metricPortraitTextSize"
-                android:textStyle="bold|italic"
-                android:typeface="sans"
 
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"/>
+                android:textStyle="bold|italic"
+                android:typeface="sans"/>
 
             <ImageButton
                 android:id="@+id/refillButton"
@@ -134,26 +139,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <!--<ImageButton-->
-    <!--android:id="@+id/startButton"-->
-    <!--android:layout_width="50dp"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_marginLeft="10dp"-->
-    <!--android:background="@drawable/play_button"-->
-    <!--/>-->
-
-    <!--<ImageButton-->
-    <!--android:id="@+id/stopButton"-->
-    <!--android:layout_width="50dp"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_marginLeft="10dp"-->
-    <!--android:background="@drawable/stop_button"-->
-    <!--android:visibility="invisible"-->
-    <!--/>-->
     <Button
         android:id="@+id/stopButton"
         android:layout_width="90dp"

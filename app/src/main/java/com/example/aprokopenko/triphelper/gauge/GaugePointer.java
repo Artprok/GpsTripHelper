@@ -12,10 +12,10 @@ public class GaugePointer {
     double          width;
 
     GaugePointer() {
-        this.value = GaugeConstants.POINTER_INIT_HEIGHT_VALUE;
-        this.width = GaugeConstants.POINTER_INIT_WIDTH_VALUE;
-        this.color = GaugeConstants.POINTER_INIT_COLOR;
-        this.enableAnimation = true;
+        value = GaugeConstants.POINTER_INIT_HEIGHT_VALUE;
+        width = GaugeConstants.POINTER_INIT_WIDTH_VALUE;
+        color = GaugeConstants.POINTER_INIT_COLOR;
+        enableAnimation = true;
     }
 
     public double getValue() {
@@ -23,7 +23,7 @@ public class GaugePointer {
     }
 
     public void setValue(double newValue) {
-        if (this.mPointerRender != null) {
+        if (mPointerRender != null) {
             ObjectAnimator animator = ObjectAnimator.ofFloat(this.mPointerRender, "value", (float) this.value, (float) newValue);
             animator.setDuration(GaugeConstants.GAUGE_ANIMATION_TIME);
             animator.start();
@@ -44,8 +44,8 @@ public class GaugePointer {
 
     public void setWidth(double width) {
         this.width = width;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        if (mBaseGauge != null) {
+            mBaseGauge.refreshGauge();
         }
     }
 
@@ -66,8 +66,8 @@ public class GaugePointer {
 
     public void setEnableAnimation(boolean enableAnimation) {
         this.enableAnimation = enableAnimation;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        if (mBaseGauge != null) {
+            mBaseGauge.refreshGauge();
         }
     }
 }

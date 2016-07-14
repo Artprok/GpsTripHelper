@@ -26,29 +26,16 @@ public class TripHelperGauge extends FrameLayout {
     RectF mVisualRect;
     RectF mRangeFrame;
     private int    frameBackgroundColor;
-    private double mAvailableHeight;
-    private double mAvailableWidth;
     double mGaugeHeight;
     double mGaugeWidth;
-    private double mScaleCentreX;
-    private double mScaleCentreY;
     double mMinSize;
-    private double mOuterBevelHeight;
-    private double mOuterBevelWidth;
-    private double mInnerBevelHeight;
     double mInnerBevelWidth;
     double mKnobDiameter;
-    private double mRimHeight;
     double mRimWidth;
-    private double mTicksPathHeight;
-    private double mTicksPathWidth;
     double mLabelsPathHeight;
-    private double mLabelsPathWidth;
-    private double mRangePathHeight;
     double mRangePathWidth;
     double mCentreX;
     double mCentreY;
-    private double marginSubtrahend;
 
     public TripHelperGauge(Context context) {
         this(context, null);
@@ -57,21 +44,21 @@ public class TripHelperGauge extends FrameLayout {
 
     public TripHelperGauge(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.mScaleRenderers = new ArrayList<>();
-        this.mPointerRenderes = new ArrayList<>();
-        this.gaugeScales = new ArrayList<>();
-        this.GaugeType = com.example.aprokopenko.triphelper.gauge.enums.GaugeType.Default;
-        this.frameBackgroundColor = GaugeConstants.FRAME_BACKGROUND_COLOR;
-        this.headers = new ArrayList<>();
-        this.mGaugeHeight = GaugeConstants.ZERO;
-        this.mGaugeWidth = GaugeConstants.ZERO;
-        this.mGap = 10.0D;
+        mScaleRenderers = new ArrayList<>();
+        mPointerRenderes = new ArrayList<>();
+        gaugeScales = new ArrayList<>();
+        GaugeType = com.example.aprokopenko.triphelper.gauge.enums.GaugeType.Default;
+        frameBackgroundColor = GaugeConstants.FRAME_BACKGROUND_COLOR;
+        headers = new ArrayList<>();
+        mGaugeHeight = GaugeConstants.ZERO;
+        mGaugeWidth = GaugeConstants.ZERO;
+        mGap = 10.0D;
         DENSITY = this.getContext().getResources().getDisplayMetrics().density;
     }
 
     private void init() {
-        this.mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
-        this.mGaugeHeader.mGauge = this;
+        mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
+        mGaugeHeader.mGauge = this;
         this.addView(this.mGaugeHeader);
     }
 
@@ -115,27 +102,26 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     public void refreshGauge() {
-        this.calculateMargin(this.mGaugeHeight, this.mGaugeWidth);
-        this.mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
-        this.mGaugeHeader.mGauge = this;
-        this.addView(this.mGaugeHeader);
+        calculateMargin(mGaugeHeight, mGaugeWidth);
+        mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
+        mGaugeHeader.mGauge = this;
+        this.addView(mGaugeHeader);
         ArrayList scaleCircularPointers = new ArrayList();
         ArrayList removeScaleRen        = new ArrayList();
         ArrayList removedPointerRender  = new ArrayList();
 
-        for (Object i$ : this.mScaleRenderers) {
+        for (Object i$ : mScaleRenderers) {
             removeScaleRen.add(i$);
         }
 
-        boolean  index1 = false;
-        Iterator i$1    = this.gaugeScales.iterator();
+        Iterator i$1 = gaugeScales.iterator();
 
         Iterator anim;
         label91:
         while (i$1.hasNext()) {
             GaugeScale    poinRen  = (GaugeScale) i$1.next();
             ScaleRenderer pointRen = null;
-            anim = this.mScaleRenderers.iterator();
+            anim = mScaleRenderers.iterator();
 
             while (true) {
                 if (anim.hasNext()) {
@@ -149,7 +135,7 @@ public class TripHelperGauge extends FrameLayout {
 
                 if (pointRen == null) {
                     ScaleRenderer anim1 = new ScaleRenderer(this.getContext(), this, poinRen);
-                    this.mScaleRenderers.add(anim1);
+                    mScaleRenderers.add(anim1);
                     this.addView(anim1);
                 }
                 else {
@@ -179,7 +165,7 @@ public class TripHelperGauge extends FrameLayout {
             this.removeView(poinRen1);
         }
 
-        i$1 = this.mPointerRenderes.iterator();
+        i$1 = mPointerRenderes.iterator();
 
         PointerRender poinRen2;
         while (i$1.hasNext()) {
@@ -187,13 +173,12 @@ public class TripHelperGauge extends FrameLayout {
             removedPointerRender.add(poinRen2);
         }
 
-        index1 = false;
         i$1 = scaleCircularPointers.iterator();
 
         while (i$1.hasNext()) {
             GaugePointer  poinRen3  = (GaugePointer) i$1.next();
             PointerRender pointRen1 = null;
-            anim = this.mPointerRenderes.iterator();
+            anim = mPointerRenderes.iterator();
 
             while (true) {
                 if (anim.hasNext()) {
@@ -207,7 +192,7 @@ public class TripHelperGauge extends FrameLayout {
 
                 if (pointRen1 == null) {
                     PointerRender anim2 = new PointerRender(this.getContext(), this, poinRen3.mGaugeScale, poinRen3);
-                    this.mPointerRenderes.add(anim2);
+                    mPointerRenderes.add(anim2);
                     poinRen3.mPointerRender = anim2;
                     this.addView(anim2);
                 }
@@ -226,292 +211,295 @@ public class TripHelperGauge extends FrameLayout {
 
         while (i$1.hasNext()) {
             poinRen2 = (PointerRender) i$1.next();
-            this.removeView(poinRen2);
+            removeView(poinRen2);
         }
 
-        if (this.mGaugeHeader != null) {
-            this.mGaugeHeader.mGauge = this;
-            this.mGaugeHeader.requestLayout();
-            this.mGaugeHeader.invalidate();
+        if (mGaugeHeader != null) {
+            mGaugeHeader.mGauge = this;
+            mGaugeHeader.requestLayout();
+            mGaugeHeader.invalidate();
         }
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        this.mVisualRect = new RectF();
+        mVisualRect = new RectF();
         h = h < 50 ? 50 : h;
         w = w < 50 ? 50 : w;
-        this.mAvailableHeight = (double) h;
-        this.mAvailableWidth = (double) w;
-        if (this.mGaugeHeight > GaugeConstants.ZERO) {
-            this.mGaugeHeight = this.mGaugeHeight > this.mAvailableHeight ? this.mAvailableHeight : this.mGaugeHeight;
+        double mAvailableHeight = (double) h;
+        double mAvailableWidth = (double) w;
+        if (mGaugeHeight > GaugeConstants.ZERO) {
+            mGaugeHeight = mGaugeHeight > mAvailableHeight ? mAvailableHeight : mGaugeHeight;
         }
         else {
-            this.mGaugeHeight = this.mAvailableHeight;
+            mGaugeHeight = mAvailableHeight;
         }
 
-        if (this.mGaugeWidth > GaugeConstants.ZERO) {
-            this.mGaugeWidth = this.mGaugeWidth > this.mAvailableWidth ? this.mAvailableWidth : this.mGaugeWidth;
+        if (mGaugeWidth > GaugeConstants.ZERO) {
+            mGaugeWidth = mGaugeWidth > mAvailableWidth ? mAvailableWidth : mGaugeWidth;
         }
         else {
-            this.mGaugeWidth = this.mAvailableWidth;
+            mGaugeWidth = mAvailableWidth;
         }
 
-        GaugeType var10000;
-        GaugeType var10001;
+        GaugeType gaugeType;
         double    squarified;
         double    rectCanvas;
+
+        //modif optimization
+        double modifDiameter25 = 25.0D;
+
         label141:
         {
-            squarified = Math.min(this.mGaugeHeight, this.mGaugeWidth);
-            var10000 = this.getGaugeType();
-            var10001 = this.GaugeType;
-            if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
-                var10000 = this.getGaugeType();
-                var10001 = this.GaugeType;
-                if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
-                    if (this.mKnobDiameter == GaugeConstants.ZERO) {
-                        rectCanvas = Math.max(this.mGaugeHeight - 30.0D, this.mGaugeWidth);
+            squarified = Math.min(mGaugeHeight, mGaugeWidth);
+            gaugeType = getGaugeType();
+            //optimizationModif
+            double modifKnobDiameterBy4 = mKnobDiameter * 4.0D;
+
+            if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                gaugeType = getGaugeType();
+                if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                    if (mKnobDiameter == GaugeConstants.ZERO) {
+                        rectCanvas = Math.max(mGaugeHeight - 30.0D, mGaugeWidth);
                     }
-                    else if (this.mKnobDiameter <= 25.0D) {
-                        rectCanvas = Math.max(this.mGaugeHeight - this.mKnobDiameter * 4.0D, this.mGaugeWidth);
+                    else if (mKnobDiameter <= modifDiameter25) {
+                        rectCanvas = Math.max(mGaugeHeight - modifKnobDiameterBy4, mGaugeWidth);
                     }
                     else {
-                        rectCanvas = Math.max(this.mGaugeHeight - 100.0D, this.mGaugeWidth);
+                        rectCanvas = Math.max(mGaugeHeight - 100.0D, mGaugeWidth);
                     }
                     break label141;
                 }
             }
 
-            if (this.mKnobDiameter == GaugeConstants.ZERO) {
-                rectCanvas = Math.max(this.mGaugeHeight, this.mGaugeWidth - 30.0D);
+            if (mKnobDiameter == GaugeConstants.ZERO) {
+                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - 30.0D);
             }
-            else if (this.mKnobDiameter <= 25.0D) {
-                rectCanvas = Math.max(this.mGaugeHeight, this.mGaugeWidth - this.mKnobDiameter * 4.0D);
+            else if (mKnobDiameter <= modifDiameter25) {
+                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - modifKnobDiameterBy4);
             }
             else {
-                rectCanvas = Math.max(this.mGaugeHeight, this.mGaugeWidth - 100.0D);
+                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - 100.0D);
             }
         }
 
         label145:
         {
-            double _mAvailHeight = this.mAvailableHeight;
-            double _mAvailWidth  = this.mAvailableWidth;
-            if (this.mAvailableWidth > this.mAvailableHeight) {
+            double initAvalHeight = mAvailableHeight;
+            double initAvalWidth  = mAvailableWidth;
+            if (mAvailableWidth > mAvailableHeight) {
                 label134:
                 {
-                    var10000 = this.getGaugeType();
-                    var10001 = this.GaugeType;
-                    if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
-                        var10000 = this.getGaugeType();
-                        var10001 = this.GaugeType;
-                        if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                    gaugeType = getGaugeType();
+                    if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                        gaugeType = getGaugeType();
+                        if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
                             break label134;
                         }
                     }
 
-                    if (this.mAvailableWidth / 2.0D > this.mAvailableHeight) {
-                        if (this.mKnobDiameter == GaugeConstants.ZERO) {
-                            this.mAvailableWidth = this.mAvailableHeight * 2.0D - 20.0D;
-                            var10000 = this.getGaugeType();
-                            var10001 = this.GaugeType;
-                            if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
-                                this.mVisualRect.top = (float) ((this.mAvailableHeight - 10.0D) / 2.0D - (this.mAvailableHeight - 10.0D));
+                    if (mAvailableWidth / 2.0D > mAvailableHeight) {
+                        if (mKnobDiameter == GaugeConstants.ZERO) {
+                            //optimizationModif
+                            double modifHeightMinus20         = mAvailableHeight - 20.0D;
+                            double modifHeightMinus10         = mAvailableHeight - 10.0D;
+                            double modifHeightMinus10DelimBy2 = modifHeightMinus10 / 2.0D;
+
+                            mAvailableWidth = mAvailableHeight * 2.0D - 20.0D;
+                            gaugeType = getGaugeType();
+                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                                mVisualRect.top = (float) (modifHeightMinus10DelimBy2 - modifHeightMinus10);
                             }
                             else {
-                                var10000 = this.getGaugeType();
-                                var10001 = this.GaugeType;
-                                if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
-                                    float res = (float) ((this.mAvailableHeight - 10.0D) / 2.0D - (this.mAvailableHeight - 20.0D));
-                                    this.mVisualRect.top = res;
+                                gaugeType = getGaugeType();
+                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                                    mVisualRect.top = (float) (modifHeightMinus10DelimBy2 - modifHeightMinus20);
                                 }
                             }
-
-                            this.mVisualRect.left = (float) ((_mAvailWidth - 20.0D) / 2.0D - (this.mAvailableHeight - 20.0D));
+                            mVisualRect.left = (float) ((initAvalWidth - 20.0D) / 2.0D - modifHeightMinus20);
                         }
-                        else if (this.mKnobDiameter <= 25.0D) {
-                            this.mAvailableWidth = (this.mAvailableHeight - this.mKnobDiameter) * 2.0D;
-                            var10000 = this.getGaugeType();
-                            var10001 = this.GaugeType;
-                            if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
-                                this.mVisualRect.top = (float) ((this.mAvailableHeight - this.mKnobDiameter) / 2.0D - (this
-                                        .mAvailableHeight - this.mKnobDiameter));
+                        else if (this.mKnobDiameter <= modifDiameter25) {
+                            //optimizationModif
+                            double modifKnobDiameterBy2         = mKnobDiameter * 2.0D;
+                            double modifHeightMinusKnobBy2      = mAvailableHeight - modifKnobDiameterBy2;
+                            double modifHeightMinusKnob         = mAvailableHeight - mKnobDiameter;
+                            double modifHeightMinusKnobDelimBy2 = (modifHeightMinusKnob) / 2.0D;
+
+                            mAvailableWidth = (modifHeightMinusKnob) * 2.0D;
+                            gaugeType = getGaugeType();
+                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                                mVisualRect.top = (float) (modifHeightMinusKnobDelimBy2 - (modifHeightMinusKnob));
                             }
                             else {
-                                var10000 = this.getGaugeType();
-                                var10001 = this.GaugeType;
-                                if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
-                                    this.mVisualRect.top = (float) ((this.mAvailableHeight - this.mKnobDiameter) / 2.0D - (this
-                                            .mAvailableHeight - this.mKnobDiameter * 2.0D));
+                                gaugeType = getGaugeType();
+                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                                    mVisualRect.top = (float) (modifHeightMinusKnobDelimBy2 - modifHeightMinusKnobBy2);
                                 }
                             }
-
-                            this.mVisualRect.left = (float) ((_mAvailWidth - this.mKnobDiameter * 2.0D) / 2.0D - (this.mAvailableHeight -
-                                    this.mKnobDiameter * 2.0D));
+                            mVisualRect.left = (float) ((initAvalWidth - modifKnobDiameterBy2) / 2.0D - modifHeightMinusKnobBy2);
                         }
                         else {
-                            this.mAvailableWidth = this.mAvailableHeight * 2.0D - 50.0D;
-                            var10000 = this.getGaugeType();
-                            var10001 = this.GaugeType;
-                            if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
-                                this.mVisualRect.top = (float) ((this.mAvailableHeight - 25.0D) / 2.0D - (this.mAvailableHeight - 25.0D));
+                            //optimizationModif
+                            double modifHeightMinus50       = mAvailableHeight - 50.0D;
+                            double modifHeightMinus25       = mAvailableHeight - 25.0D;
+                            double modifHeightMinus25delBy2 = modifHeightMinus25 / 2.0D;
+
+                            mAvailableWidth = mAvailableHeight * 2.0D - 50.0D;
+                            gaugeType = getGaugeType();
+                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                                mVisualRect.top = (float) (modifHeightMinus25delBy2 - modifHeightMinus25);
                             }
                             else {
-                                var10000 = this.getGaugeType();
-                                var10001 = this.GaugeType;
-                                if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
-                                    float res = (float) ((this.mAvailableHeight - 25.0D) / 2.0D - (this.mAvailableHeight - 50.0D));
-                                    this.mVisualRect.top = res;
+                                gaugeType = getGaugeType();
+                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                                    mVisualRect.top = (float) (modifHeightMinus25delBy2 - modifHeightMinus50);
                                 }
                             }
-
-                            this.mVisualRect.left = (float) ((_mAvailWidth - 50.0D) / 2.0D - (this.mAvailableHeight - 50.0D));
+                            mVisualRect.left = (float) ((initAvalWidth - 50.0D) / 2.0D - modifHeightMinus50);
                         }
-
-                        this.mVisualRect.bottom = (float) ((double) this.mVisualRect.top + this.mAvailableWidth);
-                        this.mVisualRect.right = (float) ((double) this.mVisualRect.left + this.mAvailableWidth);
+                        mVisualRect.bottom = (float) ((double) mVisualRect.top + mAvailableWidth);
+                        mVisualRect.right = (float) ((double) mVisualRect.left + mAvailableWidth);
                     }
                     else {
-                        this.mVisualRect.top = (float) (this.mAvailableHeight / 2.0D - rectCanvas / 2.0D);
-                        this.mVisualRect.left = (float) (this.mAvailableWidth / 2.0D - rectCanvas / 2.0D);
-                        this.mVisualRect.bottom = (float) ((double) this.mVisualRect.top + rectCanvas);
-                        this.mVisualRect.right = (float) ((double) this.mVisualRect.left + rectCanvas);
+                        //optimizationModif
+                        double modifRectCanvasDelimBy2 = rectCanvas / 2.0;
+
+                        mVisualRect.top = (float) (mAvailableHeight / 2.0D - modifRectCanvasDelimBy2);
+                        mVisualRect.left = (float) (mAvailableWidth / 2.0D - modifRectCanvasDelimBy2);
+                        mVisualRect.bottom = (float) ((double) mVisualRect.top + rectCanvas);
+                        mVisualRect.right = (float) ((double) mVisualRect.left + rectCanvas);
                     }
                     break label145;
                 }
             }
 
-            if (this.mAvailableWidth < this.mAvailableHeight) {
+            if (mAvailableWidth < mAvailableHeight) {
                 label127:
                 {
-                    var10000 = this.getGaugeType();
-                    var10001 = this.GaugeType;
-                    if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
-                        var10000 = this.getGaugeType();
-                        var10001 = this.GaugeType;
-                        if (var10000 != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                    gaugeType = getGaugeType();
+                    if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                        gaugeType = getGaugeType();
+                        if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
                             break label127;
                         }
                     }
 
-                    if (this.mAvailableHeight / 2.0D > this.mAvailableWidth) {
-                        if (this.mKnobDiameter == GaugeConstants.ZERO) {
-                            this.mAvailableHeight = (this.mAvailableWidth - 10.0D) * 2.0D;
-                            var10000 = this.getGaugeType();
-                            var10001 = this.GaugeType;
-                            if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
-                                this.mVisualRect.left = (float) ((this.mAvailableWidth - 10.0D) / 2.0D - (this.mAvailableWidth - 20.0D));
+                    if (mAvailableHeight / 2.0D > mAvailableWidth) {
+                        //optimizationModif
+                        double modifAvaliableWidthMinus20 = (mAvailableWidth - 20.0D);
+                        double modifAvaliableWidthMinus10 = mAvailableWidth - 10.0D;
+
+
+                        if (mKnobDiameter == GaugeConstants.ZERO) {
+                            mAvailableHeight = (modifAvaliableWidthMinus10) * 2.0D;
+                            gaugeType = getGaugeType();
+                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                                mVisualRect.left = (float) (modifAvaliableWidthMinus10 / 2.0D - modifAvaliableWidthMinus20);
                             }
                             else {
-                                var10000 = this.getGaugeType();
-                                var10001 = this.GaugeType;
-                                if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
-                                    float res = (float) ((this.mAvailableWidth - 10.0D) / 2.0D - (this.mAvailableWidth - 10.0D));
-                                    this.mVisualRect.left = res;
+                                gaugeType = getGaugeType();
+                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                                    mVisualRect.left = (float) (modifAvaliableWidthMinus10 / 2.0D - modifAvaliableWidthMinus10);
                                 }
                             }
 
-                            this.mVisualRect.top = (float) ((_mAvailHeight - 10.0D) / 2.0D - (this.mAvailableWidth - 20.0D));
+                            mVisualRect.top = (float) ((initAvalHeight - 10.0D) / 2.0D - modifAvaliableWidthMinus20);
                         }
-                        else if (this.mKnobDiameter <= 25.0D) {
-                            this.mAvailableHeight = (this.mAvailableWidth - this.mKnobDiameter) * 2.0D;
-                            var10000 = this.getGaugeType();
-                            var10001 = this.GaugeType;
-                            if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
-                                this.mVisualRect.left = (float) ((this.mAvailableWidth - this.mKnobDiameter) / 2.0D - (this
-                                        .mAvailableWidth - this.mKnobDiameter * 2.0D));
+                        else if (mKnobDiameter <= modifDiameter25) {
+                            //optimizationModif
+                            double modifWidthKnobBy2        = mAvailableWidth - mKnobDiameter * 2.0D;
+                            double modifWidthKnobDelimeter2 = (mAvailableWidth - mKnobDiameter) / 2.0D;
+
+                            mAvailableHeight = (mAvailableWidth - mKnobDiameter) * 2.0D;
+                            gaugeType = getGaugeType();
+                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                                mVisualRect.left = (float) (modifWidthKnobDelimeter2 - modifWidthKnobBy2);
                             }
                             else {
-                                var10000 = this.getGaugeType();
-                                var10001 = this.GaugeType;
-                                if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
-                                    this.mVisualRect.left = (float) ((this.mAvailableWidth - this.mKnobDiameter) / 2.0D - (this
-                                            .mAvailableWidth - this.mKnobDiameter));
+                                gaugeType = this.getGaugeType();
+                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                                    mVisualRect.left = (float) (modifWidthKnobDelimeter2 - (mAvailableWidth - mKnobDiameter));
                                 }
                             }
-
-                            this.mVisualRect.top = (float) ((_mAvailHeight - this.mKnobDiameter) / 2.0D - (this.mAvailableWidth - this
-                                    .mKnobDiameter * 2.0D));
+                            mVisualRect.top = (float) ((initAvalHeight - mKnobDiameter) / 2.0D - modifWidthKnobBy2);
                         }
                         else {
-                            this.mAvailableHeight = (this.mAvailableWidth - 25.0D) * 2.0D;
-                            var10000 = this.getGaugeType();
-                            var10001 = this.GaugeType;
-                            if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
-                                this.mVisualRect.left = (float) ((this.mAvailableWidth - 25.0D) / 2.0D - (this.mAvailableWidth - 50.0D));
+                            //optimizationModif
+                            double modifAvaliableWidth = ((mAvailableWidth - modifDiameter25) / 2.0D);
+
+                            mAvailableHeight = (mAvailableWidth - modifDiameter25) * 2.0D;
+                            gaugeType = getGaugeType();
+                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                                mVisualRect.left = (float) (modifAvaliableWidth - (mAvailableWidth - 50.0D));
                             }
                             else {
-                                var10000 = this.getGaugeType();
-                                var10001 = this.GaugeType;
-                                if (var10000 == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
-                                    float res = (float) ((this.mAvailableWidth - 25.0D) / 2.0D - (this.mAvailableWidth - 25.0D));
-                                    this.mVisualRect.left = res;
+                                gaugeType = getGaugeType();
+                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                                    mVisualRect.left = (float) (modifAvaliableWidth - (mAvailableWidth - modifDiameter25));
                                 }
                             }
 
-                            this.mVisualRect.top = (float) ((_mAvailHeight - 25.0D) / 2.0D - (this.mAvailableWidth - 50.0D));
+                            mVisualRect.top = (float) ((initAvalHeight - modifDiameter25) / 2.0D - (mAvailableWidth - 50.0D));
                         }
 
-                        this.mVisualRect.bottom = (float) ((double) this.mVisualRect.top + this.mAvailableHeight);
-                        this.mVisualRect.right = (float) ((double) this.mVisualRect.left + this.mAvailableHeight);
+                        mVisualRect.bottom = (float) ((double) mVisualRect.top + mAvailableHeight);
+                        mVisualRect.right = (float) ((double) mVisualRect.left + mAvailableHeight);
                     }
                     else {
-                        this.mVisualRect.top = (float) (this.mAvailableHeight / 2.0D - rectCanvas / 2.0D);
-                        this.mVisualRect.left = (float) (this.mAvailableWidth / 2.0D - rectCanvas / 2.0D);
-                        this.mVisualRect.bottom = (float) ((double) this.mVisualRect.top + rectCanvas);
-                        this.mVisualRect.right = (float) ((double) this.mVisualRect.left + rectCanvas);
+                        //optimizationModif
+                        double modifRectCanvas = 2.0D - rectCanvas / 2.0D;
+
+                        mVisualRect.top = (float) (mAvailableHeight / modifRectCanvas);
+                        mVisualRect.left = (float) (mAvailableWidth / modifRectCanvas);
+                        mVisualRect.bottom = (float) ((double) mVisualRect.top + rectCanvas);
+                        mVisualRect.right = (float) ((double) mVisualRect.left + rectCanvas);
                     }
                     break label145;
                 }
             }
 
-            this.mVisualRect.top = (float) (this.mAvailableHeight / 2.0D - squarified / 2.0D);
-            this.mVisualRect.left = (float) (this.mAvailableWidth / 2.0D - squarified / 2.0D);
-            this.mVisualRect.bottom = (float) ((double) this.mVisualRect.top + squarified);
-            this.mVisualRect.right = (float) ((double) this.mVisualRect.left + squarified);
+            //optimizationModif
+            double modifDelimeter = 2.0D - squarified / 2.0D;
+
+            mVisualRect.top = (float) (mAvailableHeight / modifDelimeter);
+            mVisualRect.left = (float) (mAvailableWidth / modifDelimeter);
+            mVisualRect.bottom = (float) ((double) mVisualRect.top + squarified);
+            mVisualRect.right = (float) ((double) mVisualRect.left + squarified);
         }
 
-        this.mMinSize = (double) Math.min(this.mVisualRect.height(), this.mVisualRect.width());
-        this.mScaleCentreY = (double) (this.mVisualRect.top + this.mVisualRect.height() / 2.0F);
-        this.mScaleCentreX = (double) (this.mVisualRect.left + this.mVisualRect.width() / 2.0F);
-        this.mCentreY = this.mScaleCentreY;
-        this.mCentreX = this.mScaleCentreX;
-        this.mOuterBevelHeight = (double) this.mVisualRect.height();
-        this.mOuterBevelWidth = (double) this.mVisualRect.width();
-        double var13 = this.mOuterBevelHeight;
-        this.getClass();
-        this.mInnerBevelHeight = var13 + 10.0D;
-        var13 = this.mOuterBevelWidth;
-        this.getClass();
-        this.mInnerBevelWidth = var13 + 10.0D;
-        this.calculateMargin(this.mInnerBevelWidth, this.mInnerBevelWidth);
+        mMinSize = (double) Math.min(mVisualRect.height(), mVisualRect.width());
+        double mScaleCentreY = (double) (mVisualRect.top + mVisualRect.height() / 2.0F);
+        double mScaleCentreX = (double) (mVisualRect.left + mVisualRect.width() / 2.0F);
+        mCentreY = mScaleCentreY;
+        mCentreX = mScaleCentreX;
+        double mOuterBevelHeight = (double) mVisualRect.height();
+        double mOuterBevelWidth  = (double) mVisualRect.width();
+        double dimensionVar = mOuterBevelHeight;
+        double mInnerBevelHeight = dimensionVar + 10.0D;
+        dimensionVar = mOuterBevelWidth;
+        mInnerBevelWidth = dimensionVar + 10.0D;
+        calculateMargin(mInnerBevelWidth, mInnerBevelWidth);
     }
 
     void calculateMargin(double height, double width) {
-        marginSubtrahend = 2.0D * 10.0D;
-        this.getClass();
-        this.mRimHeight = height - 10.0D;
-        this.getClass();
-        this.mRimWidth = width - 10.0D;
-        double var10001 = this.mRimHeight;
-        this.getClass();
-        this.mTicksPathHeight = var10001 - marginSubtrahend;
-        var10001 = this.mRimWidth;
-        this.getClass();
-        this.mTicksPathWidth = var10001 - marginSubtrahend;
-        var10001 = this.mTicksPathHeight;
-        this.getClass();
-        this.mLabelsPathHeight = var10001 - marginSubtrahend;
-        var10001 = this.mTicksPathWidth;
-        this.getClass();
-        this.mLabelsPathWidth = var10001 - marginSubtrahend;
-        var10001 = this.mLabelsPathHeight;
-        this.getClass();
-        this.mRangePathHeight = var10001 - marginSubtrahend;
-        var10001 = this.mLabelsPathWidth;
-        this.getClass();
-        this.mRangePathWidth = var10001 - marginSubtrahend;
+        //optimizationModif
+        double marginSubtrahend = 2.0D * 10.0D;
+
+        double mRimHeight = height - 10.0D;
+        mRimWidth = width - 10.0D;
+
+        double dimensionVariable = mRimHeight;
+        double mTicksPathHeight  = dimensionVariable - marginSubtrahend;
+        dimensionVariable = mRimWidth;
+        double mTicksPathWidth = dimensionVariable - marginSubtrahend;
+        dimensionVariable = mTicksPathHeight;
+        mLabelsPathHeight = dimensionVariable - marginSubtrahend;
+        dimensionVariable = mTicksPathWidth;
+        double mLabelsPathWidth = dimensionVariable - marginSubtrahend;
+        dimensionVariable = mLabelsPathHeight;
+        double mRangePathHeight = dimensionVariable - marginSubtrahend;
+        dimensionVariable = mLabelsPathWidth;
+        mRangePathWidth = dimensionVariable - marginSubtrahend;
     }
 }
 

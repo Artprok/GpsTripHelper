@@ -14,74 +14,89 @@ class GaugeHeaderRenderer extends View {
 
     public GaugeHeaderRenderer(Context context) {
         this(context, null);
-        this.mPaint = new Paint();
-        this.mPaint.setAntiAlias(true);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
     }
 
     public GaugeHeaderRenderer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.mPaint = new Paint();
-        this.mPaint.setAntiAlias(true);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (this.mGauge != null && this.mGauge.headers != null) {
-            for (Header header : this.mGauge.headers) {
-                header.gauge = this.mGauge;
-                this.mPaint.setColor(header.textColor);
-                this.mPaint.setTextSize(((float) header.textSize) * TripHelperGauge.DENSITY);
-                this.mPaint.setTypeface(header.textStyle);
+        if (mGauge != null && mGauge.headers != null) {
+            for (Header header : mGauge.headers) {
+                header.gauge = mGauge;
+                mPaint.setColor(header.textColor);
+                mPaint.setTextSize(((float) header.textSize) * TripHelperGauge.DENSITY);
+                mPaint.setTypeface(header.textStyle);
                 double headerTextHeight = header.textSize;
-                double headerTextWidth  = (double) this.mPaint.measureText(header.text);
+                double headerTextWidth  = (double) mPaint.measureText(header.text);
                 if (header.HeaderAlignment != null) {
                     double left;
                     double top;
+
                     if (header.getHeaderAlignment() == HeaderAlignment.TopLeft) {
                         left = GaugeConstants.ZERO;
                         top = GaugeConstants.ZERO + headerTextHeight;
                     }
                     else if (header.getHeaderAlignment() == HeaderAlignment.Top) {
-                        left = this.mGauge.mCentreX - (headerTextWidth / GaugeConstants.ZERO);
+                        left = mGauge.mCentreX - (headerTextWidth / GaugeConstants.ZERO);
                         top = GaugeConstants.ZERO + headerTextHeight;
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.TopRight) {
-                        left = (this.mGauge.mCentreX * 2.0d) - headerTextWidth;
-                        top = GaugeConstants.ZERO + headerTextHeight;
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.Left) {
-                        left = GaugeConstants.ZERO;
-                        top = this.mGauge.mCentreY + (headerTextHeight / 2.0d);
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.Center) {
-                        left = this.mGauge.mCentreX - (headerTextWidth / 2.0d);
-                        top = this.mGauge.mCentreY + (headerTextHeight / 2.0d);
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.Right) {
-                        left = (this.mGauge.mCentreX * 2.0d) - headerTextWidth;
-                        top = this.mGauge.mCentreY + (headerTextHeight / 2.0d);
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.BottomLeft) {
-                        left = GaugeConstants.ZERO;
-                        top = (this.mGauge.mCentreY * 2.0d) - 10.0d;
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.Bottom) {
-                        left = this.mGauge.mCentreX - (headerTextWidth / 2.0d);
-                        top = (this.mGauge.mCentreY * 2.0d) - 10.0d;
-                    }
-                    else if (header.getHeaderAlignment() == HeaderAlignment.BottomRight) {
-                        left = (this.mGauge.mCentreX * 2.0d) - headerTextWidth;
-                        top = (this.mGauge.mCentreY * 2.0d) - 10.0d;
-                    }
-                    else if (this.mGauge.mCentreY > this.mGauge.mCentreX) {
-                        left = this.mGauge.mGaugeWidth * ((double) header.position.x);
-                        top = (this.mGauge.mCentreY - ((double) (this.mGauge.mVisualRect
-                                .height() / 2.0f))) + ((double) (this.mGauge.mVisualRect.height() * header.position.y));
                     }
                     else {
-                        left = (this.mGauge.mCentreX - ((double) (this.mGauge.mVisualRect
-                                .width() / 2.0f))) + ((double) (this.mGauge.mVisualRect.width() * header.position.x));
-                        top = this.mGauge.mGaugeHeight * ((double) header.position.y);
+                        double modif_centerXmultBy2minusHeaderWidth = mGauge.mCentreX * 2.0d - headerTextWidth;
+                        double modif_centerYmultBy2minus10          = mGauge.mCentreY * 2.0d - 10.0d;
+                        double modif_textHeightDivideBy2            = headerTextHeight / 2.0d;
+                        double modif_textWidthDivideBy2             = headerTextWidth / 2.0d;
+
+                        if (header.getHeaderAlignment() == HeaderAlignment.TopRight) {
+                            left = modif_centerXmultBy2minusHeaderWidth;
+                            top = GaugeConstants.ZERO + headerTextHeight;
+                        }
+                        else {
+                            if (header.getHeaderAlignment() == HeaderAlignment.Left) {
+                                left = GaugeConstants.ZERO;
+                                top = mGauge.mCentreY + modif_textHeightDivideBy2;
+                            }
+                            else {
+                                if (header.getHeaderAlignment() == HeaderAlignment.Center) {
+                                    left = mGauge.mCentreX - modif_textWidthDivideBy2;
+                                    top = mGauge.mCentreY + modif_textHeightDivideBy2;
+                                }
+                                else if (header.getHeaderAlignment() == HeaderAlignment.Right) {
+                                    left = modif_centerXmultBy2minusHeaderWidth;
+                                    top = mGauge.mCentreY + modif_textHeightDivideBy2;
+                                }
+                                else {
+
+                                    if (header.getHeaderAlignment() == HeaderAlignment.BottomLeft) {
+                                        left = GaugeConstants.ZERO;
+                                        top = modif_centerYmultBy2minus10;
+                                    }
+                                    else if (header.getHeaderAlignment() == HeaderAlignment.Bottom) {
+                                        left = mGauge.mCentreX - modif_textWidthDivideBy2;
+                                        top = modif_centerYmultBy2minus10;
+                                    }
+                                    else if (header.getHeaderAlignment() == HeaderAlignment.BottomRight) {
+                                        left = modif_centerXmultBy2minusHeaderWidth;
+                                        top = modif_centerYmultBy2minus10;
+                                    }
+                                    else if (mGauge.mCentreY > mGauge.mCentreX) {
+                                        left = mGauge.mGaugeWidth * ((double) header.position.x);
+                                        top = (mGauge.mCentreY - ((double) (mGauge.mVisualRect
+                                                .height() / 2.0f))) + ((double) (mGauge.mVisualRect.height() * header.position.y));
+                                    }
+                                    else {
+                                        left = (mGauge.mCentreX - ((double) (mGauge.mVisualRect
+                                                .width() / 2.0f))) + ((double) (mGauge.mVisualRect.width() * header.position.x));
+                                        top = mGauge.mGaugeHeight * ((double) header.position.y);
+                                    }
+                                }
+                            }
+                        }
                     }
                     canvas.drawText(header.text, (float) left, (float) top, this.mPaint);
                 }

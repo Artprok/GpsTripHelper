@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 
-public class GaugeConstants {
+class GaugeConstants {
 
     public static final double ZERO                   = 0.0;
     public static final int    FRAME_BACKGROUND_COLOR = -16777216;

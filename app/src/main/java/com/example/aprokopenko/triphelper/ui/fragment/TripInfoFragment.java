@@ -86,7 +86,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
     private static final String TRIP_ID                   = "TripId";
 
     private float    averageFuelConsumption;
-    private float    timeSpentInMotion;
     private float    timeSpentOnStop;
     private float    distTravelled;
     private float    moneySpent;
@@ -157,7 +156,7 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             ArrayList<String> speedArray     = getArguments().getStringArrayList(SPEED_ARR);
             timeSpentOnStop = getArguments().getFloat(TIME_SPENT_WITHOUT_MOTION);
             averageFuelConsumption = getArguments().getFloat(AVERAGE_FUEL_CONS);
-            timeSpentInMotion = getArguments().getFloat(TIME_SPENT_IN_MOTION);
+            float timeSpentInMotion = getArguments().getFloat(TIME_SPENT_IN_MOTION);
             distTravelled = getArguments().getFloat(DISTANCE_TRAVELLED);
             avgSpeed = getArguments().getFloat(AVERAGE_SPEED);
             moneySpent = getArguments().getFloat(MONEY_SPENT);
@@ -280,7 +279,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
         }
         if (ConstantValues.LOGGING_ENABLED) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
-            Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME in Motion+" + timeSpentInMotion);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, null));
         }
 

@@ -32,30 +32,30 @@ public class GaugeScale {
     double                  sweepAngle;
 
     public GaugeScale() {
-        this.showRim = true;
-        this.showTicks = true;
-        this.showLabels = true;
-        this.gaugeRanges = new ArrayList<>();
-        this.GaugePointers = new ArrayList<>();
-        this.majorTickSettings = new TickSettings();
-        this.minorTickSettings = new TickSettings();
+        showRim = true;
+        showTicks = true;
+        showLabels = true;
+        gaugeRanges = new ArrayList<>();
+        GaugePointers = new ArrayList<>();
+        majorTickSettings = new TickSettings();
+        minorTickSettings = new TickSettings();
 
-        this.startValue = GaugeConstants.SCALE_INIT_START_VALUE;
-        this.endValue = GaugeConstants.SCALE_INIT_END_VALUE;
-        this.startAngle = GaugeConstants.SCALE_INIT_START_ANGLE;
-        this.sweepAngle = GaugeConstants.SCALE_INIT_SWEEP_ANGLE;
-        this.interval = GaugeConstants.SCALE_INIT_INTERVAL;
-        this.labelPrefix = GaugeConstants.SCALE_INIT_PREFIX;
-        this.labelPostfix = GaugeConstants.SCALE_INIT_POSTFIX;
-        this.rimColor = GaugeConstants.SCALE_INIT_RIM_COLOR;
-        this.rimWidth = GaugeConstants.SCALE_INIT_RIM_WIDTH;
-        this.labelTextSize = GaugeConstants.SCALE_INIT_LABEL_TEXT_SIZE;
-        this.labelTextStyle = GaugeConstants.SCALE_INIT_LABEL_TEXT_STYLE;
-        this.labelColor = GaugeConstants.SCALE_INIT_LABEL_COLOR;
-        this.minorTicksPerInterval = GaugeConstants.SCALE_INIT_MINOR_TICK_INTERVAL;
-        this.radiusFactor = GaugeConstants.SCALE_INIT_RADIUS_FACTOR;
-        this.numberOfDecimalDigits = GaugeConstants.SCALE_INIT_NUMBER_OF_DECIMAL_DIGITS;
-        this.LabelOffset = GaugeConstants.SCALE_INIT_LABEL_OFFSET;
+        startValue = GaugeConstants.SCALE_INIT_START_VALUE;
+        endValue = GaugeConstants.SCALE_INIT_END_VALUE;
+        startAngle = GaugeConstants.SCALE_INIT_START_ANGLE;
+        sweepAngle = GaugeConstants.SCALE_INIT_SWEEP_ANGLE;
+        interval = GaugeConstants.SCALE_INIT_INTERVAL;
+        labelPrefix = GaugeConstants.SCALE_INIT_PREFIX;
+        labelPostfix = GaugeConstants.SCALE_INIT_POSTFIX;
+        rimColor = GaugeConstants.SCALE_INIT_RIM_COLOR;
+        rimWidth = GaugeConstants.SCALE_INIT_RIM_WIDTH;
+        labelTextSize = GaugeConstants.SCALE_INIT_LABEL_TEXT_SIZE;
+        labelTextStyle = GaugeConstants.SCALE_INIT_LABEL_TEXT_STYLE;
+        labelColor = GaugeConstants.SCALE_INIT_LABEL_COLOR;
+        minorTicksPerInterval = GaugeConstants.SCALE_INIT_MINOR_TICK_INTERVAL;
+        radiusFactor = GaugeConstants.SCALE_INIT_RADIUS_FACTOR;
+        numberOfDecimalDigits = GaugeConstants.SCALE_INIT_NUMBER_OF_DECIMAL_DIGITS;
+        LabelOffset = GaugeConstants.SCALE_INIT_LABEL_OFFSET;
     }
 
     public ArrayList<GaugeRange> getGaugeRanges() {

@@ -9,7 +9,7 @@
     <string name="money_on_fuel_spent_hint">Money on fuel spent -&#160;</string>
     <string name="time_spent_on_trip_hint">Time spent on trip -&#160;</string>
     <string name="distance_travelled_hint">Distance travelled -&#160;</string>
-    <string name="average_speed_hint">Average speed is -&#160;</string>
+    <string name="average_speed_hint">Average speed -&#160;</string>
     <string name="maximum_speed_hint">Maximum speed -&#160;</string>
     <string name="fuel_spent_hint">Fuel spent -&#160;</string>
     <string name="trip_ID_hint">Trip id -&#160;</string>

@@ -10,11 +10,11 @@ public class GaugeRange {
     double width;
 
     public GaugeRange() {
-        this.color = GaugeConstants.RANGE_INIT_COLOR;
-        this.startValue = GaugeConstants.RANGE_INIT_START_VALUE;
-        this.endValue = GaugeConstants.RANGE_INIT_END_VALUE;
-        this.width = GaugeConstants.RANGE_INIT_WIDTH;
-        this.offset = GaugeConstants.RANGE_INIT_OFFSET;
+        color = GaugeConstants.RANGE_INIT_COLOR;
+        startValue = GaugeConstants.RANGE_INIT_START_VALUE;
+        endValue = GaugeConstants.RANGE_INIT_END_VALUE;
+        width = GaugeConstants.RANGE_INIT_WIDTH;
+        offset = GaugeConstants.RANGE_INIT_OFFSET;
     }
 
     public int getColor() {

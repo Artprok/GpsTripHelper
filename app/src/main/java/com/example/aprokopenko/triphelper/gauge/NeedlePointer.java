@@ -9,10 +9,10 @@ public class NeedlePointer extends GaugePointer {
     NeedleType type;
 
     public NeedlePointer() {
-        this.knobRadius = GaugeConstants.DEFAULT_KNOB_RADIUS;
-        this.knobColor = GaugeConstants.DEFAULT_KNOB_COLOR;
-        this.lengthFactor = GaugeConstants.LENGHT_FACTOR;
-        this.type = NeedleType.Bar;
+        knobRadius = GaugeConstants.DEFAULT_KNOB_RADIUS;
+        knobColor = GaugeConstants.DEFAULT_KNOB_COLOR;
+        lengthFactor = GaugeConstants.LENGHT_FACTOR;
+        type = NeedleType.Bar;
     }
 
     public int getKnobColor() {

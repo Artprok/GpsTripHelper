@@ -50,7 +50,6 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
     @BindView(R.id.progressBar)
     ProgressBar  progressBar;
 
-
     private static final String LOG_TAG = "TripListFragment";
 
     private TripData        tripData;
@@ -125,7 +124,6 @@ public class TripListFragment extends Fragment implements ListFragmentInteractio
         }
         super.onDetach();
     }
-
 
     @Override public void onFragmentReplacing(TripInfoFragment tripInfoFragment) {
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());

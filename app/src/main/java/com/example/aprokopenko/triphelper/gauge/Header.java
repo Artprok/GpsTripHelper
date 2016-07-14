@@ -16,12 +16,12 @@ public class Header {
     Typeface        textStyle;
 
     public Header() {
-        this.text = "headerText";
-        this.textSize = GaugeConstants.DEFAULT_HEADER_TEXT_SIZE;
-        this.textStyle = GaugeConstants.DEFAULT_HEADER_TEXT_STYLE;
-        this.textColor = GaugeConstants.DEFAULT_HEADER_TEXT_COLOR;
-        this.position = GaugeConstants.DEFAULT_HEADER_POSITION;
-        this.HeaderAlignment = com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment.Custom;
+        text = "headerText";
+        textSize = GaugeConstants.DEFAULT_HEADER_TEXT_SIZE;
+        textStyle = GaugeConstants.DEFAULT_HEADER_TEXT_STYLE;
+        textColor = GaugeConstants.DEFAULT_HEADER_TEXT_COLOR;
+        position = GaugeConstants.DEFAULT_HEADER_POSITION;
+        HeaderAlignment = com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment.Custom;
     }
 
     public String getText() {

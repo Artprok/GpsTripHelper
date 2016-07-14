@@ -25,8 +25,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="7dp"
         android:layout_alignTop="@+id/statusImageView"
+        android:layout_marginRight="6dp"
         android:background="@drawable/button_background"
         android:src="@drawable/trip_list_button"
         />
@@ -49,27 +49,43 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="6dp"
         android:background="@drawable/button_background"
-        android:text="@string/start"
-        android:layout_marginLeft="9dp"
-        android:layout_marginBottom="7dp"/>
+        android:text="@string/start"/>
 
     <RelativeLayout
-        android:id="@+id/speedometerContainer"
+        android:id="@+id/conty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_toLeftOf="@+id/tripListButton"
-        android:layout_toRightOf="@+id/fuelLayout">
+        android:layout_toRightOf="@+id/fuelLayout"
+        >
 
-        <TextView
-            android:id="@+id/speedometerTextView"
+        <RelativeLayout
+            android:id="@+id/speedometerContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/initial_speedometer_val"
-            android:textSize="@dimen/speedometerTextViewSize"
-            />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="2dp"
+            android:paddingTop="2dp"
+            >
+
+            <TextView
+                android:id="@+id/speedometerTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/initial_speedometer_val"
+                android:textSize="@dimen/speedometerTextViewSize"
+                />
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 
@@ -79,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/statusImageView"
-        android:layout_marginLeft="9dp"
+        android:layout_marginLeft="6dp"
         android:visibility="visible">
 
         <ImageView
@@ -94,13 +110,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/fuelIcon"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout_toRightOf="@+id/fuelIcon"
             android:text="@string/fuel_left_label"
             android:textSize="@dimen/metricsTextSize"
             android:textStyle="bold|italic"
-            android:typeface="sans"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"/>
+            android:typeface="sans"/>
 
         <TextView
             android:id="@+id/fuelLeftView"
@@ -113,11 +129,11 @@
 
         <RelativeLayout
             android:id="@+id/refillButtonLayout"
-            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_alignLeft="@id/fuelIcon"
             android:layout_below="@id/fuelIcon"
+            android:layout_marginTop="30dp"
             android:background="@drawable/button_background"
             android:padding="2dp"
             >
@@ -133,13 +149,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/refillButton"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:layout_toRightOf="@+id/refillButton"
                 android:text="@string/refill_hint"
                 android:textSize="@dimen/metricsTextSize"
                 android:textStyle="bold|italic"
-                android:typeface="sans"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"/>
+                android:typeface="sans"/>
         </RelativeLayout>
 
     </RelativeLayout>
@@ -149,9 +165,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_alignTop="@+id/speedometerContainer"
-        android:layout_marginLeft="9dp"
-        android:layout_marginTop="7dp"
+
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/red_satellite"
         />
 </RelativeLayout>

@@ -7,8 +7,6 @@ public enum NeedleType {
     // $FF: synthetic field
     private static final NeedleType[] $VALUES = new NeedleType[]{Bar, Triangle};
 
-
     NeedleType(String var1, int var2) {
     }
-
 }
