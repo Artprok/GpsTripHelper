@@ -3,14 +3,19 @@ package com.example.aprokopenko.triphelper.gauge;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment;
 
+import java.util.ArrayList;
+
 class GaugeHeaderRenderer extends View {
-    protected TripHelperGauge mGauge;
-    private   Paint           mPaint;
+    private TripHelperGauge mGauge;
+    private Paint           mPaint;
+    private ArrayList<Header> headerArrayList = new ArrayList<>();
 
     public GaugeHeaderRenderer(Context context) {
         this(context, null);
@@ -24,51 +29,65 @@ class GaugeHeaderRenderer extends View {
         mPaint.setAntiAlias(true);
     }
 
+    public void setmGauge(TripHelperGauge mGauge) {
+        this.mGauge = mGauge;
+    }
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mGauge != null && mGauge.headers != null) {
-            for (Header header : mGauge.headers) {
-                header.gauge = mGauge;
-                mPaint.setColor(header.textColor);
-                mPaint.setTextSize(((float) header.textSize) * TripHelperGauge.DENSITY);
-                mPaint.setTypeface(header.textStyle);
-                double headerTextHeight = header.textSize;
-                double headerTextWidth  = (double) mPaint.measureText(header.text);
-                if (header.HeaderAlignment != null) {
+        if (mGauge != null && headerArrayList != null) {
+
+            headerArrayList = mGauge.getHeaders();
+
+            RectF  mVisualRect  = mGauge.getmVisualRect();
+            double mCentreX     = mGauge.getmCentreX();
+            double mCentreY     = mGauge.getmCentreY();
+            double mGaugeWidth  = mGauge.getmGaugeWidth();
+            double mGaugeHeight = mGauge.getmGaugeHeight();
+
+
+            for (Header header : headerArrayList) {
+                header.setGauge(mGauge);
+                double textSize = header.getTextSize();
+                mPaint.setColor(header.getTextColor());
+                mPaint.setTextSize(((float) textSize) * TripHelperGauge.DENSITY);
+                mPaint.setTypeface(header.getTextStyle());
+                double headerTextWidth = (double) mPaint.measureText(header.getText());
+                if (header.getHeaderAlignment() != null) {
                     double left;
                     double top;
 
                     if (header.getHeaderAlignment() == HeaderAlignment.TopLeft) {
                         left = GaugeConstants.ZERO;
-                        top = GaugeConstants.ZERO + headerTextHeight;
+                        top = GaugeConstants.ZERO + textSize;
                     }
                     else if (header.getHeaderAlignment() == HeaderAlignment.Top) {
-                        left = mGauge.mCentreX - (headerTextWidth / GaugeConstants.ZERO);
-                        top = GaugeConstants.ZERO + headerTextHeight;
+                        left = mCentreX - (headerTextWidth / GaugeConstants.ZERO);
+                        top = GaugeConstants.ZERO + textSize;
                     }
                     else {
-                        double modif_centerXmultBy2minusHeaderWidth = mGauge.mCentreX * 2.0d - headerTextWidth;
-                        double modif_centerYmultBy2minus10          = mGauge.mCentreY * 2.0d - 10.0d;
-                        double modif_textHeightDivideBy2            = headerTextHeight / 2.0d;
+                        double modif_centerXmultBy2minusHeaderWidth = mCentreX * 2.0d - headerTextWidth;
+                        double modif_centerYmultBy2minus10          = mCentreY * 2.0d - 10.0d;
+                        double modif_textHeightDivideBy2            = textSize / 2.0d;
                         double modif_textWidthDivideBy2             = headerTextWidth / 2.0d;
 
                         if (header.getHeaderAlignment() == HeaderAlignment.TopRight) {
                             left = modif_centerXmultBy2minusHeaderWidth;
-                            top = GaugeConstants.ZERO + headerTextHeight;
+                            top = GaugeConstants.ZERO + textSize;
                         }
                         else {
                             if (header.getHeaderAlignment() == HeaderAlignment.Left) {
                                 left = GaugeConstants.ZERO;
-                                top = mGauge.mCentreY + modif_textHeightDivideBy2;
+                                top = mCentreY + modif_textHeightDivideBy2;
                             }
                             else {
                                 if (header.getHeaderAlignment() == HeaderAlignment.Center) {
-                                    left = mGauge.mCentreX - modif_textWidthDivideBy2;
-                                    top = mGauge.mCentreY + modif_textHeightDivideBy2;
+                                    left = mCentreX - modif_textWidthDivideBy2;
+                                    top = mCentreY + modif_textHeightDivideBy2;
                                 }
                                 else if (header.getHeaderAlignment() == HeaderAlignment.Right) {
                                     left = modif_centerXmultBy2minusHeaderWidth;
-                                    top = mGauge.mCentreY + modif_textHeightDivideBy2;
+                                    top = mCentreY + modif_textHeightDivideBy2;
                                 }
                                 else {
 
@@ -77,28 +96,30 @@ class GaugeHeaderRenderer extends View {
                                         top = modif_centerYmultBy2minus10;
                                     }
                                     else if (header.getHeaderAlignment() == HeaderAlignment.Bottom) {
-                                        left = mGauge.mCentreX - modif_textWidthDivideBy2;
+                                        left = mCentreX - modif_textWidthDivideBy2;
                                         top = modif_centerYmultBy2minus10;
                                     }
                                     else if (header.getHeaderAlignment() == HeaderAlignment.BottomRight) {
                                         left = modif_centerXmultBy2minusHeaderWidth;
                                         top = modif_centerYmultBy2minus10;
                                     }
-                                    else if (mGauge.mCentreY > mGauge.mCentreX) {
-                                        left = mGauge.mGaugeWidth * ((double) header.position.x);
-                                        top = (mGauge.mCentreY - ((double) (mGauge.mVisualRect
-                                                .height() / 2.0f))) + ((double) (mGauge.mVisualRect.height() * header.position.y));
+                                    else if (mCentreY > mCentreX) {
+                                        PointF pointF = header.getPosition();
+                                        left = mGaugeWidth * ((double) pointF.x);
+                                        top = (mCentreY - ((double) (mVisualRect.height() / 2.0f))) + ((double) (mVisualRect
+                                                .height() * pointF.y));
                                     }
                                     else {
-                                        left = (mGauge.mCentreX - ((double) (mGauge.mVisualRect
-                                                .width() / 2.0f))) + ((double) (mGauge.mVisualRect.width() * header.position.x));
-                                        top = mGauge.mGaugeHeight * ((double) header.position.y);
+                                        PointF pointF = header.getPosition();
+                                        left = (mCentreX - ((double) (mVisualRect.width() / 2.0f))) + ((double) (mVisualRect
+                                                .width() * pointF.x));
+                                        top = mGaugeHeight * ((double) pointF.y);
                                     }
                                 }
                             }
                         }
                     }
-                    canvas.drawText(header.text, (float) left, (float) top, this.mPaint);
+                    canvas.drawText(header.getText(), (float) left, (float) top, this.mPaint);
                 }
             }
         }

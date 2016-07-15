@@ -6,14 +6,14 @@ import android.graphics.Typeface;
 import com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment;
 
 public class Header {
-    com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment HeaderAlignment;
+    private com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment HeaderAlignment;
 
-    protected TripHelperGauge gauge;
-    protected PointF          position;
-    protected String          text;
-    protected int             textColor;
-    protected double          textSize;
-    protected Typeface        textStyle;
+    private TripHelperGauge gauge;
+    private PointF          position;
+    private String          text;
+    private int             textColor;
+    private double          textSize;
+    private Typeface        textStyle;
 
     public Header() {
         text = "headerText";
@@ -26,6 +26,10 @@ public class Header {
 
     public String getText() {
         return this.text;
+    }
+
+    public void setGauge(TripHelperGauge gauge) {
+        this.gauge = gauge;
     }
 
     public void setText(String text) {

@@ -65,27 +65,27 @@
 
         <RelativeLayout
             android:id="@+id/speedometerContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="2dp"
-            android:paddingTop="2dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             >
-
-            <TextView
-                android:id="@+id/speedometerTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/initial_speedometer_val"
-                android:textSize="@dimen/speedometerTextViewSize"
-                />
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/speedometerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="15dp"
+            android:paddingRight="25dp"
+            android:text="@string/initial_speedometer_val"
+            android:textSize="@dimen/speedometerTextViewSize"
+            />
 
     </RelativeLayout>
 

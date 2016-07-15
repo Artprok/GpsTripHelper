@@ -28,7 +28,7 @@ public class ConstantValues {
     public static final boolean LOGGING_ENABLED    = false; //todo change for release to false
 
     public static final int   START_VALUE                = 0;
-    public static final float FUEL_COST_DEFAULT          = 20.4f;
+    public static final float FUEL_COST_DEFAULT          = 21.8f;
     public static final int   FUEL_TANK_CAPACITY_DEFAULT = 60;
     public static final float FUEL_CONSUMPTION_DEFAULT   = 11;
 

@@ -3,13 +3,13 @@ package com.example.aprokopenko.triphelper.gauge;
 import android.animation.ObjectAnimator;
 
 public class GaugePointer {
-    protected int             color;
-    private   boolean         enableAnimation;
-    protected TripHelperGauge mBaseGauge;
-    protected GaugeScale      mGaugeScale;
-    protected PointerRender   mPointerRender;
-    protected double          value;
-    protected double          width;
+    private int             color;
+    private boolean         enableAnimation;
+    private TripHelperGauge mBaseGauge;
+    private GaugeScale      mGaugeScale;
+    private PointerRender   mPointerRender;
+    private double          value;
+    private double          width;
 
     GaugePointer() {
         value = GaugeConstants.POINTER_INIT_HEIGHT_VALUE;
@@ -31,6 +31,26 @@ public class GaugePointer {
         this.value = newValue;
     }
 
+    public GaugeScale getmGaugeScale() {
+        return mGaugeScale;
+    }
+
+    public void setmBaseGauge(TripHelperGauge mBaseGauge) {
+        this.mBaseGauge = mBaseGauge;
+    }
+
+    TripHelperGauge getmBaseGauge() {
+        return mBaseGauge;
+    }
+
+    public void setmGaugeScale(GaugeScale mGaugeScale) {
+        this.mGaugeScale = mGaugeScale;
+    }
+
+    public void setmPointerRender(PointerRender mPointerRender) {
+        this.mPointerRender = mPointerRender;
+    }
+
     public void setPointerValue(float newValue) {
         this.value = (double) newValue;
         if (this.mBaseGauge != null) {
@@ -39,7 +59,7 @@ public class GaugePointer {
     }
 
     public double getWidth() {
-        return this.width;
+        return width;
     }
 
     public void setWidth(double width) {

@@ -156,7 +156,6 @@ public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
             ArrayList<String> speedArray     = getArguments().getStringArrayList(SPEED_ARR);
             timeSpentOnStop = getArguments().getFloat(TIME_SPENT_WITHOUT_MOTION);
             averageFuelConsumption = getArguments().getFloat(AVERAGE_FUEL_CONS);
-            float timeSpentInMotion = getArguments().getFloat(TIME_SPENT_IN_MOTION);
             distTravelled = getArguments().getFloat(DISTANCE_TRAVELLED);
             avgSpeed = getArguments().getFloat(AVERAGE_SPEED);
             moneySpent = getArguments().getFloat(MONEY_SPENT);

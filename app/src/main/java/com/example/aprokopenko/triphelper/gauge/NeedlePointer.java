@@ -3,10 +3,10 @@ package com.example.aprokopenko.triphelper.gauge;
 import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
 
 public class NeedlePointer extends GaugePointer {
-    protected int        knobColor;
-    protected double     knobRadius;
-    protected double     lengthFactor;
-    protected NeedleType type;
+    private int        knobColor;
+    private double     knobRadius;
+    private double     lengthFactor;
+    private NeedleType type;
 
     public NeedlePointer() {
         knobRadius = GaugeConstants.DEFAULT_KNOB_RADIUS;
@@ -21,8 +21,9 @@ public class NeedlePointer extends GaugePointer {
 
     public void setKnobColor(int knobColor) {
         this.knobColor = knobColor;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        TripHelperGauge tripHelperGauge = this.getmBaseGauge();
+        if (tripHelperGauge != null) {
+            tripHelperGauge.refreshGauge();
         }
     }
 
@@ -32,8 +33,9 @@ public class NeedlePointer extends GaugePointer {
 
     public void setKnobRadius(double knobRadius) {
         this.knobRadius = knobRadius;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        TripHelperGauge tripHelperGauge = this.getmBaseGauge();
+        if (tripHelperGauge != null) {
+            tripHelperGauge.refreshGauge();
         }
     }
 
@@ -43,19 +45,21 @@ public class NeedlePointer extends GaugePointer {
 
     public void setType(NeedleType type) {
         this.type = type;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        TripHelperGauge tripHelperGauge = this.getmBaseGauge();
+        if (tripHelperGauge != null) {
+            tripHelperGauge.refreshGauge();
         }
     }
 
     public double getLengthFactor() {
-        return this.lengthFactor;
+        return lengthFactor;
     }
 
     public void setLengthFactor(double lengthFactor) {
         this.lengthFactor = lengthFactor;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        TripHelperGauge tripHelperGauge = this.getmBaseGauge();
+        if (tripHelperGauge != null) {
+            tripHelperGauge.refreshGauge();
         }
     }
 }

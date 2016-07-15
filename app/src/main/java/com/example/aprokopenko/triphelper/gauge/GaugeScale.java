@@ -6,30 +6,30 @@ import android.graphics.Typeface;
 import java.util.ArrayList;
 
 public class GaugeScale {
-    protected double                  LabelOffset;
-    protected ArrayList<GaugePointer> GaugePointers;
-    protected ArrayList<GaugeRange>   gaugeRanges;
-    protected double                  endValue;
-    protected double                  interval;
-    protected int                     labelColor;
-    protected String                  labelPostfix;
-    protected String                  labelPrefix;
-    protected double                  labelTextSize;
-    protected Typeface                labelTextStyle;
-    protected TripHelperGauge         mGauge;
-    protected TickSettings            majorTickSettings;
-    protected TickSettings            minorTickSettings;
-    protected double                  minorTicksPerInterval;
-    protected int                     numberOfDecimalDigits;
-    protected double                  radiusFactor;
-    protected int                     rimColor;
-    protected double                  rimWidth;
-    protected boolean                 showLabels;
-    protected boolean                 showRim;
-    protected boolean                 showTicks;
-    protected double                  startAngle;
-    protected double                  startValue;
-    protected double                  sweepAngle;
+    private double                  LabelOffset;
+    private ArrayList<GaugePointer> GaugePointers;
+    private ArrayList<GaugeRange>   gaugeRanges;
+    private double                  endValue;
+    private double                  interval;
+    private int                     labelColor;
+    private String                  labelPostfix;
+    private String                  labelPrefix;
+    private double                  labelTextSize;
+    private Typeface                labelTextStyle;
+    private TripHelperGauge         mGauge;
+    private TickSettings            majorTickSettings;
+    private TickSettings            minorTickSettings;
+    private double                  minorTicksPerInterval;
+    private int                     numberOfDecimalDigits;
+    private double                  radiusFactor;
+    private int                     rimColor;
+    private double                  rimWidth;
+    private boolean                 showLabels;
+    private boolean                 showRim;
+    private boolean                 showTicks;
+    private double                  startAngle;
+    private double                  startValue;
+    private double                  sweepAngle;
 
     public GaugeScale() {
         showRim = true;
@@ -56,6 +56,14 @@ public class GaugeScale {
         radiusFactor = GaugeConstants.SCALE_INIT_RADIUS_FACTOR;
         numberOfDecimalDigits = GaugeConstants.SCALE_INIT_NUMBER_OF_DECIMAL_DIGITS;
         LabelOffset = GaugeConstants.SCALE_INIT_LABEL_OFFSET;
+    }
+
+    public TripHelperGauge getmGauge() {
+        return mGauge;
+    }
+
+    public void setmGauge(TripHelperGauge mGauge) {
+        this.mGauge = mGauge;
     }
 
     public ArrayList<GaugeRange> getGaugeRanges() {
@@ -261,7 +269,7 @@ public class GaugeScale {
     }
 
     public void setMajorTickSettings(TickSettings majorTickSettings) {
-        majorTickSettings.mGauge = this.mGauge;
+        majorTickSettings.setmGauge(this.mGauge);
         this.majorTickSettings = majorTickSettings;
         if (this.mGauge != null) {
             this.mGauge.refreshGauge();
@@ -273,7 +281,7 @@ public class GaugeScale {
     }
 
     public void setMinorTickSettings(TickSettings minorTickSettings) {
-        minorTickSettings.mGauge = this.mGauge;
+        minorTickSettings.setmGauge(this.mGauge);
         this.minorTickSettings = minorTickSettings;
         if (this.mGauge != null) {
             this.mGauge.refreshGauge();

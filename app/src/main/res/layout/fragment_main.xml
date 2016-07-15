@@ -33,13 +33,13 @@
 
     <RelativeLayout
         android:id="@+id/speedometerContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/fuelLayout"
         android:layout_below="@+id/statusImageView"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:paddingLeft="3dp">
+        >
 
     </RelativeLayout>
 
@@ -49,8 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fuelLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:paddingLeft="3dp"
+        android:layout_marginBottom="45dp"
         android:text="@string/initial_speedometer_val"
         android:textSize="@dimen/speedometerTextViewSize"/>
 

@@ -12,26 +12,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class TripHelperGauge extends FrameLayout {
-    com.example.aprokopenko.triphelper.gauge.enums.GaugeType GaugeType;
     static float DENSITY = -1.0F;
+    private       GaugeType                GaugeType;
     private final ArrayList<ScaleRenderer> mScaleRenderers;
     private final ArrayList<PointerRender> mPointerRenderes;
     private       ArrayList<GaugeScale>    gaugeScales;
-    protected     ArrayList<Header>        headers;
+    private       ArrayList<Header>        headers;
     private       GaugeHeaderRenderer      mGaugeHeader;
-    protected     RectF                    mVisualRect;
-    protected     RectF                    mRangeFrame;
+    private       RectF                    mVisualRect;
+    private       RectF                    mRangeFrame;
     private       int                      frameBackgroundColor;
-    protected     double                   mGaugeHeight;
-    protected     double                   mGaugeWidth;
-    protected     double                   mMinSize;
-    protected     double                   mInnerBevelWidth;
-    protected     double                   mKnobDiameter;
-    protected     double                   mRimWidth;
-    protected     double                   mLabelsPathHeight;
-    protected     double                   mRangePathWidth;
-    protected     double                   mCentreX;
-    protected     double                   mCentreY;
+    private       double                   mGaugeHeight;
+    private       double                   mGaugeWidth;
+    private       double                   mMinSize;
+    private       double                   mInnerBevelWidth;
+    private       double                   mKnobDiameter;
+    private       double                   mRimWidth;
+    private       double                   mLabelsPathHeight;
+    private       double                   mRangePathWidth;
+    private       double                   mCentreX;
+    private       double                   mCentreY;
 
     public TripHelperGauge(Context context) {
         this(context, null);
@@ -51,9 +51,10 @@ public class TripHelperGauge extends FrameLayout {
         DENSITY = this.getContext().getResources().getDisplayMetrics().density;
     }
 
+
     private void init() {
         mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
-        mGaugeHeader.mGauge = this;
+        mGaugeHeader.setmGauge(this);
         this.addView(this.mGaugeHeader);
     }
 
@@ -69,13 +70,70 @@ public class TripHelperGauge extends FrameLayout {
         }
     }
 
-    private GaugeType getGaugeType() {
-        return this.GaugeType;
+    public GaugeType getGaugeType() {
+        return GaugeType;
+    }
+
+    public RectF getmVisualRect() {
+        return mVisualRect;
     }
 
     public void setGaugeType(GaugeType gaugeType) {
         this.GaugeType = gaugeType;
         this.refreshGauge();
+    }
+
+    public void setmRangeFrame(RectF mRangeFrame) {
+        this.mRangeFrame = mRangeFrame;
+    }
+
+    public double getmCentreX() {
+        return mCentreX;
+    }
+
+    public double getmCentreY() {
+        return mCentreY;
+    }
+
+    public double getmGaugeHeight() {
+        return mGaugeHeight;
+    }
+
+    public double getmGaugeWidth() {
+        return mGaugeWidth;
+    }
+
+    public double getmMinSize() {
+        return mMinSize;
+    }
+
+    public RectF getmRangeFrame() {
+        return mRangeFrame;
+    }
+
+    public double getmInnerBevelWidth() {
+        return mInnerBevelWidth;
+    }
+
+    public double getmRimWidth() {
+        return mRimWidth;
+    }
+
+    public double getmKnobDiameter() {
+        return mKnobDiameter;
+    }
+
+    public void setmKnobDiameter(double mKnobDiameter) {
+        this.mKnobDiameter = mKnobDiameter;
+    }
+
+    public double getmLabelsPathHeight() {
+        return mLabelsPathHeight;
+    }
+
+
+    public double getmRangePathWidth() {
+        return mRangePathWidth;
     }
 
     protected int getFrameBackgroundColor() {
@@ -88,7 +146,7 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     public ArrayList<Header> getHeaders() {
-        return this.headers;
+        return headers;
     }
 
     public void setHeaders(ArrayList<Header> headers) {
@@ -97,9 +155,9 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     public void refreshGauge() {
-        calculateMargin(mGaugeHeight, mGaugeWidth);
+        calculateMargin(mGaugeWidth);
         mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
-        mGaugeHeader.mGauge = this;
+        mGaugeHeader.setmGauge(this);
         this.addView(mGaugeHeader);
         ArrayList scaleCircularPointers = new ArrayList();
         ArrayList removeScaleRen        = new ArrayList();
@@ -121,7 +179,7 @@ public class TripHelperGauge extends FrameLayout {
             while (true) {
                 if (anim.hasNext()) {
                     ScaleRenderer scRender = (ScaleRenderer) anim.next();
-                    if (scRender.gaugeScale != poinRen) {
+                    if (scRender.getGaugeScale() != poinRen) {
                         continue;
                     }
 
@@ -138,7 +196,7 @@ public class TripHelperGauge extends FrameLayout {
                     pointRen.invalidate();
                 }
 
-                anim = poinRen.GaugePointers.iterator();
+                anim = poinRen.getGaugePointers().iterator();
 
                 while (true) {
                     if (!anim.hasNext()) {
@@ -146,8 +204,8 @@ public class TripHelperGauge extends FrameLayout {
                     }
 
                     GaugePointer scRender1 = (GaugePointer) anim.next();
-                    scRender1.mGaugeScale = poinRen;
-                    scRender1.mBaseGauge = this;
+                    scRender1.setmGaugeScale(poinRen);
+                    scRender1.setmBaseGauge(this);
                     scaleCircularPointers.add(scRender1);
                 }
             }
@@ -178,7 +236,7 @@ public class TripHelperGauge extends FrameLayout {
             while (true) {
                 if (anim.hasNext()) {
                     PointerRender scRender2 = (PointerRender) anim.next();
-                    if (scRender2.mGaugePointer != poinRen3) {
+                    if (scRender2.getmGaugePointer() != poinRen3) {
                         continue;
                     }
 
@@ -186,14 +244,14 @@ public class TripHelperGauge extends FrameLayout {
                 }
 
                 if (pointRen1 == null) {
-                    PointerRender anim2 = new PointerRender(this.getContext(), this, poinRen3.mGaugeScale, poinRen3);
+                    PointerRender anim2 = new PointerRender(this.getContext(), this, poinRen3.getmGaugeScale(), poinRen3);
                     mPointerRenderes.add(anim2);
-                    poinRen3.mPointerRender = anim2;
+                    poinRen3.setmPointerRender(anim2);
                     this.addView(anim2);
                 }
                 else {
                     removedPointerRender.remove(pointRen1);
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(pointRen1, "", pointRen1.value, (float) poinRen3.value);
+                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(pointRen1, "", pointRen1.getValue(), (float) poinRen3.getValue());
                     anim3.setDuration(GaugeConstants.GAUGE_ANIMATION_TIME);
                     anim3.start();
                     pointRen1.invalidate();
@@ -210,7 +268,7 @@ public class TripHelperGauge extends FrameLayout {
         }
 
         if (mGaugeHeader != null) {
-            mGaugeHeader.mGauge = this;
+            mGaugeHeader.setmGauge(this);
             mGaugeHeader.requestLayout();
             mGaugeHeader.invalidate();
         }
@@ -467,34 +525,20 @@ public class TripHelperGauge extends FrameLayout {
         double mScaleCentreX = (double) (mVisualRect.left + mVisualRect.width() / 2.0F);
         mCentreY = mScaleCentreY;
         mCentreX = mScaleCentreX;
-        double mOuterBevelHeight = (double) mVisualRect.height();
-        double mOuterBevelWidth  = (double) mVisualRect.width();
-        double dimensionVar      = mOuterBevelHeight;
-        double mInnerBevelHeight = dimensionVar + 10.0D;
-        dimensionVar = mOuterBevelWidth;
+        double dimensionVar = (double) mVisualRect.width();
         mInnerBevelWidth = dimensionVar + 10.0D;
-        calculateMargin(mInnerBevelWidth, mInnerBevelWidth);
+        calculateMargin(mInnerBevelWidth);
     }
 
-    void calculateMargin(double height, double width) {
+    public void calculateMargin(double width) {
         //optimizationModif
         double marginSubtrahend = 2.0D * 10.0D;
 
-        double mRimHeight = height - 10.0D;
         mRimWidth = width - 10.0D;
+        double dimensionVariable = (mRimWidth - marginSubtrahend) - marginSubtrahend;
 
-        double dimensionVariable = mRimHeight;
-        double mTicksPathHeight  = dimensionVariable - marginSubtrahend;
-        dimensionVariable = mRimWidth;
-        double mTicksPathWidth = dimensionVariable - marginSubtrahend;
-        dimensionVariable = mTicksPathHeight;
-        mLabelsPathHeight = dimensionVariable - marginSubtrahend;
-        dimensionVariable = mTicksPathWidth;
-        double mLabelsPathWidth = dimensionVariable - marginSubtrahend;
-        dimensionVariable = mLabelsPathHeight;
-        double mRangePathHeight = dimensionVariable - marginSubtrahend;
-        dimensionVariable = mLabelsPathWidth;
-        mRangePathWidth = dimensionVariable - marginSubtrahend;
+        mLabelsPathHeight = dimensionVariable;
+        mRangePathWidth = dimensionVariable;
     }
 }
 

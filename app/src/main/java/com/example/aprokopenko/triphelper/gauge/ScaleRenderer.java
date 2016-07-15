@@ -9,16 +9,19 @@ import android.view.View;
 
 import com.example.aprokopenko.triphelper.gauge.enums.GaugeType;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 class ScaleRenderer extends View {
 
     private       TripHelperGauge gauge;
-    protected     GaugeScale      gaugeScale;
+    private       GaugeScale      gaugeScale;
     private       RectF           rectF;
     private       Paint           paint;
+    private       Paint           rangePaint;
     private final double          arcAliasing;
 
+    //modif optimization
     private double modifMinSizeDivideBy4;
     private double modifMinSizeDivideBy2;
     private double modifMinSizeMultipleBy0dot75;
@@ -27,12 +30,27 @@ class ScaleRenderer extends View {
     private double modifMinSizeMultipleBy0dot375;
     private double modifRimWidthDivideBy2;
 
+    private double    mCentreX;
+    private double    mCentreY;
+    private RectF     mRangeFrame;
+    private GaugeType gaugeType;
+    private double    mInnerBevelWidth;
+    private double    mMinSize;
+    private double    mRangePathWidth;
+
     public ScaleRenderer(Context context, TripHelperGauge gauge, GaugeScale gaugeScale) {
         this(context, null);
         this.gauge = gauge;
         this.gaugeScale = gaugeScale;
         rectF = new RectF();
         paint = new Paint();
+        rangePaint = new Paint();
+
+
+    }
+
+    public GaugeScale getGaugeScale() {
+        return gaugeScale;
     }
 
     public ScaleRenderer(Context context, AttributeSet attrs) {
@@ -40,44 +58,56 @@ class ScaleRenderer extends View {
         gauge = null;
         gaugeScale = null;
         arcAliasing = 0.7D;
+
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (gauge != null && gaugeScale != null) {
-            gaugeScale.mGauge = gauge;
+            gaugeScale.setmGauge(gauge);
 
-            //modif optimization
-            modifMinSizeDivideBy4 = gauge.mMinSize / 4.0D;
-            modifMinSizeDivideBy2 = gauge.mMinSize / 2.0D;
-            modifMinSizeMultipleBy0dot75 = gauge.mMinSize * 0.75D;
-            modifMinSizeMultipleBy0dot875 = gauge.mMinSize * 0.875D;
-            modifMinSizeMultipleBy0dot125 = gauge.mMinSize * 0.125D;
-            modifMinSizeMultipleBy0dot375 = gauge.mMinSize * 0.375D;
-            modifRimWidthDivideBy2 = gaugeScale.rimWidth / 2.0D;
+            mCentreX = gauge.getmCentreX();
+            mCentreY = gauge.getmCentreY();
+            mInnerBevelWidth = gauge.getmInnerBevelWidth();
+            mMinSize = gauge.getmMinSize();
+            gaugeType = gauge.getGaugeType();
+            mRangeFrame = gauge.getmRangeFrame();
+            mRangePathWidth = gauge.getmRangePathWidth();
 
-            if (gaugeScale.endValue > gaugeScale.startValue && gaugeScale.startValue < gaugeScale.endValue) {
-                double totalTicks = (gaugeScale.getEndValue() - gaugeScale.getStartValue()) / gaugeScale.interval;
-                rectF = calculateRectF(gaugeScale.radiusFactor);
+            double rimWidth = gaugeScale.getRimWidth();
+            modifMinSizeDivideBy4 = mMinSize / 4.0D;
+            modifMinSizeDivideBy2 = mMinSize / 2.0D;
+            modifMinSizeMultipleBy0dot75 = mMinSize * 0.75D;
+            modifMinSizeMultipleBy0dot875 = mMinSize * 0.875D;
+            modifMinSizeMultipleBy0dot125 = mMinSize * 0.125D;
+            modifMinSizeMultipleBy0dot375 = mMinSize * 0.375D;
+            modifRimWidthDivideBy2 = rimWidth / 2.0D;
+
+            double endVal   = gaugeScale.getEndValue();
+            double startVal = gaugeScale.getStartValue();
+
+            if (endVal > startVal && startVal < endVal) {
+                double totalTicks = (gaugeScale.getEndValue() - gaugeScale.getStartValue()) / gaugeScale.getInterval();
+                rectF = calculateRectF(gaugeScale.getRadiusFactor());
                 paint.setAntiAlias(true);
                 paint.setColor(0);
                 paint.setStyle(Paint.Style.STROKE);
-                paint.setStrokeWidth((float) gaugeScale.rimWidth);
-                paint.setColor(gaugeScale.rimColor);
-                if (gaugeScale.showRim) {
-                    canvas.drawArc(rectF, (float) gaugeScale.startAngle, (float) gaugeScale.sweepAngle, false, paint);
+                paint.setStrokeWidth((float) rimWidth);
+                paint.setColor(gaugeScale.getRimColor());
+                if (gaugeScale.isShowRim()) {
+                    canvas.drawArc(rectF, (float) gaugeScale.getStartAngle(), (float) gaugeScale.getSweepAngle(), false, paint);
                 }
 
                 paint.setStrokeWidth(1.0F);
                 paint.setStyle(Paint.Style.FILL);
-                paint.setTypeface(gaugeScale.labelTextStyle);
-                paint = getLabels(paint, gaugeScale.labelColor, (float) gaugeScale.labelTextSize);
+                paint.setTypeface(gaugeScale.getLabelTextStyle());
+                paint = getLabels(paint, gaugeScale.getLabelColor(), (float) gaugeScale.getLabelTextSize());
                 onDrawRanges(canvas, gaugeScale);
-                if (gaugeScale.showLabels) {
+                if (gaugeScale.isShowLabels()) {
                     onDrawLabels(canvas, paint, totalTicks, gaugeScale);
                 }
-                paint = getTicks(paint, gaugeScale.majorTickSettings.color, gaugeScale);
-                if (gaugeScale.showTicks) {
+                paint = getTicks(paint, gaugeScale.getMajorTickSettings().getColor(), gaugeScale);
+                if (gaugeScale.isShowTicks()) {
                     onDrawTicks(canvas, paint, totalTicks, gaugeScale);
                 }
             }
@@ -92,45 +122,45 @@ class ScaleRenderer extends View {
 
     private Paint getTicks(Paint paint, int majorTickColor, GaugeScale gaugeScale) {
         paint.setColor(majorTickColor);
-        paint.setStrokeWidth((float) gaugeScale.majorTickSettings.width);
+        paint.setStrokeWidth((float) gaugeScale.getMajorTickSettings().getWidth());
         return paint;
     }
 
     private void onDrawLabels(Canvas canvas, Paint paint, double totalTicks, GaugeScale gaugeScale) {
-        double anglularSpace    = gaugeScale.sweepAngle / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double angle            = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double mInnerBevelWidth = gauge.mInnerBevelWidth;
-        double tempGaugeSize    = (mInnerBevelWidth - 10.0D) / 2.0D;
-        tempGaugeSize *= 1.0D - gaugeScale.radiusFactor;
+        double anglularSpace = gaugeScale.getSweepAngle() / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double angle         = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double tempGaugeSize = (mInnerBevelWidth - 10.0D) / 2.0D;
+        tempGaugeSize *= 1.0D - gaugeScale.getRadiusFactor();
         String label;
         String value;
-        int    fractionalDigit = gaugeScale.numberOfDecimalDigits;
-        double startValue      = gaugeScale.startValue;
+        int    fractionalDigit = gaugeScale.getNumberOfDecimalDigits();
+        double startValue      = gaugeScale.getStartValue();
+        String postfix         = gaugeScale.getLabelPostfix();
+        String prefix          = gaugeScale.getLabelPrefix();
 
         for (int j = 0; (double) j <= totalTicks; ++j) {
             if (fractionalDigit < 0) {
-                if ((double) ((int) gaugeScale.startValue) == gaugeScale.startValue && (double) ((int) gaugeScale.interval) == gaugeScale
-                        .interval) {
-                    label = gaugeScale.labelPrefix + String.valueOf((int) startValue) + gaugeScale.labelPostfix;
+                if ((double) ((int) startValue) == startValue && (double) ((int) gaugeScale.getInterval()) == gaugeScale.getInterval()) {
+                    label = prefix + String.valueOf((int) startValue) + postfix;
                 }
                 else {
-                    label = gaugeScale.labelPrefix + String.valueOf((float) startValue) + gaugeScale.labelPostfix;
+                    label = prefix + String.valueOf((float) startValue) + postfix;
                 }
             }
             else {
                 value = String.format("%." + String.valueOf(fractionalDigit) + "f", startValue);
-                label = gaugeScale.labelPrefix + value + gaugeScale.labelPostfix;
+                label = prefix + value + postfix;
             }
 
             paint.setAntiAlias(true);
-            double widthOfLabel = (double) paint.measureText(String.valueOf((int) gaugeScale.endValue));
+            double widthOfLabel = (double) paint.measureText(String.valueOf((int) gaugeScale.getEndValue()));
             //modif optimization
             double modifWidthOfLabelDivideBy4     = widthOfLabel / 4.0D;
             double modifWidthOfLabelDivideBy1dot8 = widthOfLabel / 1.8D;
 
-
-            double outerSize = tempGaugeSize - gaugeScale.LabelOffset * gauge.mCentreX - widthOfLabel / 2.0D - modifRimWidthDivideBy2;
-            double tempLabelSize = gauge.mMinSize / 2.0D - tempGaugeSize + gaugeScale.LabelOffset * gauge.mCentreX +
+            double labelOffset = gaugeScale.getLabelOffset();
+            double outerSize   = tempGaugeSize - labelOffset * mCentreX - widthOfLabel / 2.0D - modifRimWidthDivideBy2;
+            double tempLabelSize = mMinSize / 2.0D - tempGaugeSize + labelOffset * mCentreX +
                     modifRimWidthDivideBy2;
 
             double modifOuterSizeMultipleBy1dot5 = outerSize * 1.5D;
@@ -140,111 +170,117 @@ class ScaleRenderer extends View {
             double x;
             double y;
 
-            if (gauge.mCentreY > gauge.mCentreX) {
-                if (gauge.GaugeType == GaugeType.West) {
-                    x = gauge.mCentreX - modifMinSizeDivideBy4 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
+            if (mCentreY > mCentreX) {
+                if (gaugeType == GaugeType.West) {
+                    x = mCentreX - modifMinSizeDivideBy4 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
                             modifWidthOfLabelDivideBy4;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        x = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        x = mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
                                 modifWidthOfLabelDivideBy4;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
                         x = outerSize + outerSize * Math.cos(angle) + tempLabelSize + modifWidthOfLabelDivideBy4;
                     }
                     else {
-                        x = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                        x = mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                                 .cos(angle) + tempLabelSize + modifWidthOfLabelDivideBy4;
                     }
                 }
                 else {
-                    x = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                    x = mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                             .cos(angle) + tempLabelSize + modifWidthOfLabelDivideBy4;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    y = gauge.mCentreY - modifMinSizeDivideBy4 + outerSize + outerSize * Math
+                if (gaugeType == GaugeType.North) {
+                    y = mCentreY - modifMinSizeDivideBy4 + outerSize + outerSize * Math
                             .sin(angle) + tempLabelSize + modifWidthOfLabelDivideBy1dot8;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        y = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        y = mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
                                 modifWidthOfLabelDivideBy1dot8;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.SouthWest) {
-                        y = gauge.mCentreY - modifMinSizeDivideBy2 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.SouthWest) {
+                        y = mCentreY - modifMinSizeDivideBy2 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
                                 modifWidthOfLabelDivideBy1dot8;
                     }
                     else {
-                        y = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                        y = mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                                 .sin(angle) + tempLabelSize + modifWidthOfLabelDivideBy1dot8;
                     }
                 }
                 else {
-                    y = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                    y = mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                             .sin(angle) + tempLabelSize + modifWidthOfLabelDivideBy1dot8;
                 }
             }
             else {
-                if (gauge.GaugeType == GaugeType.West) {
-                    x = gauge.mCentreX - modifMinSizeDivideBy4 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
+                if (gaugeType == GaugeType.West) {
+                    x = mCentreX - modifMinSizeDivideBy4 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
                             modifWidthOfLabelDivideBy4;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        x = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        x = mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
                                 modifWidthOfLabelDivideBy4;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
-                        x = gauge.mCentreX - modifMinSizeDivideBy2 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
+                        x = mCentreX - modifMinSizeDivideBy2 + outerSize + modifOuterSizeMultipleCos + tempLabelSize +
                                 modifWidthOfLabelDivideBy4;
                     }
                     else {
-                        x = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                        x = mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                                 .cos(angle) + tempLabelSize + modifWidthOfLabelDivideBy4;
                     }
                 }
                 else {
-                    x = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                    x = mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                             .cos(angle) + tempLabelSize + modifWidthOfLabelDivideBy4;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    y = gauge.mCentreY - modifMinSizeDivideBy4 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
+                if (gaugeType == GaugeType.North) {
+                    y = mCentreY - modifMinSizeDivideBy4 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
                             modifWidthOfLabelDivideBy1dot8;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        y = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        y = mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modifOuterSizeMultipleSin + tempLabelSize +
                                 modifWidthOfLabelDivideBy1dot8;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.SouthWest) {
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.SouthWest) {
                         y = outerSize + outerSize * Math.sin(angle) + tempLabelSize + modifWidthOfLabelDivideBy1dot8;
                     }
                     else {
-                        y = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                        y = mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                                 .sin(angle) + tempLabelSize + modifWidthOfLabelDivideBy1dot8;
                     }
                 }
                 else {
-                    y = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
+                    y = mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modifOuterSizeMultipleBy1dot5 * Math
                             .sin(angle) + tempLabelSize + modifWidthOfLabelDivideBy1dot8;
                 }
             }
 
             canvas.drawText(label, (float) x, (float) y, paint);
             angle += anglularSpace;
-            startValue += gaugeScale.interval;
+            startValue += gaugeScale.getInterval();
         }
     }
 
     private void onDrawTicks(Canvas canvas, Paint paint, double totalTicks, GaugeScale gaugeScale) {
-        double angularSpace     = gaugeScale.sweepAngle / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double angle            = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double mInnerBevelWidth = gauge.mInnerBevelWidth;
-        double tempGaugeSize    = (mInnerBevelWidth - 10.0D) / 2.0D;
-        tempGaugeSize *= 1.0D - gaugeScale.radiusFactor;
+
+        TickSettings majorSettings = gaugeScale.getMajorTickSettings();
+        double       offset        = majorSettings.getOffset();
+        double       width         = majorSettings.getWidth();
+        int          color         = majorSettings.getColor();
+        double       size          = majorSettings.getSize();
+
+        double angularSpace  = gaugeScale.getSweepAngle() / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double angle         = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double tempGaugeSize = (mInnerBevelWidth - 10.0D) / 2.0D;
+        tempGaugeSize *= 1.0D - gaugeScale.getRadiusFactor();
 
         double tickLength1;
         double minorTickPosition;
@@ -254,16 +290,16 @@ class ScaleRenderer extends View {
         double innerSize;
 
         //modif optimization
-        double modifTickOffsetMultByCenterX = gaugeScale.majorTickSettings.offset * gauge.mCentreX;
-        double modifArcAliasMultByRimWidth  = 0.7D * gaugeScale.rimWidth;
+        double modifTickOffsetMultByCenterX = offset * mCentreX;
+        double modifArcAliasMultByRimWidth  = 0.7D * gaugeScale.getRimWidth();
         double modif1dot5MultipByCosAngle   = 1.5D * Math.cos(angle);
         double modif1dot5MultipBySinAngle   = 1.5D * Math.sin(angle);
 
         for (int minorTicksCount = 0; (double) minorTicksCount <= totalTicks; ++minorTicksCount) {
             paint.setAntiAlias(true);
-            paint.setStrokeWidth((float) gaugeScale.majorTickSettings.width);
+            paint.setStrokeWidth((float) width);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(gaugeScale.majorTickSettings.color);
+            paint.setColor(color);
 
             tickLength1 = tempGaugeSize - modifTickOffsetMultByCenterX + modifArcAliasMultByRimWidth - modifRimWidthDivideBy2;
 
@@ -275,102 +311,97 @@ class ScaleRenderer extends View {
                     modifRimWidthDivideBy2;
 
 
-            if (gauge.mCentreY > gauge.mCentreX) {
-                if (gauge.GaugeType == GaugeType.West) {
-                    minorTickPosition = gauge.mCentreX - modifMinSizeDivideBy4 + tickLength1 + modifTickLengthMultByCosAngle + tickLength;
+            if (mCentreY > mCentreX) {
+                if (gaugeType == GaugeType.West) {
+                    minorTickPosition = mCentreX - modifMinSizeDivideBy4 + tickLength1 + modifTickLengthMultByCosAngle + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        minorTickPosition = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + tickLength1 + modifTickLengthMultByCosAngle +
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        minorTickPosition = mCentreX - modifMinSizeMultipleBy0dot75 + tickLength1 + modifTickLengthMultByCosAngle +
                                 tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
                         minorTickPosition = tickLength1 + modifTickLengthMultByCosAngle + tickLength;
                     }
                     else {
-                        minorTickPosition = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + tickLength1 +
+                        minorTickPosition = mCentreX - modifMinSizeMultipleBy0dot875 + tickLength1 +
                                 modifTickMultBy1dot5andMultByCosAngle + tickLength;
                     }
                 }
                 else {
-                    minorTickPosition = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + tickLength1 +
+                    minorTickPosition = mCentreX - modifMinSizeMultipleBy0dot125 + tickLength1 +
                             modifTickMultBy1dot5andMultByCosAngle +
                             tickLength;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    outerSize = gauge.mCentreY - modifMinSizeDivideBy4 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
+                if (gaugeType == GaugeType.North) {
+                    outerSize = mCentreY - modifMinSizeDivideBy4 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        outerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + tickLength1 + tickLength1 * Math
-                                .sin(angle) + tickLength;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        outerSize = mCentreY - modifMinSizeMultipleBy0dot75 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.SouthWest) {
-                        outerSize = gauge.mCentreY - modifMinSizeDivideBy2 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.SouthWest) {
+                        outerSize = mCentreY - modifMinSizeDivideBy2 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
                     }
                     else {
-                        outerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + tickLength1 + tickLength1 *
-                                modif1dot5MultipBySinAngle +
+                        outerSize = mCentreY - modifMinSizeMultipleBy0dot875 + tickLength1 + tickLength1 * modif1dot5MultipBySinAngle +
                                 tickLength;
                     }
                 }
                 else {
-                    outerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + tickLength1 + tickLength1 * modif1dot5MultipBySinAngle +
+                    outerSize = mCentreY - modifMinSizeMultipleBy0dot125 + tickLength1 + tickLength1 * modif1dot5MultipBySinAngle +
                             tickLength;
                 }
             }
             else {
-                if (gauge.GaugeType == GaugeType.West) {
-                    minorTickPosition = gauge.mCentreX - modifMinSizeDivideBy4 + tickLength1 + modifTickLengthMultByCosAngle + tickLength;
+                if (gaugeType == GaugeType.West) {
+                    minorTickPosition = mCentreX - modifMinSizeDivideBy4 + tickLength1 + modifTickLengthMultByCosAngle + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        minorTickPosition = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + tickLength1 + modifTickLengthMultByCosAngle +
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        minorTickPosition = mCentreX - modifMinSizeMultipleBy0dot75 + tickLength1 + modifTickLengthMultByCosAngle +
                                 tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
-                        minorTickPosition = gauge.mCentreX - modifMinSizeDivideBy2 + tickLength1 + modifTickLengthMultByCosAngle +
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
+                        minorTickPosition = mCentreX - modifMinSizeDivideBy2 + tickLength1 + modifTickLengthMultByCosAngle +
                                 tickLength;
                     }
                     else {
-                        minorTickPosition = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + tickLength1 +
+                        minorTickPosition = mCentreX - modifMinSizeMultipleBy0dot875 + tickLength1 +
                                 modifTickMultBy1dot5andMultByCosAngle + tickLength;
                     }
                 }
                 else {
-                    minorTickPosition = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + tickLength1 +
+                    minorTickPosition = mCentreX - modifMinSizeMultipleBy0dot125 + tickLength1 +
                             modifTickMultBy1dot5andMultByCosAngle +
                             tickLength;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    outerSize = gauge.mCentreY - modifMinSizeDivideBy4 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
+                if (gaugeType == GaugeType.North) {
+                    outerSize = mCentreY - modifMinSizeDivideBy4 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        outerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + tickLength1 + tickLength1 * Math
-                                .sin(angle) + tickLength;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        outerSize = mCentreY - modifMinSizeMultipleBy0dot75 + tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.SouthWest) {
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.SouthWest) {
                         outerSize = tickLength1 + tickLength1 * Math.sin(angle) + tickLength;
                     }
                     else {
-                        outerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + tickLength1 + tickLength1 *
-                                modif1dot5MultipBySinAngle +
+                        outerSize = mCentreY - modifMinSizeMultipleBy0dot875 + tickLength1 + tickLength1 * modif1dot5MultipBySinAngle +
                                 tickLength;
                     }
                 }
                 else {
-                    outerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + tickLength1 + tickLength1 * modif1dot5MultipBySinAngle +
+                    outerSize = mCentreY - modifMinSizeMultipleBy0dot125 + tickLength1 + tickLength1 * modif1dot5MultipBySinAngle +
                             tickLength;
                 }
             }
 
-            x2 = tempGaugeSize - gaugeScale.majorTickSettings.size - modifTickOffsetMultByCenterX + modifArcAliasMultByRimWidth -
+            x2 = tempGaugeSize - size - modifTickOffsetMultByCenterX + modifArcAliasMultByRimWidth - modifRimWidthDivideBy2;
+            tickLength = modifMinSizeDivideBy2 - tempGaugeSize + size + modifTickOffsetMultByCenterX - modifArcAliasMultByRimWidth +
                     modifRimWidthDivideBy2;
-            tickLength = modifMinSizeDivideBy2 - tempGaugeSize + gaugeScale.majorTickSettings.size + modifTickOffsetMultByCenterX -
-                    modifArcAliasMultByRimWidth + modifRimWidthDivideBy2;
 
             //modif optimization
             double modif_x2MultByCosAngle      = x2 * Math.cos(angle);
@@ -378,78 +409,78 @@ class ScaleRenderer extends View {
             double modif_x2multiplByX2CosAngle = x2 * modif1dot5MultipByCosAngle;
             double modif_x2multiplByX2SinAngle = x2 * modif1dot5MultipBySinAngle;
 
-            if (gauge.mCentreY > gauge.mCentreX) {
-                if (gauge.GaugeType == GaugeType.West) {
-                    y2 = gauge.mCentreX - modifMinSizeDivideBy4 + x2 + modif_x2MultByCosAngle + tickLength;
+            if (mCentreY > mCentreX) {
+                if (gaugeType == GaugeType.West) {
+                    y2 = mCentreX - modifMinSizeDivideBy4 + x2 + modif_x2MultByCosAngle + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        y2 = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultByCosAngle + tickLength;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        y2 = mCentreX - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultByCosAngle + tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
                         y2 = x2 + modif_x2MultByCosAngle + tickLength;
                     }
                     else {
-                        y2 = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2CosAngle + tickLength;
+                        y2 = mCentreX - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2CosAngle + tickLength;
                     }
                 }
                 else {
-                    y2 = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2CosAngle + tickLength;
+                    y2 = mCentreX - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2CosAngle + tickLength;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    innerSize = gauge.mCentreY - modifMinSizeDivideBy4 + x2 + modif_x2MultiplBySinAngle + tickLength;
+                if (gaugeType == GaugeType.North) {
+                    innerSize = mCentreY - modifMinSizeDivideBy4 + x2 + modif_x2MultiplBySinAngle + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        innerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultiplBySinAngle + tickLength;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        innerSize = mCentreY - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultiplBySinAngle + tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.SouthWest) {
-                        innerSize = gauge.mCentreY - modifMinSizeDivideBy2 + x2 + modif_x2MultiplBySinAngle + tickLength;
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.SouthWest) {
+                        innerSize = mCentreY - modifMinSizeDivideBy2 + x2 + modif_x2MultiplBySinAngle + tickLength;
                     }
                     else {
-                        innerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2SinAngle + tickLength;
+                        innerSize = mCentreY - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2SinAngle + tickLength;
                     }
                 }
                 else {
-                    innerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2SinAngle + tickLength;
+                    innerSize = mCentreY - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2SinAngle + tickLength;
                 }
             }
             else {
-                if (gauge.GaugeType == GaugeType.West) {
-                    y2 = gauge.mCentreX - modifMinSizeDivideBy4 + x2 + modif_x2MultByCosAngle + tickLength;
+                if (gaugeType == GaugeType.West) {
+                    y2 = mCentreX - modifMinSizeDivideBy4 + x2 + modif_x2MultByCosAngle + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        y2 = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultByCosAngle + tickLength;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        y2 = mCentreX - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultByCosAngle + tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
-                        y2 = gauge.mCentreX - modifMinSizeDivideBy2 + x2 + modif_x2MultByCosAngle + tickLength;
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
+                        y2 = mCentreX - modifMinSizeDivideBy2 + x2 + modif_x2MultByCosAngle + tickLength;
                     }
                     else {
-                        y2 = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2CosAngle + tickLength;
+                        y2 = mCentreX - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2CosAngle + tickLength;
                     }
                 }
                 else {
-                    y2 = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2CosAngle + tickLength;
+                    y2 = mCentreX - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2CosAngle + tickLength;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    innerSize = gauge.mCentreY - modifMinSizeDivideBy4 + x2 + modif_x2MultiplBySinAngle + tickLength;
+                if (gaugeType == GaugeType.North) {
+                    innerSize = mCentreY - modifMinSizeDivideBy4 + x2 + modif_x2MultiplBySinAngle + tickLength;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        innerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultiplBySinAngle + tickLength;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        innerSize = mCentreY - modifMinSizeMultipleBy0dot75 + x2 + modif_x2MultiplBySinAngle + tickLength;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.SouthWest) {
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.SouthWest) {
                         innerSize = x2 + modif_x2MultiplBySinAngle + tickLength;
                     }
                     else {
-                        innerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2SinAngle + tickLength;
+                        innerSize = mCentreY - modifMinSizeMultipleBy0dot875 + x2 + modif_x2multiplByX2SinAngle + tickLength;
                     }
                 }
                 else {
-                    innerSize = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2SinAngle + tickLength;
+                    innerSize = mCentreY - modifMinSizeMultipleBy0dot125 + x2 + modif_x2multiplByX2SinAngle + tickLength;
                 }
             }
 
@@ -457,21 +488,29 @@ class ScaleRenderer extends View {
             angle += angularSpace;
         }
 
-        angle = gaugeScale.startAngle * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double minorTicksQuantity = totalTicks * gaugeScale.minorTicksPerInterval;
-        double minorTickAngle     = angularSpace / (gaugeScale.minorTicksPerInterval + 1.0D);
-        paint.setStrokeWidth((float) gaugeScale.minorTickSettings.width);
+        angle = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
+        double minorTickPerInterval = gaugeScale.getMinorTicksPerInterval();
+        double minorTicksQuantity   = totalTicks * minorTickPerInterval;
+        double minorTickAngle       = angularSpace / (minorTickPerInterval + 1.0D);
+
+        TickSettings minorSettings = gaugeScale.getMinorTickSettings();
+        double       minorWidth    = minorSettings.getWidth();
+        double       minorOffset   = minorSettings.getOffset();
+        double       minorSize     = minorSettings.getSize();
+        int          minorColor    = minorSettings.getColor();
+
+        paint.setStrokeWidth((float) minorWidth);
 
         //modif optimization
-        double modif_arcAlisaMultByWidth      = arcAliasing * gaugeScale.rimWidth;
-        double modif_minorOffsetMultByCenterX = gaugeScale.minorTickSettings.offset * gauge.mCentreX;
+        double modif_arcAlisaMultByWidth      = arcAliasing * gaugeScale.getRimWidth();
+        double modif_minorOffsetMultByCenterX = minorOffset * mCentreX;
 
 
         for (int i = 1; (double) i <= minorTicksQuantity; ++i) {
             angle += minorTickAngle;
             paint.setAntiAlias(true);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(gaugeScale.minorTickSettings.color);
+            paint.setColor(minorColor);
             minorTickPosition = GaugeConstants.ZERO;
             outerSize = tempGaugeSize - modif_minorOffsetMultByCenterX + modif_arcAlisaMultByWidth -
                     minorTickPosition - modifRimWidthDivideBy2;
@@ -484,85 +523,85 @@ class ScaleRenderer extends View {
             double modif_outerSizeMultBy1dot5Cos = outerSize * modif1dot5MultipByCosAngle;
             double modif_outerSizeMultBy1dot5Sin = outerSize * modif1dot5MultipBySinAngle;
 
-            if (gauge.mCentreY > gauge.mCentreX) {
-                if (gauge.GaugeType == GaugeType.West) {
-                    x2 = gauge.mCentreX - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
+            if (mCentreY > mCentreX) {
+                if (gaugeType == GaugeType.West) {
+                    x2 = mCentreX - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        x2 = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        x2 = mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthEast && gauge.GaugeType != GaugeType.NorthEast) {
+                    else if (gaugeType != GaugeType.SouthEast && gaugeType != GaugeType.NorthEast) {
                         x2 = outerSize + modif_outerSizeMultByCosAngle + tickLength1;
                     }
                     else {
-                        x2 = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
+                        x2 = mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
                     }
                 }
                 else {
-                    x2 = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
+                    x2 = mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    y2 = gauge.mCentreY - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
+                if (gaugeType == GaugeType.North) {
+                    y2 = mCentreY - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.NorthEast) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        y2 = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.NorthEast) {
+                    if (gaugeType == GaugeType.South) {
+                        y2 = mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthWest && gauge.GaugeType != GaugeType.SouthEast) {
-                        y2 = gauge.mCentreY - modifMinSizeDivideBy2 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
+                    else if (gaugeType != GaugeType.SouthWest && gaugeType != GaugeType.SouthEast) {
+                        y2 = mCentreY - modifMinSizeDivideBy2 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
                     }
                     else {
-                        y2 = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
+                        y2 = mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
                     }
                 }
                 else {
-                    y2 = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
+                    y2 = mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
                 }
             }
             else {
-                if (gauge.GaugeType == GaugeType.West) {
-                    x2 = gauge.mCentreX - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
+                if (gaugeType == GaugeType.West) {
+                    x2 = mCentreX - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (this.gauge.GaugeType == GaugeType.East) {
-                        x2 = this.gauge.mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        x2 = mCentreX - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
-                        x2 = gauge.mCentreX - modifMinSizeDivideBy2 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
+                        x2 = mCentreX - modifMinSizeDivideBy2 + outerSize + modif_outerSizeMultByCosAngle + tickLength1;
                     }
                     else {
-                        x2 = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
+                        x2 = mCentreX - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
                     }
                 }
                 else {
-                    x2 = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
+                    x2 = mCentreX - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Cos + tickLength1;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    y2 = gauge.mCentreY - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
+                if (gaugeType == GaugeType.North) {
+                    y2 = mCentreY - modifMinSizeDivideBy4 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.NorthWest) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        y2 = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
+                else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.NorthWest) {
+                    if (gaugeType == GaugeType.South) {
+                        y2 = mCentreY - modifMinSizeMultipleBy0dot75 + outerSize + modif_outerSizeMultBySinAngle + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthWest && gauge.GaugeType != GaugeType.SouthEast) {
+                    else if (gaugeType != GaugeType.SouthWest && gaugeType != GaugeType.SouthEast) {
                         y2 = outerSize + modif_outerSizeMultBySinAngle + tickLength1;
                     }
                     else {
-                        y2 = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
+                        y2 = mCentreY - modifMinSizeMultipleBy0dot875 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
                     }
                 }
                 else {
-                    y2 = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
+                    y2 = mCentreY - modifMinSizeMultipleBy0dot125 + outerSize + modif_outerSizeMultBy1dot5Sin + tickLength1;
                 }
             }
 
-            innerSize = tempGaugeSize - gaugeScale.minorTickSettings.size - modif_minorOffsetMultByCenterX + modif_arcAlisaMultByWidth -
+            innerSize = tempGaugeSize - minorSize - modif_minorOffsetMultByCenterX + modif_arcAlisaMultByWidth -
                     minorTickPosition - modifRimWidthDivideBy2;
-            tickLength1 = modifMinSizeDivideBy2 - tempGaugeSize + gaugeScale.minorTickSettings.size + modif_minorOffsetMultByCenterX -
-                    modif_arcAlisaMultByWidth + minorTickPosition +
+            tickLength1 = modifMinSizeDivideBy2 - tempGaugeSize + minorSize + modif_minorOffsetMultByCenterX - modif_arcAlisaMultByWidth
+                    + minorTickPosition +
                     modifRimWidthDivideBy2;
             double x1;
             double y1;
@@ -573,118 +612,121 @@ class ScaleRenderer extends View {
             double modif_innerSizeMultBy1dot5CosAngle = innerSize * modif1dot5MultipByCosAngle;
             double modif_innerSizeMultBy1dot5SinAngle = innerSize * modif1dot5MultipBySinAngle;
 
-            if (gauge.mCentreY > gauge.mCentreX) {
-                if (gauge.GaugeType == GaugeType.West) {
-                    x1 = gauge.mCentreX - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultByCos + tickLength1;
+            if (mCentreY > mCentreX) {
+                if (gaugeType == GaugeType.West) {
+                    x1 = mCentreX - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultByCos + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        x1 = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultByCos + tickLength1;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        x1 = mCentreX - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultByCos + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
                         x1 = innerSize + modif_innerSizeMultByCos + tickLength1;
                     }
                     else {
-                        x1 = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
+                        x1 = mCentreX - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
                     }
                 }
                 else {
-                    x1 = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
+                    x1 = mCentreX - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    y1 = gauge.mCentreY - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultBySin + tickLength1;
+                if (gaugeType == GaugeType.North) {
+                    y1 = mCentreY - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultBySin + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.NorthWest) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        y1 = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultBySin + tickLength1;
+                else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.NorthWest) {
+                    if (gaugeType == GaugeType.South) {
+                        y1 = mCentreY - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultBySin + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthWest && gauge.GaugeType != GaugeType.SouthEast) {
-                        y1 = gauge.mCentreY - modifMinSizeDivideBy2 + innerSize + modif_innerSizeMultBySin + tickLength1;
+                    else if (gaugeType != GaugeType.SouthWest && gaugeType != GaugeType.SouthEast) {
+                        y1 = mCentreY - modifMinSizeDivideBy2 + innerSize + modif_innerSizeMultBySin + tickLength1;
                     }
                     else {
-                        y1 = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
+                        y1 = mCentreY - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
                     }
                 }
                 else {
-                    y1 = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
+                    y1 = mCentreY - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
                 }
             }
             else {
-                if (gauge.GaugeType == GaugeType.West) {
-                    x1 = gauge.mCentreX - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultByCos + tickLength1;
+                if (gaugeType == GaugeType.West) {
+                    x1 = mCentreX - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultByCos + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthWest && gauge.GaugeType != GaugeType.SouthWest) {
-                    if (gauge.GaugeType == GaugeType.East) {
-                        x1 = gauge.mCentreX - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultByCos + tickLength1;
+                else if (gaugeType != GaugeType.NorthWest && gaugeType != GaugeType.SouthWest) {
+                    if (gaugeType == GaugeType.East) {
+                        x1 = mCentreX - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultByCos + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.SouthEast) {
-                        x1 = gauge.mCentreX - modifMinSizeDivideBy2 + innerSize + modif_innerSizeMultByCos + tickLength1;
+                    else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.SouthEast) {
+                        x1 = mCentreX - modifMinSizeDivideBy2 + innerSize + modif_innerSizeMultByCos + tickLength1;
                     }
                     else {
-                        x1 = gauge.mCentreX - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
+                        x1 = mCentreX - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
                     }
                 }
                 else {
-                    x1 = gauge.mCentreX - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
+                    x1 = mCentreX - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5CosAngle + tickLength1;
                 }
 
-                if (gauge.GaugeType == GaugeType.North) {
-                    y1 = gauge.mCentreY - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultBySin + tickLength1;
+                if (gaugeType == GaugeType.North) {
+                    y1 = mCentreY - modifMinSizeDivideBy4 + innerSize + modif_innerSizeMultBySin + tickLength1;
                 }
-                else if (gauge.GaugeType != GaugeType.NorthEast && gauge.GaugeType != GaugeType.NorthWest) {
-                    if (gauge.GaugeType == GaugeType.South) {
-                        y1 = gauge.mCentreY - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultBySin + tickLength1;
+                else if (gaugeType != GaugeType.NorthEast && gaugeType != GaugeType.NorthWest) {
+                    if (gaugeType == GaugeType.South) {
+                        y1 = mCentreY - modifMinSizeMultipleBy0dot75 + innerSize + modif_innerSizeMultBySin + tickLength1;
                     }
-                    else if (gauge.GaugeType != GaugeType.SouthWest && gauge.GaugeType != GaugeType.SouthEast) {
+                    else if (gaugeType != GaugeType.SouthWest && gaugeType != GaugeType.SouthEast) {
                         y1 = innerSize + modif_innerSizeMultBySin + tickLength1;
                     }
                     else {
-                        y1 = gauge.mCentreY - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
+                        y1 = mCentreY - modifMinSizeMultipleBy0dot875 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
                     }
                 }
                 else {
-                    y1 = gauge.mCentreY - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
+                    y1 = mCentreY - modifMinSizeMultipleBy0dot125 + innerSize + modif_innerSizeMultBy1dot5SinAngle + tickLength1;
                 }
             }
             canvas.drawLine((float) x1, (float) y1, (float) x2, (float) y2, paint);
-            if ((double) i % gaugeScale.minorTicksPerInterval == GaugeConstants.ZERO) {
+            if ((double) i % gaugeScale.getMinorTicksPerInterval() == GaugeConstants.ZERO) {
                 angle += minorTickAngle;
             }
         }
     }
 
     private void onDrawRanges(Canvas canvas, GaugeScale gaugeScale) {
-        Paint  paint;
-        double startArc;
-        double endtArc;
-        if (gaugeScale.gaugeRanges != null) {
-            for (Iterator i$ = gaugeScale.gaugeRanges.iterator(); i$.hasNext(); canvas
-                    .drawArc(rectF, (float) startArc, (float) endtArc, false, paint)) {
+        double                startArc;
+        double                endtArc;
+        ArrayList<GaugeRange> gaugeRanges = gaugeScale.getGaugeRanges();
+        if (gaugeRanges != null) {
+            for (Iterator i$ = gaugeRanges.iterator(); i$.hasNext(); canvas
+                    .drawArc(rectF, (float) startArc, (float) endtArc, false, rangePaint)) {
+                double     rimWidth   = gauge.getmRimWidth();
                 GaugeRange gaugeRange = (GaugeRange) i$.next();
-                gaugeRange.mGauge = gaugeScale.mGauge;
-                paint = new Paint();
-                paint.setAntiAlias(true);
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setStrokeWidth((float) gaugeRange.width);
-                paint.setColor(gaugeRange.color);
-                startArc = gaugeScale.startAngle + getRangeAngle(gaugeRange.startValue, gaugeScale) - getRangeAngle(gaugeScale.startValue,
+                gaugeRange.setmGauge(gaugeScale.getmGauge());
+                rangePaint.setAntiAlias(true);
+                rangePaint.setStyle(Paint.Style.STROKE);
+                rangePaint.setStrokeWidth((float) gaugeRange.getWidth());
+                rangePaint.setColor(gaugeRange.getColor());
+
+                double startVal = gaugeRange.getStartValue();
+
+                startArc = gaugeScale.getStartAngle() + getRangeAngle(startVal, gaugeScale) - getRangeAngle(gaugeScale.getStartValue(),
                         gaugeScale);
-                endtArc = getRangeAngle(gaugeRange.endValue, gaugeScale) - getRangeAngle(gaugeRange.startValue, gaugeScale);
+                endtArc = getRangeAngle(gaugeRange.getEndValue(), gaugeScale) - getRangeAngle(startVal, gaugeScale);
 
                 //modif optimization
-                double modif_withdMultByRadius   = gauge.mInnerBevelWidth * gaugeScale.radiusFactor;
-                double modif_minSizeMultByRadius = gauge.mMinSize * gaugeScale.radiusFactor;
+                double radFactor                 = gaugeScale.getRadiusFactor();
+                double modif_withdMultByRadius   = mInnerBevelWidth * radFactor;
+                double modif_minSizeMultByRadius = mMinSize * radFactor;
 
-                gauge.calculateMargin(gauge.mInnerBevelWidth - modif_withdMultByRadius, gauge.mInnerBevelWidth - modif_withdMultByRadius);
-                double var10000;
+                gauge.calculateMargin(mInnerBevelWidth - modif_withdMultByRadius);
+                double width;
                 double rimSize;
 
-                if (gaugeScale.radiusFactor > 0.0D) {
-                    gauge.calculateMargin(gauge.mMinSize - modif_minSizeMultByRadius, gauge.mMinSize - modif_minSizeMultByRadius);
-                    var10000 = gauge.mRangePathWidth - gauge.mRimWidth;
-                    gauge.getClass();
-                    rimSize = var10000 - 4.0D * 10.0D;
+                if (radFactor > GaugeConstants.ZERO) {
+                    gauge.calculateMargin(mMinSize - modif_minSizeMultByRadius);
+                    width = mRangePathWidth - rimWidth;
+                    rimSize = width - 4.0D * 10.0D;
 
                     //modif optimization
                     double modif_centerYminusMinSizePlusRimSize  = getCenterYminusDivideBy2plusRimSize(rimSize);
@@ -692,7 +734,7 @@ class ScaleRenderer extends View {
                     double modif_centerYplusMinSizeMinusRimSize  = getCenterYplusDivideBy2minusRimSize(rimSize);
                     double modifCenterXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
 
-                    if (gauge.mCentreY > gauge.mCentreX) {
+                    if (mCentreY > mCentreX) {
                         rectF = new RectF((float) rimSize, (float) modif_centerYminusMinSizePlusRimSize,
                                 (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
                     }
@@ -701,28 +743,28 @@ class ScaleRenderer extends View {
                                 (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
                     }
 
-                    gauge.mRangeFrame = rectF;
-                    float factor = gauge.mRangeFrame.left + (gauge.mRangeFrame
-                            .width() / 2.0F - gauge.mRangeFrame.left) * (float) gaugeScale.radiusFactor + (float) (gaugeRange.offset *
-                            (gauge.mCentreX - gauge.mRimWidth));
-                    if (gauge.mCentreY > gauge.mCentreX) {
+                    mRangeFrame = rectF;
+                    float factor = mRangeFrame.left + (mRangeFrame
+                            .width() / 2.0F - mRangeFrame.left) * (float) radFactor + (float) (gaugeRange
+                            .getOffset() * (mCentreX - rimWidth));
+                    if (mCentreY > mCentreX) {
                         rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize((double) factor)),
                                 (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
                                 (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
                     }
                     else {
-                        factor = gauge.mRangeFrame.top + (gauge.mRangeFrame
-                                .height() / 2.0F - gauge.mRangeFrame.top) * (float) gaugeScale.radiusFactor + (float) (gaugeRange.offset
-                                * (gauge.mCentreY - gauge.mRimWidth));
+                        factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radFactor + (float) (gaugeRange
+                                .getOffset() * (mCentreY - rimWidth));
                         rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize((double) factor)), factor,
                                 (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
                                 (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
                     }
                 }
                 else {
-                    if (gauge.mCentreY > gauge.mCentreX) {
-                        rimSize = gauge.mMinSize - gauge.mRimWidth - (double) ((float) (gaugeRange.offset * (gauge.mCentreX - gauge
-                                .mRimWidth))) + gaugeRange.width / 2.0D;
+                    if (mCentreY > mCentreX) {
+                        double rimW = gauge.getmRimWidth();
+                        rimSize = mMinSize - rimW - (double) ((float) (gaugeRange.getOffset() * (mCentreX - rimW))) + gaugeRange
+                                .getWidth() / 2.0D;
 
                         //modif optimization
                         double modify_centerXplus0dot125minusRimSize  = getCenterXplus0dot125minusRimSize(rimSize);
@@ -743,35 +785,35 @@ class ScaleRenderer extends View {
                         double modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
                         double modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
 
-                        if (gauge.GaugeType == GaugeType.North) {
+                        if (gaugeType == GaugeType.North) {
                             rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy4plusRimSize,
                                     (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplus0dot75minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.South) {
+                        else if (gaugeType == GaugeType.South) {
                             rectF = new RectF((float) rimSize, (float) modif_centerYminus0dot75plusRimSize,
                                     (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.West) {
+                        else if (gaugeType == GaugeType.West) {
                             rectF = new RectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYminusMinSizePlusRimSize,
                                     (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.East) {
+                        else if (gaugeType == GaugeType.East) {
                             rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerYminusMinSizePlusRimSize,
                                     (float) modif_centerXplusDivideBy4minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.NorthEast) {
+                        else if (gaugeType == GaugeType.NorthEast) {
                             rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot375plusRimSize,
                                     (float) modif_centerXminus0dot125plusRimSize, (float) modife_centerYplus0dot125minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.NorthWest) {
+                        else if (gaugeType == GaugeType.NorthWest) {
                             rectF = new RectF((float) modify_centerXminus0dot375plusRimSize, (float) modif_centerXminus0dot375plusRimSize,
                                     (float) modify_centerXplus0dot125minusRimSize, (float) modife_centerYplus0dot125minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.SouthEast) {
+                        else if (gaugeType == GaugeType.SouthEast) {
                             rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modify_centerYminus0dot125plusRimSize,
                                     (float) modif_centerXminus0dot125plusRimSize, (float) modify_centerYplus0dot375minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.SouthWest) {
+                        else if (gaugeType == GaugeType.SouthWest) {
                             rectF = new RectF((float) modify_centerXminus0dot375plusRimSize, (float) modify_centerYminus0dot125plusRimSize,
                                     (float) modify_centerXplus0dot125minusRimSize, (float) modify_centerYplus0dot375minusRimSize);
                         }
@@ -781,8 +823,9 @@ class ScaleRenderer extends View {
                         }
                     }
                     else {
-                        rimSize = gauge.mMinSize - gauge.mRimWidth - (double) ((float) (gaugeRange.offset * (gauge.mCentreY - gauge
-                                .mRimWidth))) + gaugeRange.width / 2.0D;
+                        double rimW = gauge.getmRimWidth();
+                        rimSize = mMinSize - rimW - (double) ((float) (gaugeRange.getOffset() * (mCentreY - rimW))) + gaugeRange
+                                .getWidth() / 2.0D;
                         //modif optimization
                         double modif_centerXplus0dot125minusRimSize   = getCenterXplus0dot125minusRimSize(rimSize);
                         double modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
@@ -802,36 +845,36 @@ class ScaleRenderer extends View {
                         double modif_centerYplusMinSizeMinusRimSize   = getCenterYplusDivideBy2minusRimSize(rimSize);
 
 
-                        if (gauge.GaugeType == GaugeType.West) {
+                        if (gaugeType == GaugeType.West) {
                             rectF = new RectF((float) modif_centerXminusDivideBy4plusRimSize, (float) rimSize,
                                     (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.East) {
+                        else if (gaugeType == GaugeType.East) {
                             rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) rimSize,
                                     (float) modif_centerXplusDivideBy4minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.North) {
+                        else if (gaugeType == GaugeType.North) {
                             rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize,
                                     (float) modif_centerYminusDivideBy4plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
                                     (float) modif_centerYplus0dot75minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.South) {
+                        else if (gaugeType == GaugeType.South) {
                             rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerYminus0dot75plusRimSize,
                                     (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.NorthEast) {
+                        else if (gaugeType == GaugeType.NorthEast) {
                             rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot375plusRimSize,
                                     (float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYplus0dot125minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.NorthWest) {
+                        else if (gaugeType == GaugeType.NorthWest) {
                             rectF = new RectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerYminus0dot375plusRimSize,
                                     (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.SouthEast) {
+                        else if (gaugeType == GaugeType.SouthEast) {
                             rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
                                     (float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYplus0dot375minusRimSize);
                         }
-                        else if (gauge.GaugeType == GaugeType.SouthWest) {
+                        else if (gaugeType == GaugeType.SouthWest) {
                             rectF = new RectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
                                     (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot375minusRimSize);
                         }
@@ -841,30 +884,29 @@ class ScaleRenderer extends View {
                         }
                     }
 
-                    gauge.mRangeFrame = rectF;
+                    mRangeFrame = rectF;
                 }
             }
         }
     }
 
     private double getRangeAngle(double rangeValue, GaugeScale gaugeScale) {
-        if (rangeValue < gaugeScale.startValue) {
-            rangeValue = gaugeScale.startValue;
+        double startVal = gaugeScale.getStartValue();
+        if (rangeValue < startVal) {
+            rangeValue = startVal;
         }
 
-        if (rangeValue > gaugeScale.endValue) {
-            rangeValue = gaugeScale.endValue;
+        double endVal = gaugeScale.getEndValue();
+        if (rangeValue > endVal) {
+            rangeValue = endVal;
         }
 
-        double anglePartition = gaugeScale.sweepAngle / (gaugeScale.endValue - gaugeScale.startValue);
+        double anglePartition = gaugeScale.getSweepAngle() / (gaugeScale.getEndValue() - startVal);
         return anglePartition * rangeValue;
     }
 
     private RectF calculateRectF(double radiusFactor) {
-        double mMinSize         = gauge.mMinSize;
-        double mInnerBevelWidth = gauge.mInnerBevelWidth;
-        gauge.getClass();
-        double rimSize = mMinSize - (mInnerBevelWidth - 10.0D) + gaugeScale.rimWidth / 2.0D;
+        double rimSize = mMinSize - (mInnerBevelWidth - 10.0D) + gaugeScale.getRimWidth() / 2.0D;
 
         //modif optimization
         double modif_centerXplusDivideBy2minusRimSize = getCenterXplusDivideBy2minusRimSize(rimSize);
@@ -873,13 +915,11 @@ class ScaleRenderer extends View {
         double modif_centerXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
 
         if (radiusFactor > GaugeConstants.ZERO) {
-            gauge.calculateMargin(modifMinSizeDivideBy2 - gauge.mCentreX * radiusFactor,
-                    modifMinSizeDivideBy2 - gauge.mCentreX * radiusFactor);
-            mMinSize = gauge.mRangePathWidth - gauge.mRimWidth;
-            gauge.getClass();
+            gauge.calculateMargin(modifMinSizeDivideBy2 - mCentreX * radiusFactor);
+            mMinSize = mRangePathWidth - gauge.getmRimWidth();
             rimSize = mMinSize - 4.0D * 10.0D;
 
-            if (gauge.mCentreY > gauge.mCentreX) {
+            if (mCentreY > mCentreX) {
                 rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy2plusRimSize,
                         (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
             }
@@ -888,15 +928,15 @@ class ScaleRenderer extends View {
                         (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
             }
 
-            gauge.mRangeFrame = rectF;
-            float factor = gauge.mRangeFrame.left + (gauge.mRangeFrame.width() / 2.0F - gauge.mRangeFrame.left) * (float) radiusFactor;
-            if (gauge.mCentreY > gauge.mCentreX) {
+            mRangeFrame = rectF;
+            float factor = mRangeFrame.left + (mRangeFrame.width() / 2.0F - mRangeFrame.left) * (float) radiusFactor;
+            if (mCentreY > mCentreX) {
                 rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize((double) factor)),
                         (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
                         (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
             }
             else {
-                factor = gauge.mRangeFrame.top + (gauge.mRangeFrame.height() / 2.0F - gauge.mRangeFrame.top) * (float) radiusFactor;
+                factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radiusFactor;
                 rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize((double) factor)), factor,
                         (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
                         (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
@@ -924,36 +964,36 @@ class ScaleRenderer extends View {
             modif_centerYplusDivideBy2minusRimSize = getCenterYplusDivideBy2minusRimSize(rimSize);
             modif_centerYminusDivideBy2plusRimSize = getCenterYminusDivideBy2plusRimSize(rimSize);
 
-            if (gauge.mCentreY > gauge.mCentreX) {
-                if (gauge.GaugeType == GaugeType.North) {
+            if (mCentreY > mCentreX) {
+                if (gaugeType == GaugeType.North) {
                     rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy4plusRimSize,
                             (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplus0dot75minusRimSize);
                 }
-                else if (gauge.GaugeType == GaugeType.South) {
+                else if (gaugeType == GaugeType.South) {
                     rectF = new RectF((float) rimSize, (float) modif_centerYminus0dot75plusRimSize,
                             (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
                 }
-                else if (gauge.GaugeType == GaugeType.West) {
+                else if (gaugeType == GaugeType.West) {
                     rectF = new RectF((float) (modif_centerXminusDidiveBy4plusRimSize), (float) modif_centerYminusDivideBy2plusRimSize,
                             (float) modif_centerXplus0dot75minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
                 }
-                else if (gauge.GaugeType == GaugeType.East) {
+                else if (gaugeType == GaugeType.East) {
                     rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerYminusDivideBy2plusRimSize,
                             (float) (modif_centerXplusDivideBy4minusRimSize), (float) modif_centerYplusDivideBy2minusRimSize);
                 }
-                else if (gauge.GaugeType == GaugeType.NorthEast) {
+                else if (gaugeType == GaugeType.NorthEast) {
                     rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
                             (float) modif_centerXplus0dot375minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
                 }
-                else if (gauge.GaugeType == GaugeType.NorthWest) {
+                else if (gaugeType == GaugeType.NorthWest) {
                     rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
                             (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
                 }
-                else if (gauge.GaugeType == GaugeType.SouthEast) {
+                else if (gaugeType == GaugeType.SouthEast) {
                     rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
                             (float) modif_centerXplus0dot375minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
                 }
-                else if (gauge.GaugeType == GaugeType.SouthWest) {
+                else if (gaugeType == GaugeType.SouthWest) {
                     rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
                             (float) modif_centerXplus0dot125minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
                 }
@@ -962,35 +1002,35 @@ class ScaleRenderer extends View {
                             (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
                 }
             }
-            else if (gauge.GaugeType == GaugeType.West) {
+            else if (gaugeType == GaugeType.West) {
                 rectF = new RectF((float) modif_centerXminusDidiveBy4plusRimSize, (float) rimSize,
                         (float) modif_centerXplus0dot75minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
             }
-            else if (gauge.GaugeType == GaugeType.East) {
+            else if (gaugeType == GaugeType.East) {
                 rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) rimSize,
                         (float) (modif_centerXplusDivideBy4minusRimSize), (float) modif_centerYplusDivideBy2minusRimSize);
             }
-            else if (gauge.GaugeType == GaugeType.North) {
+            else if (gaugeType == GaugeType.North) {
                 rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerYminusDivideBy4plusRimSize,
                         (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplus0dot75minusRimSize);
             }
-            else if (gauge.GaugeType == GaugeType.South) {
+            else if (gaugeType == GaugeType.South) {
                 rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerYminus0dot75plusRimSize,
                         (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
             }
-            else if (gauge.GaugeType == GaugeType.NorthEast) {
+            else if (gaugeType == GaugeType.NorthEast) {
                 rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
                         (float) modif_centerXplus0dot375minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
             }
-            else if (gauge.GaugeType == GaugeType.NorthWest) {
+            else if (gaugeType == GaugeType.NorthWest) {
                 rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
                         (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
             }
-            else if (gauge.GaugeType == GaugeType.SouthEast) {
+            else if (gaugeType == GaugeType.SouthEast) {
                 rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
                         (float) modif_centerXplus0dot375minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
             }
-            else if (gauge.GaugeType == GaugeType.SouthWest) {
+            else if (gaugeType == GaugeType.SouthWest) {
                 rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
                         (float) modif_centerXplus0dot125minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
             }
@@ -998,88 +1038,88 @@ class ScaleRenderer extends View {
                 rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) rimSize,
                         (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
             }
-            gauge.mRangeFrame = rectF;
+            mRangeFrame = rectF;
         }
         return rectF;
     }
 
     private double getCenterYplusDivideBy2minusRimSize(double rimSize) {
-        return gauge.mCentreY + modifMinSizeDivideBy2 - rimSize;
+        return mCentreY + modifMinSizeDivideBy2 - rimSize;
     }
 
     private double getCenterXplusDivideBy2minusRimSize(double rimSize) {
-        return gauge.mCentreX + modifMinSizeDivideBy2 - rimSize;
+        return mCentreX + modifMinSizeDivideBy2 - rimSize;
     }
 
     private double getCenterXplus0dot75minusRimSize(double rimSize) {
-        return gauge.mCentreX + modifMinSizeMultipleBy0dot75 - rimSize;
+        return mCentreX + modifMinSizeMultipleBy0dot75 - rimSize;
     }
 
     private double getCenterXplus0dot375minusRimSize(double rimSize) {
-        return gauge.mCentreX + modifMinSizeMultipleBy0dot375 - rimSize;
+        return mCentreX + modifMinSizeMultipleBy0dot375 - rimSize;
     }
 
     private double getCenterYplus0dot375minusRimSize(double rimSize) {
-        return gauge.mCentreY + modifMinSizeMultipleBy0dot375 - rimSize;
+        return mCentreY + modifMinSizeMultipleBy0dot375 - rimSize;
     }
 
     private double getCenterXminus0dot375plusRimSize(double rimSize) {
-        return gauge.mCentreX - modifMinSizeMultipleBy0dot375 + rimSize;
+        return mCentreX - modifMinSizeMultipleBy0dot375 + rimSize;
     }
 
     private double getCenterXminus0dot125plusRimSize(double rimSize) {
-        return gauge.mCentreX - modifMinSizeMultipleBy0dot125 + rimSize;
+        return mCentreX - modifMinSizeMultipleBy0dot125 + rimSize;
     }
 
     private double getCenterXplusDivideBy4minusRimSize(double rimSize) {
-        return gauge.mCentreX + modifMinSizeDivideBy4 - rimSize;
+        return mCentreX + modifMinSizeDivideBy4 - rimSize;
     }
 
     private double getCenterYminus0dot75plusRimSize(double rimSize) {
-        return gauge.mCentreY - modifMinSizeMultipleBy0dot75 + rimSize;
+        return mCentreY - modifMinSizeMultipleBy0dot75 + rimSize;
     }
 
     private double getCenterYminusDivideBy4plusRimSize(double rimSize) {
-        return gauge.mCentreY - modifMinSizeDivideBy4 + rimSize;
+        return mCentreY - modifMinSizeDivideBy4 + rimSize;
     }
 
     private double getCenterYminusDivideBy2plusRimSize(double rimSize) {
-        return gauge.mCentreY - modifMinSizeDivideBy2 + rimSize;
+        return mCentreY - modifMinSizeDivideBy2 + rimSize;
     }
 
     private double getCenterYplus0dot75minusRimSize(double rimSize) {
-        return gauge.mCentreY + modifMinSizeMultipleBy0dot75 - rimSize;
+        return mCentreY + modifMinSizeMultipleBy0dot75 - rimSize;
     }
 
     private double getCenterYminus0dot375plusRimSize(double rimSize) {
-        return gauge.mCentreY - modifMinSizeMultipleBy0dot375 + rimSize;
+        return mCentreY - modifMinSizeMultipleBy0dot375 + rimSize;
     }
 
     private double getCenterYminus0dot125plusRimSize(double rimSize) {
-        return gauge.mCentreY - modifMinSizeMultipleBy0dot125 + rimSize;
+        return mCentreY - modifMinSizeMultipleBy0dot125 + rimSize;
     }
 
     private double getCenterYplus0dot125minusRimSize(double rimSize) {
-        return gauge.mCentreY + modifMinSizeMultipleBy0dot125 - rimSize;
+        return mCentreY + modifMinSizeMultipleBy0dot125 - rimSize;
     }
 
     private double getCenterXminusDivideBy2plusRimSize(double rimSize) {
-        return gauge.mCentreX - modifMinSizeDivideBy2 + rimSize;
+        return mCentreX - modifMinSizeDivideBy2 + rimSize;
     }
 
     private double getCenterXminus0dot75plusRimSize(double rimSize) {
-        return gauge.mCentreX - modifMinSizeMultipleBy0dot75 + rimSize;
+        return mCentreX - modifMinSizeMultipleBy0dot75 + rimSize;
     }
 
     private double getCenterYplusDivideBy4minusRimSize(double rimSize) {
-        return gauge.mCentreY + modifMinSizeDivideBy4 - rimSize;
+        return mCentreY + modifMinSizeDivideBy4 - rimSize;
     }
 
     private double getCenterXminusDivideBy4plusRimSize(double rimSize) {
-        return gauge.mCentreX - modifMinSizeDivideBy4 + rimSize;
+        return mCentreX - modifMinSizeDivideBy4 + rimSize;
     }
 
     private double getCenterXplus0dot125minusRimSize(double rimSize) {
-        return gauge.mCentreX + modifMinSizeMultipleBy0dot125 - rimSize;
+        return mCentreX + modifMinSizeMultipleBy0dot125 - rimSize;
     }
 }
