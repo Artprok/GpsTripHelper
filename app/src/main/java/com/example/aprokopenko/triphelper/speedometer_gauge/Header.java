@@ -34,8 +34,8 @@ public class Header {
 
     public void setText(String text) {
         this.text = text;
-        if (this.gauge != null) {
-            this.gauge.refreshGauge();
+        if (gauge != null) {
+            gauge.refreshGauge();
         }
     }
 
@@ -45,8 +45,8 @@ public class Header {
 
     public void setTextSize(double textSize) {
         this.textSize = textSize;
-        if (this.gauge != null) {
-            this.gauge.refreshGauge();
+        if (gauge != null) {
+            gauge.refreshGauge();
         }
     }
 
@@ -56,8 +56,8 @@ public class Header {
 
     public void setTextStyle(Typeface textStyle) {
         this.textStyle = textStyle;
-        if (this.gauge != null) {
-            this.gauge.refreshGauge();
+        if (gauge != null) {
+            gauge.refreshGauge();
         }
     }
 
@@ -67,8 +67,8 @@ public class Header {
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
-        if (this.gauge != null) {
-            this.gauge.refreshGauge();
+        if (gauge != null) {
+            gauge.refreshGauge();
         }
     }
 

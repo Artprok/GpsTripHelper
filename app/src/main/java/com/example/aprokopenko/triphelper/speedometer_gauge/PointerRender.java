@@ -315,15 +315,14 @@ public class PointerRender extends View {
                             (float) modif_centerXplus1dot125minusRimS, (float) modif_centerYplus0dot375minusRimS);
                 }
                 else {
-                    rectF = getRectF((float) (getCenterYminusDivideBy2plusRimS(((double) factor))), factor,
-                            (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                            (float) (getCenterYplusDivideBy2minusRimS(((double) factor))));
+                    rectF = getRectF((float) (getCenterYminusDivideBy2plusRimS(factor)), factor,
+                            (float) (getCenterXplusDivideBy2minusRimS(factor)), (float) (getCenterYplusDivideBy2minusRimS(factor)));
                 }
             }
             else {
                 if (mGaugePointer instanceof RangePointer) {
-                    rimSize = (mMinSize - mRimWidth) - ((double) ((float) ((((double) ((float) ((RangePointer) mGaugePointer)
-                            .getOffset())) * (mCentreX - mRimWidth)) - (mGaugePointer.getWidth() / 2.0d))));
+                    rimSize = (mMinSize - mRimWidth) - (((((RangePointer) mGaugePointer)
+                            .getOffset())) * (mCentreX - mRimWidth)) - (mGaugePointer.getWidth() / 2.0d);
                 }
                 if (mCentreY > mCentreX) {
                     if (gaugeType == GaugeType.North) {

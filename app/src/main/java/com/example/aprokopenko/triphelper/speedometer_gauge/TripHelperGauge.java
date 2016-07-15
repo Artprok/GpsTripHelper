@@ -410,8 +410,8 @@ public class TripHelperGauge extends FrameLayout {
                             }
                             mVisualRect.left = (float) ((initAvalWidth - 50.0D) / 2.0D - modifHeightMinus50);
                         }
-                        mVisualRect.bottom = (float) ((double) mVisualRect.top + mAvailableWidth);
-                        mVisualRect.right = (float) ((double) mVisualRect.left + mAvailableWidth);
+                        mVisualRect.bottom = (float) (mVisualRect.top + mAvailableWidth);
+                        mVisualRect.right = (float) (mVisualRect.left + mAvailableWidth);
                     }
                     else {
                         //optimizationModif
@@ -419,8 +419,8 @@ public class TripHelperGauge extends FrameLayout {
 
                         mVisualRect.top = (float) (mAvailableHeight / 2.0D - modifRectCanvasDelimBy2);
                         mVisualRect.left = (float) (mAvailableWidth / 2.0D - modifRectCanvasDelimBy2);
-                        mVisualRect.bottom = (float) ((double) mVisualRect.top + rectCanvas);
-                        mVisualRect.right = (float) ((double) mVisualRect.left + rectCanvas);
+                        mVisualRect.bottom = (float) (mVisualRect.top + rectCanvas);
+                        mVisualRect.right = (float) (mVisualRect.left + rectCanvas);
                     }
                     break label145;
                 }
@@ -495,8 +495,8 @@ public class TripHelperGauge extends FrameLayout {
                             mVisualRect.top = (float) ((initAvalHeight - modifDiameter25) / 2.0D - (mAvailableWidth - 50.0D));
                         }
 
-                        mVisualRect.bottom = (float) ((double) mVisualRect.top + mAvailableHeight);
-                        mVisualRect.right = (float) ((double) mVisualRect.left + mAvailableHeight);
+                        mVisualRect.bottom = (float) (mVisualRect.top + mAvailableHeight);
+                        mVisualRect.right = (float) (mVisualRect.left + mAvailableHeight);
                     }
                     else {
                         //optimizationModif
@@ -504,8 +504,8 @@ public class TripHelperGauge extends FrameLayout {
 
                         mVisualRect.top = (float) (mAvailableHeight / modifRectCanvas);
                         mVisualRect.left = (float) (mAvailableWidth / modifRectCanvas);
-                        mVisualRect.bottom = (float) ((double) mVisualRect.top + rectCanvas);
-                        mVisualRect.right = (float) ((double) mVisualRect.left + rectCanvas);
+                        mVisualRect.bottom = (float) (mVisualRect.top + rectCanvas);
+                        mVisualRect.right = (float) (mVisualRect.left + rectCanvas);
                     }
                     break label145;
                 }
@@ -516,8 +516,8 @@ public class TripHelperGauge extends FrameLayout {
 
             mVisualRect.top = (float) (mAvailableHeight / modifDelimeter);
             mVisualRect.left = (float) (mAvailableWidth / modifDelimeter);
-            mVisualRect.bottom = (float) ((double) mVisualRect.top + squarified);
-            mVisualRect.right = (float) ((double) mVisualRect.left + squarified);
+            mVisualRect.bottom = (float) (mVisualRect.top + squarified);
+            mVisualRect.right = (float) (mVisualRect.left + squarified);
         }
 
         mMinSize = (double) Math.min(mVisualRect.height(), mVisualRect.width());

@@ -757,15 +757,14 @@ class ScaleRenderer extends View {
                         factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radFactor + (float) (gaugeRange
                                 .getOffset() * (mCentreY - rimWidth));
                         rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize((double) factor)), factor,
-                                (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
-                                (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
+                                (float) (getCenterXplusDivideBy2minusRimSize(factor)),
+                                (float) (getCenterYplusDivideBy2minusRimSize(factor)));
                     }
                 }
                 else {
                     if (mCentreY > mCentreX) {
                         double rimW = gauge.getmRimWidth();
-                        rimSize = mMinSize - rimW - (double) ((float) (gaugeRange.getOffset() * (mCentreX - rimW))) + gaugeRange
-                                .getWidth() / 2.0D;
+                        rimSize = mMinSize - rimW - ((gaugeRange.getOffset() * (mCentreX - rimW))) + gaugeRange.getWidth() / 2.0D;
 
                         //modif optimization
                         double modify_centerXplus0dot125minusRimSize  = getCenterXplus0dot125minusRimSize(rimSize);
@@ -931,15 +930,13 @@ class ScaleRenderer extends View {
             mRangeFrame = rectF;
             float factor = mRangeFrame.left + (mRangeFrame.width() / 2.0F - mRangeFrame.left) * (float) radiusFactor;
             if (mCentreY > mCentreX) {
-                rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize((double) factor)),
-                        (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
-                        (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
+                rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize(factor)),
+                        (float) (getCenterXplusDivideBy2minusRimSize(factor)), (float) (getCenterYplusDivideBy2minusRimSize(factor)));
             }
             else {
                 factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radiusFactor;
-                rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize((double) factor)), factor,
-                        (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
-                        (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
+                rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize(factor)), factor,
+                        (float) (getCenterXplusDivideBy2minusRimSize(factor)), (float) (getCenterYplusDivideBy2minusRimSize(factor)));
             }
         }
         else {

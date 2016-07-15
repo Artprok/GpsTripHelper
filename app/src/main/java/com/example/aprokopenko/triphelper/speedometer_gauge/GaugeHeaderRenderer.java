@@ -105,15 +105,13 @@ class GaugeHeaderRenderer extends View {
                                     }
                                     else if (mCentreY > mCentreX) {
                                         PointF pointF = header.getPosition();
-                                        left = mGaugeWidth * ((double) pointF.x);
-                                        top = (mCentreY - ((double) (mVisualRect.height() / 2.0f))) + ((double) (mVisualRect
-                                                .height() * pointF.y));
+                                        left = mGaugeWidth * (pointF.x);
+                                        top = (mCentreY - ((mVisualRect.height() / 2.0f))) + ((mVisualRect.height() * pointF.y));
                                     }
                                     else {
                                         PointF pointF = header.getPosition();
-                                        left = (mCentreX - ((double) (mVisualRect.width() / 2.0f))) + ((double) (mVisualRect
-                                                .width() * pointF.x));
-                                        top = mGaugeHeight * ((double) pointF.y);
+                                        left = (mCentreX - ((mVisualRect.width() / 2.0f))) + ((mVisualRect.width() * pointF.x));
+                                        top = mGaugeHeight * (pointF.y);
                                     }
                                 }
                             }

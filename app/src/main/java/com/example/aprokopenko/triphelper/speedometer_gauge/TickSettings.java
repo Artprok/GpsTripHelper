@@ -20,8 +20,8 @@ public class TickSettings {
 
     public void setSize(double size) {
         this.size = size;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -35,8 +35,8 @@ public class TickSettings {
 
     public void setWidth(double width) {
         this.width = width;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -46,8 +46,8 @@ public class TickSettings {
 
     public void setColor(int color) {
         this.color = color;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -57,8 +57,8 @@ public class TickSettings {
 
     public void setOffset(double offset) {
         this.offset = offset;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 }
