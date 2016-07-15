@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -735,12 +736,12 @@ class ScaleRenderer extends View {
                     double modifCenterXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
 
                     if (mCentreY > mCentreX) {
-                        rectF = new RectF((float) rimSize, (float) modif_centerYminusMinSizePlusRimSize,
-                                (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                        rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
                     }
                     else {
-                        rectF = new RectF((float) modifCenterXminusDivideBy2plusRimSize, (float) rimSize,
-                                (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                        rectF = getRectF((float) modifCenterXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
                     }
 
                     mRangeFrame = rectF;
@@ -786,40 +787,40 @@ class ScaleRenderer extends View {
                         double modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
 
                         if (gaugeType == GaugeType.North) {
-                            rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy4plusRimSize,
-                                    (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplus0dot75minusRimSize);
+                            rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                    (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
                         }
                         else if (gaugeType == GaugeType.South) {
-                            rectF = new RectF((float) rimSize, (float) modif_centerYminus0dot75plusRimSize,
-                                    (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
+                            rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                    (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
                         }
                         else if (gaugeType == GaugeType.West) {
-                            rectF = new RectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYminusMinSizePlusRimSize,
-                                    (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                            rectF = getRectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYplus0dot75minusRimSize,
+                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
                         }
                         else if (gaugeType == GaugeType.East) {
-                            rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerYminusMinSizePlusRimSize,
-                                    (float) modif_centerXplusDivideBy4minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                            rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerXplusDivideBy4minusRimSize,
+                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthEast) {
-                            rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot375plusRimSize,
-                                    (float) modif_centerXminus0dot125plusRimSize, (float) modife_centerYplus0dot125minusRimSize);
+                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
+                                    (float) modife_centerYplus0dot125minusRimSize, (float) modif_centerXminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthWest) {
-                            rectF = new RectF((float) modify_centerXminus0dot375plusRimSize, (float) modif_centerXminus0dot375plusRimSize,
-                                    (float) modify_centerXplus0dot125minusRimSize, (float) modife_centerYplus0dot125minusRimSize);
+                            rectF = getRectF((float) modify_centerXminus0dot375plusRimSize, (float) modify_centerXplus0dot125minusRimSize,
+                                    (float) modife_centerYplus0dot125minusRimSize, (float) modif_centerXminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthEast) {
-                            rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modify_centerYminus0dot125plusRimSize,
-                                    (float) modif_centerXminus0dot125plusRimSize, (float) modify_centerYplus0dot375minusRimSize);
+                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
+                                    (float) modify_centerYplus0dot375minusRimSize, (float) modify_centerYminus0dot125plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthWest) {
-                            rectF = new RectF((float) modify_centerXminus0dot375plusRimSize, (float) modify_centerYminus0dot125plusRimSize,
-                                    (float) modify_centerXplus0dot125minusRimSize, (float) modify_centerYplus0dot375minusRimSize);
+                            rectF = getRectF((float) modify_centerXminus0dot375plusRimSize, (float) modify_centerXplus0dot125minusRimSize,
+                                    (float) modify_centerYplus0dot375minusRimSize, (float) modify_centerYminus0dot125plusRimSize);
                         }
                         else {
-                            rectF = new RectF((float) rimSize, (float) modif_centerYminusMinSizePlusRimSize,
-                                    (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                            rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
                         }
                     }
                     else {
@@ -846,41 +847,40 @@ class ScaleRenderer extends View {
 
 
                         if (gaugeType == GaugeType.West) {
-                            rectF = new RectF((float) modif_centerXminusDivideBy4plusRimSize, (float) rimSize,
-                                    (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                            rectF = getRectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYplus0dot75minusRimSize,
+                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
                         }
                         else if (gaugeType == GaugeType.East) {
-                            rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) rimSize,
-                                    (float) modif_centerXplusDivideBy4minusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                            rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerXplusDivideBy4minusRimSize,
+                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
                         }
                         else if (gaugeType == GaugeType.North) {
-                            rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize,
-                                    (float) modif_centerYminusDivideBy4plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplus0dot75minusRimSize);
+                            rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                    (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
                         }
                         else if (gaugeType == GaugeType.South) {
-                            rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerYminus0dot75plusRimSize,
-                                    (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
+                            rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                    (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthEast) {
-                            rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot375plusRimSize,
-                                    (float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYplus0dot125minusRimSize);
+                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
+                                    (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthWest) {
-                            rectF = new RectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerYminus0dot375plusRimSize,
-                                    (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
+                            rectF = getRectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
+                                    (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthEast) {
-                            rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
-                                    (float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYplus0dot375minusRimSize);
+                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
+                                    (float) modif_centerYplus0dot375minusRimSize, (float) modif_centerYminus0dot125plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthWest) {
-                            rectF = new RectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
-                                    (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot375minusRimSize);
+                            rectF = getRectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
+                                    (float) modif_centerYplus0dot375minusRimSize, (float) modif_centerYminus0dot125plusRimSize);
                         }
                         else {
-                            rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) rimSize,
-                                    (float) modif_centerXplusMinSizeMinusRimSize, (float) modif_centerYplusMinSizeMinusRimSize);
+                            rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
+                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
                         }
                     }
 
@@ -920,12 +920,12 @@ class ScaleRenderer extends View {
             rimSize = mMinSize - 4.0D * 10.0D;
 
             if (mCentreY > mCentreX) {
-                rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy2plusRimSize,
-                        (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
+                rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                        (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
             }
             else {
-                rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) rimSize,
-                        (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
+                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
             }
 
             mRangeFrame = rectF;
@@ -966,81 +966,87 @@ class ScaleRenderer extends View {
 
             if (mCentreY > mCentreX) {
                 if (gaugeType == GaugeType.North) {
-                    rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy4plusRimSize,
-                            (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplus0dot75minusRimSize);
+                    rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                            (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
                 }
                 else if (gaugeType == GaugeType.South) {
-                    rectF = new RectF((float) rimSize, (float) modif_centerYminus0dot75plusRimSize,
-                            (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
+                    rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                            (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
                 }
                 else if (gaugeType == GaugeType.West) {
-                    rectF = new RectF((float) (modif_centerXminusDidiveBy4plusRimSize), (float) modif_centerYminusDivideBy2plusRimSize,
-                            (float) modif_centerXplus0dot75minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
+                    rectF = getRectF((float) (modif_centerXminusDidiveBy4plusRimSize), (float) modif_centerXplus0dot75minusRimSize,
+                            (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
                 }
                 else if (gaugeType == GaugeType.East) {
-                    rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerYminusDivideBy2plusRimSize,
-                            (float) (modif_centerXplusDivideBy4minusRimSize), (float) modif_centerYplusDivideBy2minusRimSize);
+                    rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) (modif_centerXplusDivideBy4minusRimSize),
+                            (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
                 }
                 else if (gaugeType == GaugeType.NorthEast) {
-                    rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
-                            (float) modif_centerXplus0dot375minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
+                    rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
+                            (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
                 }
                 else if (gaugeType == GaugeType.NorthWest) {
-                    rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
-                            (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
+                    rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
+                            (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
                 }
                 else if (gaugeType == GaugeType.SouthEast) {
-                    rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
-                            (float) modif_centerXplus0dot375minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
+                    rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
+                            (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
                 }
                 else if (gaugeType == GaugeType.SouthWest) {
-                    rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
-                            (float) modif_centerXplus0dot125minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
+                    rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
+                            (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
                 }
                 else {
-                    rectF = new RectF((float) rimSize, (float) modif_centerYminusDivideBy2plusRimSize,
-                            (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
+                    rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                            (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
                 }
             }
             else if (gaugeType == GaugeType.West) {
-                rectF = new RectF((float) modif_centerXminusDidiveBy4plusRimSize, (float) rimSize,
-                        (float) modif_centerXplus0dot75minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
+                rectF = getRectF((float) modif_centerXminusDidiveBy4plusRimSize, (float) modif_centerXplus0dot75minusRimSize,
+                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
             }
             else if (gaugeType == GaugeType.East) {
-                rectF = new RectF((float) modif_centerXminus0dot75plusRimSize, (float) rimSize,
-                        (float) (modif_centerXplusDivideBy4minusRimSize), (float) modif_centerYplusDivideBy2minusRimSize);
+                rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) (modif_centerXplusDivideBy4minusRimSize),
+                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
             }
             else if (gaugeType == GaugeType.North) {
-                rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerYminusDivideBy4plusRimSize,
-                        (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplus0dot75minusRimSize);
+                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                        (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
             }
             else if (gaugeType == GaugeType.South) {
-                rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerYminus0dot75plusRimSize,
-                        (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy4minusRimSize);
+                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                        (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
             }
             else if (gaugeType == GaugeType.NorthEast) {
-                rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
-                        (float) modif_centerXplus0dot375minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
+                rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
+                        (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
             }
             else if (gaugeType == GaugeType.NorthWest) {
-                rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot372plusRimSize,
-                        (float) modif_centerXplus0dot125minusRimSize, (float) modif_centerYplus0dot125minusRimSize);
+                rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
+                        (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
             }
             else if (gaugeType == GaugeType.SouthEast) {
-                rectF = new RectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
-                        (float) modif_centerXplus0dot375minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
+                rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
+                        (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
             }
             else if (gaugeType == GaugeType.SouthWest) {
-                rectF = new RectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerYminus0dot125plusRimSize,
-                        (float) modif_centerXplus0dot125minusRimSize, (float) (modif_centerYplus0dot375minusRimSize));
+                rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
+                        (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
             }
             else {
-                rectF = new RectF((float) modif_centerXminusDivideBy2plusRimSize, (float) rimSize,
-                        (float) modif_centerXplusDivideBy2minusRimSize, (float) modif_centerYplusDivideBy2minusRimSize);
+                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
+                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
             }
             mRangeFrame = rectF;
         }
         return rectF;
+    }
+
+    @NonNull private RectF getRectF(float rimSize, float modif_centerXplusDivideBy2minusRimSize, float modif_centerYplus0dot75minusRimSize,
+                                    float modif_centerYminusDivideBy4plusRimSize) {
+        return new RectF(rimSize, modif_centerYminusDivideBy4plusRimSize, modif_centerXplusDivideBy2minusRimSize,
+                modif_centerYplus0dot75minusRimSize);
     }
 
     private double getCenterYplusDivideBy2minusRimSize(double rimSize) {
