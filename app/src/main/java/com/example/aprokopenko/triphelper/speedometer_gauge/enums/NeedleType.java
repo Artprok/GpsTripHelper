@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.gauge.enums;
+package com.example.aprokopenko.triphelper.speedometer_gauge.enums;
 
 public enum NeedleType {
 

@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.gauge;
+package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.aprokopenko.triphelper.gauge.enums.GaugeType;
+import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
 
 import java.util.ArrayList;
 import java.util.Iterator;

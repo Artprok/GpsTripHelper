@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.gauge;
+package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 
 import android.graphics.Typeface;

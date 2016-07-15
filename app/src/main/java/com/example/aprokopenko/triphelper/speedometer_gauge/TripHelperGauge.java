@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.gauge;
+package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.example.aprokopenko.triphelper.gauge.enums.GaugeType;
+import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,7 +43,7 @@ public class TripHelperGauge extends FrameLayout {
         mScaleRenderers = new ArrayList<>();
         mPointerRenderes = new ArrayList<>();
         gaugeScales = new ArrayList<>();
-        GaugeType = com.example.aprokopenko.triphelper.gauge.enums.GaugeType.Default;
+        GaugeType = com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.Default;
         frameBackgroundColor = GaugeConstants.FRAME_BACKGROUND_COLOR;
         headers = new ArrayList<>();
         mGaugeHeight = GaugeConstants.ZERO;
@@ -309,9 +309,9 @@ public class TripHelperGauge extends FrameLayout {
             //optimizationModif
             double modifKnobDiameterBy4 = mKnobDiameter * 4.0D;
 
-            if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+            if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                 gaugeType = getGaugeType();
-                if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
                     if (mKnobDiameter == GaugeConstants.ZERO) {
                         rectCanvas = Math.max(mGaugeHeight - 30.0D, mGaugeWidth);
                     }
@@ -344,9 +344,9 @@ public class TripHelperGauge extends FrameLayout {
                 label134:
                 {
                     gaugeType = getGaugeType();
-                    if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                    if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                         gaugeType = getGaugeType();
-                        if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                        if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
                             break label134;
                         }
                     }
@@ -360,12 +360,12 @@ public class TripHelperGauge extends FrameLayout {
 
                             mAvailableWidth = mAvailableHeight * 2.0D - 20.0D;
                             gaugeType = getGaugeType();
-                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                            if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                                 mVisualRect.top = (float) (modifHeightMinus10DelimBy2 - modifHeightMinus10);
                             }
                             else {
                                 gaugeType = getGaugeType();
-                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                                if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
                                     mVisualRect.top = (float) (modifHeightMinus10DelimBy2 - modifHeightMinus20);
                                 }
                             }
@@ -380,12 +380,12 @@ public class TripHelperGauge extends FrameLayout {
 
                             mAvailableWidth = (modifHeightMinusKnob) * 2.0D;
                             gaugeType = getGaugeType();
-                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                            if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                                 mVisualRect.top = (float) (modifHeightMinusKnobDelimBy2 - (modifHeightMinusKnob));
                             }
                             else {
                                 gaugeType = getGaugeType();
-                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                                if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
                                     mVisualRect.top = (float) (modifHeightMinusKnobDelimBy2 - modifHeightMinusKnobBy2);
                                 }
                             }
@@ -399,12 +399,12 @@ public class TripHelperGauge extends FrameLayout {
 
                             mAvailableWidth = mAvailableHeight * 2.0D - 50.0D;
                             gaugeType = getGaugeType();
-                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.North) {
+                            if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                                 mVisualRect.top = (float) (modifHeightMinus25delBy2 - modifHeightMinus25);
                             }
                             else {
                                 gaugeType = getGaugeType();
-                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.South) {
+                                if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
                                     mVisualRect.top = (float) (modifHeightMinus25delBy2 - modifHeightMinus50);
                                 }
                             }
@@ -430,9 +430,9 @@ public class TripHelperGauge extends FrameLayout {
                 label127:
                 {
                     gaugeType = getGaugeType();
-                    if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                    if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                         gaugeType = getGaugeType();
-                        if (gaugeType != com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                        if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.West) {
                             break label127;
                         }
                     }
@@ -446,12 +446,12 @@ public class TripHelperGauge extends FrameLayout {
                         if (mKnobDiameter == GaugeConstants.ZERO) {
                             mAvailableHeight = (modifAvaliableWidthMinus10) * 2.0D;
                             gaugeType = getGaugeType();
-                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                            if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                                 mVisualRect.left = (float) (modifAvaliableWidthMinus10 / 2.0D - modifAvaliableWidthMinus20);
                             }
                             else {
                                 gaugeType = getGaugeType();
-                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                                if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.West) {
                                     mVisualRect.left = (float) (modifAvaliableWidthMinus10 / 2.0D - modifAvaliableWidthMinus10);
                                 }
                             }
@@ -465,12 +465,12 @@ public class TripHelperGauge extends FrameLayout {
 
                             mAvailableHeight = (mAvailableWidth - mKnobDiameter) * 2.0D;
                             gaugeType = getGaugeType();
-                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                            if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                                 mVisualRect.left = (float) (modifWidthKnobDelimeter2 - modifWidthKnobBy2);
                             }
                             else {
                                 gaugeType = this.getGaugeType();
-                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                                if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.West) {
                                     mVisualRect.left = (float) (modifWidthKnobDelimeter2 - (mAvailableWidth - mKnobDiameter));
                                 }
                             }
@@ -482,12 +482,12 @@ public class TripHelperGauge extends FrameLayout {
 
                             mAvailableHeight = (mAvailableWidth - modifDiameter25) * 2.0D;
                             gaugeType = getGaugeType();
-                            if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.East) {
+                            if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                                 mVisualRect.left = (float) (modifAvaliableWidth - (mAvailableWidth - 50.0D));
                             }
                             else {
                                 gaugeType = getGaugeType();
-                                if (gaugeType == com.example.aprokopenko.triphelper.gauge.enums.GaugeType.West) {
+                                if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.West) {
                                     mVisualRect.left = (float) (modifAvaliableWidth - (mAvailableWidth - modifDiameter25));
                                 }
                             }

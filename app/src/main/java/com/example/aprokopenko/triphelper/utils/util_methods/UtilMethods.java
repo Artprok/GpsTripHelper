@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -344,7 +345,6 @@ public class UtilMethods {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
         }
         catch (android.content.ActivityNotFoundException anfe) {
-            // FIXME: 02.06.2016 add rateGooglePlay here! Proper url.
             viewInBrowser(context, "https://play.google.com/store/apps/details?id=" + context.getPackageName());
         }
     }

@@ -5,13 +5,13 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.support.annotation.Nullable;
 
-import com.example.aprokopenko.triphelper.gauge.GaugePointer;
-import com.example.aprokopenko.triphelper.gauge.GaugeRange;
-import com.example.aprokopenko.triphelper.gauge.GaugeScale;
-import com.example.aprokopenko.triphelper.gauge.Header;
-import com.example.aprokopenko.triphelper.gauge.NeedlePointer;
-import com.example.aprokopenko.triphelper.gauge.TickSettings;
-import com.example.aprokopenko.triphelper.gauge.TripHelperGauge;
+import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
+import com.example.aprokopenko.triphelper.speedometer_gauge.GaugeRange;
+import com.example.aprokopenko.triphelper.speedometer_gauge.GaugeScale;
+import com.example.aprokopenko.triphelper.speedometer_gauge.Header;
+import com.example.aprokopenko.triphelper.speedometer_gauge.NeedlePointer;
+import com.example.aprokopenko.triphelper.speedometer_gauge.TickSettings;
+import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.utils.settings.GaugeFactorySettings;
 
 import java.util.ArrayList;

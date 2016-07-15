@@ -97,7 +97,7 @@ import butterknife.Unbinder;
         readDataFromFile();
         setupSpinner();
 
-        // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
+        // TODO: 07.06.2016 not working due to problems with WakeLock that called in OnLocationChanged,whatever you do..
         //        setupBackgroundSwitch();
     }
 
@@ -105,7 +105,6 @@ import butterknife.Unbinder;
         unbinder.unbind();
         super.onDestroyView();
     }
-
 
     public void setFileEraseListener(FileEraseListener fileEraseListener) {
         this.fileEraseListener = fileEraseListener;

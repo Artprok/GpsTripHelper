@@ -1,12 +1,12 @@
-package com.example.aprokopenko.triphelper.gauge;
+package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 import android.graphics.PointF;
 import android.graphics.Typeface;
 
-import com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment;
+import com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignment;
 
 public class Header {
-    private com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment HeaderAlignment;
+    private com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignment HeaderAlignment;
 
     private TripHelperGauge gauge;
     private PointF          position;
@@ -21,7 +21,7 @@ public class Header {
         textStyle = GaugeConstants.DEFAULT_HEADER_TEXT_STYLE;
         textColor = GaugeConstants.DEFAULT_HEADER_TEXT_COLOR;
         position = GaugeConstants.DEFAULT_HEADER_POSITION;
-        HeaderAlignment = com.example.aprokopenko.triphelper.gauge.enums.HeaderAlignment.Custom;
+        HeaderAlignment = com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignment.Custom;
     }
 
     public String getText() {

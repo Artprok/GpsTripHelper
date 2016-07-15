@@ -1,6 +1,6 @@
-package com.example.aprokopenko.triphelper.gauge;
+package com.example.aprokopenko.triphelper.speedometer_gauge;
 
-import com.example.aprokopenko.triphelper.gauge.enums.NeedleType;
+import com.example.aprokopenko.triphelper.speedometer_gauge.enums.NeedleType;
 
 public class NeedlePointer extends GaugePointer {
     private int        knobColor;
