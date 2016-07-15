@@ -38,7 +38,7 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
-import com.example.aprokopenko.triphelper.speedometerfactory.CircularGaugeFactory;
+import com.example.aprokopenko.triphelper.speedometer_factory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;

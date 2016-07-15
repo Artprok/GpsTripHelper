@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.speedometerfactory;
+package com.example.aprokopenko.triphelper.speedometer_factory;
 
 import android.content.Context;
 import android.graphics.Color;
