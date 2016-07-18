@@ -26,11 +26,13 @@ import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
 import java.util.ArrayList;
 
+import javax.inject.Singleton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TripListFragment extends Fragment implements ListFragmentInteractionListener {
+@Singleton public class TripListFragment extends Fragment implements ListFragmentInteractionListener {
     @BindView(R.id.avgFuelConsListFrag)
     TextView     avgFuelConsumptionView;
     @BindView(R.id.distanceTravelledListFrag)

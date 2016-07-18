@@ -33,12 +33,12 @@ import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
-import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
 import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
 import com.example.aprokopenko.triphelper.speedometer_factory.CircularGaugeFactory;
+import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
+import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -49,11 +49,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import javax.inject.Singleton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
+
+@Singleton public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
     @BindView(R.id.speedometerContainer)
     RelativeLayout speedometerContainer;
     @BindView(R.id.speedometerTextView)
@@ -124,6 +127,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupButtons();
         setupSpeedometer();
 
+
         setupTripProcessor();
         setupFuelFields();
     }
@@ -144,6 +148,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
                 requestPermissionWithRationale();
             }
         }
+
     }
 
     @Override public void onAttach(Context context) {

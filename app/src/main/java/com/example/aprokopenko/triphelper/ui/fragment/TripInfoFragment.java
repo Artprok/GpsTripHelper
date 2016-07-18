@@ -33,11 +33,13 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import javax.inject.Singleton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
+@Singleton public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
     @BindView(R.id.tripAvgFuelConsumption)
     TextView       tripAvgFuelConsumptionView;

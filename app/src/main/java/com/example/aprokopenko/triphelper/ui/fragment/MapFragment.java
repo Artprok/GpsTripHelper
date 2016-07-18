@@ -24,9 +24,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import javax.inject.Singleton;
+
 import rx.Subscriber;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+@Singleton public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String LOG_TAG = "MAP_FRAGMENT";
     private LatLng               previousLocationFromData;
     private Subscriber<Location> locationSubscriber;
