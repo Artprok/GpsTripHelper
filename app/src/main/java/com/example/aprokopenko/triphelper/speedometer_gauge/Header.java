@@ -40,7 +40,7 @@ public class Header {
     }
 
     public double getTextSize() {
-        return this.textSize;
+        return textSize;
     }
 
     public void setTextSize(double textSize) {
@@ -51,7 +51,7 @@ public class Header {
     }
 
     public Typeface getTextStyle() {
-        return this.textStyle;
+        return textStyle;
     }
 
     public void setTextStyle(Typeface textStyle) {
@@ -62,7 +62,7 @@ public class Header {
     }
 
     public int getTextColor() {
-        return this.textColor;
+        return textColor;
     }
 
     public void setTextColor(int textColor) {
@@ -73,7 +73,7 @@ public class Header {
     }
 
     public PointF getPosition() {
-        return this.position;
+        return position;
     }
 
     public void setPosition(PointF position) {
@@ -81,7 +81,7 @@ public class Header {
     }
 
     public HeaderAlignment getHeaderAlignment() {
-        return this.HeaderAlignment;
+        return HeaderAlignment;
     }
 
     public void setHeaderAlignment(HeaderAlignment headerAlignment) {

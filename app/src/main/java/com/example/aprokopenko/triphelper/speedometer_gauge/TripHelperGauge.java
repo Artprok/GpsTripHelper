@@ -55,7 +55,7 @@ public class TripHelperGauge extends FrameLayout {
     private void init() {
         mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
         mGaugeHeader.setmGauge(this);
-        this.addView(this.mGaugeHeader);
+        this.addView(mGaugeHeader);
     }
 
     public ArrayList<GaugeScale> getGaugeScales() {
@@ -65,8 +65,8 @@ public class TripHelperGauge extends FrameLayout {
     public void setGaugeScales(ArrayList<GaugeScale> gaugeScales) {
         this.gaugeScales = gaugeScales;
         this.refreshGauge();
-        if (this.mGaugeHeader == null) {
-            this.init();
+        if (mGaugeHeader == null) {
+            init();
         }
     }
 
@@ -80,7 +80,7 @@ public class TripHelperGauge extends FrameLayout {
 
     public void setGaugeType(GaugeType gaugeType) {
         this.GaugeType = gaugeType;
-        this.refreshGauge();
+        refreshGauge();
     }
 
     public void setmRangeFrame(RectF mRangeFrame) {
@@ -279,8 +279,8 @@ public class TripHelperGauge extends FrameLayout {
         mVisualRect = new RectF();
         h = h < 50 ? 50 : h;
         w = w < 50 ? 50 : w;
-        double mAvailableHeight = (double) h;
-        double mAvailableWidth  = (double) w;
+        double mAvailableHeight = h;
+        double mAvailableWidth  = w;
         if (mGaugeHeight > GaugeConstants.ZERO) {
             mGaugeHeight = mGaugeHeight > mAvailableHeight ? mAvailableHeight : mGaugeHeight;
         }
@@ -520,12 +520,12 @@ public class TripHelperGauge extends FrameLayout {
             mVisualRect.right = (float) (mVisualRect.left + squarified);
         }
 
-        mMinSize = (double) Math.min(mVisualRect.height(), mVisualRect.width());
-        double mScaleCentreY = (double) (mVisualRect.top + mVisualRect.height() / 2.0F);
-        double mScaleCentreX = (double) (mVisualRect.left + mVisualRect.width() / 2.0F);
+        mMinSize = Math.min(mVisualRect.height(), mVisualRect.width());
+        double mScaleCentreY = mVisualRect.top + mVisualRect.height() / 2.0F;
+        double mScaleCentreX = mVisualRect.left + mVisualRect.width() / 2.0F;
         mCentreY = mScaleCentreY;
         mCentreX = mScaleCentreX;
-        double dimensionVar = (double) mVisualRect.width();
+        double dimensionVar = mVisualRect.width();
         mInnerBevelWidth = dimensionVar + 10.0D;
         calculateMargin(mInnerBevelWidth);
     }

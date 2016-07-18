@@ -67,235 +67,235 @@ public class GaugeScale {
     }
 
     public ArrayList<GaugeRange> getGaugeRanges() {
-        return this.gaugeRanges;
+        return gaugeRanges;
     }
 
     public void setGaugeRanges(ArrayList<GaugeRange> gaugeRanges) {
         this.gaugeRanges = gaugeRanges;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public ArrayList<GaugePointer> getGaugePointers() {
-        return this.GaugePointers;
+        return GaugePointers;
     }
 
     public void setGaugePointers(ArrayList<GaugePointer> GaugePointers) {
         this.GaugePointers = GaugePointers;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getStartValue() {
-        return this.startValue;
+        return startValue;
     }
 
     public void setStartValue(double startValue) {
         this.startValue = startValue;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getEndValue() {
-        return this.endValue;
+        return endValue;
     }
 
     public void setEndValue(double endValue) {
         this.endValue = endValue;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getStartAngle() {
-        return this.startAngle;
+        return startAngle;
     }
 
     public void setStartAngle(double startAngle) {
         this.startAngle = startAngle;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getSweepAngle() {
-        return this.sweepAngle;
+        return sweepAngle;
     }
 
     public void setSweepAngle(double sweepAngle) {
         this.sweepAngle = sweepAngle;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getInterval() {
-        return this.interval;
+        return interval;
     }
 
     public void setInterval(double interval) {
         this.interval = interval;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public String getLabelPrefix() {
-        return this.labelPrefix;
+        return labelPrefix;
     }
 
     public void setLabelPrefix(String labelPrefix) {
         this.labelPrefix = labelPrefix;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public String getLabelPostfix() {
-        return this.labelPostfix;
+        return labelPostfix;
     }
 
     public void setLabelPostfix(String labelPostfix) {
         this.labelPostfix = labelPostfix;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public int getRimColor() {
-        return this.rimColor;
+        return rimColor;
     }
 
     public void setRimColor(int rimColor) {
         this.rimColor = rimColor;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getRimWidth() {
-        return this.rimWidth;
+        return rimWidth;
     }
 
     public void setRimWidth(double rimWidth) {
         this.rimWidth = rimWidth;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getLabelTextSize() {
-        return this.labelTextSize;
+        return labelTextSize;
     }
 
     public void setLabelTextSize(double labelTextSize) {
         this.labelTextSize = labelTextSize;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public Typeface getLabelTextStyle() {
-        return this.labelTextStyle;
+        return labelTextStyle;
     }
 
     public void setLabelTextStyle(Typeface labelTextStyle) {
         this.labelTextStyle = labelTextStyle;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public int getLabelColor() {
-        return this.labelColor;
+        return labelColor;
     }
 
     public void setLabelColor(int labelColor) {
         this.labelColor = labelColor;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getMinorTicksPerInterval() {
-        return this.minorTicksPerInterval;
+        return minorTicksPerInterval;
     }
 
     public void setMinorTicksPerInterval(double minorTicksPerInterval) {
         this.minorTicksPerInterval = minorTicksPerInterval;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public boolean isShowLabels() {
-        return this.showLabels;
+        return showLabels;
     }
 
     public void setShowLabels(boolean showLabels) {
         this.showLabels = showLabels;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public boolean isShowTicks() {
-        return this.showTicks;
+        return showTicks;
     }
 
     public void setShowTicks(boolean showTicks) {
         this.showTicks = showTicks;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public boolean isShowRim() {
-        return this.showRim;
+        return showRim;
     }
 
     public void setShowRim(boolean showRim) {
         this.showRim = showRim;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public TickSettings getMajorTickSettings() {
-        return this.majorTickSettings;
+        return majorTickSettings;
     }
 
     public void setMajorTickSettings(TickSettings majorTickSettings) {
         majorTickSettings.setmGauge(this.mGauge);
         this.majorTickSettings = majorTickSettings;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public TickSettings getMinorTickSettings() {
-        return this.minorTickSettings;
+        return minorTickSettings;
     }
 
     public void setMinorTickSettings(TickSettings minorTickSettings) {
         minorTickSettings.setmGauge(this.mGauge);
         this.minorTickSettings = minorTickSettings;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getRadiusFactor() {
-        return this.radiusFactor;
+        return radiusFactor;
     }
 
     public void setRadiusFactor(double radiusFactor) {
         this.radiusFactor = radiusFactor;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -305,13 +305,13 @@ public class GaugeScale {
 
     public void setNumberOfDecimalDigits(int numberOfDecimalDigits) {
         this.numberOfDecimalDigits = numberOfDecimalDigits;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
     public double getLabelOffset() {
-        return this.LabelOffset;
+        return LabelOffset;
     }
 
     public void setLabelOffset(double labelOffset) {

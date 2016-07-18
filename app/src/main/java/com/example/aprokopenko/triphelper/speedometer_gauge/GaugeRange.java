@@ -27,8 +27,8 @@ public class GaugeRange {
 
     public void setColor(int color) {
         this.color = color;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -38,8 +38,8 @@ public class GaugeRange {
 
     public void setStartValue(double startValue) {
         this.startValue = startValue;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -49,8 +49,8 @@ public class GaugeRange {
 
     public void setEndValue(double endValue) {
         this.endValue = endValue;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -60,8 +60,8 @@ public class GaugeRange {
 
     public void setWidth(double width) {
         this.width = width;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 
@@ -71,8 +71,8 @@ public class GaugeRange {
 
     public void setOffset(double offset) {
         this.offset = offset;
-        if (this.mGauge != null) {
-            this.mGauge.refreshGauge();
+        if (mGauge != null) {
+            mGauge.refreshGauge();
         }
     }
 }

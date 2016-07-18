@@ -8,7 +8,7 @@ class RangePointer extends GaugePointer {
     }
 
     public double getOffset() {
-        return this.offset;
+        return offset;
     }
 
     public void setOffset(double offset) {

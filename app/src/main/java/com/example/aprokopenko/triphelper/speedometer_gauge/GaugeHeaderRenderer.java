@@ -52,7 +52,7 @@ class GaugeHeaderRenderer extends View {
                 mPaint.setColor(header.getTextColor());
                 mPaint.setTextSize(((float) textSize) * TripHelperGauge.DENSITY);
                 mPaint.setTypeface(header.getTextStyle());
-                double headerTextWidth = (double) mPaint.measureText(header.getText());
+                double headerTextWidth = mPaint.measureText(header.getText());
                 if (header.getHeaderAlignment() != null) {
                     double left;
                     double top;

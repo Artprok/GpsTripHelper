@@ -72,7 +72,7 @@ public class PointerRender extends View {
     }
 
     public float getValue() {
-        return this.value;
+        return value;
     }
 
     public void setValue(float value) {
@@ -81,7 +81,7 @@ public class PointerRender extends View {
     }
 
     public boolean ismEnableAnimation() {
-        return this.mEnableAnimation;
+        return mEnableAnimation;
     }
 
     public void setmEnableAnimation(boolean mEnableAnimation) {
@@ -225,34 +225,28 @@ public class PointerRender extends View {
                 if (mGaugePointer instanceof RangePointer) {
                     rangePointerPoisition = (float) ((RangePointer) mGaugePointer).getOffset();
                 }
-                float factor = (mRangeFrame.left + (((mRangeFrame
-                        .width() / 2.0f) - mRangeFrame.left) * ((float) radFactor))) + ((float) (((double) rangePointerPoisition) *
-                        (mCentreX - mRimWidth)));
+                float factor = (float) ((mRangeFrame.left + (((mRangeFrame
+                        .width() / 2.0f) - mRangeFrame.left) * (radFactor))) + ((rangePointerPoisition) * (mCentreX - mRimWidth)));
                 if (mCentreY <= mCentreX) {
-                    factor = (mRangeFrame.top + (((mRangeFrame
-                            .height() / 2.0f) - mRangeFrame.top) * ((float) radFactor))) + ((float) (((double) rangePointerPoisition) *
-                            (mCentreY - mRimWidth)));
+                    factor = (float) ((mRangeFrame.top + (((mRangeFrame
+                            .height() / 2.0f) - mRangeFrame.top) * (radFactor))) + ((rangePointerPoisition) * (mCentreY - mRimWidth)));
                     if (gaugeType == GaugeType.West) {
-                        rectF = getRectF(factor, (float) (getCenterXminusDivideBy4plusRimS(((double) factor))),
-                                (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                                (float) (getCenterYplus0dot75minusRimS(((double) factor))));
+                        rectF = getRectF(factor, (float) (getCenterXminusDivideBy4plusRimS(factor)),
+                                (float) (getCenterXplusDivideBy2minusRimS(factor)), (float) (getCenterYplus0dot75minusRimS(factor)));
                     }
                     else if (gaugeType == GaugeType.East) {
-                        rectF = getRectF(factor, (float) (getCenterXminus0dot75plusRimS(((double) factor))),
-                                (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                                (float) (getCenterYplusDivideBy4minusRimS(((double) factor))));
+                        rectF = getRectF(factor, (float) (getCenterXminus0dot75plusRimS(factor)),
+                                (float) (getCenterXplusDivideBy2minusRimS(factor)), (float) (getCenterYplusDivideBy4minusRimS(factor)));
                     }
                     else if (gaugeType == GaugeType.North) {
-                        rectF = getRectF((float) (getCenterYminusDivideBy4plusRimS(((double) factor))),
-                                (float) (getCenterXminusDivideBy2plusRimS(((double) factor))),
-                                (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                                (float) (getCenterYplus0dot75minusRimS(((double) factor))));
+                        rectF = getRectF((float) (getCenterYminusDivideBy4plusRimS(factor)),
+                                (float) (getCenterXminusDivideBy2plusRimS(factor)), (float) (getCenterXplusDivideBy2minusRimS(factor)),
+                                (float) (getCenterYplus0dot75minusRimS(factor)));
                     }
                     else if (gaugeType == GaugeType.South) {
-                        rectF = getRectF((float) (getCenterYminus0dot75plusRimS(((double) factor))),
-                                (float) (getCenterXminusDivideBy2plusRimS(((double) factor))),
-                                (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                                (float) (getCenterYplusDivideBy4minusRimS(((double) factor))));
+                        rectF = getRectF((float) (getCenterYminus0dot75plusRimS(factor)),
+                                (float) (getCenterXminusDivideBy2plusRimS(factor)), (float) (getCenterXplusDivideBy2minusRimS(factor)),
+                                (float) (getCenterYplusDivideBy4minusRimS(factor)));
                     }
                     else if (gaugeType == GaugeType.NorthEast) {
                         rectF = getRectF((float) modif_centerYminus0dot375plusRimS, (float) moidf_centerXminus1dot125plusRimS,
@@ -271,32 +265,25 @@ public class PointerRender extends View {
                                 (float) modif_centerXplus1dot125minusRimS, (float) modif_centerYplus0dot375minusRimS);
                     }
                     else {
-                        rectF = getRectF(factor, (float) (getCenterXminusDivideBy2plusRimS(((double) factor))),
-                                (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                                (float) (getCenterYplusDivideBy2minusRimS(((double) factor))));
+                        rectF = getRectF(factor, (float) (getCenterXminusDivideBy2plusRimS(factor)),
+                                (float) (getCenterXplusDivideBy2minusRimS(factor)), (float) (getCenterYplusDivideBy2minusRimS(factor)));
                     }
                 }
                 else if (gaugeType == GaugeType.North) {
-                    rectF = getRectF((float) (getCenterYminusDivideBy4plusRimS(((double) factor))), factor,
-                            (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                            (float) (getCenterYplus0dot75minusRimS(((double) factor))));
+                    rectF = getRectF((float) (getCenterYminusDivideBy4plusRimS(factor)), factor,
+                            (float) (getCenterXplusDivideBy2minusRimS(factor)), (float) (getCenterYplus0dot75minusRimS(factor)));
                 }
                 else if (gaugeType == GaugeType.South) {
-                    rectF = getRectF((float) (getCenterYminus0dot75plusRimS(((double) factor))), factor,
-                            (float) (getCenterXplusDivideBy2minusRimS(((double) factor))),
-                            (float) (getCenterYplusDivideBy4minusRimS(((double) factor))));
+                    rectF = getRectF((float) (getCenterYminus0dot75plusRimS(factor)), factor,
+                            (float) (getCenterXplusDivideBy2minusRimS(factor)), (float) (getCenterYplusDivideBy4minusRimS(factor)));
                 }
                 else if (gaugeType == GaugeType.West) {
-                    rectF = getRectF((float) (getCenterYminusDivideBy2plusRimS(((double) factor))),
-                            (float) (getCenterXminusDivideBy4plusRimS(((double) factor))),
-                            (float) (getCenterXplus0dot75minusRimS(((double) factor))),
-                            (float) (getCenterYplusDivideBy2minusRimS(((double) factor))));
+                    rectF = getRectF((float) (getCenterYminusDivideBy2plusRimS(factor)), (float) (getCenterXminusDivideBy4plusRimS(factor)),
+                            (float) (getCenterXplus0dot75minusRimS(factor)), (float) (getCenterYplusDivideBy2minusRimS(factor)));
                 }
                 else if (gaugeType == GaugeType.East) {
-                    rectF = getRectF((float) (getCenterYminusDivideBy2plusRimS(((double) factor))),
-                            (float) (getCenterXminus0dot75plusRimS(((double) factor))),
-                            (float) (getCenterXplusDivideBy4minusRimS(((double) factor))),
-                            (float) (getCenterYplusDivideBy2minusRimS(((double) factor))));
+                    rectF = getRectF((float) (getCenterYminusDivideBy2plusRimS(factor)), (float) (getCenterXminus0dot75plusRimS(factor)),
+                            (float) (getCenterXplusDivideBy4minusRimS(factor)), (float) (getCenterYplusDivideBy2minusRimS(factor)));
                 }
                 else if (gaugeType == GaugeType.NorthEast) {
                     rectF = getRectF((float) modif_centerYminus0dot375plusRimS, (float) moidf_centerXminus1dot125plusRimS,
@@ -421,7 +408,7 @@ public class PointerRender extends View {
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth((float) width);
             canvas.drawArc(rectF, (float) gaugeScale.getStartAngle(),
-                    (float) ((getPointerAngle((double) value, gaugeScale) - getPointerAngle(gaugeScale.getStartValue(),
+                    (float) ((getPointerAngle(value, gaugeScale) - getPointerAngle(gaugeScale.getStartValue(),
                             gaugeScale)) / GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY), false, paint);
             return;
         }
@@ -438,7 +425,7 @@ public class PointerRender extends View {
                 .getLengthFactor() * (mLabelsPathHeight / 2.0d));
         double innerSize     = (mLabelsPathHeight / 2.0d) - pointerLength;
         double pointerMargin = (modif_minSizeDivideBy2 - (mLabelsPathHeight / 2.0d)) + pointerLength;
-        double angle         = getPointerAngle((double) value, gaugeScale);
+        double angle         = getPointerAngle(value, gaugeScale);
 
         //modif optim
         double modif_widthMultCos                     = modif_widthDivideBy2 * Math.cos(angle - 90.0d);

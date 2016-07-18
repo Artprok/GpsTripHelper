@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
@@ -141,11 +142,11 @@ class ScaleRenderer extends View {
 
         for (int j = 0; (double) j <= totalTicks; ++j) {
             if (fractionalDigit < 0) {
-                if ((double) ((int) startValue) == startValue && (double) ((int) gaugeScale.getInterval()) == gaugeScale.getInterval()) {
+                if (((int) startValue) == startValue && ((int) gaugeScale.getInterval()) == gaugeScale.getInterval()) {
                     label = prefix + String.valueOf((int) startValue) + postfix;
                 }
                 else {
-                    label = prefix + String.valueOf((float) startValue) + postfix;
+                    label = prefix + String.valueOf(startValue) + postfix;
                 }
             }
             else {
@@ -154,7 +155,7 @@ class ScaleRenderer extends View {
             }
 
             paint.setAntiAlias(true);
-            double widthOfLabel = (double) paint.measureText(String.valueOf((int) gaugeScale.getEndValue()));
+            double widthOfLabel = paint.measureText(String.valueOf((int) gaugeScale.getEndValue()));
             //modif optimization
             double modifWidthOfLabelDivideBy4     = widthOfLabel / 4.0D;
             double modifWidthOfLabelDivideBy1dot8 = widthOfLabel / 1.8D;
@@ -283,7 +284,7 @@ class ScaleRenderer extends View {
         double tempGaugeSize = (mInnerBevelWidth - 10.0D) / 2.0D;
         tempGaugeSize *= 1.0D - gaugeScale.getRadiusFactor();
 
-        double tickLength1;
+
         double minorTickPosition;
         double outerSize;
         double x2;
@@ -295,22 +296,19 @@ class ScaleRenderer extends View {
         double modifArcAliasMultByRimWidth  = 0.7D * gaugeScale.getRimWidth();
         double modif1dot5MultipByCosAngle   = 1.5D * Math.cos(angle);
         double modif1dot5MultipBySinAngle   = 1.5D * Math.sin(angle);
+        double tickLength1 = tempGaugeSize - modifTickOffsetMultByCenterX + modifArcAliasMultByRimWidth - modifRimWidthDivideBy2;
 
-        for (int minorTicksCount = 0; (double) minorTicksCount <= totalTicks; ++minorTicksCount) {
-            paint.setAntiAlias(true);
-            paint.setStrokeWidth((float) width);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(color);
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth((float) width);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(color);
 
-            tickLength1 = tempGaugeSize - modifTickOffsetMultByCenterX + modifArcAliasMultByRimWidth - modifRimWidthDivideBy2;
-
+        for (int minorTicksCount = 0; minorTicksCount <= totalTicks; ++minorTicksCount) {
             //modif optimization
             double modifTickLengthMultByCosAngle         = tickLength1 * Math.cos(angle);
             double modifTickMultBy1dot5andMultByCosAngle = tickLength1 * modif1dot5MultipByCosAngle;
-
             double tickLength = modifMinSizeDivideBy2 - tempGaugeSize + modifTickOffsetMultByCenterX - modifArcAliasMultByRimWidth +
                     modifRimWidthDivideBy2;
-
 
             if (mCentreY > mCentreX) {
                 if (gaugeType == GaugeType.West) {
@@ -501,18 +499,18 @@ class ScaleRenderer extends View {
         int          minorColor    = minorSettings.getColor();
 
         paint.setStrokeWidth((float) minorWidth);
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(minorColor);
 
         //modif optimization
         double modif_arcAlisaMultByWidth      = arcAliasing * gaugeScale.getRimWidth();
         double modif_minorOffsetMultByCenterX = minorOffset * mCentreX;
+        minorTickPosition = GaugeConstants.ZERO;
 
-
-        for (int i = 1; (double) i <= minorTicksQuantity; ++i) {
+        for (int i = 1; i <= minorTicksQuantity; ++i) {
             angle += minorTickAngle;
-            paint.setAntiAlias(true);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(minorColor);
-            minorTickPosition = GaugeConstants.ZERO;
+
             outerSize = tempGaugeSize - modif_minorOffsetMultByCenterX + modif_arcAlisaMultByWidth -
                     minorTickPosition - modifRimWidthDivideBy2;
             tickLength1 = modifMinSizeDivideBy2 - tempGaugeSize + modif_minorOffsetMultByCenterX - modif_arcAlisaMultByWidth +
@@ -699,13 +697,15 @@ class ScaleRenderer extends View {
         double                endtArc;
         ArrayList<GaugeRange> gaugeRanges = gaugeScale.getGaugeRanges();
         if (gaugeRanges != null) {
+            rangePaint.setAntiAlias(true);
+            rangePaint.setStyle(Paint.Style.STROKE);
+
+
             for (Iterator i$ = gaugeRanges.iterator(); i$.hasNext(); canvas
                     .drawArc(rectF, (float) startArc, (float) endtArc, false, rangePaint)) {
                 double     rimWidth   = gauge.getmRimWidth();
                 GaugeRange gaugeRange = (GaugeRange) i$.next();
                 gaugeRange.setmGauge(gaugeScale.getmGauge());
-                rangePaint.setAntiAlias(true);
-                rangePaint.setStyle(Paint.Style.STROKE);
                 rangePaint.setStrokeWidth((float) gaugeRange.getWidth());
                 rangePaint.setColor(gaugeRange.getColor());
 

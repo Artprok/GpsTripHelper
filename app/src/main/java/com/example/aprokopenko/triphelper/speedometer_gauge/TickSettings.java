@@ -15,7 +15,7 @@ public class TickSettings {
     }
 
     public double getSize() {
-        return this.size;
+        return size;
     }
 
     public void setSize(double size) {
@@ -30,7 +30,7 @@ public class TickSettings {
     }
 
     public double getWidth() {
-        return this.width;
+        return width;
     }
 
     public void setWidth(double width) {
@@ -41,7 +41,7 @@ public class TickSettings {
     }
 
     public int getColor() {
-        return this.color;
+        return color;
     }
 
     public void setColor(int color) {
@@ -52,7 +52,7 @@ public class TickSettings {
     }
 
     public double getOffset() {
-        return this.offset;
+        return offset;
     }
 
     public void setOffset(double offset) {
