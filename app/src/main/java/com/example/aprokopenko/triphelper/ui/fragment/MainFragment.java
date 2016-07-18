@@ -55,7 +55,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-
 @Singleton public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
     @BindView(R.id.speedometerContainer)
     RelativeLayout speedometerContainer;
@@ -138,11 +137,11 @@ import butterknife.Unbinder;
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 tripProcessor.performExit();
                 tripProcessor = null;
-                if (tripProcessor == null) {
-                    tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-                    tripProcessor.setSpeedChangeListener(this);
-                    gpsStatusListener(REGISTER);
-                }
+
+                tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+                tripProcessor.setSpeedChangeListener(this);
+                gpsStatusListener(REGISTER);
+
             }
             else {
                 requestPermissionWithRationale();
