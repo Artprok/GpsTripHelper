@@ -257,7 +257,6 @@ import butterknife.Unbinder;
         return timeSpent - timeSpentInMotion;
     }
 
-
     private void setupMapView(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);
         MapsInitializer.initialize(this.getActivity());

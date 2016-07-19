@@ -96,7 +96,6 @@ public class GpsHandler implements LocationListener, Parcelable {
         speedObservable.observeOn(Schedulers.immediate()).subscribe(speedSubscriber);
     }
 
-
     private void getMaxSpeedAndSetupObservable(float speed) {
         maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
         setupMaxSpeedObservable(maxSpeed);
@@ -111,6 +110,7 @@ public class GpsHandler implements LocationListener, Parcelable {
         else {
             speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
         }
+
         setupLocationObservable(location);
         getMaxSpeedAndSetupObservable(speed);
         setupSpeedObservable(speed);
