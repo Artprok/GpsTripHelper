@@ -95,7 +95,6 @@
             />
 
         <Switch
-            android:visibility="invisible"
             android:id="@+id/backgroundSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -105,10 +104,10 @@
             android:showText="true"
             android:textOff="@string/switchOff"
             android:textOn="@string/switchOn"
+            android:visibility="invisible"
             />
 
         <TextView
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/backgroundSwitch"
@@ -118,6 +117,7 @@
             android:text="@string/workInBackGround"
             android:textColor="@color/textColor"
             android:textSize="@dimen/metricPortraitTextSize"
+            android:visibility="invisible"
             />
 
     </RelativeLayout>

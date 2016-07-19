@@ -125,8 +125,6 @@ import butterknife.Unbinder;
 
         setupButtons();
         setupSpeedometer();
-
-
         setupTripProcessor();
         setupFuelFields();
     }
@@ -141,7 +139,6 @@ import butterknife.Unbinder;
                 tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
                 tripProcessor.setSpeedChangeListener(this);
                 gpsStatusListener(REGISTER);
-
             }
             else {
                 requestPermissionWithRationale();

@@ -40,7 +40,6 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         >
-
     </RelativeLayout>
 
     <TextView
@@ -144,10 +143,10 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/button_background"
-        android:text="@string/stop"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="9dp"
+        android:background="@drawable/button_background"
+        android:text="@string/stop"
         android:visibility="invisible"
         />
 

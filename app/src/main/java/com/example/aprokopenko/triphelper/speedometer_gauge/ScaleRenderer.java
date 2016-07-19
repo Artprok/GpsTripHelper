@@ -13,7 +13,7 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-class ScaleRenderer extends View {
+public class ScaleRenderer extends View {
 
     private       TripHelperGauge gauge;
     private       GaugeScale      gaugeScale;

@@ -23,9 +23,9 @@
         android:layout_below="@+id/fuelToFill"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
+        android:background="@drawable/button_shape"
         android:padding="10dp"
         android:text="@string/fill_fuel_tank"
-        android:textSize="12sp"
-        android:background="@drawable/button_shape"/>
+        android:textSize="12sp"/>
 
 </RelativeLayout>

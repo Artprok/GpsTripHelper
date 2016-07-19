@@ -6,10 +6,10 @@
 
     <ImageButton
         android:id="@+id/eraseButton"
-        android:layout_alignParentRight="true"
-        android:layout_margin="5dp"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
         android:background="@drawable/button_background"
         android:src="@drawable/erase_button"
         />
@@ -95,20 +95,19 @@
             />
 
         <Switch
-            android:visibility="invisible"
             android:id="@+id/backgroundSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/measurementUnitLabel"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_below="@id/measurementUnitLabel"
             android:layout_centerVertical="true"
             android:textOff="@string/switchOff"
             android:textOn="@string/switchOn"
+            android:visibility="invisible"
             />
 
         <TextView
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/backgroundSwitch"
@@ -116,7 +115,8 @@
             android:layout_margin="5dp"
             android:text="@string/workInBackGround"
             android:textColor="@color/textColor"
-            android:textSize="@dimen/metricPortraitTextSize"/>
+            android:textSize="@dimen/metricPortraitTextSize"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

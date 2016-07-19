@@ -12,7 +12,7 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignmen
 
 import java.util.ArrayList;
 
-class GaugeHeaderRenderer extends View {
+public class GaugeHeaderRenderer extends View {
     private TripHelperGauge mGauge;
     private Paint           mPaint;
     private ArrayList<Header> headerArrayList = new ArrayList<>();
