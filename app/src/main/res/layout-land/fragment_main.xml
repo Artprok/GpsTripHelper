@@ -56,15 +56,15 @@
 
     <RelativeLayout
         android:id="@+id/speedometerContainer"
-        android:layout_width="400dp"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
         android:layout_marginTop="7dp"
-        android:layout_toLeftOf="@+id/btn_TripList"
-        android:layout_toRightOf="@+id/fuelLayout"
+        android:layout_toLeftOf="@id/btn_Settings"
+        android:layout_toRightOf="@id/fuelLayout"
         >
 
         <TextView
@@ -74,7 +74,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:paddingBottom="8dp"
-            android:paddingRight="23dp"
+            android:paddingRight="19dp"
             android:text="@string/initial_speedometer_val"
             android:textSize="@dimen/speedometerTextViewSize"
             />

@@ -145,7 +145,7 @@ public class CircularGaugeFactory {
         }
 
         circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
-        circularGaugeHeader.setPosition(new PointF((float) 0.437, (float) 0.70));
+        circularGaugeHeader.setPosition(new PointF( 0.42f,  0.7f));
         circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
         gaugeHeaders.add(0, circularGaugeHeader);
         gauge.setHeaders(gaugeHeaders);

@@ -8,16 +8,16 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import java.util.ArrayList;
 
 public class TripInfoContainer {
-    private float avgFuelConsumption = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float distanceTravelled  = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float timeSpentInMotion  = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float moneyOnFuelSpent   = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float timeSpentForTrip   = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float timeSpentOnStop    = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float fuelSpent          = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float avgSpeed           = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private float maxSpeed           = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-    private int   id                 = ConstantValues.NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float avgFuelConsumption = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float distanceTravelled  = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float timeSpentInMotion  = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float moneyOnFuelSpent   = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float timeSpentForTrip   = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float timeSpentOnStop    = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float fuelSpent          = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float avgSpeed           = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private float maxSpeed           = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
+    private int   id                 = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
 
     private final ArrayList<Route> route;
     private final String           date;

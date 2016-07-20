@@ -44,8 +44,7 @@ public class ConstantValues {
     public static final float CONSUMPTION_VERY_HIGH_TRAFFIC_ADD = 10;
 
     public static final int   TEXT_COLOR             = Color.parseColor("#EEEEEE");
-    public static final int   MIN_UPDATE_DISTANCE    = 0;
-    public static final long  MIN_UPDATE_TIME        = 1500;
+    public static final long  MIN_UPDATE_TIME        = 1700;
     public static final float SPEED_VALUE_WORKAROUND = 666;
 
     public static final int TEXT_ANIM_DURATION             = (int) MIN_UPDATE_TIME;
@@ -63,7 +62,7 @@ public class ConstantValues {
     public static final int CITY_SPEED_LIMIT    = 80;
     public static final int OUTCITY_SPEED_LIMIT = 110;
 
-    public static final int NEGaTIVE_VALUE_OF_TRIPINFO_ERROR_CODE = 666;
+    public static final int NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE = 111;
 
     public static final int WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
     public static final int WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
