@@ -490,7 +490,7 @@ public class TripProcessor implements Parcelable {
         LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
         float  speed;
         // fixme: 10.05.2016 remove debug code
-        if (ConstantValues.DEBUG_MODE) {//debug code for testing, adds random speedValue in each location tick
+        if (BuildConfig.DEBUG) {//debug code for testing, adds random speedValue in each location tick
             speed = UtilMethods.generateRandomSpeed();
         }
         else {

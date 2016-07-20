@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
@@ -104,7 +105,7 @@ public class GpsHandler implements LocationListener, Parcelable {
     @Override public void onLocationChanged(final Location location) {
         float speed;
         // FIXME: 14.04.2016 debug code remove
-        if (ConstantValues.DEBUG_MODE) {
+        if (BuildConfig.DEBUG) {
             speed = UtilMethods.generateRandomSpeed();
         }
         else {

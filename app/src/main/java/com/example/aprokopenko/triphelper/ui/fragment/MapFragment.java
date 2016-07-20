@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
@@ -185,7 +186,7 @@ import rx.Subscriber;
                 locationList.add(location);
                 if (fragmentVisible) {
                     final float speed;
-                    if (ConstantValues.DEBUG_MODE) {
+                    if (BuildConfig.DEBUG) {
                         speed = UtilMethods.generateRandomSpeed();
                     }
 
@@ -213,7 +214,7 @@ import rx.Subscriber;
                 LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
                 setPreviousLocationPoint(currentLocation);
-                if (ConstantValues.DEBUG_MODE) {
+                if (BuildConfig.DEBUG) {
                     MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
                 }
                 else {

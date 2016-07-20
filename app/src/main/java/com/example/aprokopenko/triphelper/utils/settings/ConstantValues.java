@@ -24,7 +24,6 @@ public class ConstantValues {
     public static final float   SPEEDOMETER_HEIGHT = 0.99f;
     public static final float   SPEEDOMETER_WIDTH  = 0.99f;
     public static final int     PER_100            = 100;
-    public static final boolean DEBUG_MODE         = false; //todo change for release to false
     public static final boolean LOGGING_ENABLED    = false; //todo change for release to false
 
     public static final int   START_VALUE                = 0;
@@ -50,8 +49,8 @@ public class ConstantValues {
     public static final long  MIN_UPDATE_TIME        = 1500;
     public static final float SPEED_VALUE_WORKAROUND = 666;
 
-    public static final int TEXT_ANIM_DURATION             = (int)MIN_UPDATE_TIME;
-    public static final int SPEEDOMETER_TEXT_ANIM_DURATION = (int)MIN_UPDATE_TIME;
+    public static final int TEXT_ANIM_DURATION             = (int) MIN_UPDATE_TIME;
+    public static final int SPEEDOMETER_TEXT_ANIM_DURATION = (int) MIN_UPDATE_TIME;
 
     public static final float KMH_MULTIPLIER   = 3.6f;
     public static final float MPH_MULTIPLIER   = 2.23f;
