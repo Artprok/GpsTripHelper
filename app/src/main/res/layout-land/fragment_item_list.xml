@@ -26,7 +26,7 @@
             >
 
             <TextView
-                android:id="@+id/headerForAllInfo"
+                android:id="@+id/text_headerForAllInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/info_about_all_trip_header_label"
@@ -37,14 +37,14 @@
                 android:id="@+id/listDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/headerForAllInfo"
+                android:layout_below="@id/text_headerForAllInfo"
                 android:layout_marginBottom="@dimen/margin_between_blocks_list"
                 android:background="@drawable/blocks_with_shadow"
                 android:padding="@dimen/block_padding"
                 >
 
                 <TextView
-                    android:id="@+id/tripDataLayoutLabel"
+                    android:id="@+id/text_tripDataLayoutLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/trip_data_layout_label"
@@ -53,27 +53,27 @@
                     />
 
                 <TextView
-                    android:id="@+id/timeSpentOnAllTripsLabel"
+                    android:id="@+id/text_timeSpentOnAllTripsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tripDataLayoutLabel"
+                    android:layout_below="@+id/text_tripDataLayoutLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/time_spent_on_all_hint"
                     />
 
                 <TextView
-                    android:id="@+id/timeSpentOnAllTripsListFrag"
+                    android:id="@+id/text_timeSpentOnAllTripsListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/timeSpentOnAllTripsLabel"
+                    android:layout_alignBottom="@+id/text_timeSpentOnAllTripsLabel"
                     android:layout_alignParentRight="true"
                     />
 
                 <TextView
-                    android:id="@+id/distanceTravelledLabel"
+                    android:id="@+id/text_distanceTravelledLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/timeSpentOnAllTripsLabel"
+                    android:layout_below="@+id/text_timeSpentOnAllTripsLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:layout_marginTop="@dimen/margin_between_items"
                     android:paddingBottom="@dimen/block_bottom_padding"
@@ -81,11 +81,11 @@
                     />
 
                 <TextView
-                    android:id="@+id/distanceTravelledListFrag"
+                    android:id="@+id/text_distanceTravelledListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/distanceTravelledLabel"
+                    android:layout_alignTop="@+id/text_distanceTravelledLabel"
                     />
 
             </RelativeLayout>
@@ -101,7 +101,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/speedLayoutLabel"
+                    android:id="@+id/text_speedLayoutLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/speed_layout_label"
@@ -110,38 +110,38 @@
                     />
 
                 <TextView
-                    android:id="@+id/maxSpeedLabel"
+                    android:id="@+id/text_maxSpeedLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/speedLayoutLabel"
+                    android:layout_below="@id/text_speedLayoutLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/maximum_speed_hint"
                     />
 
                 <TextView
-                    android:id="@+id/maxSpeedListFrag"
+                    android:id="@+id/text_maxSpeedListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/maxSpeedLabel"
+                    android:layout_alignBottom="@+id/text_maxSpeedLabel"
                     android:layout_alignParentRight="true"
                     />
 
                 <TextView
-                    android:id="@+id/tripAvgSpeedLabel"
+                    android:id="@+id/text_tripAvgSpeedLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/maxSpeedLabel"
+                    android:layout_below="@+id/text_maxSpeedLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:paddingBottom="@dimen/block_bottom_padding"
                     android:text="@string/average_speed_hint"
                     />
 
                 <TextView
-                    android:id="@+id/avgSpeedListFrag"
+                    android:id="@+id/text_avgSpeedListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/tripAvgSpeedLabel"
+                    android:layout_alignTop="@+id/text_tripAvgSpeedLabel"
                     />
 
             </RelativeLayout>
@@ -155,7 +155,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/fuelSpentLayoutLabel"
+                    android:id="@+id/text_fuelSpentLayoutLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/fuel_spent_layout_label"
@@ -164,55 +164,55 @@
                     />
 
                 <TextView
-                    android:id="@+id/avgFuelConsumptionLabel"
+                    android:id="@+id/text_avgFuelConsumptionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/fuelSpentLayoutLabel"
+                    android:layout_below="@id/text_fuelSpentLayoutLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/average_fuel_consumption_hint"
                     />
 
                 <TextView
-                    android:id="@+id/avgFuelConsListFrag"
+                    android:id="@+id/text_avgFuelConsListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/avgFuelConsumptionLabel"
+                    android:layout_alignBottom="@+id/text_avgFuelConsumptionLabel"
                     android:layout_alignParentRight="true"
                     />
 
                 <TextView
-                    android:id="@+id/fuelSpentLabel"
+                    android:id="@+id/text_fuelSpentLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/avgFuelConsumptionLabel"
+                    android:layout_below="@+id/text_avgFuelConsumptionLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:text="@string/fuel_spent_hint"
                     />
 
                 <TextView
-                    android:id="@+id/fuelSpentListFrag"
+                    android:id="@+id/text_fuelSpentListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/fuelSpentLabel"
+                    android:layout_alignBottom="@+id/text_fuelSpentLabel"
                     android:layout_alignParentRight="true"
                     />
 
                 <TextView
-                    android:id="@+id/moneyOnFuelSpentLabel"
+                    android:id="@+id/text_moneyOnFuelSpentLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/fuelSpentLabel"
+                    android:layout_below="@+id/text_fuelSpentLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:paddingBottom="@dimen/block_bottom_padding"
                     android:text="@string/money_on_fuel_spent_hint"
                     />
 
                 <TextView
-                    android:id="@+id/moneyOnFuelSpentListFrag"
+                    android:id="@+id/text_moneyOnFuelSpentListFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/moneyOnFuelSpentLabel"
+                    android:layout_alignTop="@+id/text_moneyOnFuelSpentLabel"
                     />
 
 
@@ -227,7 +227,7 @@
             android:layout_toRightOf="@+id/listTripInfoLayout">
 
             <TextView
-                android:id="@+id/tripListHeader"
+                android:id="@+id/text_tripListHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/list_of_trips_label"
@@ -242,8 +242,8 @@
                 android:name="com.example.aprokopenko.triphelper.ui.fragment.TripListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignLeft="@+id/tripListHeader"
-                android:layout_below="@+id/tripListHeader"
+                android:layout_alignLeft="@+id/text_tripListHeader"
+                android:layout_below="@+id/text_tripListHeader"
                 android:background="@drawable/blocks_with_shadow"
                 android:paddingBottom="5dp"
                 app:layoutManager="LinearLayoutManager"

@@ -32,7 +32,7 @@
     <string name="hourPrefix">&#160;год</string>
     <string name="fuel_cons_prefix">литрiв/100км</string>
     <string name="fuel_overload_toast">Указано топлива, больше чем объём бака</string>
-    <string name="fuel_spent_toast">Fuel filled -</string>
+    <string name="fuel_spent_toast">Палива залито -&#160;</string>
     <string name="file_erased_toast">Данные стёрты</string>
     <string name="file_not_erased_toast">Что-то пошло не так и данные не удалось стереть</string>
     <string name="gps_first_fix_toast">Связь со спутниками установлена</string>
@@ -50,7 +50,32 @@
     <string name="exit_dialog_title">Вихiд</string>
     <string name="exit_dialog_string">Ви впевненi що бажаэте вийти?</string>
     <string name="aboutTitle">Про автопомiчнiка:</string>
-    <string name="aboutMainText">TripHelper created by Artyr Prokopenko"\n"Version 1.0"\n"Application was created for people         who want track main info about their trips."\n"Main features of this application:"\n"-speedometer"\n"-kilometer         counter"\n"</string>
+    <string name="aboutMainText"> Разработчик Автопомощника - Артур Прокопенко"\n"
+        "\n"
+        Версия 1.0
+        "\n"
+        "\n"
+        Автопомощник был создан для тех людей, кому важно знать основную информацию о их поездках и их показателях.
+        "\n"
+        "\n"
+        Автопомощник позволяет Вам:
+        "\n"
+        -Узнать расстояние пройденное Вами.
+        "\n"
+        -Узнать сколько топлива было потрачено и на сколько километров хватит остатка в баке.
+        "\n"
+        -Узнать скорость движения с помощью высокоточного спидометра.
+        "\n"
+        -Посмотреть на пройденные Вами маршруты на карте.
+        "\n"
+        -Посмотреть Ваши скоростные характеристики: среднюю скорость,максимальную скорость.
+        "\n"
+        -Посмотреть сколько денег Вы тратите на топливо.
+        "\n"
+        -Посмотреть сколько времени Вы находились в движении, а сколько простояли в пробке.
+        "\n"
+        "\n"
+        Надеемся, что Вам понравился Автопомощник, оцените пожалуйста его на GooglePlay, чтобы помочь нам сделать его ещё лучше!</string>
     <string name="aboutNegativeButton">Дякую, можливо пiзнiше</string>
     <string name="aboutRateButton">Круто, хочу оценить!</string>
     <string name="aboutFeedbackButton">Послать отзыв разработчику</string>
@@ -68,9 +93,20 @@
     <string name="sendWithFeedback">Послати email з помiччю…?</string>
     <string name="subjectForFeedback">Вiдкуг про Автопомiчника</string>
     <string name="extraTextInFeedback">Добрый день, у меня возникли некоторые проблемы с приложением или у меня есть едеи как сделать его лучше</string>
-    <string name="somethingWentWrongMessage">We can\'t draw your route on map, because we doesn\'t have any stored GPS data for this trip. Sorry :(</string>
-    <string name="somethingWentWrongOk">Ok</string>
-    <string name="somethingWentWrongTitle">Что-то пошло не так</string>
+    <string name="somethingWentWrongMessage"> Автопомощник не может отобразить Ваш путь на карте, потому что у него нету ни одной записанной GPS координаты.
+         "\n"
+         "\n"
+        Причины почему это могло произойти:
+        "\n"
+        -GPS был выключен в течении этой поездки
+         "\n"
+        -Вы забыли нажать кнопку Старт в начале поездки
+         "\n"
+        -Вы забыли нажать кнопку Стоп в конце поездки
+         "\n"
+         "\n"</string>
+    <string name="somethingWentWrongOk">Ок</string>
+    <string name="somethingWentWrongTitle">Что-то пошло не так..</string>
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
     <string name="switchOff">Вимк</string>

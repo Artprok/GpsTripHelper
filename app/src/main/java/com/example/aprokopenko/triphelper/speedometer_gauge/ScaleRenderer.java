@@ -283,7 +283,6 @@ public class ScaleRenderer extends View {
         double tempGaugeSize = (mInnerBevelWidth - 10.0D) / 2.0D;
         tempGaugeSize *= 1.0D - gaugeScale.getRadiusFactor();
 
-
         double minorTickPosition;
         double outerSize;
         double x2;

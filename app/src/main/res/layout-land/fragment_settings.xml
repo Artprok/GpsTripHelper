@@ -5,13 +5,13 @@
                 tools:context="com.example.aprokopenko.triphelper.ui.fragment.SettingsFragment">
 
     <ImageButton
-        android:id="@+id/eraseButton"
+        android:id="@+id/btn_erase"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
-        android:background="@drawable/button_background"
-        android:src="@drawable/erase_button"
+        android:background="@drawable/btn_background"
+        android:src="@drawable/btn_erase"
         />
 
     <RelativeLayout
@@ -22,7 +22,7 @@
 
 
         <EditText
-            android:id="@+id/fuelPriceEditText"
+            android:id="@+id/editText_fuelPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -33,52 +33,52 @@
             />
 
         <EditText
-            android:id="@+id/fuelConsumptionEditText"
+            android:id="@+id/editText_fuelConsumption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/fuelPriceEditText"
+            android:layout_below="@+id/editText_fuelPrice"
             android:hint="@string/fuel_consumption"
             android:inputType="numberDecimal"
             />
 
         <EditText
-            android:id="@+id/fuelCapacityEditText"
+            android:id="@+id/editText_fuelCapacity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/fuelConsumptionEditText"
+            android:layout_below="@+id/editText_fuelConsumption"
             android:hint="@string/fuel_capacity"
             android:inputType="number"
             />
 
         <TextView
-            android:id="@+id/curFuelPrice"
+            android:id="@+id/text_curFuelPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fuelPriceEditText"
+            android:layout_alignBaseline="@+id/editText_fuelPrice"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/curFuelCons"
+            android:id="@+id/text_curFuelCons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fuelConsumptionEditText"
+            android:layout_alignBaseline="@+id/editText_fuelConsumption"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/curFuelCapacity"
+            android:id="@+id/text_curFuelCapacity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fuelCapacityEditText"
+            android:layout_alignBaseline="@+id/editText_fuelCapacity"
 
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/measurementUnitLabel"
+            android:id="@+id/text_measurementUnitLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fuelCapacityEditText"
+            android:layout_below="@id/editText_fuelCapacity"
             android:layout_margin="5dp"
             android:text="@string/measurementUnitText"
             android:textColor="@color/textColor"
@@ -88,7 +88,7 @@
             android:id="@+id/measurementUnitSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/measurementUnitLabel"
+            android:layout_alignBaseline="@id/text_measurementUnitLabel"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             android:spinnerMode="dialog"
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/measurementUnitLabel"
+            android:layout_below="@id/text_measurementUnitLabel"
             android:layout_centerVertical="true"
             android:textOff="@string/switchOff"
             android:textOn="@string/switchOn"
@@ -121,13 +121,13 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/aboutButton"
+        android:id="@+id/btn_about"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
-        android:background="@drawable/about"
+        android:background="@drawable/btn_about"
         />
 
 

@@ -8,7 +8,7 @@
     >
 
     <EditText
-        android:id="@+id/fuelToFill"
+        android:id="@+id/editText_fuelToFill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,13 +17,13 @@
         />
 
     <Button
-        android:id="@+id/refillButton"
+        android:id="@+id/btn_refill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fuelToFill"
+        android:layout_below="@+id/editText_fuelToFill"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
-        android:background="@drawable/button_shape"
+        android:background="@drawable/btn_shape"
         android:padding="10dp"
         android:text="@string/fill_fuel_tank"
         android:textSize="12sp"/>

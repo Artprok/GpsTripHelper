@@ -58,26 +58,26 @@ import butterknife.Unbinder;
 @Singleton public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
     @BindView(R.id.speedometerContainer)
     RelativeLayout speedometerContainer;
-    @BindView(R.id.speedometerTextView)
+    @BindView(R.id.text_SpeedometerView)
     TextView       speedometerTextView;
     @BindView(R.id.refillButtonLayout)
     RelativeLayout refillButtonLayout;
-    @BindView(R.id.tripListButton)
+    @BindView(R.id.btn_TripList)
     ImageButton    tripListButton;
-    @BindView(R.id.statusImageView)
+    @BindView(R.id.image_statusView)
     ImageView      statusImage;
-    @BindView(R.id.startButton)
+    @BindView(R.id.btn_start)
     Button         startButton;
-    @BindView(R.id.stopButton)
+    @BindView(R.id.btn_stop)
     Button         stopButton;
     @BindView(R.id.fuelLayout)
     RelativeLayout fuelLayout;
-    @BindView(R.id.fuelLeftView)
+    @BindView(R.id.text_fuelLeftView)
     TextView       fuelLeft;
-    @BindView(R.id.settingsButton)
+    @BindView(R.id.btn_Settings)
     ImageButton    settingsButton;
 
-    public static final int LOCATION_REQUEST_CODE = 1;
+    private static final int LOCATION_REQUEST_CODE = 1;
 
     private static final String  LOG_TAG  = "MainFragment";
     private static final boolean REMOVE   = false;
@@ -517,9 +517,12 @@ import butterknife.Unbinder;
     private void gpsStatusListener(boolean register) {
         if (register) {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            // TODO: 24.06.2016 fix permission issue here. Need to addcondition when addListener is allowed
+            // TODO: 24.06.2016 fix permission issue here. Need to add condition when addListener is allowed
             if (UtilMethods.isPermissionAllowed(context)) {
                 lm.addGpsStatusListener(this);
+            }
+            else {
+                requestLocationPermissions();
             }
         }
         else {
@@ -559,7 +562,7 @@ import butterknife.Unbinder;
 
     private void setGpsIconActive() {
         getContextIfNull();
-        ButterKnife.bind(R.id.statusImageView, getActivity());
+        ButterKnife.bind(R.id.image_statusView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -574,7 +577,7 @@ import butterknife.Unbinder;
 
     private void setGpsIconNotActive() {
         getContextIfNull();
-        ButterKnife.bind(R.id.statusImageView, getActivity());
+        ButterKnife.bind(R.id.image_statusView, getActivity());
         Drawable redSatellite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
         if (statusImage != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

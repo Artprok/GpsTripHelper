@@ -159,12 +159,12 @@ public class TripHelperGauge extends FrameLayout {
         mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
         mGaugeHeader.setmGauge(this);
         this.addView(mGaugeHeader);
-        ArrayList scaleCircularPointers = new ArrayList();
-        ArrayList removeScaleRen        = new ArrayList();
-        ArrayList removedPointerRender  = new ArrayList();
+        ArrayList<GaugePointer>  scaleCircularPointers = new ArrayList<>();
+        ArrayList<ScaleRenderer> removeScaleRen        = new ArrayList<>();
+        ArrayList<PointerRender> removedPointerRender  = new ArrayList<>();
 
-        for (Object i$ : mScaleRenderers) {
-            removeScaleRen.add(i$);
+        for (ScaleRenderer scaleRenderer : mScaleRenderers) {
+            removeScaleRen.add(scaleRenderer);
         }
 
         Iterator i$1 = gaugeScales.iterator();
@@ -461,17 +461,17 @@ public class TripHelperGauge extends FrameLayout {
                         else if (mKnobDiameter <= modifDiameter25) {
                             //optimizationModif
                             double modifWidthKnobBy2        = mAvailableWidth - mKnobDiameter * 2.0D;
-                            double modifWidthKnobDelimeter2 = (mAvailableWidth - mKnobDiameter) / 2.0D;
+                            double modifWidthKnobDelimiter2 = (mAvailableWidth - mKnobDiameter) / 2.0D;
 
                             mAvailableHeight = (mAvailableWidth - mKnobDiameter) * 2.0D;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
-                                mVisualRect.left = (float) (modifWidthKnobDelimeter2 - modifWidthKnobBy2);
+                                mVisualRect.left = (float) (modifWidthKnobDelimiter2 - modifWidthKnobBy2);
                             }
                             else {
                                 gaugeType = this.getGaugeType();
                                 if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.West) {
-                                    mVisualRect.left = (float) (modifWidthKnobDelimeter2 - (mAvailableWidth - mKnobDiameter));
+                                    mVisualRect.left = (float) (modifWidthKnobDelimiter2 - (mAvailableWidth - mKnobDiameter));
                                 }
                             }
                             mVisualRect.top = (float) ((initAvalHeight - mKnobDiameter) / 2.0D - modifWidthKnobBy2);
@@ -512,10 +512,10 @@ public class TripHelperGauge extends FrameLayout {
             }
 
             //optimizationModif
-            double modifDelimeter = 2.0D - squarified / 2.0D;
+            double modifDelimiter = 2.0D - squarified / 2.0D;
 
-            mVisualRect.top = (float) (mAvailableHeight / modifDelimeter);
-            mVisualRect.left = (float) (mAvailableWidth / modifDelimeter);
+            mVisualRect.top = (float) (mAvailableHeight / modifDelimiter);
+            mVisualRect.left = (float) (mAvailableWidth / modifDelimiter);
             mVisualRect.bottom = (float) (mVisualRect.top + squarified);
             mVisualRect.right = (float) (mVisualRect.left + squarified);
         }

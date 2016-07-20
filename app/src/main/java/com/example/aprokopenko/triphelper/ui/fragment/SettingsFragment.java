@@ -42,21 +42,21 @@ import butterknife.Unbinder;
 
 @Singleton public class SettingsFragment extends Fragment {
 
-    @BindView(R.id.fuelPriceEditText)
+    @BindView(R.id.editText_fuelPrice)
     EditText    fuelPriceEditText;
-    @BindView(R.id.fuelConsumptionEditText)
+    @BindView(R.id.editText_fuelConsumption)
     EditText    fuelConsEditText;
-    @BindView(R.id.fuelCapacityEditText)
+    @BindView(R.id.editText_fuelCapacity)
     EditText    fuelCapacityEditText;
-    @BindView(R.id.curFuelCapacity)
+    @BindView(R.id.text_curFuelCapacity)
     TextView    curFuelCapacity;
-    @BindView(R.id.curFuelCons)
+    @BindView(R.id.text_curFuelCons)
     TextView    curFuelCons;
-    @BindView(R.id.curFuelPrice)
+    @BindView(R.id.text_curFuelPrice)
     TextView    curFuelPrice;
-    @BindView(R.id.eraseButton)
+    @BindView(R.id.btn_erase)
     ImageButton eraseButton;
-    @BindView(R.id.aboutButton)
+    @BindView(R.id.btn_about)
     ImageButton aboutButton;
     @BindView(R.id.measurementUnitSpinner)
     Spinner     measurementUnitSpinner;
@@ -113,17 +113,17 @@ import butterknife.Unbinder;
     private void setMeasurementUnit(int position, String kmh, String mph, String knots) {
         SharedPreferences.Editor editor = preferences.edit();
         switch (position) {
-            case 0:
+            case 0://Kilometer per hour case
                 editor.putString("measurementUnit", kmh);
                 editor.putInt("measurementUnitPosition", position);
                 editor.apply();
                 break;
-            case 1:
+            case 1://miles per hour case
                 editor.putString("measurementUnit", mph);
                 editor.putInt("measurementUnitPosition", position);
                 editor.apply();
                 break;
-            case 2:
+            case 2://knots per hour case
                 editor.putString("measurementUnit", knots);
                 editor.putInt("measurementUnitPosition", position);
                 editor.apply();

@@ -27,7 +27,7 @@ import dagger.Module;
 import io.fabric.sdk.android.Fabric;
 
 @Module public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.fab)
+    @BindView(R.id.btn_fab)
     FloatingActionButton fab;
 
     private static final String LOG_TAG = "MainActivity";
@@ -50,7 +50,7 @@ import io.fabric.sdk.android.Fabric;
     @Override public void onBackPressed() {
         final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
-            new AlertDialog.Builder(this).setIcon(R.drawable.exit_icon).setTitle(getString(R.string.exit_dialog_title))
+            new AlertDialog.Builder(this).setIcon(R.drawable.btn_exit).setTitle(getString(R.string.exit_dialog_title))
                     .setMessage(getString(R.string.exit_dialog_string))
                     .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
@@ -116,19 +116,19 @@ import io.fabric.sdk.android.Fabric;
         Point   sizePoint      = new Point();
         defaultDisplay.getSize(sizePoint);
 
-        int delimeter = getDelimeterDependsOnOrientation(defaultDisplay);
+        int delimiter = getDelimiterDependsOnOrientation(defaultDisplay);
         int width     = sizePoint.x;
 
-        return -(width / delimeter);
+        return -(width / delimiter);
     }
 
-    private int getDelimeterDependsOnOrientation(Display defaultDisplay) {
-        int widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
+    private int getDelimiterDependsOnOrientation(Display defaultDisplay) {
+        int widthDelimiter = ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
         int rotation       = defaultDisplay.getRotation();
         if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            widthDelimeter = ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
+            widthDelimiter = ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
         }
-        return widthDelimeter;
+        return widthDelimiter;
     }
 
     private void setFabToMap(final MainFragment mainFragment) {

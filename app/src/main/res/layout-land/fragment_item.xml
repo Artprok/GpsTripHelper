@@ -8,7 +8,7 @@
     >
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/text_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -16,20 +16,20 @@
         />
 
     <ImageView
-        android:id="@+id/calendarIcon"
+        android:id="@+id/image_calendarIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignBottom="@+id/id"
-        android:layout_alignLeft="@+id/id"
+        android:layout_alignBottom="@+id/text_id"
+        android:layout_alignLeft="@+id/text_id"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/calendar_icon"/>
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/calendarIcon"
-        android:layout_toRightOf="@+id/calendarIcon"
+        android:layout_alignBottom="@+id/image_calendarIcon"
+        android:layout_toRightOf="@+id/image_calendarIcon"
         android:textSize="@dimen/metricsTextSize"/>
 </RelativeLayout>

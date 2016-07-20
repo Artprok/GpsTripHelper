@@ -179,9 +179,6 @@
         -You forgot to press "Start" button at start of trip
          "\n"
         -You forgot to press "Stop" button when you arrived to your destination place
-         "\n"
-         "\n"
-        Don\'t worry, all be ok!
     </string>
 
     <string name="somethingWentWrongOk">Ok</string>

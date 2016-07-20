@@ -17,9 +17,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class FuelFillDialog extends DialogFragment {
-    @BindView(R.id.refillButton)
+    @BindView(R.id.btn_refill)
     Button   fillButton;
-    @BindView(R.id.fuelToFill)
+    @BindView(R.id.editText_fuelToFill)
     EditText fuelToFill;
 
     private FuelChangeAmountListener fuelChangeAmountListener;

@@ -41,31 +41,31 @@ import butterknife.Unbinder;
 
 @Singleton public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
 
-    @BindView(R.id.tripAvgFuelConsumption)
+    @BindView(R.id.text_tripAvgFuelConsumption)
     TextView       tripAvgFuelConsumptionView;
-    @BindView(R.id.tripDistanceTravelled)
+    @BindView(R.id.text_tripDistanceTravelled)
     TextView       tripDistanceTravelledView;
-    @BindView(R.id.tripTimeSpentInMotion)
+    @BindView(R.id.text_tripTimeSpentInMotion)
     TextView       tripTimeSpentInMotionView;
-    @BindView(R.id.tripTimeSpentOnStop)
+    @BindView(R.id.text_tripTimeSpentOnStop)
     TextView       tripTimeSpentOnStopView;
-    @BindView(R.id.tripMoneyOnTripFuelSpent)
+    @BindView(R.id.text_tripMoneyOnTripFuelSpent)
     TextView       tripMoneySpentView;
-    @BindView(R.id.tripFuelSpent)
+    @BindView(R.id.text_tripFuelSpent)
     TextView       tripFuelSpentView;
-    @BindView(R.id.tripTimeSpent)
+    @BindView(R.id.text_tripTimeSpent)
     TextView       tripTimeSpentView;
-    @BindView(R.id.tripAvgSpeed)
+    @BindView(R.id.text_tripAvgSpeed)
     TextView       tripAvgSpeedView;
-    @BindView(R.id.tripMaxSpeed)
+    @BindView(R.id.text_tripMaxSpeed)
     TextView       tripMaxSpeedView;
-    @BindView(R.id.mapTurnActiveButton)
+    @BindView(R.id.btn_mapTurnActive)
     ImageButton    openMapButton;
     @BindView(R.id.textDataContainer)
     RelativeLayout dataContainer;
-    @BindView(R.id.tripDate)
+    @BindView(R.id.text_tripDate)
     TextView       tripDateView;
-    @BindView(R.id.tripId)
+    @BindView(R.id.text_tripId)
     TextView       tripIdView;
     @BindView(R.id.mapView)
     MapView        mapView;

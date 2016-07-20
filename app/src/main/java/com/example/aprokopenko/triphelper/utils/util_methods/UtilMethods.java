@@ -226,7 +226,7 @@ public class UtilMethods {
     public static void buildAndShowAboutDialog(final Context context) {
         final Resources                                  res     = context.getResources();
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.about);
+        builder.setIcon(R.drawable.btn_about);
         builder.setTitle(context.getString(R.string.aboutTitle));
         builder.setMessage(R.string.aboutMainText).setCancelable(true)
                 .setPositiveButton(R.string.aboutRateButton, new DialogInterface.OnClickListener() {
@@ -281,12 +281,12 @@ public class UtilMethods {
     }
 
     public static void setFabInvisible(Activity activity) {
-        FloatingActionButton fab = ButterKnife.findById(activity, R.id.fab);
+        FloatingActionButton fab = ButterKnife.findById(activity, R.id.btn_fab);
         fab.setVisibility(View.INVISIBLE);
     }
 
     public static void setFabVisible(Activity activity) {
-        FloatingActionButton fab = ButterKnife.findById(activity, R.id.fab);
+        FloatingActionButton fab = ButterKnife.findById(activity, R.id.btn_fab);
         fab.setVisibility(View.VISIBLE);
     }
 

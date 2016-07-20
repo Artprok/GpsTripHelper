@@ -33,21 +33,21 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 @Singleton public class TripListFragment extends Fragment implements ListFragmentInteractionListener {
-    @BindView(R.id.avgFuelConsListFrag)
+    @BindView(R.id.text_avgFuelConsListFrag)
     TextView     avgFuelConsumptionView;
-    @BindView(R.id.distanceTravelledListFrag)
+    @BindView(R.id.text_distanceTravelledListFrag)
     TextView     distanceTravelledView;
-    @BindView(R.id.moneyOnFuelSpentListFrag)
+    @BindView(R.id.text_moneyOnFuelSpentListFrag)
     TextView     moneyOnFuelView;
-    @BindView(R.id.timeSpentOnAllTripsListFrag)
+    @BindView(R.id.text_timeSpentOnAllTripsListFrag)
     TextView     timeSpentView;
-    @BindView(R.id.fuelSpentListFrag)
+    @BindView(R.id.text_fuelSpentListFrag)
     TextView     fuelSpentView;
     @BindView(R.id.tripList)
     RecyclerView tripListView;
-    @BindView(R.id.avgSpeedListFrag)
+    @BindView(R.id.text_avgSpeedListFrag)
     TextView     avgSpeedView;
-    @BindView(R.id.maxSpeedListFrag)
+    @BindView(R.id.text_maxSpeedListFrag)
     TextView     maxSpeedView;
     @BindView(R.id.progressBar)
     ProgressBar  progressBar;

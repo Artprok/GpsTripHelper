@@ -68,9 +68,9 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.id)
+        @BindView(R.id.text_id)
         TextView idView;
-        @BindView(R.id.content)
+        @BindView(R.id.text_content)
         TextView contentView;
 
         public       Trip trip;
