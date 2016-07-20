@@ -28,6 +28,7 @@ public class GpsHandler implements LocationListener, Parcelable {
     Context         context;
 
     private static final String LOG_TAG = "GPSHandler";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private float maxSpeed = ConstantValues.START_VALUE;
     private Observer<Location> locationSubscriber;
@@ -37,7 +38,7 @@ public class GpsHandler implements LocationListener, Parcelable {
 
     public GpsHandler() {
         TripHelperApp.getApplicationComponent().injectInto(this);
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.d(LOG_TAG, "GpsHandler: created,context - " + context);
             Log.d(LOG_TAG, "GpsHandler: created,locationManger - " + locationManager);
         }

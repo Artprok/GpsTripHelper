@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.listener.FileEraseListener;
@@ -63,7 +64,8 @@ import butterknife.Unbinder;
     @BindView(R.id.backgroundSwitch)
     Switch      backgroundSwitch;
 
-    private static final String LOG_TAG = "Settings fragment";
+    private static final String  LOG_TAG = "Settings fragment";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private int   fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
     private float fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
@@ -138,7 +140,7 @@ import butterknife.Unbinder;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
                 }
                 if (!TextUtils.equals(s, "")) {
@@ -296,7 +298,7 @@ import butterknife.Unbinder;
             float price       = fuelCost;
             int   capacity    = fuelTankCapacity;
 
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
                 Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + consumption + price + capacity);
             }
@@ -320,7 +322,7 @@ import butterknife.Unbinder;
         @Override protected void onPostExecute(Boolean result) {
             if (result) {
                 updateTextFields();
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.d(LOG_TAG, "file written successfully");
                 }
             }
@@ -329,12 +331,12 @@ import butterknife.Unbinder;
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "readFileSettings");
             }
             File file = context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME);
             if (file.exists()) {
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
                 }
                 FileInputStream fis;

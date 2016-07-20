@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
@@ -34,48 +35,49 @@ import butterknife.ButterKnife;
 
 public class UtilMethods {
     private static final String  LOG_TAG        = "UtilMethods";
+    private static final boolean DEBUG = BuildConfig.DEBUG;
     private static final float[] testingTempVal = {1};
     private static final Random  random         = new Random();
 
     public static float getFuelConsumptionLevel(float avgSpeed, float fuelCons) {
         if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: HighwayLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_VERY_LOW_ADD;
         }
         else if (avgSpeed <= ConstantValues.HIGHWAY_SPEED_AVG_SPEED && avgSpeed > ConstantValues.LOW_TRAFFIC_AVG_SPEED) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: LowLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_LOW_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.LOW_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: NormalLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_NORMAL_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.HIGH_TRAFFIC_AVG_SPEED) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: MediumLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_MEDIUM_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.HIGH_TRAFFIC_AVG_SPEED && avgSpeed > ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: HighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_HIGH_TRAFFIC_ADD;
         }
         else if (avgSpeed <= ConstantValues.VERY_HIGH_TRAFFIC_AVG_SPEED) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: VeryHighLevel avgSpd: " + avgSpeed + "FuelCons: " + fuelCons);
             }
             return fuelCons + ConstantValues.CONSUMPTION_VERY_HIGH_TRAFFIC_ADD;
         }
         else {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "getFuelConsumptionLevel: Impossible thing! Number out of all interval!! impossible!!! fuel cons - " +
                         fuelCons + "average speed - " + avgSpeed);
             }
@@ -89,7 +91,7 @@ public class UtilMethods {
             return df.format(floatToFormat);
         }
         else {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.e(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
             }
             return "0.00";
@@ -98,14 +100,14 @@ public class UtilMethods {
 
     public static String formatFloatToIntFormat(Float floatToFormat) {
         if (floatToFormat != null) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "formatFloatToIntFormat inUtilMethod: " + floatToFormat);
             }
             DecimalFormat df = new DecimalFormat("######");
             return df.format(floatToFormat);
         }
         else {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.e(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
             }
             return "0.00";
@@ -268,13 +270,13 @@ public class UtilMethods {
     public static void checkIfGpsEnabledAndShowDialogs(Context context) {
         boolean isGpsEnabled = checkIfGpsEnabled(context);
         if (!isGpsEnabled) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: NotEnabled");
             }
             buildAlertMessageNoGps(context);
         }
         else {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: Gps Enabled");
             }
         }

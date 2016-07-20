@@ -5,6 +5,7 @@ import android.location.Location;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.settings.GoogleMapsSettings;
@@ -18,7 +19,8 @@ import java.util.ArrayList;
 
 public class MapUtilMethods {
 
-    private static final String LOG_TAG = "MapUtilMethods";
+    private static final String  LOG_TAG = "MapUtilMethods";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
         ArrayList<Route> route = new ArrayList<>();
@@ -50,7 +52,7 @@ public class MapUtilMethods {
             for (int i = 0; i < routes.size(); i++) {
                 LatLng currentLocation      = (routes.get(i).getRoutePoints());
                 LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
                 }
                 MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());

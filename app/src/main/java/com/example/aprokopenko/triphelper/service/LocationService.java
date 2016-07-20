@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.example.aprokopenko.triphelper.ui.activity.MainActivity;
@@ -29,6 +30,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private static final String  LOG_TAG            = "LocationService:";
     private static final int     FM_NOTIFICATION_ID = 1;
     private final        IBinder mBinder            = new LocalBinder();
+    public static final boolean DEBUG = BuildConfig.DEBUG;
 
     private GpsHandler      gpsHandler;
     private LocationRequest locationRequest;
@@ -51,7 +53,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             public void run() {
                 Looper.prepare();
                 if (UtilMethods.isPermissionAllowed(getApplicationContext())) {
-                    if (ConstantValues.LOGGING_ENABLED) {
+                    if (DEBUG) {
                         Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
                     }
                     LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
@@ -68,13 +70,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     @Override public void onConnectionSuspended(int i) {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.i(LOG_TAG, "onConnectionSuspended: ");
         }
     }
 
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.i(LOG_TAG, "onConnectionFailed: " + connectionResult);
         }
     }
@@ -84,7 +86,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.i(LOG_TAG, "onStartCommand");
         }
         super.onStartCommand(intent, flags, startId);
@@ -98,13 +100,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     @Override public void onCreate() {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.i(LOG_TAG, "service OnCreate");
         }
     }
 
     @Override public void onDestroy() {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.i(LOG_TAG, "service OnDestroy");
         }
         removeNotification();

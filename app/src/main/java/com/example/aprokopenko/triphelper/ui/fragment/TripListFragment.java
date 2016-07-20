@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
 import com.example.aprokopenko.triphelper.datamodel.Route;
@@ -53,6 +54,7 @@ import butterknife.Unbinder;
     ProgressBar  progressBar;
 
     private static final String LOG_TAG = "TripListFragment";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private TripData        tripData;
     private ArrayList<Trip> trips;
@@ -121,7 +123,7 @@ import butterknife.Unbinder;
     @Override public void onDetach() {
         tripData = null;
         trips = null;
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.d(LOG_TAG, "onDetach: OnDetach");
         }
         super.onDetach();

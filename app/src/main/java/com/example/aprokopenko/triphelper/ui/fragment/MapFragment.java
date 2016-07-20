@@ -14,7 +14,6 @@ import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
-import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -30,7 +29,8 @@ import javax.inject.Singleton;
 import rx.Subscriber;
 
 @Singleton public class MapFragment extends Fragment implements OnMapReadyCallback {
-    private static final String LOG_TAG = "MAP_FRAGMENT";
+    private static final String  LOG_TAG = "MAP_FRAGMENT";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private LatLng               previousLocationFromData;
     private Subscriber<Location> locationSubscriber;
     private LatLng               previousLocation;
@@ -53,7 +53,7 @@ import rx.Subscriber;
     public void setGpsHandler(GpsHandler gpsHandler) {
         if (this.gpsHandler == null) {
             this.gpsHandler = gpsHandler;
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "setGpsHandler: LocationStartTracking");
             }
             setupSubscribers();
@@ -207,7 +207,7 @@ import rx.Subscriber;
 
     private void drawPathFromData() {
         if (routes != null) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.d(LOG_TAG, "drawPathFromData: DrawFromData");
             }
             for (int i = 0; i < routes.size(); i++) {

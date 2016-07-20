@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
@@ -77,7 +78,8 @@ import butterknife.Unbinder;
     @BindView(R.id.btn_Settings)
     ImageButton    settingsButton;
 
-    private static final int LOCATION_REQUEST_CODE = 1;
+    private static final int     LOCATION_REQUEST_CODE = 1;
+    private static final boolean DEBUG                 = BuildConfig.DEBUG;
 
     private static final String  LOG_TAG  = "MainFragment";
     private static final boolean REMOVE   = false;
@@ -162,7 +164,7 @@ import butterknife.Unbinder;
                     avgStrArrList.add(String.valueOf(avgListItem));
                 }
             }
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.i(LOG_TAG, "onSaveInstanceState: Save called");
                 Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + isButtonVisible(startButton));
                 Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + gpsIsActive);
@@ -203,7 +205,7 @@ import butterknife.Unbinder;
     }
 
     @Override public void onDetach() {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.i(LOG_TAG, "onDetach: called");
         }
         super.onDetach();
@@ -226,7 +228,7 @@ import butterknife.Unbinder;
     @Override public void onGpsStatusChanged(int event) {
         switch (event) {
             case GpsStatus.GPS_EVENT_FIRST_FIX:
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
                 }
                 UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
@@ -474,7 +476,7 @@ import butterknife.Unbinder;
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
             getContextIfNull();
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.i(LOG_TAG, "onViewCreated: calledRestore");
                 Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
                 Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
@@ -658,12 +660,12 @@ import butterknife.Unbinder;
 
     private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {
         @Override protected Boolean doInBackground(String... params) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.i(LOG_TAG, "readFileSettings");
             }
             File file = context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME);
             if (file.exists()) {
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.i(LOG_TAG, "readTripDataFromFileSettings: ");
                 }
                 FileInputStream fis;

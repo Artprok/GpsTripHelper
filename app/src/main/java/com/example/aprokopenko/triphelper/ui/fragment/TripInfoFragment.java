@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
@@ -71,6 +72,7 @@ import butterknife.Unbinder;
     MapView        mapView;
 
     private static final String LOG_TAG = "TripInfoFragment";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private static final String TIME_SPENT_IN_MOTION      = "TimeSpentOnMotion";
     private static final String TIME_SPENT_WITHOUT_MOTION = "TimeSpentOnStop";
@@ -111,7 +113,7 @@ import butterknife.Unbinder;
     }
 
     public static TripInfoFragment newInstance(TripInfoContainer tripInfoContainer) {
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.d(LOG_TAG, "newInstance: CALLED");
         }
         TripInfoFragment  fragment       = new TripInfoFragment();
@@ -277,7 +279,7 @@ import butterknife.Unbinder;
                 timeSpentOnStop++;
             }
         }
-        if (ConstantValues.LOGGING_ENABLED) {
+        if (DEBUG) {
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
             Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, null));
         }

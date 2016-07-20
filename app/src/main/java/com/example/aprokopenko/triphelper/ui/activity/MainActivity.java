@@ -13,6 +13,7 @@ import android.view.Surface;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
+import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
@@ -30,7 +31,8 @@ import io.fabric.sdk.android.Fabric;
     @BindView(R.id.btn_fab)
     FloatingActionButton fab;
 
-    private static final String LOG_TAG = "MainActivity";
+    private static final String  LOG_TAG = "MainActivity";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private int fabTransitionValue;
 
     private Unbinder unbinder;
@@ -82,7 +84,7 @@ import io.fabric.sdk.android.Fabric;
     private void proceedToFragmentCreating(Bundle savedInstanceState) {
         UtilMethods.setFabInvisible(this);
         if (savedInstanceState == null) {
-            if (ConstantValues.LOGGING_ENABLED) {
+            if (DEBUG) {
                 Log.i(LOG_TAG, "onCreate: new fragment");
             }
             MainFragment mainFragment = MainFragment.newInstance();
@@ -94,7 +96,7 @@ import io.fabric.sdk.android.Fabric;
             Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
             MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
             if (fragment instanceof MainFragment) {
-                if (ConstantValues.LOGGING_ENABLED) {
+                if (DEBUG) {
                     Log.i(LOG_TAG, "onCreate: old fragment");
                 }
                 assert fab != null;
