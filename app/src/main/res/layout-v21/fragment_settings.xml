@@ -12,6 +12,7 @@
         android:layout_margin="5dp"
         android:background="@drawable/btn_background"
         android:src="@drawable/btn_erase"
+
         />
 
     <RelativeLayout
@@ -74,7 +75,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/editText_fuelCapacity"
-
             android:layout_alignParentRight="true"/>
 
         <TextView
@@ -101,10 +101,10 @@
             android:id="@+id/backgroundSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/text_measurementUnitLabel"
-            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:showText="true"
             android:textOff="@string/switchOff"
             android:textOn="@string/switchOn"
             android:visibility="invisible"
@@ -113,13 +113,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/backgroundSwitch"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="5dp"
+            android:layout_alignTop="@+id/backgroundSwitch"
+            android:layout_below="@id/text_measurementUnitLabel"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@id/backgroundSwitch"
             android:text="@string/workInBackGround"
             android:textColor="@color/textColor"
             android:textSize="@dimen/metricPortraitTextSize"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            />
 
     </RelativeLayout>
 
@@ -132,6 +134,4 @@
         android:layout_margin="5dp"
         android:background="@drawable/btn_about"
         />
-
-
 </RelativeLayout>

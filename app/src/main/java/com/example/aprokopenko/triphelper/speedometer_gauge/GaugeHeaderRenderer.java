@@ -34,7 +34,6 @@ public class GaugeHeaderRenderer extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         if (mGauge != null && headerArrayList != null) {
 
             headerArrayList = mGauge.getHeaders();
@@ -117,7 +116,7 @@ public class GaugeHeaderRenderer extends View {
                             }
                         }
                     }
-                    canvas.drawText(header.getText(), (float) left, (float) top, this.mPaint);
+                    canvas.drawText(header.getText(), (float) left, (float) top, mPaint);
                 }
             }
         }

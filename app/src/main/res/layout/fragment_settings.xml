@@ -19,7 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dp"
+        android:layout_below="@id/btn_erase"
+       >
 
 
         <EditText
@@ -58,7 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/editText_fuelPrice"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/editText_fuelPrice"
+            android:gravity="right"/>
 
         <TextView
             android:id="@+id/text_curFuelCons"

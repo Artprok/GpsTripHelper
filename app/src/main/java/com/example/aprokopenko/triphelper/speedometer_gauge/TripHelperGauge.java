@@ -48,14 +48,14 @@ public class TripHelperGauge extends FrameLayout {
         headers = new ArrayList<>();
         mGaugeHeight = GaugeConstants.ZERO;
         mGaugeWidth = GaugeConstants.ZERO;
-        DENSITY = this.getContext().getResources().getDisplayMetrics().density;
+        DENSITY = getContext().getResources().getDisplayMetrics().density;
     }
 
 
     private void init() {
-        mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
+        mGaugeHeader = new GaugeHeaderRenderer(getContext());
         mGaugeHeader.setmGauge(this);
-        this.addView(mGaugeHeader);
+        addView(mGaugeHeader);
     }
 
     public ArrayList<GaugeScale> getGaugeScales() {
@@ -280,7 +280,13 @@ public class TripHelperGauge extends FrameLayout {
         h = h < 50 ? 50 : h;
         w = w < 50 ? 50 : w;
         double mAvailableHeight = h;
-        double mAvailableWidth  = w;
+        double mAvailableWidth;
+        if (h > w) {
+            mAvailableWidth = w;
+        }
+        else {
+            mAvailableWidth = mAvailableHeight;
+        }
         if (mGaugeHeight > GaugeConstants.ZERO) {
             mGaugeHeight = mGaugeHeight > mAvailableHeight ? mAvailableHeight : mGaugeHeight;
         }

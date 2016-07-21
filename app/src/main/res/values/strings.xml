@@ -60,8 +60,8 @@
 
     <!--SettingsHints-->
     <string name="fuel_price">Fuel price</string>
-    <string name="fuel_consumption">fuelConsFromSettings</string>
-    <string name="fuel_capacity">fuelCapacity</string>
+    <string name="fuel_consumption">Fuel consumption</string>
+    <string name="fuel_capacity">Fuel capacity</string>
     <!--/SettingsHints-->
 
 

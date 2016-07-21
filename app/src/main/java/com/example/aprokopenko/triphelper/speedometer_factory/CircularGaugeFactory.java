@@ -2,7 +2,6 @@ package com.example.aprokopenko.triphelper.speedometer_factory;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.support.annotation.Nullable;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
@@ -145,7 +144,8 @@ public class CircularGaugeFactory {
         }
 
         circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
-        circularGaugeHeader.setPosition(new PointF( 0.42f,  0.7f));
+
+        circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
         circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
         gaugeHeaders.add(0, circularGaugeHeader);
         gauge.setHeaders(gaugeHeaders);

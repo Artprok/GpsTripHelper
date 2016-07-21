@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
@@ -46,8 +47,6 @@ public class ScaleRenderer extends View {
         rectF = new RectF();
         paint = new Paint();
         rangePaint = new Paint();
-
-
     }
 
     public GaugeScale getGaugeScale() {
@@ -63,7 +62,6 @@ public class ScaleRenderer extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         if (gauge != null && gaugeScale != null) {
             gaugeScale.setmGauge(gauge);
 
@@ -698,7 +696,6 @@ public class ScaleRenderer extends View {
             rangePaint.setAntiAlias(true);
             rangePaint.setStyle(Paint.Style.STROKE);
 
-
             for (Iterator i$ = gaugeRanges.iterator(); i$.hasNext(); canvas
                     .drawArc(rectF, (float) startArc, (float) endtArc, false, rangePaint)) {
                 double     rimWidth   = gauge.getmRimWidth();
@@ -734,6 +731,7 @@ public class ScaleRenderer extends View {
                     double modifCenterXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
 
                     if (mCentreY > mCentreX) {
+                        Log.d("HERE1", "onDrawRanges: ");
                         rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
                                 (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
                     }
@@ -747,20 +745,22 @@ public class ScaleRenderer extends View {
                             .width() / 2.0F - mRangeFrame.left) * (float) radFactor + (float) (gaugeRange
                             .getOffset() * (mCentreX - rimWidth));
                     if (mCentreY > mCentreX) {
-                        rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize((double) factor)),
-                                (float) (getCenterXplusDivideBy2minusRimSize((double) factor)),
-                                (float) (getCenterYplusDivideBy2minusRimSize((double) factor)));
+                        Log.d("2", "onDrawRanges: ");
+                        rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize(factor)),
+                                (float) (getCenterXplusDivideBy2minusRimSize(factor)),
+                                (float) (getCenterYplusDivideBy2minusRimSize(factor)));
                     }
                     else {
                         factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radFactor + (float) (gaugeRange
                                 .getOffset() * (mCentreY - rimWidth));
-                        rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize((double) factor)), factor,
+                        rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize(factor)), factor,
                                 (float) (getCenterXplusDivideBy2minusRimSize(factor)),
                                 (float) (getCenterYplusDivideBy2minusRimSize(factor)));
                     }
                 }
                 else {
                     if (mCentreY > mCentreX) {
+                        Log.d("HERE", "onDrawRanges: ");
                         double rimW = gauge.getmRimWidth();
                         rimSize = mMinSize - rimW - ((gaugeRange.getOffset() * (mCentreX - rimW))) + gaugeRange.getWidth() / 2.0D;
 
@@ -842,7 +842,6 @@ public class ScaleRenderer extends View {
                         double modif_centerXplusMinSizeMinusRimSize   = getCenterXplusDivideBy2minusRimSize(rimSize);
                         double modif_centerYplusMinSizeMinusRimSize   = getCenterYplusDivideBy2minusRimSize(rimSize);
 
-
                         if (gaugeType == GaugeType.West) {
                             rectF = getRectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYplus0dot75minusRimSize,
                                     (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
@@ -880,7 +879,6 @@ public class ScaleRenderer extends View {
                                     (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
                         }
                     }
-
                     mRangeFrame = rectF;
                 }
             }

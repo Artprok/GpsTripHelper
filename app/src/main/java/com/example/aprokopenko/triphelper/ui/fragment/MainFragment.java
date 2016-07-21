@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,7 +130,30 @@ import butterknife.Unbinder;
         setupSpeedometer();
         setupTripProcessor();
         setupFuelFields();
+
+        if (getResources().getConfiguration().orientation == 2) {
+            fuelLayout.post(new Runnable() {
+                @Override public void run() {
+                    if (fuelLayout != null) {
+                        DisplayMetrics dis     = getResources().getDisplayMetrics();
+                        int            w       = dis.heightPixels;
+                        int            h       = dis.widthPixels;
+                        int            padding = fuelLayout.getMeasuredWidth();
+
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
+                        layoutParams.setMargins(padding, 7, 7, 7);
+                        speedometerContainer.setLayoutParams(layoutParams);
+                        speedometerContainer.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
+        else {
+            speedometerContainer.setVisibility(View.VISIBLE);
+        }
+
     }
+
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -200,7 +224,6 @@ import butterknife.Unbinder;
         setInternalSettingsToTripProcessor();
         UtilMethods.setFabVisible(getActivity());
         checkGpsStatus();
-
         super.onResume();
     }
 
@@ -602,6 +625,8 @@ import butterknife.Unbinder;
         speedometer = createSpeedometerGauge(context);
         speedometer.setScaleX(ConstantValues.SPEEDOMETER_WIDTH);
         speedometer.setScaleY(ConstantValues.SPEEDOMETER_HEIGHT);
+        //todo set invisible here. Can be replaced by some splash screen with reference or something like this.
+        speedometerContainer.setVisibility(View.INVISIBLE);
         speedometerContainer.addView(speedometer);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/android_7.ttf");
         speedometerTextView.setTypeface(tf);

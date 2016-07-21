@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper.utils.settings;
 
 import android.graphics.Color;
+import android.graphics.PointF;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.NeedleType;
 
@@ -45,4 +46,5 @@ public class GaugeFactorySettings {
     public static final int        knobRadius            = 20;
     public static final int        ticksWidth            = 3;
 
+    public static final PointF headerPosition = new PointF(0.43f, 0.7f);
 }
