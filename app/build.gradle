@@ -4,7 +4,7 @@ apply plugin: 'io.fabric'
 
 android {
     signingConfigs {
-        TripHelper {
+        release {
             keyAlias 'TripHelper'
             keyPassword '6884882'
             storeFile file('E:/projects/keystores/tripHelper-keystore.jks')
@@ -20,7 +20,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        signingConfig signingConfigs.TripHelper
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
@@ -28,7 +28,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.TripHelper
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
@@ -39,22 +39,21 @@ android {
     }
 
     productFlavors {
-        releaseFlavour {
+        production_ {
             defaultConfig {
                 applicationId "com.example.aprokopenko.triphelper"
                 minSdkVersion 14
                 targetSdkVersion 23
                 versionCode 1
                 versionName "1.0"
-                signingConfig signingConfigs.TripHelper
-
+                signingConfig signingConfigs.release
             }
         }
 
-        forOlegFlavour {
+        forOleg_ {
             minSdkVersion 14
             applicationId 'com.example.aprokopenko.specialy_for_Oleg'
-            signingConfig signingConfigs.TripHelper
+            signingConfig signingConfigs.release
             targetSdkVersion 23
             versionCode 1
             versionName '1.0 specialy for Oleg'
@@ -65,10 +64,10 @@ android {
         main {
             res.srcDirs = ['/src/main/res']
         }
-        releaseFlavour {
+        production_ {
             res.srcDirs = ['/src/main/releaseFlavour/res', '/src/main/res']
         }
-        forOlegFlavour {
+        forOleg_ {
             res.srcDirs = ['/src/main/forOlegFlavour/res', '/src/main/res']
         }
     }
