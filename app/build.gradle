@@ -11,15 +11,16 @@ android {
             storePassword '6884882'
         }
     }
-
     compileSdkVersion 23
     buildToolsVersion "24.0.0 rc2"
+
     defaultConfig {
         applicationId "com.example.aprokopenko.triphelper"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.TripHelper
     }
 
     buildTypes {
@@ -36,32 +37,67 @@ android {
     dexOptions {
         incremental true
     }
-}
 
-repositories {
-    jcenter()
-    maven { url 'https://maven.fabric.io/public' }
-}
+    productFlavors {
+        releaseFlavour {
+            defaultConfig {
+                applicationId "com.example.aprokopenko.triphelper"
+                minSdkVersion 14
+                targetSdkVersion 23
+                versionCode 1
+                versionName "1.0"
+                signingConfig signingConfigs.TripHelper
 
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
-    apt 'com.google.dagger:dagger-compiler:2.5'
-    testCompile 'junit:junit:4.12'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
-        transitive = true;
+            }
+        }
+
+        forOlegFlavour {
+            minSdkVersion 14
+            applicationId 'com.example.aprokopenko.specialy_for_Oleg'
+            signingConfig signingConfigs.TripHelper
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0 specialy for Oleg'
+        }
     }
-    compile 'com.google.android.gms:play-services-location:9.2.1'
-    compile 'com.google.android.gms:play-services-maps:9.2.1'
-//    compile 'com.google.android.gms:play-services-location:9.0.2'
-//    compile 'com.google.android.gms:play-services-maps:9.0.2'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:palette-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.jakewharton:butterknife:8.2.1'
-    compile 'com.google.dagger:dagger:2.5'
-    compile 'io.reactivex:rxandroid:1.2.1'
+
+    sourceSets {
+        main {
+            res.srcDirs = ['/src/main/res']
+        }
+        releaseFlavour {
+            res.srcDirs = ['/src/main/releaseFlavour/res', '/src/main/res']
+        }
+        forOlegFlavour {
+            res.srcDirs = ['/src/main/forOlegFlavour/res', '/src/main/res']
+        }
+    }
+
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        compile fileTree(include: ['*.jar'], dir: 'libs')
+        apt 'com.jakewharton:butterknife-compiler:8.2.1'
+        apt 'com.google.dagger:dagger-compiler:2.5'
+        testCompile 'junit:junit:4.12'
+        compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
+            transitive = true;
+        }
+        compile 'com.google.android.gms:play-services-location:9.2.1'
+        compile 'com.google.android.gms:play-services-maps:9.2.1'
+        //    compile 'com.google.android.gms:play-services-location:9.0.2'
+        //    compile 'com.google.android.gms:play-services-maps:9.0.2'
+        compile 'com.android.support:recyclerview-v7:23.4.0'
+        compile 'com.android.support:appcompat-v7:23.4.0'
+        compile 'com.android.support:support-v4:23.4.0'
+        compile 'com.android.support:palette-v7:23.4.0'
+        compile 'com.android.support:design:23.4.0'
+        compile 'com.android.support:multidex:1.0.1'
+        compile 'com.jakewharton:butterknife:8.2.1'
+        compile 'com.google.dagger:dagger:2.5'
+        compile 'io.reactivex:rxandroid:1.2.1'
+    }
 }

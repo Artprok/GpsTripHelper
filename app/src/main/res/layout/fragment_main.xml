@@ -107,11 +107,14 @@
         <RelativeLayout
             android:id="@+id/refillButtonLayout"
             android:layout_width="wrap_content"
-            android:layout_height="37dp"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@id/image_fuelIcon"
             android:layout_below="@id/image_fuelIcon"
             android:background="@drawable/btn_background"
-            android:padding="2dp"
+            android:paddingTop="4dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:paddingBottom="4dp"
             >
 
             <TextView
