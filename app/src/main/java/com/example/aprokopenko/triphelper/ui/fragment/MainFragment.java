@@ -138,7 +138,7 @@ import butterknife.Unbinder;
                         DisplayMetrics dis     = getResources().getDisplayMetrics();
                         int            w       = dis.heightPixels;
                         int            h       = dis.widthPixels;
-                        int            padding = fuelLayout.getMeasuredWidth();
+                        int            padding = (int) (fuelLayout.getMeasuredWidth() * 1.2);
 
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
                         layoutParams.setMargins(padding, 7, 7, 7);

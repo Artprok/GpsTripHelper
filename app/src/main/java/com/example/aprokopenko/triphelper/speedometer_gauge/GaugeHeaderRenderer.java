@@ -37,13 +37,11 @@ public class GaugeHeaderRenderer extends View {
         if (mGauge != null && headerArrayList != null) {
 
             headerArrayList = mGauge.getHeaders();
-
             RectF  mVisualRect  = mGauge.getmVisualRect();
             double mCentreX     = mGauge.getmCentreX();
             double mCentreY     = mGauge.getmCentreY();
             double mGaugeWidth  = mGauge.getmGaugeWidth();
             double mGaugeHeight = mGauge.getmGaugeHeight();
-
 
             for (Header header : headerArrayList) {
                 header.setGauge(mGauge);
