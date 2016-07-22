@@ -112,8 +112,8 @@
             android:layout_below="@id/image_fuelIcon"
             android:background="@drawable/btn_background"
             android:paddingTop="4dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
             android:paddingBottom="4dp"
             >
 
@@ -121,12 +121,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/btn_refill"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
                 android:layout_toRightOf="@id/btn_refill"
                 android:text="@string/refill_hint"
                 android:textSize="@dimen/metricPortraitTextSize"
-
                 android:textStyle="bold|italic"
                 android:typeface="sans"/>
 

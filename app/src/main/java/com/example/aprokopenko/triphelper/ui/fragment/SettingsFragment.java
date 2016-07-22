@@ -177,7 +177,9 @@ import butterknife.Unbinder;
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(LOG_TAG, "beforeTextChanged: count"+count);
                 if (!TextUtils.equals(s, "")) {
+                    // FIXME: 21.07.2016 bug is here! check why 8888888 is produce this bug!
                     fuelTankCapacity = (Integer.valueOf(s.toString()));
                     writeDataToFile();
                 }

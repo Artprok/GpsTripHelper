@@ -14,6 +14,7 @@
         android:layout_centerHorizontal="true"
         android:hint="@string/fuel_filled_val"
         android:inputType="number"
+        android:maxLength="3"
         />
 
     <Button

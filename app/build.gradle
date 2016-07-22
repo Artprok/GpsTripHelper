@@ -52,7 +52,7 @@ android {
 
         forOleg_ {
             minSdkVersion 14
-            applicationId 'com.example.aprokopenko.specialy_for_Oleg'
+            applicationId 'com.example.aprokopenko.triphelper'
             signingConfig signingConfigs.release
             targetSdkVersion 23
             versionCode 1

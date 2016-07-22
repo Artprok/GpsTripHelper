@@ -33,6 +33,8 @@
             android:layout_marginTop="61dp"
             android:hint="@string/fuel_price"
             android:inputType="numberDecimal"
+            android:maxLength="4"
+
             />
 
         <EditText
@@ -43,6 +45,7 @@
             android:layout_below="@+id/editText_fuelPrice"
             android:hint="@string/fuel_consumption"
             android:inputType="numberDecimal"
+            android:maxLength="3"
             />
 
         <EditText
@@ -53,6 +56,7 @@
             android:layout_below="@+id/editText_fuelConsumption"
             android:hint="@string/fuel_capacity"
             android:inputType="number"
+            android:maxLength="3"
             />
 
         <TextView
