@@ -398,12 +398,12 @@ import butterknife.Unbinder;
         tripListButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (tripProcessor.isFileNotInWriteMode()) {
-                    UtilMethods.setFabInvisible(getActivity());
                     TripData         tripData         = tripProcessor.getTripData();
-                    TripListFragment tripListFragment = TripListFragment.newInstance();
                     if (tripData != null && !isButtonVisible(stopButton)) {
                         if (!tripData.getTrips().isEmpty()) {
+                            TripListFragment tripListFragment = TripListFragment.newInstance();
                             saveState();
+                            UtilMethods.setFabInvisible(getActivity());
                             tripListFragment.setTripData(tripData);
                             UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
                         }
