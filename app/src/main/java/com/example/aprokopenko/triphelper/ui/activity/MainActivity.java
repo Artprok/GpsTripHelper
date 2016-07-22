@@ -43,7 +43,6 @@ import io.fabric.sdk.android.Fabric;
         unbinder = ButterKnife.bind(this);
         //        Debug.startMethodTracing("Bottlenecks");
         Fabric.with(this, new Crashlytics());
-
         fabTransitionValue = getDataForFABanimation();
 
         proceedToFragmentCreating(savedInstanceState);

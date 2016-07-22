@@ -9,6 +9,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="windowNoTitle">true</item>
         <item name="android:dialogTheme">@style/mDialogTheme</item>
+        <item name="android:windowActionBar">false</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat">
