@@ -131,29 +131,8 @@ import butterknife.Unbinder;
         setupTripProcessor();
         setupFuelFields();
 
-        if (getResources().getConfiguration().orientation == 2) {
-            fuelLayout.post(new Runnable() {
-                @Override public void run() {
-                    if (fuelLayout != null) {
-                        DisplayMetrics dis     = getResources().getDisplayMetrics();
-                        int            w       = dis.heightPixels;
-                        int            h       = dis.widthPixels;
-                        int            padding = (int) (fuelLayout.getMeasuredWidth() * 1.2);
-
-                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
-                        layoutParams.setMargins(padding, 7, 7, 7);
-                        speedometerContainer.setLayoutParams(layoutParams);
-                        speedometerContainer.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
-        }
-        else {
-            speedometerContainer.setVisibility(View.VISIBLE);
-        }
-
+        visualizeSpeedometer();
     }
-
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -290,6 +269,15 @@ import butterknife.Unbinder;
         return savedState.containsKey("ControlButtonVisibility");
     }
 
+    private void visualizeSpeedometer() {
+        if (getResources().getConfiguration().orientation == 2) {//if landscape
+            setSpeedometerLayoutParams();
+        }
+        else {
+            speedometerContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void checkGpsStatus() {
         if (!UtilMethods.checkIfGpsEnabled(context)) {
             setGpsIconNotActive();
@@ -299,6 +287,18 @@ import butterknife.Unbinder;
     private void requestLocationPermissions() {
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,},
                 LOCATION_REQUEST_CODE);
+    }
+
+    private void setSpeedometerLayoutParams() {
+        fuelLayout.post(new Runnable() {
+            @Override public void run() {
+                if (fuelLayout != null) {
+                    RelativeLayout.LayoutParams layoutParams = getLayoutParams();
+                    speedometerContainer.setLayoutParams(layoutParams);
+                    speedometerContainer.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void requestPermissionWithRationale() {
@@ -317,6 +317,16 @@ import butterknife.Unbinder;
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_REQUEST_CODE);
         }
+    }
+
+    private RelativeLayout.LayoutParams getLayoutParams() {
+        DisplayMetrics dis     = getResources().getDisplayMetrics();
+        int            w       = dis.heightPixels;
+        int            padding = (int) (fuelLayout.getMeasuredWidth() * 1.1);//get padding for speedometer
+
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
+        layoutParams.setMargins(padding, 7, 7, 7);
+        return layoutParams;
     }
 
     private void setupTripProcessor() {
@@ -398,7 +408,7 @@ import butterknife.Unbinder;
         tripListButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (tripProcessor.isFileNotInWriteMode()) {
-                    TripData         tripData         = tripProcessor.getTripData();
+                    TripData tripData = tripProcessor.getTripData();
                     if (tripData != null && !isButtonVisible(stopButton)) {
                         if (!tripData.getTrips().isEmpty()) {
                             TripListFragment tripListFragment = TripListFragment.newInstance();
