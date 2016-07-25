@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="61dp"
             android:hint="@string/fuel_price"
             android:inputType="numberDecimal"
             android:maxLength="4"
@@ -97,6 +96,27 @@
             android:layout_alignBaseline="@id/text_measurementUnitLabel"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
+            android:spinnerMode="dialog"
+            />
+
+        <TextView
+            android:id="@+id/text_currencyUnitLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/measurementUnitSpinner"
+            android:layout_margin="5dp"
+            android:text="@string/currencyUnitText"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/metricPortraitTextSize"/>
+
+        <Spinner
+            android:id="@+id/currencyUnitSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_currencyUnitLabel"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:layout_below="@id/measurementUnitSpinner"
             android:spinnerMode="dialog"
             />
 

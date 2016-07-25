@@ -61,6 +61,8 @@ import butterknife.Unbinder;
     ImageButton aboutButton;
     @BindView(R.id.measurementUnitSpinner)
     Spinner     measurementUnitSpinner;
+    @BindView(R.id.currencyUnitSpinner)
+    Spinner     currencyUnitSpinner;
     @BindView(R.id.backgroundSwitch)
     Switch      backgroundSwitch;
 
@@ -74,6 +76,7 @@ import butterknife.Unbinder;
     private SharedPreferences preferences;
     private Context           context;
     private Unbinder          unbinder;
+    private String            currency_prefix;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -97,7 +100,9 @@ import butterknife.Unbinder;
         setupAboutButton();
         setupEditTextFields();
         readDataFromFile();
-        setupSpinner();
+        setupMeasurementUnitSpinner();
+        setupCurrencyUnitSpinner();
+
 
         // TODO: 07.06.2016 not working due to problems with WakeLock that called in OnLocationChanged,whatever you do..
         //        setupBackgroundSwitch();
@@ -128,6 +133,32 @@ import butterknife.Unbinder;
             case 2://knots per hour case
                 editor.putString("measurementUnit", knots);
                 editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+        }
+    }
+
+    private void setCurrencyUnit(int position, String grn, String rub, String usd, String eur) {
+        SharedPreferences.Editor editor = preferences.edit();
+        switch (position) {
+            case 0:
+                editor.putString("currencyUnit", grn);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+            case 1:
+                editor.putString("currencyUnit", rub);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+            case 2:
+                editor.putString("currencyUnit", usd);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+            case 3:
+                editor.putString("currencyUnit", eur);
+                editor.putInt("currencyUnitPosition", position);
                 editor.apply();
                 break;
         }
@@ -197,6 +228,7 @@ import butterknife.Unbinder;
         });
     }
 
+
     private void setupEraseButton() {
         eraseButton.setVisibility(View.VISIBLE);
         eraseButton.setOnClickListener(new View.OnClickListener() {
@@ -224,11 +256,11 @@ import butterknife.Unbinder;
         }
 
         if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
-            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + getString(R.string.currency_prefix);
+            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + currency_prefix;
             curFuelPrice.setText(fuelCost);
         }
         else {
-            String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
+            String fuelCost = this.fuelCost + currency_prefix;
             curFuelPrice.setText(fuelCost);
         }
 
@@ -242,7 +274,7 @@ import butterknife.Unbinder;
         }
     }
 
-    private void setupSpinner() {
+    private void setupMeasurementUnitSpinner() {
         final String kmh   = getString(R.string.kilometreUnit);
         final String mph   = getString(R.string.milesUnit);
         final String knots = getString(R.string.knots);
@@ -266,16 +298,59 @@ import butterknife.Unbinder;
         });
     }
 
+    private void setupCurrencyUnitSpinner() {
+        final String grn_label = getString(R.string.grn_label);
+        final String rub_label = getString(R.string.rub_label);
+        final String usd_label = getString(R.string.usd_label);
+        final String eur_label = getString(R.string.eur_label);
+
+        final String grn = getString(R.string.grn);
+        final String rub = getString(R.string.rub);
+        final String usd = getString(R.string.usd);
+        final String eur = getString(R.string.eur);
+
+        currency_prefix = preferences.getString("currencyUnit", "");
+        if (TextUtils.equals(currency_prefix, "")) {
+            currency_prefix = grn;
+        }
+
+        String title = getString(R.string.currencyUnitText);
+
+        String[]             data    = {grn_label, rub_label, usd_label, eur_label};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        currencyUnitSpinner.setAdapter(adapter);
+        currencyUnitSpinner.setPrompt(title);
+
+        currencyUnitSpinner.setSelection(preferences.getInt("currencyUnitPosition", 0));
+        currencyUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setCurrencyUnit(position, grn, rub, usd, eur);
+                updateFuelCost();
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+    }
+
+    private void updateFuelCost() {
+        currency_prefix = preferences.getString("currencyUnit", "");
+        String fuelCost = this.fuelCost + currency_prefix;
+        curFuelPrice.setText(fuelCost);
+        curFuelPrice.invalidate();
+    }
+
     private void updateTextFields() {
         String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
         curFuelCons.setText(fuelCons);
 
-        String fuelCost = this.fuelCost + getString(R.string.currency_prefix);
+        String fuelCost = this.fuelCost + currency_prefix;
         curFuelPrice.setText(fuelCost);
 
         String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
         curFuelCapacity.setText(fuelCapacity);
-
     }
 
     private void readDataFromFile() {

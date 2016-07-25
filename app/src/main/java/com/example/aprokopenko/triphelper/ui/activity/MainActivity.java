@@ -15,6 +15,7 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.ui.fragment.DataHolderFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
@@ -82,10 +83,15 @@ import io.fabric.sdk.android.Fabric;
 
     private void proceedToFragmentCreating(Bundle savedInstanceState) {
         UtilMethods.setFabInvisible(this);
+        DataHolderFragment dataHolderFragment;
         if (savedInstanceState == null) {
             if (DEBUG) {
                 Log.i(LOG_TAG, "onCreate: new fragment");
             }
+
+            dataHolderFragment = DataHolderFragment.newInstance();
+            UtilMethods.addFragment(dataHolderFragment, ConstantValues.DATA_HOLDER_TAG, this);
+
             MainFragment mainFragment = MainFragment.newInstance();
             assert fab != null;
             setFabToMap(mainFragment);
@@ -101,6 +107,7 @@ import io.fabric.sdk.android.Fabric;
                 assert fab != null;
                 setFabToMap((MainFragment) fragment);
                 UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+
             }
             if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
                 setFabToSpeedometer(mainFragment);

@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="61dp"
             android:hint="@string/fuel_price"
             android:inputType="numberDecimal"
             android:maxLength="4"
@@ -102,18 +101,26 @@
             android:spinnerMode="dialog"
             />
 
-        <Switch
-            android:id="@+id/backgroundSwitch"
+        <TextView
+            android:id="@+id/text_currencyUnitLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@id/text_measurementUnitLabel"
             android:layout_margin="5dp"
-            android:showText="true"
-            android:textOff="@string/switchOff"
-            android:textOn="@string/switchOn"
-            android:visibility="invisible"
+            android:text="@string/currencyUnitText"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/metricPortraitTextSize"/>
+
+        <Spinner
+            android:id="@+id/currencyUnitSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/text_currencyUnitLabel"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:spinnerMode="dialog"
             />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -125,6 +132,18 @@
             android:text="@string/workInBackGround"
             android:textColor="@color/textColor"
             android:textSize="@dimen/metricPortraitTextSize"
+            android:visibility="invisible"
+            />
+        <Switch
+            android:id="@+id/backgroundSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
+            android:showText="true"
+            android:textOff="@string/switchOff"
+            android:textOn="@string/switchOn"
             android:visibility="invisible"
             />
 

@@ -110,6 +110,10 @@ import butterknife.Unbinder;
         // Required empty public constructor
     }
 
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
@@ -178,6 +182,11 @@ import butterknife.Unbinder;
             outState.putBoolean("FirstStart", firstStart);
             outState.putStringArrayList("AvgSpeedList", avgStrArrList);
             outState.putParcelable("TripProcessor", tripProcessor);
+
+            DataHolderFragment dataHolder = (DataHolderFragment) getActivity().getSupportFragmentManager()
+                    .findFragmentByTag(ConstantValues.DATA_HOLDER_TAG);
+            dataHolder.setTripData(tripProcessor.getTripData());
+
             super.onSaveInstanceState(outState);
         }
     }
@@ -188,10 +197,12 @@ import butterknife.Unbinder;
             checkGpsStatus();
             saveState();
         }
+
         super.onPause();
     }
 
     @Override public void onResume() {
+        UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {

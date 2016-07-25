@@ -66,4 +66,5 @@ public class ConstantValues {
 
     public static final int WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
     public static final int WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
+    public static final String DATA_HOLDER_TAG="DATA_HOLDER";
 }

@@ -124,6 +124,12 @@ public class UtilMethods {
         return sdf.format(dateString);
     }
 
+    public static void addFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
+        FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(fragment, fragment_tag)
+                .commit();
+    }
+
     public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
         int orientation = fragmentActivity.getResources()
                 .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape

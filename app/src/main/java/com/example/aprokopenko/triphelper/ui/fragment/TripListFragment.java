@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
+import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
@@ -53,17 +55,19 @@ import butterknife.Unbinder;
     @BindView(R.id.progressBar)
     ProgressBar  progressBar;
 
-    private static final String LOG_TAG = "TripListFragment";
+    private static final String  LOG_TAG = "TripListFragment";
     public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private TripData        tripData;
     private ArrayList<Trip> trips;
     private Unbinder        unbinder;
+    private Bundle          state;
 
     public TripListFragment() {
     }
 
     public static TripListFragment newInstance() {
+        Log.d(LOG_TAG, "newInstance: NEW INST!!");
         return new TripListFragment();
     }
 
@@ -72,6 +76,11 @@ import butterknife.Unbinder;
         unbinder = ButterKnife.bind(this, view);
         if (savedInstanceState != null) {
             tripData = savedInstanceState.getParcelable("tripData");
+            if (tripData == null) {
+                DataHolderFragment dataHolderFragment = (DataHolderFragment) getActivity().getSupportFragmentManager()
+                        .findFragmentByTag(ConstantValues.DATA_HOLDER_TAG);
+                tripData = dataHolderFragment.getTripData();
+            }
             if (tripData != null) {
                 trips = tripData.getTrips();
             }
@@ -89,6 +98,9 @@ import butterknife.Unbinder;
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            state = savedInstanceState;
+        }
         Resources res = getResources();
         String    distance;
         String    avgFuelCons;
@@ -98,9 +110,13 @@ import butterknife.Unbinder;
         String    maxSpeed;
         float     timeSpentOnTrips;
 
-        distance = UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + getString(R.string.distance_prefix);
+        distance = UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
         avgFuelCons = UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
-        moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + getString(R.string.currency_prefix);
+        String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
+        if (TextUtils.equals(curUnit, "")) {
+            curUnit = getString(R.string.grn);
+        }
+        moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
         fuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
         avgSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
         maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
@@ -115,6 +131,19 @@ import butterknife.Unbinder;
         maxSpeedView.setText(maxSpeed);
     }
 
+    @Override public void onPause() {
+        saveState();
+        super.onPause();
+    }
+
+    @Override public void onResume() {
+        if (state != null) {
+            tripData = state.getParcelable("tripData");
+        }
+        super.onResume();
+    }
+
+
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -123,9 +152,6 @@ import butterknife.Unbinder;
     @Override public void onDetach() {
         tripData = null;
         trips = null;
-        if (DEBUG) {
-            Log.d(LOG_TAG, "onDetach: OnDetach");
-        }
         super.onDetach();
     }
 
@@ -157,5 +183,12 @@ import butterknife.Unbinder;
     public void setTripData(TripData tripData) {
         this.tripData = tripData;
         trips = tripData.getTrips();
+    }
+
+    private void saveState() {
+        if (state == null) {
+            state = new Bundle();
+        }
+        onSaveInstanceState(state);
     }
 }

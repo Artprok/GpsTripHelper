@@ -1,0 +1,208 @@
+<resources>
+    <string name="app_name">TripHelper</string>
+
+    <!--hints-->
+    <string name="average_fuel_consumption_hint">Average fuel consumption &#160;</string>
+    <string name="time_spent_on_stop_hint">Time spent without motion &#160;</string>
+    <string name="time_spent_in_motion_hint">Time spent in motion &#160;</string>
+    <string name="time_spent_on_all_hint">Time spent on all trips &#160;</string>
+    <string name="money_on_fuel_spent_hint">Money on fuel spent &#160;</string>
+    <string name="time_spent_on_trip_hint">Time spent on trip &#160;</string>
+    <string name="distance_travelled_hint">Distance travelled </string>
+    <string name="average_speed_hint">Average speed &#160;</string>
+    <string name="maximum_speed_hint">Maximum speed &#160;</string>
+    <string name="fuel_spent_hint">Fuel spent &#160;</string>
+    <string name="trip_ID_hint">Trip id &#160;</string>
+    <!--/hints-->
+
+
+    <!--labels-->
+    <string name="info_about_all_trip_header_label">Info about all trips:&#160;</string>
+    <string name="list_of_trips_label">List of trips:&#160;</string>
+    <string name="trip_data_layout_label">Trip data:&#160;</string>
+    <string name="time_spent_layout_label">Time&#160;</string>
+    <string name="fuel_spent_layout_label">Fuel&#160;</string>
+    <string name="fuel_left_label">Fuel left:&#160;</string>
+    <string name="trip_date_label">Trip date:&#160;</string>
+    <string name="speed_layout_label">Speed:&#160;</string>
+    <!--/labels-->
+
+
+    <!--prefixes:-->
+    <string name="fuel_cons_prefix">&#160;litre/100km</string>
+    <string name="currency_prefix">&#160;grn</string>
+    <string name="distance_prefix">&#160;km</string>
+    <string name="fuel_prefix">&#160;litre</string>
+    <string name="speed_prefix">&#160;km/h</string>
+    <string name="hourPrefix">&#160;h</string>
+    <string name="minutePref">&#160;m</string>
+    <string name="secondPref">&#160;s</string>
+    <!--/prefixes-->
+
+
+    <!--fill_fuel_dialog-->
+    <string name="fuel_filled_val">How much fuel to fill?</string>
+    <string name="fill_fuel_tank">Fill fuel tank</string>
+    <string name="refill_hint">Refill</string>
+    <!--/fill_fuel_dialog-->
+
+
+    <!--Toasts-->
+    <string name="file_not_erased_toast">Something went wrong with data_erasing</string>
+    <string name="gps_first_fix_toast">Satellites connected</string>
+    <string name="fuel_spent_toast">Fuel filled -&#160;</string>
+    <string name="fuel_overload_toast">Too much fuel</string>
+    <string name="trip_started_toast">Trip started</string>
+    <string name="file_erased_toast">Data erased</string>
+    <string name="trip_ended_toast">Trip ended</string>
+    <!--/Toasts-->
+
+
+    <!--SettingsHints-->
+    <string name="fuel_price">Fuel price</string>
+    <string name="fuel_consumption">Fuel consumption</string>
+    <string name="fuel_capacity">Fuel capacity</string>
+    <!--/SettingsHints-->
+
+
+    <!--GPS dialog-->
+    <string name="gps_dialog_text_label">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="gps_dialog_agree_enable">Yes</string>
+    <string name="gps_dialog_disagree_enable">No</string>
+    <string name="gps_dialog_title">Gps disabled</string>
+    <!--/GPS dialog-->
+
+
+    <!--Exit dialog-->
+    <string name="exit_dialog_string">Are you sure you want to exit?</string>
+    <string name="exit_dialog_title">Exit</string>
+    <string name="exit_dialog_yes">Yes</string>
+    <string name="exit_dialog_no">No</string>
+    <!--/Exit dialog-->
+
+    <!--InitialValues-->
+    <string name="initial_speedometer_val" translatable="false">0</string>
+    <string name="fuel_left_initial_val" translatable="false">0</string>
+    <!--/InitialValues-->
+
+    <!--AboutDialog-->
+    <string name="aboutTitle">About TripHelper app:</string>
+    <string name="aboutMainText">
+        TripHelper created by Artyr Prokopenko"\n"
+        "\n"
+        Version 1.0
+        "\n"
+        "\n"
+        Application was created for people who want track main info about their trips.
+        "\n"
+        "\n"
+        With help of TripHelper, You will be able to:
+        "\n"
+         -Know what distance You have travelled
+        "\n"
+        -Know how much fuel left in Your gasTank and what distance You can travel on it
+        "\n"
+        -Watch Your speed by high accurate speedometer
+        "\n"
+        -Watch Your tracks on map and check on what speed you have driven during those trips
+        "\n"
+        -Watch on Your speed performance: average speed,maximum speed
+        "\n"
+        -Watch on how much money You spent on fuel
+        "\n"
+        -Watch on how much time You spent in motion or in a traffic jam
+        "\n"
+        "\n"
+        Do you enjoy TripHelper? Please rate us on GooglePlay and help us to get better!
+    </string>
+    <string name="aboutRateButton">It\'s cool, I want to rate!</string>
+    <string name="aboutNegativeButton">Thanks, maybe later</string>
+    <string name="aboutFeedbackButton">Send a feedback to developer</string>
+    <!--/AboutDialog-->
+
+    <!--TutorialDialog-->
+    <string name="tutorialTitle">How to use TripHelper?</string>
+    <string name="tutorialNext">Yes, please tell me how to use it</string>
+    <string name="tutorialNo">No, thanks</string>
+    <string name="tutorialThanks">Ok, I got it</string>
+    <string name="tutorialWantToKnowInfo">Do You want to read a small tutorial to know how to use TripHelper?</string>
+    <string name="tutorialInfo">
+        Hello! Thanks for using TripHelper, it will do it\'s best for You!
+        "\n"
+        To get TripHelper work properly you need to specify a few parameters in settings tab(setting tab looks like a gear):
+        "\n"
+        -Gastank capacity
+        "\n"
+        -Fuel consumption
+        "\n"
+        -Price of fuel in your region
+        "\n"
+        "\n"
+        Then all You need is check that GPS is ON and press "Play" button every time You going to drive somewhere and press "Stop" Button
+        when You arrived to destination place.
+        "\n"
+        "\n"
+        Highly recommended to plug in Your device when You using a TripHelper to get battery in charging state!
+        "\n"
+        "\n"
+        Hope you will like TripHelper!
+    </string>
+    <!--/TutorialDialog-->
+
+    <!--MeasurementsUnit-->
+    <string name="kilometreUnit">km/h</string>
+    <string name="milesUnit">mph</string>
+    <string name="knots">knots</string>
+    <string name="measurementUnitSpinnerTitle">Please chose wanted measurement unit</string>
+    <string name="measurementUnitText">Measurement units</string>
+    <!--/MeasurementsUnit-->
+
+    <!--Feedback-->
+    <string name="emailForFeedback" translatable="false">artyrprok@gmail.com</string>
+    <string name="subjectForFeedback">Feedback for TripHelper</string>
+    <string name="extraTextInFeedback">Dear Dev, I have some sudjestions or problems with your app,</string>
+    <string name="sendWithFeedback">Send email with…?</string>
+    <!--/Feedback-->
+
+    <!--SomethingWentWrongDialog-->
+    <string name="somethingWentWrongTitle">Something went wrong with map</string>
+    <string name="somethingWentWrongMessage">
+        We can\'t draw your route on map, because we doesn\'t have any stored GPS data for this trip.
+         "\n"
+        Sorry :(
+         "\n"
+         "\n"
+        Some reasons why it was happened:
+        "\n"
+        -GPS was turned off during that trip
+         "\n"
+        -You forgot to press "Start" button at start of trip
+         "\n"
+        -You forgot to press "Stop" button when you arrived to your destination place
+    </string>
+
+    <string name="somethingWentWrongOk">Ok</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="workInBackGround">work in background (increase discharging rate) </string>
+    <string name="switchOff">Off</string>
+    <string name="switchOn">On</string>
+    <string name="notificationTitle">TripHelper</string>
+    <string name="notificationContent">Touch to continue</string>
+    <string name="permissionExplanation">To proceed You need to allow App to get Your location</string>
+    <!--/SomethingWentWrongDialog-->
+
+    <string name="currencyUnitText">Currency</string>
+    <string name="eur">&#160;Euro</string>
+    <string name="rub">&#160;Rub</string>
+    <string name="usd">&#160;Dol</string>
+    <string name="grn">&#160;Uah</string>
+
+
+    <string name="eur_label">&#160;Euro</string>
+    <string name="rub_label">&#160;Rub</string>
+    <string name="usd_label">&#160;Dollar</string>
+    <string name="grn_label">&#160;Uah</string>
+
+
+</resources>

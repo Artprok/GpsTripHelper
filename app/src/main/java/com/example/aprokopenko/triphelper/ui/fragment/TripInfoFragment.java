@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -71,7 +73,7 @@ import butterknife.Unbinder;
     @BindView(R.id.mapView)
     MapView        mapView;
 
-    private static final String LOG_TAG = "TripInfoFragment";
+    private static final String  LOG_TAG = "TripInfoFragment";
     public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private static final String TIME_SPENT_IN_MOTION      = "TimeSpentOnMotion";
@@ -101,6 +103,7 @@ import butterknife.Unbinder;
     private int      tripId;
     private boolean  drawMap;
     private Unbinder unbinder;
+    private String   currency_prefix;
 
     private ArrayList<String> speedValues;
     private Context           context;
@@ -185,6 +188,13 @@ import butterknife.Unbinder;
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         context = getActivity();
+        String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
+        if (TextUtils.equals(curUnit, "")) {
+            currency_prefix = getString(R.string.grn);
+        }
+        else {
+            currency_prefix = curUnit;
+        }
         setDataToInfoFragmentFields();
 
         openMapButton.setOnClickListener(new View.OnClickListener() {
@@ -269,7 +279,7 @@ import butterknife.Unbinder;
     private void setDataToInfoFragmentFields() {
         String avgFuelCons      = UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_cons_prefix);
         String fuelSpent        = UtilMethods.formatFloatDecimalFormat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
-        String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + getString(R.string.currency_prefix);
+        String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + currency_prefix;
         String avgSpeed         = UtilMethods.formatFloatDecimalFormat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
         String maxSpeed         = UtilMethods.formatFloatDecimalFormat(this.maxSpeed) + " " + getString(R.string.speed_prefix);
         String distance         = UtilMethods.formatFloatDecimalFormat(distTravelled) + " " + getString(R.string.distance_prefix);
