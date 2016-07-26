@@ -27,7 +27,6 @@
 
     <!--prefixes-->
     <string name="fuel_cons_prefix">&#160;литров/100км</string>
-    <string name="currency_prefix">&#160;грн</string>
     <string name="distance_prefix">&#160;км</string>
     <string name="fuel_prefix">&#160;литров</string>
     <string name="speed_prefix">&#160;км/ч</string>

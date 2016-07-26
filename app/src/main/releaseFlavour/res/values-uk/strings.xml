@@ -4,7 +4,6 @@
     <string name="average_speed_hint">Середня швидкiсть &#160;</string>
     <string name="maximum_speed_hint">Максимальна швидкiсть &#160;</string>
     <string name="average_fuel_consumption_hint">Середня витрата палива &#160;</string>
-    <string name="currency_prefix">&#160;грн</string>
     <string name="distance_travelled_hint">Расстояние пройдено -&#160;</string>
     <string name="distance_prefix">&#160;км</string>
     <string name="fill_fuel_tank">Залити паливо</string>

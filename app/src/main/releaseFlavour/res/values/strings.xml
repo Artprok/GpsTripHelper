@@ -30,7 +30,6 @@
 
     <!--prefixes:-->
     <string name="fuel_cons_prefix">&#160;litre/100km</string>
-    <string name="currency_prefix">&#160;grn</string>
     <string name="distance_prefix">&#160;km</string>
     <string name="fuel_prefix">&#160;litre</string>
     <string name="speed_prefix">&#160;km/h</string>
