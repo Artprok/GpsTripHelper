@@ -67,7 +67,6 @@ import butterknife.Unbinder;
     }
 
     public static TripListFragment newInstance() {
-        Log.d(LOG_TAG, "newInstance: NEW INST!!");
         return new TripListFragment();
     }
 

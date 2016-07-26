@@ -37,8 +37,8 @@ import java.util.concurrent.ExecutionException;
 import rx.Subscriber;
 
 public class TripProcessor implements Parcelable {
-    private static final String LOG_TAG = "TripProcessor";
-    private static final boolean DEBUG                 = BuildConfig.DEBUG;
+    private static final String  LOG_TAG = "TripProcessor";
+    private static final boolean DEBUG   = BuildConfig.DEBUG;
     private final Context context;
 
     private ArrayList<Float>  avgSpeedArrayList;

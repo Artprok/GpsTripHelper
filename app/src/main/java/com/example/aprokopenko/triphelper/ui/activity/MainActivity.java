@@ -107,7 +107,6 @@ import io.fabric.sdk.android.Fabric;
                 assert fab != null;
                 setFabToMap((MainFragment) fragment);
                 UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-
             }
             if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
                 setFabToSpeedometer(mainFragment);
