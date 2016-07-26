@@ -24,21 +24,21 @@ public class ScaleRenderer extends View {
     private final double          arcAliasing;
 
     //modif optimization
-    private double modifMinSizeDivideBy4;
-    private double modifMinSizeDivideBy2;
-    private double modifMinSizeMultipleBy0dot75;
-    private double modifMinSizeMultipleBy0dot875;
-    private double modifMinSizeMultipleBy0dot125;
-    private double modifMinSizeMultipleBy0dot375;
-    private double modifRimWidthDivideBy2;
+    private float modifMinSizeDivideBy4;
+    private float modifMinSizeDivideBy2;
+    private float modifMinSizeMultipleBy0dot75;
+    private float modifMinSizeMultipleBy0dot875;
+    private float modifMinSizeMultipleBy0dot125;
+    private float modifMinSizeMultipleBy0dot375;
+    private float modifRimWidthDivideBy2;
 
-    private double    mCentreX;
-    private double    mCentreY;
+    private float     mCentreX;
+    private float     mCentreY;
     private RectF     mRangeFrame;
     private GaugeType gaugeType;
-    private double    mInnerBevelWidth;
-    private double    mMinSize;
-    private double    mRangePathWidth;
+    private float     mInnerBevelWidth;
+    private float     mMinSize;
+    private float     mRangePathWidth;
 
     public ScaleRenderer(Context context, TripHelperGauge gauge, GaugeScale gaugeScale) {
         this(context, null);
@@ -57,7 +57,7 @@ public class ScaleRenderer extends View {
         super(context, attrs);
         gauge = null;
         gaugeScale = null;
-        arcAliasing = 0.7D;
+        arcAliasing = 0.7;
 
     }
 
@@ -65,22 +65,22 @@ public class ScaleRenderer extends View {
         if (gauge != null && gaugeScale != null) {
             gaugeScale.setmGauge(gauge);
 
-            mCentreX = gauge.getmCentreX();
-            mCentreY = gauge.getmCentreY();
-            mInnerBevelWidth = gauge.getmInnerBevelWidth();
-            mMinSize = gauge.getmMinSize();
+            mCentreX = (float) gauge.getmCentreX();
+            mCentreY = (float) gauge.getmCentreY();
+            mInnerBevelWidth = (float) gauge.getmInnerBevelWidth();
+            mMinSize = (float) gauge.getmMinSize();
             gaugeType = gauge.getGaugeType();
             mRangeFrame = gauge.getmRangeFrame();
-            mRangePathWidth = gauge.getmRangePathWidth();
+            mRangePathWidth = (float) gauge.getmRangePathWidth();
 
             double rimWidth = gaugeScale.getRimWidth();
-            modifMinSizeDivideBy4 = mMinSize / 4.0D;
-            modifMinSizeDivideBy2 = mMinSize / 2.0D;
-            modifMinSizeMultipleBy0dot75 = mMinSize * 0.75D;
-            modifMinSizeMultipleBy0dot875 = mMinSize * 0.875D;
-            modifMinSizeMultipleBy0dot125 = mMinSize * 0.125D;
-            modifMinSizeMultipleBy0dot375 = mMinSize * 0.375D;
-            modifRimWidthDivideBy2 = rimWidth / 2.0D;
+            modifMinSizeDivideBy4 = mMinSize / 4.0f;
+            modifMinSizeDivideBy2 = mMinSize / 2.0f;
+            modifMinSizeMultipleBy0dot75 = mMinSize * 0.75f;
+            modifMinSizeMultipleBy0dot875 = mMinSize * 0.875f;
+            modifMinSizeMultipleBy0dot125 = mMinSize * 0.125f;
+            modifMinSizeMultipleBy0dot375 = mMinSize * 0.375f;
+            modifRimWidthDivideBy2 = (float) (rimWidth / 2.0);
 
             double endVal   = gaugeScale.getEndValue();
             double startVal = gaugeScale.getStartValue();
@@ -128,8 +128,8 @@ public class ScaleRenderer extends View {
     private void onDrawLabels(Canvas canvas, Paint paint, double totalTicks, GaugeScale gaugeScale) {
         double anglularSpace = gaugeScale.getSweepAngle() / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
         double angle         = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double tempGaugeSize = (mInnerBevelWidth - 10.0D) / 2.0D;
-        tempGaugeSize *= 1.0D - gaugeScale.getRadiusFactor();
+        double tempGaugeSize = (mInnerBevelWidth - 10.0) / 2.0;
+        tempGaugeSize *= 1.0 - gaugeScale.getRadiusFactor();
         String label;
         String value;
         int    fractionalDigit = gaugeScale.getNumberOfDecimalDigits();
@@ -154,15 +154,15 @@ public class ScaleRenderer extends View {
             paint.setAntiAlias(true);
             double widthOfLabel = paint.measureText(String.valueOf((int) gaugeScale.getEndValue()));
             //modif optimization
-            double modifWidthOfLabelDivideBy4     = widthOfLabel / 4.0D;
-            double modifWidthOfLabelDivideBy1dot8 = widthOfLabel / 1.8D;
+            double modifWidthOfLabelDivideBy4     = widthOfLabel / 4.0;
+            double modifWidthOfLabelDivideBy1dot8 = widthOfLabel / 1.8;
 
             double labelOffset = gaugeScale.getLabelOffset();
-            double outerSize   = tempGaugeSize - labelOffset * mCentreX - widthOfLabel / 2.0D - modifRimWidthDivideBy2;
-            double tempLabelSize = mMinSize / 2.0D - tempGaugeSize + labelOffset * mCentreX +
+            double outerSize   = tempGaugeSize - labelOffset * mCentreX - widthOfLabel / 2.0 - modifRimWidthDivideBy2;
+            double tempLabelSize = mMinSize / 2.0 - tempGaugeSize + labelOffset * mCentreX +
                     modifRimWidthDivideBy2;
 
-            double modifOuterSizeMultipleBy1dot5 = outerSize * 1.5D;
+            double modifOuterSizeMultipleBy1dot5 = outerSize * 1.5;
             double modifOuterSizeMultipleCos     = outerSize * Math.cos(angle);
             double modifOuterSizeMultipleSin     = outerSize * Math.sin(angle);
 
@@ -278,8 +278,8 @@ public class ScaleRenderer extends View {
 
         double angularSpace  = gaugeScale.getSweepAngle() / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
         double angle         = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
-        double tempGaugeSize = (mInnerBevelWidth - 10.0D) / 2.0D;
-        tempGaugeSize *= 1.0D - gaugeScale.getRadiusFactor();
+        double tempGaugeSize = (mInnerBevelWidth - 10.0) / 2.0;
+        tempGaugeSize *= 1.0 - gaugeScale.getRadiusFactor();
 
         double minorTickPosition;
         double outerSize;
@@ -717,27 +717,26 @@ public class ScaleRenderer extends View {
 
                 gauge.calculateMargin(mInnerBevelWidth - modif_withdMultByRadius);
                 double width;
-                double rimSize;
+                float  rimSize;
 
                 if (radFactor > GaugeConstants.ZERO) {
                     gauge.calculateMargin(mMinSize - modif_minSizeMultByRadius);
                     width = mRangePathWidth - rimWidth;
-                    rimSize = width - 4.0D * 10.0D;
+                    rimSize = (float) (width - 4.0D * 10.0D);
 
                     //modif optimization
-                    double modif_centerYminusMinSizePlusRimSize  = getCenterYminusDivideBy2plusRimSize(rimSize);
-                    double modif_centerXplusMinSizeMinusRimSize  = getCenterXplusDivideBy2minusRimSize(rimSize);
-                    double modif_centerYplusMinSizeMinusRimSize  = getCenterYplusDivideBy2minusRimSize(rimSize);
-                    double modifCenterXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
+                    float modif_centerYminusMinSizePlusRimSize  = getCenterYminusDivideBy2plusRimSize(rimSize);
+                    float modif_centerXplusMinSizeMinusRimSize  = getCenterXplusDivideBy2minusRimSize(rimSize);
+                    float modif_centerYplusMinSizeMinusRimSize  = getCenterYplusDivideBy2minusRimSize(rimSize);
+                    float modifCenterXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
 
                     if (mCentreY > mCentreX) {
                         Log.d("HERE1", "onDrawRanges: ");
-                        rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
+                        rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusMinSizeMinusRimSize, modif_centerYminusMinSizePlusRimSize);
                     }
                     else {
-                        rectF = getRectF((float) modifCenterXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
+                        rectF = getRectF(modifCenterXminusDivideBy2plusRimSize, modif_centerXplusMinSizeMinusRimSize,
+                                modif_centerYplusMinSizeMinusRimSize, rimSize);
                     }
 
                     mRangeFrame = rectF;
@@ -746,137 +745,131 @@ public class ScaleRenderer extends View {
                             .getOffset() * (mCentreX - rimWidth));
                     if (mCentreY > mCentreX) {
                         Log.d("2", "onDrawRanges: ");
-                        rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize(factor)),
-                                (float) (getCenterXplusDivideBy2minusRimSize(factor)),
-                                (float) (getCenterYplusDivideBy2minusRimSize(factor)));
+                        rectF = new RectF(factor, getCenterYminusDivideBy2plusRimSize(factor), getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
                     }
                     else {
                         factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radFactor + (float) (gaugeRange
                                 .getOffset() * (mCentreY - rimWidth));
-                        rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize(factor)), factor,
-                                (float) (getCenterXplusDivideBy2minusRimSize(factor)),
-                                (float) (getCenterYplusDivideBy2minusRimSize(factor)));
+                        rectF = new RectF(getCenterXminusDivideBy2plusRimSize(factor), factor,
+                                getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
                     }
                 }
                 else {
                     if (mCentreY > mCentreX) {
                         Log.d("HERE", "onDrawRanges: ");
                         double rimW = gauge.getmRimWidth();
-                        rimSize = mMinSize - rimW - ((gaugeRange.getOffset() * (mCentreX - rimW))) + gaugeRange.getWidth() / 2.0D;
+                        rimSize = (float) (mMinSize - rimW - ((gaugeRange.getOffset() * (mCentreX - rimW))) + gaugeRange.getWidth() / 2.0);
 
                         //modif optimization
-                        double modify_centerXplus0dot125minusRimSize  = getCenterXplus0dot125minusRimSize(rimSize);
-                        double modify_centerYminus0dot125plusRimSize  = getCenterYminus0dot125plusRimSize(rimSize);
-                        double modify_centerYplus0dot375minusRimSize  = getCenterYplus0dot375minusRimSize(rimSize);
-                        double modify_centerXminus0dot375plusRimSize  = getCenterXminus0dot375plusRimSize(rimSize);
-                        double modife_centerYplus0dot125minusRimSize  = getCenterYplus0dot125minusRimSize(rimSize);
-                        double modif_centerXminusDivideBy4plusRimSize = getCenterXminusDivideBy4plusRimSize(rimSize);
-                        double modif_centerXminus0dot75plusRimSize    = getCenterXminus0dot75plusRimSize(rimSize);
-                        double modif_centerYminusDivideBy4plusRimSize = getCenterYminusDivideBy4plusRimSize(rimSize);
-                        double modif_centerYminus0dot75plusRimSize    = getCenterYminus0dot75plusRimSize(rimSize);
-                        double modif_centerYminusMinSizePlusRimSize   = getCenterYminusDivideBy2plusRimSize(rimSize);
-                        double modif_centerXplusMinSizeMinusRimSize   = getCenterXplusDivideBy2minusRimSize(rimSize);
-                        double modif_centerYplusMinSizeMinusRimSize   = getCenterYplusDivideBy2minusRimSize(rimSize);
-                        double modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
-                        double modif_centerXminus0dot375plusRimSize   = getCenterYminus0dot375plusRimSize(rimSize);
-                        double modif_centerYplus0dot75minusRimSize    = getCenterYplus0dot75minusRimSize(rimSize);
-                        double modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
-                        double modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
+                        float modify_centerXplus0dot125minusRimSize  = getCenterXplus0dot125minusRimSize(rimSize);
+                        float modify_centerYminus0dot125plusRimSize  = getCenterYminus0dot125plusRimSize(rimSize);
+                        float modify_centerYplus0dot375minusRimSize  = getCenterYplus0dot375minusRimSize(rimSize);
+                        float modify_centerXminus0dot375plusRimSize  = getCenterXminus0dot375plusRimSize(rimSize);
+                        float modife_centerYplus0dot125minusRimSize  = getCenterYplus0dot125minusRimSize(rimSize);
+                        float modif_centerXminusDivideBy4plusRimSize = getCenterXminusDivideBy4plusRimSize(rimSize);
+                        float modif_centerXminus0dot75plusRimSize    = getCenterXminus0dot75plusRimSize(rimSize);
+                        float modif_centerYminusDivideBy4plusRimSize = getCenterYminusDivideBy4plusRimSize(rimSize);
+                        float modif_centerYminus0dot75plusRimSize    = getCenterYminus0dot75plusRimSize(rimSize);
+                        float modif_centerYminusMinSizePlusRimSize   = getCenterYminusDivideBy2plusRimSize(rimSize);
+                        float modif_centerXplusMinSizeMinusRimSize   = getCenterXplusDivideBy2minusRimSize(rimSize);
+                        float modif_centerYplusMinSizeMinusRimSize   = getCenterYplusDivideBy2minusRimSize(rimSize);
+                        float modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
+                        float modif_centerXminus0dot375plusRimSize   = getCenterYminus0dot375plusRimSize(rimSize);
+                        float modif_centerYplus0dot75minusRimSize    = getCenterYplus0dot75minusRimSize(rimSize);
+                        float modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
+                        float modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
 
                         if (gaugeType == GaugeType.North) {
-                            rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
+                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplus0dot75minusRimSize, modif_centerYminusDivideBy4plusRimSize);
                         }
                         else if (gaugeType == GaugeType.South) {
-                            rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
+                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize,
+                                    modif_centerYplusDivideBy4minusRimSize, modif_centerYminus0dot75plusRimSize);
                         }
                         else if (gaugeType == GaugeType.West) {
-                            rectF = getRectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYplus0dot75minusRimSize,
-                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
+                            rectF = getRectF(modif_centerXminusDivideBy4plusRimSize, modif_centerYplus0dot75minusRimSize,
+                                    modif_centerYplusMinSizeMinusRimSize, modif_centerYminusMinSizePlusRimSize);
                         }
                         else if (gaugeType == GaugeType.East) {
-                            rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerXplusDivideBy4minusRimSize,
-                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
+                            rectF = getRectF(modif_centerXminus0dot75plusRimSize, modif_centerXplusDivideBy4minusRimSize,
+                                    modif_centerYplusMinSizeMinusRimSize, modif_centerYminusMinSizePlusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthEast) {
-                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
-                                    (float) modife_centerYplus0dot125minusRimSize, (float) modif_centerXminus0dot375plusRimSize);
+                            rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXminus0dot125plusRimSize,
+                                    modife_centerYplus0dot125minusRimSize, modif_centerXminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthWest) {
-                            rectF = getRectF((float) modify_centerXminus0dot375plusRimSize, (float) modify_centerXplus0dot125minusRimSize,
-                                    (float) modife_centerYplus0dot125minusRimSize, (float) modif_centerXminus0dot375plusRimSize);
+                            rectF = getRectF(modify_centerXminus0dot375plusRimSize, modify_centerXplus0dot125minusRimSize,
+                                    modife_centerYplus0dot125minusRimSize, modif_centerXminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthEast) {
-                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
-                                    (float) modify_centerYplus0dot375minusRimSize, (float) modify_centerYminus0dot125plusRimSize);
+                            rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXminus0dot125plusRimSize,
+                                    modify_centerYplus0dot375minusRimSize, modify_centerYminus0dot125plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthWest) {
-                            rectF = getRectF((float) modify_centerXminus0dot375plusRimSize, (float) modify_centerXplus0dot125minusRimSize,
-                                    (float) modify_centerYplus0dot375minusRimSize, (float) modify_centerYminus0dot125plusRimSize);
+                            rectF = getRectF(modify_centerXminus0dot375plusRimSize, modify_centerXplus0dot125minusRimSize,
+                                    modify_centerYplus0dot375minusRimSize, modify_centerYminus0dot125plusRimSize);
                         }
                         else {
-                            rectF = getRectF((float) rimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) modif_centerYminusMinSizePlusRimSize);
+                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusMinSizeMinusRimSize, modif_centerYminusMinSizePlusRimSize);
                         }
                     }
                     else {
                         double rimW = gauge.getmRimWidth();
-                        rimSize = mMinSize - rimW - (double) ((float) (gaugeRange.getOffset() * (mCentreY - rimW))) + gaugeRange
-                                .getWidth() / 2.0D;
+                        rimSize = (float) (mMinSize - rimW - (gaugeRange.getOffset() * (mCentreY - rimW)) + gaugeRange.getWidth() / 2.0);
                         //modif optimization
-                        double modif_centerXplus0dot125minusRimSize   = getCenterXplus0dot125minusRimSize(rimSize);
-                        double modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
-                        double modif_centerYplus0dot125minusRimSize   = getCenterYplus0dot125minusRimSize(rimSize);
-                        double modif_centerYminus0dot125plusRimSize   = getCenterYminus0dot125plusRimSize(rimSize);
-                        double modif_centerYplus0dot375minusRimSize   = getCenterYplus0dot375minusRimSize(rimSize);
-                        double modif_centerYminus0dot375plusRimSize   = getCenterYminus0dot375plusRimSize(rimSize);
-                        double modif_centerXminus0dot75plusRimSize    = getCenterXminus0dot75plusRimSize(rimSize);
-                        double modif_centerYminus0dot75plusRimSize    = getCenterYminus0dot75plusRimSize(rimSize);
-                        double modif_centerYplus0dot75minusRimSize    = getCenterYplus0dot75minusRimSize(rimSize);
-                        double modif_centerXminusDivideBy4plusRimSize = getCenterXminusDivideBy4plusRimSize(rimSize);
-                        double modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
-                        double modif_centerYminusDivideBy4plusRimSize = getCenterYminusDivideBy4plusRimSize(rimSize);
-                        double modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
-                        double modif_centerXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
-                        double modif_centerXplusMinSizeMinusRimSize   = getCenterXplusDivideBy2minusRimSize(rimSize);
-                        double modif_centerYplusMinSizeMinusRimSize   = getCenterYplusDivideBy2minusRimSize(rimSize);
+                        float modif_centerXplus0dot125minusRimSize   = getCenterXplus0dot125minusRimSize(rimSize);
+                        float modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
+                        float modif_centerYplus0dot125minusRimSize   = getCenterYplus0dot125minusRimSize(rimSize);
+                        float modif_centerYminus0dot125plusRimSize   = getCenterYminus0dot125plusRimSize(rimSize);
+                        float modif_centerYplus0dot375minusRimSize   = getCenterYplus0dot375minusRimSize(rimSize);
+                        float modif_centerYminus0dot375plusRimSize   = getCenterYminus0dot375plusRimSize(rimSize);
+                        float modif_centerXminus0dot75plusRimSize    = getCenterXminus0dot75plusRimSize(rimSize);
+                        float modif_centerYminus0dot75plusRimSize    = getCenterYminus0dot75plusRimSize(rimSize);
+                        float modif_centerYplus0dot75minusRimSize    = getCenterYplus0dot75minusRimSize(rimSize);
+                        float modif_centerXminusDivideBy4plusRimSize = getCenterXminusDivideBy4plusRimSize(rimSize);
+                        float modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
+                        float modif_centerYminusDivideBy4plusRimSize = getCenterYminusDivideBy4plusRimSize(rimSize);
+                        float modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
+                        float modif_centerXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
+                        float modif_centerXplusMinSizeMinusRimSize   = getCenterXplusDivideBy2minusRimSize(rimSize);
+                        float modif_centerYplusMinSizeMinusRimSize   = getCenterYplusDivideBy2minusRimSize(rimSize);
 
                         if (gaugeType == GaugeType.West) {
-                            rectF = getRectF((float) modif_centerXminusDivideBy4plusRimSize, (float) modif_centerYplus0dot75minusRimSize,
-                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
+                            rectF = getRectF(modif_centerXminusDivideBy4plusRimSize, modif_centerYplus0dot75minusRimSize,
+                                    modif_centerYplusMinSizeMinusRimSize, rimSize);
                         }
                         else if (gaugeType == GaugeType.East) {
-                            rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) modif_centerXplusDivideBy4minusRimSize,
-                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
+                            rectF = getRectF(modif_centerXminus0dot75plusRimSize, modif_centerXplusDivideBy4minusRimSize,
+                                    modif_centerYplusMinSizeMinusRimSize, rimSize);
                         }
                         else if (gaugeType == GaugeType.North) {
-                            rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
+                            rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusMinSizeMinusRimSize,
+                                    modif_centerYplus0dot75minusRimSize, modif_centerYminusDivideBy4plusRimSize);
                         }
                         else if (gaugeType == GaugeType.South) {
-                            rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
+                            rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusMinSizeMinusRimSize,
+                                    modif_centerYplusDivideBy4minusRimSize, modif_centerYminus0dot75plusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthEast) {
-                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
-                                    (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot375plusRimSize);
+                            rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXminus0dot125plusRimSize,
+                                    modif_centerYplus0dot125minusRimSize, modif_centerYminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.NorthWest) {
-                            rectF = getRectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
-                                    (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot375plusRimSize);
+                            rectF = getRectF(modif_centerYminus0dot375plusRimSize, modif_centerXplus0dot125minusRimSize,
+                                    modif_centerYplus0dot125minusRimSize, modif_centerYminus0dot375plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthEast) {
-                            rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXminus0dot125plusRimSize,
-                                    (float) modif_centerYplus0dot375minusRimSize, (float) modif_centerYminus0dot125plusRimSize);
+                            rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXminus0dot125plusRimSize,
+                                    modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
                         }
                         else if (gaugeType == GaugeType.SouthWest) {
-                            rectF = getRectF((float) modif_centerYminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
-                                    (float) modif_centerYplus0dot375minusRimSize, (float) modif_centerYminus0dot125plusRimSize);
+                            rectF = getRectF(modif_centerYminus0dot375plusRimSize, modif_centerXplus0dot125minusRimSize,
+                                    modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
                         }
                         else {
-                            rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusMinSizeMinusRimSize,
-                                    (float) modif_centerYplusMinSizeMinusRimSize, (float) rimSize);
+                            rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusMinSizeMinusRimSize,
+                                    modif_centerYplusMinSizeMinusRimSize, rimSize);
                         }
                     }
                     mRangeFrame = rectF;
@@ -901,135 +894,130 @@ public class ScaleRenderer extends View {
     }
 
     private RectF calculateRectF(double radiusFactor) {
-        double rimSize = mMinSize - (mInnerBevelWidth - 10.0D) + gaugeScale.getRimWidth() / 2.0D;
+        float rimSize = (float) (mMinSize - (mInnerBevelWidth - 10.0) + gaugeScale.getRimWidth() / 2.0);
 
         //modif optimization
-        double modif_centerXplusDivideBy2minusRimSize = getCenterXplusDivideBy2minusRimSize(rimSize);
-        double modif_centerYplusDivideBy2minusRimSize = getCenterYplusDivideBy2minusRimSize(rimSize);
-        double modif_centerYminusDivideBy2plusRimSize = getCenterYminusDivideBy2plusRimSize(rimSize);
-        double modif_centerXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
+        float modif_centerXplusDivideBy2minusRimSize = getCenterXplusDivideBy2minusRimSize(rimSize);
+        float modif_centerYplusDivideBy2minusRimSize = getCenterYplusDivideBy2minusRimSize(rimSize);
+        float modif_centerYminusDivideBy2plusRimSize = getCenterYminusDivideBy2plusRimSize(rimSize);
+        float modif_centerXminusDivideBy2plusRimSize = getCenterXminusDivideBy2plusRimSize(rimSize);
 
         if (radiusFactor > GaugeConstants.ZERO) {
             gauge.calculateMargin(modifMinSizeDivideBy2 - mCentreX * radiusFactor);
-            mMinSize = mRangePathWidth - gauge.getmRimWidth();
-            rimSize = mMinSize - 4.0D * 10.0D;
+            mMinSize = (float) (mRangePathWidth - gauge.getmRimWidth());
+            rimSize = mMinSize - 4.0f * 10.0f;
 
             if (mCentreY > mCentreX) {
-                rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                        (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
+                rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy2minusRimSize, modif_centerYminusDivideBy2plusRimSize);
             }
             else {
-                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
+                rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusDivideBy2minusRimSize,
+                        modif_centerYplusDivideBy2minusRimSize, rimSize);
             }
 
             mRangeFrame = rectF;
             float factor = mRangeFrame.left + (mRangeFrame.width() / 2.0F - mRangeFrame.left) * (float) radiusFactor;
             if (mCentreY > mCentreX) {
-                rectF = new RectF(factor, (float) (getCenterYminusDivideBy2plusRimSize(factor)),
-                        (float) (getCenterXplusDivideBy2minusRimSize(factor)), (float) (getCenterYplusDivideBy2minusRimSize(factor)));
+                rectF = new RectF(factor, getCenterYminusDivideBy2plusRimSize(factor),
+                        getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
             }
             else {
                 factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radiusFactor;
-                rectF = new RectF((float) (getCenterXminusDivideBy2plusRimSize(factor)), factor,
-                        (float) (getCenterXplusDivideBy2minusRimSize(factor)), (float) (getCenterYplusDivideBy2minusRimSize(factor)));
+                rectF = new RectF(getCenterXminusDivideBy2plusRimSize(factor), factor, getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
             }
         }
         else {
             //modif optimization
-            double modif_centerYplus0dot75minusRimSize    = getCenterYplus0dot75minusRimSize(rimSize);
-            double modif_centerYminusDivideBy4plusRimSize = getCenterYminusDivideBy4plusRimSize(rimSize);
-            double modif_centerYminus0dot75plusRimSize    = getCenterYminus0dot75plusRimSize(rimSize);
-            double modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
-            double modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
-            double modif_centerYminus0dot372plusRimSize   = getCenterYminus0dot375plusRimSize(rimSize);
-            double modif_centerXplus0dot375minusRimSize   = getCenterXplus0dot375minusRimSize(rimSize);
-            double modif_centerYplus0dot125minusRimSize   = getCenterYplus0dot125minusRimSize(rimSize);
-            double modif_centerXminus0dot375plusRimSize   = getCenterXminus0dot375plusRimSize(rimSize);
-            double modif_centerYminus0dot125plusRimSize   = getCenterYminus0dot125plusRimSize(rimSize);
-            double modif_centerXminus0dot75plusRimSize    = getCenterXminus0dot75plusRimSize(rimSize);
-            double modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
-            double modif_centerYplus0dot375minusRimSize   = getCenterYplus0dot375minusRimSize(rimSize);
-            double modif_centerXplus0dot75minusRimSize    = getCenterXplus0dot75minusRimSize(rimSize);
-            double modif_centerXplus0dot125minusRimSize   = getCenterXplus0dot125minusRimSize(rimSize);
-            double modif_centerXminusDidiveBy4plusRimSize = getCenterXminusDivideBy4plusRimSize(rimSize);
+            float modif_centerYplus0dot75minusRimSize    = getCenterYplus0dot75minusRimSize(rimSize);
+            float modif_centerYminusDivideBy4plusRimSize = getCenterYminusDivideBy4plusRimSize(rimSize);
+            float modif_centerYminus0dot75plusRimSize    = getCenterYminus0dot75plusRimSize(rimSize);
+            float modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
+            float modif_centerXminus0dot125plusRimSize   = getCenterXminus0dot125plusRimSize(rimSize);
+            float modif_centerYminus0dot372plusRimSize   = getCenterYminus0dot375plusRimSize(rimSize);
+            float modif_centerXplus0dot375minusRimSize   = getCenterXplus0dot375minusRimSize(rimSize);
+            float modif_centerYplus0dot125minusRimSize   = getCenterYplus0dot125minusRimSize(rimSize);
+            float modif_centerXminus0dot375plusRimSize   = getCenterXminus0dot375plusRimSize(rimSize);
+            float modif_centerYminus0dot125plusRimSize   = getCenterYminus0dot125plusRimSize(rimSize);
+            float modif_centerXminus0dot75plusRimSize    = getCenterXminus0dot75plusRimSize(rimSize);
+            float modif_centerXplusDivideBy4minusRimSize = getCenterXplusDivideBy4minusRimSize(rimSize);
+            float modif_centerYplus0dot375minusRimSize   = getCenterYplus0dot375minusRimSize(rimSize);
+            float modif_centerXplus0dot75minusRimSize    = getCenterXplus0dot75minusRimSize(rimSize);
+            float modif_centerXplus0dot125minusRimSize   = getCenterXplus0dot125minusRimSize(rimSize);
+            float modif_centerXminusDidiveBy4plusRimSize = getCenterXminusDivideBy4plusRimSize(rimSize);
             modif_centerXplusDivideBy2minusRimSize = getCenterXplusDivideBy2minusRimSize(rimSize);
             modif_centerYplusDivideBy2minusRimSize = getCenterYplusDivideBy2minusRimSize(rimSize);
             modif_centerYminusDivideBy2plusRimSize = getCenterYminusDivideBy2plusRimSize(rimSize);
 
             if (mCentreY > mCentreX) {
                 if (gaugeType == GaugeType.North) {
-                    rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                            (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
+                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplus0dot75minusRimSize, modif_centerYminusDivideBy4plusRimSize);
                 }
                 else if (gaugeType == GaugeType.South) {
-                    rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                            (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
+                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy4minusRimSize, modif_centerYminus0dot75plusRimSize);
                 }
                 else if (gaugeType == GaugeType.West) {
-                    rectF = getRectF((float) (modif_centerXminusDidiveBy4plusRimSize), (float) modif_centerXplus0dot75minusRimSize,
-                            (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
+                    rectF = getRectF(modif_centerXminusDidiveBy4plusRimSize, modif_centerXplus0dot75minusRimSize,
+                            modif_centerYplusDivideBy2minusRimSize, modif_centerYminusDivideBy2plusRimSize);
                 }
                 else if (gaugeType == GaugeType.East) {
-                    rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) (modif_centerXplusDivideBy4minusRimSize),
-                            (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
+                    rectF = getRectF(modif_centerXminus0dot75plusRimSize, modif_centerXplusDivideBy4minusRimSize,
+                            modif_centerYplusDivideBy2minusRimSize, modif_centerYminusDivideBy2plusRimSize);
                 }
                 else if (gaugeType == GaugeType.NorthEast) {
-                    rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
-                            (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
+                    rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXplus0dot375minusRimSize,
+                            modif_centerYplus0dot125minusRimSize, modif_centerYminus0dot372plusRimSize);
                 }
                 else if (gaugeType == GaugeType.NorthWest) {
-                    rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
-                            (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
+                    rectF = getRectF(modif_centerXminus0dot375plusRimSize, modif_centerXplus0dot125minusRimSize,
+                            modif_centerYplus0dot125minusRimSize, modif_centerYminus0dot372plusRimSize);
                 }
                 else if (gaugeType == GaugeType.SouthEast) {
-                    rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
-                            (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
+                    rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXplus0dot375minusRimSize,
+                            modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
                 }
                 else if (gaugeType == GaugeType.SouthWest) {
-                    rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
-                            (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
+                    rectF = getRectF(modif_centerXminus0dot375plusRimSize, modif_centerXplus0dot125minusRimSize,
+                            modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
                 }
                 else {
-                    rectF = getRectF((float) rimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                            (float) modif_centerYplusDivideBy2minusRimSize, (float) modif_centerYminusDivideBy2plusRimSize);
+                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy2minusRimSize, modif_centerYminusDivideBy2plusRimSize);
                 }
             }
             else if (gaugeType == GaugeType.West) {
-                rectF = getRectF((float) modif_centerXminusDidiveBy4plusRimSize, (float) modif_centerXplus0dot75minusRimSize,
-                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
+                rectF = getRectF(modif_centerXminusDidiveBy4plusRimSize, modif_centerXplus0dot75minusRimSize,
+                        modif_centerYplusDivideBy2minusRimSize, rimSize);
             }
             else if (gaugeType == GaugeType.East) {
-                rectF = getRectF((float) modif_centerXminus0dot75plusRimSize, (float) (modif_centerXplusDivideBy4minusRimSize),
-                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
+                rectF = getRectF(modif_centerXminus0dot75plusRimSize, modif_centerXplusDivideBy4minusRimSize,
+                        modif_centerYplusDivideBy2minusRimSize, rimSize);
             }
             else if (gaugeType == GaugeType.North) {
-                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                        (float) modif_centerYplus0dot75minusRimSize, (float) modif_centerYminusDivideBy4plusRimSize);
+                rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusDivideBy2minusRimSize,
+                        modif_centerYplus0dot75minusRimSize, modif_centerYminusDivideBy4plusRimSize);
             }
             else if (gaugeType == GaugeType.South) {
-                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                        (float) modif_centerYplusDivideBy4minusRimSize, (float) modif_centerYminus0dot75plusRimSize);
+                rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusDivideBy2minusRimSize,
+                        modif_centerYplusDivideBy4minusRimSize, modif_centerYminus0dot75plusRimSize);
             }
             else if (gaugeType == GaugeType.NorthEast) {
-                rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
-                        (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
+                rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXplus0dot375minusRimSize,
+                        modif_centerYplus0dot125minusRimSize, modif_centerYminus0dot372plusRimSize);
             }
             else if (gaugeType == GaugeType.NorthWest) {
-                rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
-                        (float) modif_centerYplus0dot125minusRimSize, (float) modif_centerYminus0dot372plusRimSize);
+                rectF = getRectF(modif_centerXminus0dot375plusRimSize, modif_centerXplus0dot125minusRimSize,
+                        modif_centerYplus0dot125minusRimSize, modif_centerYminus0dot372plusRimSize);
             }
             else if (gaugeType == GaugeType.SouthEast) {
-                rectF = getRectF((float) modif_centerXminus0dot125plusRimSize, (float) modif_centerXplus0dot375minusRimSize,
-                        (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
+                rectF = getRectF(modif_centerXminus0dot125plusRimSize, modif_centerXplus0dot375minusRimSize,
+                        modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
             }
             else if (gaugeType == GaugeType.SouthWest) {
-                rectF = getRectF((float) modif_centerXminus0dot375plusRimSize, (float) modif_centerXplus0dot125minusRimSize,
-                        (float) (modif_centerYplus0dot375minusRimSize), (float) modif_centerYminus0dot125plusRimSize);
+                rectF = getRectF(modif_centerXminus0dot375plusRimSize, modif_centerXplus0dot125minusRimSize,
+                        modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
             }
             else {
-                rectF = getRectF((float) modif_centerXminusDivideBy2plusRimSize, (float) modif_centerXplusDivideBy2minusRimSize,
-                        (float) modif_centerYplusDivideBy2minusRimSize, (float) rimSize);
+                rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusDivideBy2minusRimSize,
+                        modif_centerYplusDivideBy2minusRimSize, rimSize);
             }
             mRangeFrame = rectF;
         }
@@ -1042,83 +1030,83 @@ public class ScaleRenderer extends View {
                 modif_centerYplus0dot75minusRimSize);
     }
 
-    private double getCenterYplusDivideBy2minusRimSize(double rimSize) {
+    private float getCenterYplusDivideBy2minusRimSize(float rimSize) {
         return mCentreY + modifMinSizeDivideBy2 - rimSize;
     }
 
-    private double getCenterXplusDivideBy2minusRimSize(double rimSize) {
+    private float getCenterXplusDivideBy2minusRimSize(float rimSize) {
         return mCentreX + modifMinSizeDivideBy2 - rimSize;
     }
 
-    private double getCenterXplus0dot75minusRimSize(double rimSize) {
+    private float getCenterXplus0dot75minusRimSize(float rimSize) {
         return mCentreX + modifMinSizeMultipleBy0dot75 - rimSize;
     }
 
-    private double getCenterXplus0dot375minusRimSize(double rimSize) {
+    private float getCenterXplus0dot375minusRimSize(float rimSize) {
         return mCentreX + modifMinSizeMultipleBy0dot375 - rimSize;
     }
 
-    private double getCenterYplus0dot375minusRimSize(double rimSize) {
+    private float getCenterYplus0dot375minusRimSize(float rimSize) {
         return mCentreY + modifMinSizeMultipleBy0dot375 - rimSize;
     }
 
-    private double getCenterXminus0dot375plusRimSize(double rimSize) {
+    private float getCenterXminus0dot375plusRimSize(float rimSize) {
         return mCentreX - modifMinSizeMultipleBy0dot375 + rimSize;
     }
 
-    private double getCenterXminus0dot125plusRimSize(double rimSize) {
+    private float getCenterXminus0dot125plusRimSize(float rimSize) {
         return mCentreX - modifMinSizeMultipleBy0dot125 + rimSize;
     }
 
-    private double getCenterXplusDivideBy4minusRimSize(double rimSize) {
+    private float getCenterXplusDivideBy4minusRimSize(float rimSize) {
         return mCentreX + modifMinSizeDivideBy4 - rimSize;
     }
 
-    private double getCenterYminus0dot75plusRimSize(double rimSize) {
+    private float getCenterYminus0dot75plusRimSize(float rimSize) {
         return mCentreY - modifMinSizeMultipleBy0dot75 + rimSize;
     }
 
-    private double getCenterYminusDivideBy4plusRimSize(double rimSize) {
+    private float getCenterYminusDivideBy4plusRimSize(float rimSize) {
         return mCentreY - modifMinSizeDivideBy4 + rimSize;
     }
 
-    private double getCenterYminusDivideBy2plusRimSize(double rimSize) {
+    private float getCenterYminusDivideBy2plusRimSize(float rimSize) {
         return mCentreY - modifMinSizeDivideBy2 + rimSize;
     }
 
-    private double getCenterYplus0dot75minusRimSize(double rimSize) {
+    private float getCenterYplus0dot75minusRimSize(float rimSize) {
         return mCentreY + modifMinSizeMultipleBy0dot75 - rimSize;
     }
 
-    private double getCenterYminus0dot375plusRimSize(double rimSize) {
+    private float getCenterYminus0dot375plusRimSize(float rimSize) {
         return mCentreY - modifMinSizeMultipleBy0dot375 + rimSize;
     }
 
-    private double getCenterYminus0dot125plusRimSize(double rimSize) {
+    private float getCenterYminus0dot125plusRimSize(float rimSize) {
         return mCentreY - modifMinSizeMultipleBy0dot125 + rimSize;
     }
 
-    private double getCenterYplus0dot125minusRimSize(double rimSize) {
+    private float getCenterYplus0dot125minusRimSize(float rimSize) {
         return mCentreY + modifMinSizeMultipleBy0dot125 - rimSize;
     }
 
-    private double getCenterXminusDivideBy2plusRimSize(double rimSize) {
+    private float getCenterXminusDivideBy2plusRimSize(float rimSize) {
         return mCentreX - modifMinSizeDivideBy2 + rimSize;
     }
 
-    private double getCenterXminus0dot75plusRimSize(double rimSize) {
+    private float getCenterXminus0dot75plusRimSize(float rimSize) {
         return mCentreX - modifMinSizeMultipleBy0dot75 + rimSize;
     }
 
-    private double getCenterYplusDivideBy4minusRimSize(double rimSize) {
+    private float getCenterYplusDivideBy4minusRimSize(float rimSize) {
         return mCentreY + modifMinSizeDivideBy4 - rimSize;
     }
 
-    private double getCenterXminusDivideBy4plusRimSize(double rimSize) {
+    private float getCenterXminusDivideBy4plusRimSize(float rimSize) {
         return mCentreX - modifMinSizeDivideBy4 + rimSize;
     }
 
-    private double getCenterXplus0dot125minusRimSize(double rimSize) {
+    private float getCenterXplus0dot125minusRimSize(float rimSize) {
         return mCentreX + modifMinSizeMultipleBy0dot125 - rimSize;
     }
 }

@@ -4,7 +4,7 @@ class RangePointer extends GaugePointer {
     private double offset;
 
     public RangePointer() {
-        this.offset = GaugeConstants.ZERO;
+        offset = GaugeConstants.ZERO;
     }
 
     public double getOffset() {

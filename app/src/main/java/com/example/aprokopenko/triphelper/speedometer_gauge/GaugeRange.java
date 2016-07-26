@@ -33,7 +33,7 @@ public class GaugeRange {
     }
 
     public double getStartValue() {
-        return this.startValue;
+        return startValue;
     }
 
     public void setStartValue(double startValue) {
@@ -44,7 +44,7 @@ public class GaugeRange {
     }
 
     public double getEndValue() {
-        return this.endValue;
+        return endValue;
     }
 
     public void setEndValue(double endValue) {
@@ -55,7 +55,7 @@ public class GaugeRange {
     }
 
     public double getWidth() {
-        return this.width;
+        return width;
     }
 
     public void setWidth(double width) {
@@ -66,7 +66,7 @@ public class GaugeRange {
     }
 
     public double getOffset() {
-        return this.offset;
+        return offset;
     }
 
     public void setOffset(double offset) {

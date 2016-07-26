@@ -63,10 +63,10 @@ public class GaugeHeaderRenderer extends View {
                         top = GaugeConstants.ZERO + textSize;
                     }
                     else {
-                        double modif_centerXmultBy2minusHeaderWidth = mCentreX * 2.0d - headerTextWidth;
-                        double modif_centerYmultBy2minus10          = mCentreY * 2.0d - 10.0d;
-                        double modif_textHeightDivideBy2            = textSize / 2.0d;
-                        double modif_textWidthDivideBy2             = headerTextWidth / 2.0d;
+                        double modif_centerXmultBy2minusHeaderWidth = mCentreX * 2.0 - headerTextWidth;
+                        double modif_centerYmultBy2minus10          = mCentreY * 2.0 - 10.0;
+                        double modif_textHeightDivideBy2            = textSize / 2.0;
+                        double modif_textWidthDivideBy2             = headerTextWidth / 2.0;
 
                         if (header.getHeaderAlignment() == HeaderAlignment.TopRight) {
                             left = modif_centerXmultBy2minusHeaderWidth;

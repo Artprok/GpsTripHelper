@@ -19,16 +19,16 @@ public class GaugePointer {
     }
 
     public double getValue() {
-        return this.value;
+        return value;
     }
 
     public void setValue(double newValue) {
         if (mPointerRender != null) {
-            ObjectAnimator animator = ObjectAnimator.ofFloat(this.mPointerRender, "value", (float) this.value, (float) newValue);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(mPointerRender, "value", (float) value, (float) newValue);
             animator.setDuration(GaugeConstants.GAUGE_ANIMATION_TIME);
             animator.start();
         }
-        this.value = newValue;
+        value = newValue;
     }
 
     public GaugeScale getmGaugeScale() {
@@ -53,8 +53,8 @@ public class GaugePointer {
 
     public void setPointerValue(float newValue) {
         this.value = (double) newValue;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        if (mBaseGauge != null) {
+            mBaseGauge.refreshGauge();
         }
     }
 
@@ -75,8 +75,8 @@ public class GaugePointer {
 
     public void setColor(int color) {
         this.color = color;
-        if (this.mBaseGauge != null) {
-            this.mBaseGauge.refreshGauge();
+        if (mBaseGauge != null) {
+            mBaseGauge.refreshGauge();
         }
     }
 

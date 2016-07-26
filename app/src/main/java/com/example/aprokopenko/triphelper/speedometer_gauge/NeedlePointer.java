@@ -40,7 +40,7 @@ public class NeedlePointer extends GaugePointer {
     }
 
     public NeedleType getType() {
-        return this.type;
+        return type;
     }
 
     public void setType(NeedleType type) {

@@ -26,7 +26,7 @@ public class TripHelperGauge extends FrameLayout {
     private       double                   mGaugeWidth;
     private       double                   mMinSize;
     private       double                   mInnerBevelWidth;
-    private       double                   mKnobDiameter;
+    private       float                    mKnobDiameter;
     private       double                   mRimWidth;
     private       double                   mLabelsPathHeight;
     private       double                   mRangePathWidth;
@@ -59,12 +59,12 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     public ArrayList<GaugeScale> getGaugeScales() {
-        return this.gaugeScales;
+        return gaugeScales;
     }
 
     public void setGaugeScales(ArrayList<GaugeScale> gaugeScales) {
         this.gaugeScales = gaugeScales;
-        this.refreshGauge();
+        refreshGauge();
         if (mGaugeHeader == null) {
             init();
         }
@@ -124,7 +124,7 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     public void setmKnobDiameter(double mKnobDiameter) {
-        this.mKnobDiameter = mKnobDiameter;
+        this.mKnobDiameter = (float) mKnobDiameter;
     }
 
     public double getmLabelsPathHeight() {
@@ -279,8 +279,8 @@ public class TripHelperGauge extends FrameLayout {
         mVisualRect = new RectF();
         h = h < 50 ? 50 : h;
         w = w < 50 ? 50 : w;
-        double mAvailableHeight = h;
-        double mAvailableWidth;
+        float mAvailableHeight = h;
+        float mAvailableWidth;
         if (h > w) {
             mAvailableWidth = w;
         }
@@ -306,7 +306,7 @@ public class TripHelperGauge extends FrameLayout {
         double    rectCanvas;
 
         //modif optimization
-        double modifDiameter25 = 25.0D;
+        float modifDiameter25 = 25.0f;
 
         label141:
         {
@@ -364,7 +364,7 @@ public class TripHelperGauge extends FrameLayout {
                             double modifHeightMinus10         = mAvailableHeight - 10.0D;
                             double modifHeightMinus10DelimBy2 = modifHeightMinus10 / 2.0D;
 
-                            mAvailableWidth = mAvailableHeight * 2.0D - 20.0D;
+                            mAvailableWidth = mAvailableHeight * 2.0f - 20.0f;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                                 mVisualRect.top = (float) (modifHeightMinus10DelimBy2 - modifHeightMinus10);
@@ -379,20 +379,20 @@ public class TripHelperGauge extends FrameLayout {
                         }
                         else if (this.mKnobDiameter <= modifDiameter25) {
                             //optimizationModif
-                            double modifKnobDiameterBy2         = mKnobDiameter * 2.0D;
-                            double modifHeightMinusKnobBy2      = mAvailableHeight - modifKnobDiameterBy2;
-                            double modifHeightMinusKnob         = mAvailableHeight - mKnobDiameter;
-                            double modifHeightMinusKnobDelimBy2 = (modifHeightMinusKnob) / 2.0D;
+                            float modifKnobDiameterBy2         = (float) (mKnobDiameter * 2.0);
+                            float modifHeightMinusKnobBy2      = mAvailableHeight - modifKnobDiameterBy2;
+                            float modifHeightMinusKnob         = mAvailableHeight - mKnobDiameter;
+                            float modifHeightMinusKnobDelimBy2 = (modifHeightMinusKnob) / 2.0f;
 
-                            mAvailableWidth = (modifHeightMinusKnob) * 2.0D;
+                            mAvailableWidth = (modifHeightMinusKnob) * 2.0f;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
-                                mVisualRect.top = (float) (modifHeightMinusKnobDelimBy2 - (modifHeightMinusKnob));
+                                mVisualRect.top = modifHeightMinusKnobDelimBy2 - (modifHeightMinusKnob);
                             }
                             else {
                                 gaugeType = getGaugeType();
                                 if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
-                                    mVisualRect.top = (float) (modifHeightMinusKnobDelimBy2 - modifHeightMinusKnobBy2);
+                                    mVisualRect.top = modifHeightMinusKnobDelimBy2 - modifHeightMinusKnobBy2;
                                 }
                             }
                             mVisualRect.left = (float) ((initAvalWidth - modifKnobDiameterBy2) / 2.0D - modifHeightMinusKnobBy2);
@@ -403,7 +403,7 @@ public class TripHelperGauge extends FrameLayout {
                             double modifHeightMinus25       = mAvailableHeight - 25.0D;
                             double modifHeightMinus25delBy2 = modifHeightMinus25 / 2.0D;
 
-                            mAvailableWidth = mAvailableHeight * 2.0D - 50.0D;
+                            mAvailableWidth = mAvailableHeight * 2.0f - 50.0f;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                                 mVisualRect.top = (float) (modifHeightMinus25delBy2 - modifHeightMinus25);
@@ -416,8 +416,8 @@ public class TripHelperGauge extends FrameLayout {
                             }
                             mVisualRect.left = (float) ((initAvalWidth - 50.0D) / 2.0D - modifHeightMinus50);
                         }
-                        mVisualRect.bottom = (float) (mVisualRect.top + mAvailableWidth);
-                        mVisualRect.right = (float) (mVisualRect.left + mAvailableWidth);
+                        mVisualRect.bottom = mVisualRect.top + mAvailableWidth;
+                        mVisualRect.right = mVisualRect.left + mAvailableWidth;
                     }
                     else {
                         //optimizationModif
@@ -446,11 +446,11 @@ public class TripHelperGauge extends FrameLayout {
                     if (mAvailableHeight / 2.0D > mAvailableWidth) {
                         //optimizationModif
                         double modifAvaliableWidthMinus20 = (mAvailableWidth - 20.0D);
-                        double modifAvaliableWidthMinus10 = mAvailableWidth - 10.0D;
+                        float  modifAvaliableWidthMinus10 = mAvailableWidth - 10.0f;
 
 
                         if (mKnobDiameter == GaugeConstants.ZERO) {
-                            mAvailableHeight = (modifAvaliableWidthMinus10) * 2.0D;
+                            mAvailableHeight = (modifAvaliableWidthMinus10) * 2.0f;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                                 mVisualRect.left = (float) (modifAvaliableWidthMinus10 / 2.0D - modifAvaliableWidthMinus20);
@@ -469,7 +469,7 @@ public class TripHelperGauge extends FrameLayout {
                             double modifWidthKnobBy2        = mAvailableWidth - mKnobDiameter * 2.0D;
                             double modifWidthKnobDelimiter2 = (mAvailableWidth - mKnobDiameter) / 2.0D;
 
-                            mAvailableHeight = (mAvailableWidth - mKnobDiameter) * 2.0D;
+                            mAvailableHeight = (mAvailableWidth - mKnobDiameter) * 2.0f;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                                 mVisualRect.left = (float) (modifWidthKnobDelimiter2 - modifWidthKnobBy2);
@@ -486,7 +486,7 @@ public class TripHelperGauge extends FrameLayout {
                             //optimizationModif
                             double modifAvaliableWidth = ((mAvailableWidth - modifDiameter25) / 2.0D);
 
-                            mAvailableHeight = (mAvailableWidth - modifDiameter25) * 2.0D;
+                            mAvailableHeight = (mAvailableWidth - modifDiameter25) * 2.0f;
                             gaugeType = getGaugeType();
                             if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
                                 mVisualRect.left = (float) (modifAvaliableWidth - (mAvailableWidth - 50.0D));
@@ -501,8 +501,8 @@ public class TripHelperGauge extends FrameLayout {
                             mVisualRect.top = (float) ((initAvalHeight - modifDiameter25) / 2.0D - (mAvailableWidth - 50.0D));
                         }
 
-                        mVisualRect.bottom = (float) (mVisualRect.top + mAvailableHeight);
-                        mVisualRect.right = (float) (mVisualRect.left + mAvailableHeight);
+                        mVisualRect.bottom = mVisualRect.top + mAvailableHeight;
+                        mVisualRect.right = mVisualRect.left + mAvailableHeight;
                     }
                     else {
                         //optimizationModif

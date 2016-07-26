@@ -362,7 +362,6 @@ import butterknife.Unbinder;
         writeFileTask.execute();
     }
 
-
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
         @Override protected Boolean doInBackground(Void... params) {
 
