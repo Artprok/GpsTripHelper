@@ -17,12 +17,12 @@
     <!--labels-->
     <string name="info_about_all_trip_header_label">Информация о всех поездках:&#160;</string>
     <string name="list_of_trips_label">Список всех поездок:&#160;</string>
-    <string name="trip_data_layout_label">Дата поездки&#160;</string>
+    <string name="trip_data_layout_label">Общая информация:&#160;</string>
     <string name="fuel_left_label">Топлива осталось:&#160;</string>
-    <string name="fuel_spent_layout_label">Топливо&#160;</string>
-    <string name="time_spent_layout_label">Время&#160;</string>
+    <string name="fuel_spent_layout_label">Топливо:&#160;</string>
+    <string name="time_spent_layout_label">Время:&#160;</string>
+    <string name="speed_layout_label">Скорость:&#160;</string>
     <string name="trip_date_label">Дата поездки&#160;</string>
-    <string name="speed_layout_label">Скорость&#160;</string>
     <!--/labels-->
 
     <!--prefixes-->
@@ -185,11 +185,12 @@
     <string name="permissionExplanation">Чтобы Автопомощник мог определить Вашу скорость нужно разрешить использовать GPS</string>
     <!--/SomethingWentWrongDialog-->
 
-    <string name="currencyUnitText">Валюта</string>
-    <string name="eur">&#160;Евро</string>
-    <string name="rub">&#160;Руб</string>
-    <string name="usd">&#160;Дол</string>
-    <string name="grn">&#160;Грн</string>
+    <string name="currencyUnitText">Пожалуйста выберите удобную для Вас валюту</string>
+    <string name="currencyUnitSpinnerTitle">Валюта</string>
+    <string name="eur">&#160;евро</string>
+    <string name="rub">&#160;руб</string>
+    <string name="usd">&#160;дол</string>
+    <string name="grn">&#160;грн</string>
 
     <string name="eur_label">&#160;Евро</string>
     <string name="rub_label">&#160;Рубли</string>

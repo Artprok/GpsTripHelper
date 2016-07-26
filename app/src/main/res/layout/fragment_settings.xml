@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/text_measurementUnitLabel"
             android:layout_margin="5dp"
-            android:text="@string/currencyUnitText"
+            android:text="@string/currencyUnitSpinnerTitle"
             android:textColor="@color/textColor"
             android:textSize="@dimen/metricPortraitTextSize"/>
 

@@ -228,7 +228,6 @@ import butterknife.Unbinder;
         });
     }
 
-
     private void setupEraseButton() {
         eraseButton.setVisibility(View.VISIBLE);
         eraseButton.setOnClickListener(new View.OnClickListener() {
