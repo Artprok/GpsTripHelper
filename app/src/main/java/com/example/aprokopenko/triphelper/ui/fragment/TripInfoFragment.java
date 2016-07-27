@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 @Singleton public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
+
     @BindView(R.id.text_tripAvgFuelConsumption)
     TextView       tripAvgFuelConsumptionView;
     @BindView(R.id.text_tripDistanceTravelled)
@@ -72,22 +73,23 @@ import butterknife.Unbinder;
     @BindView(R.id.mapView)
     MapView        mapView;
 
-    public static final  boolean DEBUG                     = BuildConfig.DEBUG;
-    private static final String  LOG_TAG                   = "TripInfoFragment";
-    private static final String  TIME_SPENT_IN_MOTION      = "TimeSpentOnMotion";
-    private static final String  TIME_SPENT_WITHOUT_MOTION = "TimeSpentOnStop";
-    private static final String  LONGITUDE_ARR             = "LongitudeArray";
-    private static final String  DISTANCE_TRAVELLED        = "DistTravelled";
-    private static final String  LATITUDE_ARR              = "LatitudeArray";
-    private static final String  AVERAGE_FUEL_CONS         = "FuelConsumed";
-    private static final String  MONEY_SPENT               = "MoneySpent";
-    private static final String  SPEED_ARR                 = "SpeedArray";
-    private static final String  TIME_SPENT                = "TimeSpent";
-    private static final String  FUEL_SPENT                = "FuelSpent";
-    private static final String  AVERAGE_SPEED             = "AvgSpeed";
-    private static final String  TRIP_DATE                 = "TripDate";
-    private static final String  MAX_SPEED                 = "MaxSpeed";
-    private static final String  TRIP_ID                   = "TripId";
+    private static final String  LOG_TAG = "TripInfoFragment";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
+
+    private static final String TIME_SPENT_IN_MOTION      = "TimeSpentOnMotion";
+    private static final String TIME_SPENT_WITHOUT_MOTION = "TimeSpentOnStop";
+    private static final String LONGITUDE_ARR             = "LongitudeArray";
+    private static final String DISTANCE_TRAVELLED        = "DistTravelled";
+    private static final String LATITUDE_ARR              = "LatitudeArray";
+    private static final String AVERAGE_FUEL_CONS         = "FuelConsumed";
+    private static final String MONEY_SPENT               = "MoneySpent";
+    private static final String SPEED_ARR                 = "SpeedArray";
+    private static final String TIME_SPENT                = "TimeSpent";
+    private static final String FUEL_SPENT                = "FuelSpent";
+    private static final String AVERAGE_SPEED             = "AvgSpeed";
+    private static final String TRIP_DATE                 = "TripDate";
+    private static final String MAX_SPEED                 = "MaxSpeed";
+    private static final String TRIP_ID                   = "TripId";
 
     private float    averageFuelConsumption;
     private float    timeSpentOnStop;
@@ -233,6 +235,47 @@ import butterknife.Unbinder;
         context = null;
     }
 
+    @Override public void onMapReady(GoogleMap googleMap) {
+        if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            UtilMethods.isPermissionAllowed(context);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.getUiSettings().setMapToolbarEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            if (UtilMethods.isPermissionAllowed(context)) {
+                googleMap.setMyLocationEnabled(true);
+            }
+            boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
+            if (drawn) {
+                drawMap = true;
+                routes = null;
+            }
+        }
+        else {
+            drawMap = false;
+            routes = null;
+        }
+    }
+
+
+    private float getInMotionValue() {
+        float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
+        float percentInMotion      = 100 - percentWithoutMotion;
+        return timeSpent / 100 * percentInMotion;
+    }
+
+    private float getWithoutMotionValue(float timeSpentInMotion) {
+        return timeSpent - timeSpentInMotion;
+    }
+
+    private void setupMapView(Bundle savedInstanceState) {
+        mapView.onCreate(savedInstanceState);
+        MapsInitializer.initialize(this.getActivity());
+        mapView.getMapAsync(this);
+        mapView.onResume();
+    }
+
     private void setDataToInfoFragmentFields() {
         String avgFuelCons      = UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_cons_prefix);
         String fuelSpent        = UtilMethods.formatFloatDecimalFormat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
@@ -269,8 +312,54 @@ import butterknife.Unbinder;
         tripDateView.setText(tripDate);
     }
 
-    private void animateMapClosingForPortrait(final View view) {
-        ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, 0, -view.getHeight());
+    private void animateMapOpeningForLandscape(final View view) {
+        ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, 0, view.getWidth());
+        dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
+        dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
+        dataContainerAnimator.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override public void onAnimationEnd(Animator animation) {
+                dataContainer.setVisibility(View.INVISIBLE);
+                ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, -view.getWidth(), 0);
+                mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
+                mapViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                mapViewAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        mapView.setVisibility(View.VISIBLE);
+                        mapOpened = true;
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                mapViewAnimator.start();
+            }
+
+            @Override public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        dataContainerAnimator.start();
+    }
+
+    private void animateMapClosingForLandscape(final View view) {
+        ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, 0, -view.getWidth());
         mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AnticipateInterpolator());
         mapViewAnimator.addListener(new Animator.AnimatorListener() {
@@ -279,7 +368,7 @@ import butterknife.Unbinder;
 
             @Override public void onAnimationEnd(Animator animation) {
                 mapView.setVisibility(View.INVISIBLE);
-                ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, view.getHeight(), 0);
+                ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, view.getWidth(), 0);
                 dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 dataContainerAnimator.addListener(new Animator.AnimatorListener() {
@@ -360,8 +449,8 @@ import butterknife.Unbinder;
         dataContainerAnimator.start();
     }
 
-    private void animateMapClosingForLandscape(final View view) {
-        ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, 0, -view.getWidth());
+    private void animateMapClosingForPortrait(final View view) {
+        ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, 0, -view.getHeight());
         mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AnticipateInterpolator());
         mapViewAnimator.addListener(new Animator.AnimatorListener() {
@@ -370,7 +459,7 @@ import butterknife.Unbinder;
 
             @Override public void onAnimationEnd(Animator animation) {
                 mapView.setVisibility(View.INVISIBLE);
-                ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, view.getWidth(), 0);
+                ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, view.getHeight(), 0);
                 dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 dataContainerAnimator.addListener(new Animator.AnimatorListener() {
@@ -403,92 +492,6 @@ import butterknife.Unbinder;
             }
         });
         mapViewAnimator.start();
-    }
-
-    private void animateMapOpeningForLandscape(final View view) {
-        ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, 0, view.getWidth());
-        dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
-        dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
-        dataContainerAnimator.addListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override public void onAnimationEnd(Animator animation) {
-                dataContainer.setVisibility(View.INVISIBLE);
-                ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, -view.getWidth(), 0);
-                mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
-                mapViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                mapViewAnimator.addListener(new Animator.AnimatorListener() {
-                    @Override public void onAnimationStart(Animator animation) {
-                        mapView.setVisibility(View.VISIBLE);
-                        mapOpened = true;
-                    }
-
-                    @Override public void onAnimationEnd(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                mapViewAnimator.start();
-            }
-
-            @Override public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        dataContainerAnimator.start();
-    }
-
-    private float getInMotionValue() {
-        float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
-        float percentInMotion      = 100 - percentWithoutMotion;
-        return timeSpent / 100 * percentInMotion;
-    }
-
-    private float getWithoutMotionValue(float timeSpentInMotion) {
-        return timeSpent - timeSpentInMotion;
-    }
-
-    private void setupMapView(Bundle savedInstanceState) {
-        mapView.onCreate(savedInstanceState);
-        MapsInitializer.initialize(this.getActivity());
-        mapView.getMapAsync(this);
-        mapView.onResume();
-    }
-
-    @Override public void onMapReady(GoogleMap googleMap) {
-        if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
-            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            UtilMethods.isPermissionAllowed(context);
-            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-            googleMap.getUiSettings().setZoomControlsEnabled(true);
-            googleMap.getUiSettings().setMapToolbarEnabled(true);
-            googleMap.getUiSettings().setCompassEnabled(true);
-            if (UtilMethods.isPermissionAllowed(context)) {
-                googleMap.setMyLocationEnabled(true);
-            }
-            boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
-            if (drawn) {
-                drawMap = true;
-                routes = null;
-            }
-        }
-        else {
-            drawMap = false;
-            routes = null;
-        }
     }
 }
 

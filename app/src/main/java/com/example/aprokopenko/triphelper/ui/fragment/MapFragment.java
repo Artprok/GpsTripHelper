@@ -29,8 +29,8 @@ import javax.inject.Singleton;
 import rx.Subscriber;
 
 @Singleton public class MapFragment extends Fragment implements OnMapReadyCallback {
-    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private static final String  LOG_TAG = "MAP_FRAGMENT";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private LatLng               previousLocationFromData;
     private Subscriber<Location> locationSubscriber;
     private LatLng               previousLocation;
@@ -61,12 +61,117 @@ import rx.Subscriber;
         }
     }
 
-    private void setupSubscribers() {
-        setupLocationSubscriber();
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_map, container, false);
+    }
+
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        locationList = new ArrayList<>();
+        getGoogleMap();
+        if (context == null) {
+            context = getActivity();
+        }
+        fragmentVisible = true;
+    }
+
+    @Override public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        UtilMethods.isPermissionAllowed(context);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setAllGesturesEnabled(true);
+        googleMap.getUiSettings().setMapToolbarEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(true);
+        if (UtilMethods.isPermissionAllowed(context)) {
+            googleMap.setMyLocationEnabled(true);
+        }
+        this.googleMap = googleMap;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        if (locationSubscriber != null) {
+            locationSubscriber.unsubscribe();
+        }
+        Fragment f = getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        if (f != null) {
+            getChildFragmentManager().beginTransaction().remove(f).commitAllowingStateLoss();
+        }
+    }
+
+    @Override public void onDetach() {
+        super.onDetach();
+        gpsHandler = null;
+        context = null;
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("routes", routes);
+        outState.putParcelableArrayList("locations", locationList);
+        outState.putParcelable("gpsHandler", gpsHandler);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            routes = savedInstanceState.getParcelableArrayList("routes");
+            locationList = savedInstanceState.getParcelableArrayList("locations");
+            gpsHandler = savedInstanceState.getParcelable("gpsHandler");
+        }
+    }
+
+    @Override public void onResume() {
+        if (locationSubscriber == null && gpsHandler != null) {
+            setupSubscribers();
+            setSubscribersToGpsHandler(gpsHandler);
+        }
+        super.onResume();
+    }
+
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    public void setRoutes(ArrayList<Route> routes) {
+        this.routes = routes;
+    }
+
+    private LatLng getStartingPosition(Location location) {
+        LatLng previousLoc;
+        if (previousLocationFromData != null) {
+            previousLoc = previousLocationFromData;
+            previousLocationFromData = null;
+        }
+        else if (previousLocation == null) {
+            previousLoc = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        else {
+            previousLoc = previousLocation;
+        }
+        return previousLoc;
+    }
+
+    private void setPreviousLocationPoint(LatLng previousLocationPoint) {
+        previousLocationFromData = previousLocationPoint;
     }
 
     private void setSubscribersToGpsHandler(GpsHandler GpsHandler) {
         GpsHandler.setLocationSubscriber(locationSubscriber);
+    }
+
+    private void locationTracking(GoogleMap googleMap, Location location, @Nullable Float speed) {
+        drawPathFromData();
+        LatLng tempPreviousLocation = getStartingPosition(location);
+        LatLng tempLocation         = new LatLng(location.getLatitude(), location.getLongitude());
+        previousLocation = tempLocation;
+        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, tempLocation, speed);
+    }
+
+    private void setupSubscribers() {
+        setupLocationSubscriber();
     }
 
     private void setupLocationSubscriber() {
@@ -100,14 +205,6 @@ import rx.Subscriber;
         };
     }
 
-    private void locationTracking(GoogleMap googleMap, Location location, @Nullable Float speed) {
-        drawPathFromData();
-        LatLng tempPreviousLocation = getStartingPosition(location);
-        LatLng tempLocation         = new LatLng(location.getLatitude(), location.getLongitude());
-        previousLocation = tempLocation;
-        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, tempLocation, speed);
-    }
-
     private void drawPathFromData() {
         if (routes != null) {
             if (DEBUG) {
@@ -128,106 +225,9 @@ import rx.Subscriber;
         }
     }
 
-    private LatLng getStartingPosition(Location location) {
-        LatLng previousLoc;
-        if (previousLocationFromData != null) {
-            previousLoc = previousLocationFromData;
-            previousLocationFromData = null;
-        }
-        else if (previousLocation == null) {
-            previousLoc = new LatLng(location.getLatitude(), location.getLongitude());
-        }
-        else {
-            previousLoc = previousLocation;
-        }
-        return previousLoc;
-    }
-
-    private void setPreviousLocationPoint(LatLng previousLocationPoint) {
-        previousLocationFromData = previousLocationPoint;
-    }
-
-    @Override public void onMapReady(GoogleMap googleMap) {
-        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        UtilMethods.isPermissionAllowed(context);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setAllGesturesEnabled(true);
-        googleMap.getUiSettings().setMapToolbarEnabled(true);
-        googleMap.getUiSettings().setCompassEnabled(true);
-        if (UtilMethods.isPermissionAllowed(context)) {
-            googleMap.setMyLocationEnabled(true);
-        }
-        this.googleMap = googleMap;
-    }
-
-    @Override public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_map, container, false);
-    }
-
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        locationList = new ArrayList<>();
-        getGoogleMap();
-        if (context == null) {
-            context = getActivity();
-        }
-        fragmentVisible = true;
-    }
-
-    @Override public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            routes = savedInstanceState.getParcelableArrayList("routes");
-            locationList = savedInstanceState.getParcelableArrayList("locations");
-            gpsHandler = savedInstanceState.getParcelable("gpsHandler");
-        }
-    }
-
-    @Override public void onResume() {
-        if (locationSubscriber == null && gpsHandler != null) {
-            setupSubscribers();
-            setSubscribersToGpsHandler(gpsHandler);
-        }
-        super.onResume();
-    }
-
-    @Override public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("routes", routes);
-        outState.putParcelableArrayList("locations", locationList);
-        outState.putParcelable("gpsHandler", gpsHandler);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        if (locationSubscriber != null) {
-            locationSubscriber.unsubscribe();
-        }
-        Fragment f = getChildFragmentManager().findFragmentById(R.id.mapFragment);
-        if (f != null) {
-            getChildFragmentManager().beginTransaction().remove(f).commitAllowingStateLoss();
-        }
-    }
-
-    @Override public void onDetach() {
-        super.onDetach();
-        gpsHandler = null;
-        context = null;
-    }
-
     private void getGoogleMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
-    }
-
-    public void setRoutes(ArrayList<Route> routes) {
-        this.routes = routes;
     }
 }
 

@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class MapUtilMethods {
 
-    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private static final String  LOG_TAG = "MapUtilMethods";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     public static ArrayList<Route> unwrapRoute(ArrayList<String> latitudes, ArrayList<String> longitudes, ArrayList<String> speedArr) {
         ArrayList<Route> route = new ArrayList<>();
@@ -33,6 +33,17 @@ public class MapUtilMethods {
             route.add(routePoint);
         }
         return route;
+    }
+
+    public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
+        LatLng previousLocation;
+        if (size > 1 && currentIndex > 1) {
+            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
+        }
+        else {
+            previousLocation = (routes.get(currentIndex).getRoutePoints());
+        }
+        return previousLocation;
     }
 
     public static boolean drawPathFromData(ArrayList<Route> routes, GoogleMap googleMap) {
@@ -53,37 +64,6 @@ public class MapUtilMethods {
         return result;
     }
 
-    public static LatLng getPreviousLocation(ArrayList<Route> routes, int size, int currentIndex) {
-        LatLng previousLocation;
-        if (size > 1 && currentIndex > 1) {
-            previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
-        }
-        else {
-            previousLocation = (routes.get(currentIndex).getRoutePoints());
-        }
-        return previousLocation;
-    }
-
-    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
-        int color = Color.BLACK;
-        if (speed != null) {
-            color = choseColorDependOnSpeed(speed);
-        }
-        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
-    }
-
-    private static LatLng getPositionForCamera(ArrayList<Route> routes) {
-        LatLng lastPoint;
-        int    routeSize = routes.size();
-        int    index     = routeSize - 1;
-        if (index > 0) {
-            lastPoint = routes.get(routeSize - 1).getRoutePoints();
-            return lastPoint;
-        }
-        else {
-            return ConstantValues.BERMUDA_COORDINATES;
-        }
-    }
 
     public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
         if (location != null) {
@@ -104,6 +84,27 @@ public class MapUtilMethods {
                     .tilt(GoogleMapsSettings.googleMapCameraTilt)                           // Sets the tilt of the camera to 30 degrees
                     .build();                                                               // Creates a CameraPosition from the builder
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+    }
+
+    public static void addPolylineDependsOnSpeed(GoogleMap googleMap, LatLng prevLoc, LatLng curLoc, Float speed) {
+        int color = Color.BLACK;
+        if (speed != null) {
+            color = choseColorDependOnSpeed(speed);
+        }
+        googleMap.addPolyline(new PolylineOptions().add(prevLoc, curLoc).width(GoogleMapsSettings.polylineWidth).color(color));
+    }
+
+    private static LatLng getPositionForCamera(ArrayList<Route> routes) {
+        LatLng lastPoint;
+        int    routeSize = routes.size();
+        int    index     = routeSize - 1;
+        if (index > 0) {
+            lastPoint = routes.get(routeSize - 1).getRoutePoints();
+            return lastPoint;
+        }
+        else {
+            return ConstantValues.BERMUDA_COORDINATES;
         }
     }
 

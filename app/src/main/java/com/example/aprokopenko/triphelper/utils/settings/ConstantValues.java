@@ -64,7 +64,7 @@ public class ConstantValues {
 
     public static final int NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE = 111;
 
-    public static final int    WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
-    public static final int    WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
-    public static final String DATA_HOLDER_TAG               = "DATA_HOLDER";
+    public static final int WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
+    public static final int WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
+    public static final String DATA_HOLDER_TAG="DATA_HOLDER";
 }

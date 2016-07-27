@@ -5,7 +5,7 @@ public class GaugeRange {
 
     private int    color;
     private double endValue;
-    private float  offset;
+    private float offset;
     private double startValue;
     private double width;
 

@@ -52,18 +52,6 @@ public class CalculationUtils {
         return resultString;
     }
 
-    private static int getSecondsFromMills(float timeInMills) {
-        return (int) (timeInMills / ConstantValues.MILLISECONDS_IN_SECOND) % 60;
-    }
-
-    private static int getMinutesFromMills(float timeInMills) {
-        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60)) % 60);
-    }
-
-    private static int getHoursFromMills(float timeInMills) {
-        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60 * 60)) % ConstantValues.HOURS_IN_DAY);
-    }
-
     public static float calcFuelSpent(float distanceTraveled, float fuelConsumption) {
         return distanceTraveled * (fuelConsumption / ConstantValues.PER_100);
     }
@@ -96,24 +84,6 @@ public class CalculationUtils {
         return distanceTravelled;
     }
 
-    private static float getTimeFromMills(float timeInMills) {
-        float result;
-        int   secondsInHour = ConstantValues.SECONDS_IN_HOUR;
-        float seconds       = getSecondsFromMills(timeInMills);
-        float minutes       = getMinutesFromMills(timeInMills);
-        float hours         = getHoursFromMills(timeInMills);
-        if (hours == 0) {
-            result = (minutes / 60) + (seconds / secondsInHour);
-            if (minutes == 0) {
-                result = seconds / secondsInHour;
-            }
-        }
-        else {
-            result = hours + (minutes / 60) + (seconds / secondsInHour);
-        }
-        return result;
-    }
-
     public static float findMaxSpeed(float speed, float initialVal) {
         float maxSpeed = initialVal;
         if (speed > maxSpeed) {
@@ -142,6 +112,37 @@ public class CalculationUtils {
                 break;
         }
         measurementUnitMultiplier = result;
+    }
+
+
+    private static int getHoursFromMills(float timeInMills) {
+        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60 * 60)) % ConstantValues.HOURS_IN_DAY);
+    }
+
+    private static int getMinutesFromMills(float timeInMills) {
+        return (int) ((timeInMills / (ConstantValues.MILLISECONDS_IN_SECOND * 60)) % 60);
+    }
+
+    private static int getSecondsFromMills(float timeInMills) {
+        return (int) (timeInMills / ConstantValues.MILLISECONDS_IN_SECOND) % 60;
+    }
+
+    private static float getTimeFromMills(float timeInMills) {
+        float result;
+        int   secondsInHour = ConstantValues.SECONDS_IN_HOUR;
+        float seconds       = getSecondsFromMills(timeInMills);
+        float minutes       = getMinutesFromMills(timeInMills);
+        float hours         = getHoursFromMills(timeInMills);
+        if (hours == 0) {
+            result = (minutes / 60) + (seconds / secondsInHour);
+            if (minutes == 0) {
+                result = seconds / secondsInHour;
+            }
+        }
+        else {
+            result = hours + (minutes / 60) + (seconds / secondsInHour);
+        }
+        return result;
     }
 }
 

@@ -54,8 +54,8 @@ import butterknife.Unbinder;
     @BindView(R.id.progressBar)
     ProgressBar  progressBar;
 
-    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private static final String  LOG_TAG = "TripListFragment";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private TripData        tripData;
     private ArrayList<Trip> trips;
@@ -86,6 +86,12 @@ import butterknife.Unbinder;
         tripListView.setAdapter(new TripListRecyclerViewAdapter(trips, this));
         tripListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        if (tripData != null) {
+            outState.putParcelable("tripData", tripData);
+        }
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -123,6 +129,11 @@ import butterknife.Unbinder;
         maxSpeedView.setText(maxSpeed);
     }
 
+    @Override public void onPause() {
+        saveState();
+        super.onPause();
+    }
+
     @Override public void onResume() {
         if (state != null) {
             tripData = state.getParcelable("tripData");
@@ -130,16 +141,6 @@ import butterknife.Unbinder;
         super.onResume();
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
-        if (tripData != null) {
-            outState.putParcelable("tripData", tripData);
-        }
-    }
-
-    @Override public void onPause() {
-        saveState();
-        super.onPause();
-    }
 
     @Override public void onDestroyView() {
         super.onDestroyView();
@@ -152,11 +153,8 @@ import butterknife.Unbinder;
         super.onDetach();
     }
 
-    private void saveState() {
-        if (state == null) {
-            state = new Bundle();
-        }
-        onSaveInstanceState(state);
+    @Override public void onFragmentReplacing(TripInfoFragment tripInfoFragment) {
+        UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 
     @Override public void onListItemClick(Trip trip) {
@@ -180,12 +178,15 @@ import butterknife.Unbinder;
         UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 
-    @Override public void onFragmentReplacing(TripInfoFragment tripInfoFragment) {
-        UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
-    }
-
     public void setTripData(TripData tripData) {
         this.tripData = tripData;
         trips = tripData.getTrips();
+    }
+
+    private void saveState() {
+        if (state == null) {
+            state = new Bundle();
+        }
+        onSaveInstanceState(state);
     }
 }

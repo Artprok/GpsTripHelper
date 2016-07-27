@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 @Singleton public class SettingsFragment extends Fragment {
+
     @BindView(R.id.editText_fuelPrice)
     EditText    fuelPriceEditText;
     @BindView(R.id.editText_fuelConsumption)
@@ -65,8 +66,8 @@ import butterknife.Unbinder;
     @BindView(R.id.backgroundSwitch)
     Switch      backgroundSwitch;
 
-    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private static final String  LOG_TAG = "Settings fragment";
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
 
     private int   fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
     private float fuelConsumption  = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
@@ -112,28 +113,55 @@ import butterknife.Unbinder;
         super.onDestroyView();
     }
 
-    private void setupEraseButton() {
-        eraseButton.setVisibility(View.VISIBLE);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (UtilMethods.eraseFile(context)) {
-                    fileEraseListener.onFileErased();
-                    readDataFromFile();
-                    UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
-                }
-                else {
-                    UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
-                }
-            }
-        });
+    public void setFileEraseListener(FileEraseListener fileEraseListener) {
+        this.fileEraseListener = fileEraseListener;
     }
 
-    private void setupAboutButton() {
-        aboutButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                UtilMethods.buildAndShowAboutDialog(getActivity());
-            }
-        });
+    private void setMeasurementUnit(int position, String kmh, String mph, String knots) {
+        SharedPreferences.Editor editor = preferences.edit();
+        switch (position) {
+            case 0://Kilometer per hour case
+                editor.putString("measurementUnit", kmh);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+            case 1://miles per hour case
+                editor.putString("measurementUnit", mph);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+            case 2://knots per hour case
+                editor.putString("measurementUnit", knots);
+                editor.putInt("measurementUnitPosition", position);
+                editor.apply();
+                break;
+        }
+    }
+
+    private void setCurrencyUnit(int position, String grn, String rub, String usd, String eur) {
+        SharedPreferences.Editor editor = preferences.edit();
+        switch (position) {
+            case 0:
+                editor.putString("currencyUnit", grn);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+            case 1:
+                editor.putString("currencyUnit", rub);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+            case 2:
+                editor.putString("currencyUnit", usd);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+            case 3:
+                editor.putString("currencyUnit", eur);
+                editor.putInt("currencyUnitPosition", position);
+                editor.apply();
+                break;
+        }
     }
 
     private void setupEditTextFields() {
@@ -192,9 +220,57 @@ import butterknife.Unbinder;
         });
     }
 
-    private void readDataFromFile() {
-        ReadInternalFile readFileTask = new ReadInternalFile();
-        readFileTask.execute();
+    private void setupAboutButton() {
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                UtilMethods.buildAndShowAboutDialog(getActivity());
+            }
+        });
+    }
+
+    private void setupEraseButton() {
+        eraseButton.setVisibility(View.VISIBLE);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (UtilMethods.eraseFile(context)) {
+                    fileEraseListener.onFileErased();
+                    readDataFromFile();
+                    UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
+                }
+                else {
+                    UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
+                }
+            }
+        });
+    }
+
+    private void setupTextFields() {
+        if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION_DEFAULT) {
+            String fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
+            curFuelCons.setText(fuelCons);
+        }
+        else {
+            String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
+            curFuelCons.setText(fuelCons);
+        }
+
+        if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
+            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + currency_prefix;
+            curFuelPrice.setText(fuelCost);
+        }
+        else {
+            String fuelCost = this.fuelCost + currency_prefix;
+            curFuelPrice.setText(fuelCost);
+        }
+
+        if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY_DEFAULT) {
+            String fuelCap = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
+            curFuelCapacity.setText(fuelCap);
+        }
+        else {
+            String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
+            curFuelCapacity.setText(fuelCapacity);
+        }
     }
 
     private void setupMeasurementUnitSpinner() {
@@ -258,96 +334,11 @@ import butterknife.Unbinder;
         });
     }
 
-    private void writeDataToFile() {
-        WriteInternalFile writeFileTask = new WriteInternalFile();
-        writeFileTask.execute();
-    }
-
-    private void setMeasurementUnit(int position, String kmh, String mph, String knots) {
-        SharedPreferences.Editor editor = preferences.edit();
-        switch (position) {
-            case 0://Kilometer per hour case
-                editor.putString("measurementUnit", kmh);
-                editor.putInt("measurementUnitPosition", position);
-                editor.apply();
-                break;
-            case 1://miles per hour case
-                editor.putString("measurementUnit", mph);
-                editor.putInt("measurementUnitPosition", position);
-                editor.apply();
-                break;
-            case 2://knots per hour case
-                editor.putString("measurementUnit", knots);
-                editor.putInt("measurementUnitPosition", position);
-                editor.apply();
-                break;
-        }
-    }
-
-    private void setCurrencyUnit(int position, String grn, String rub, String usd, String eur) {
-        SharedPreferences.Editor editor = preferences.edit();
-        switch (position) {
-            case 0:
-                editor.putString("currencyUnit", grn);
-                editor.putInt("currencyUnitPosition", position);
-                editor.apply();
-                break;
-            case 1:
-                editor.putString("currencyUnit", rub);
-                editor.putInt("currencyUnitPosition", position);
-                editor.apply();
-                break;
-            case 2:
-                editor.putString("currencyUnit", usd);
-                editor.putInt("currencyUnitPosition", position);
-                editor.apply();
-                break;
-            case 3:
-                editor.putString("currencyUnit", eur);
-                editor.putInt("currencyUnitPosition", position);
-                editor.apply();
-                break;
-        }
-    }
-
     private void updateFuelCost() {
         currency_prefix = preferences.getString("currencyUnit", "");
         String fuelCost = this.fuelCost + currency_prefix;
         curFuelPrice.setText(fuelCost);
         curFuelPrice.invalidate();
-    }
-
-    public void setFileEraseListener(FileEraseListener fileEraseListener) {
-        this.fileEraseListener = fileEraseListener;
-    }
-
-    private void setupTextFields() {
-        if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION_DEFAULT) {
-            String fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
-            curFuelCons.setText(fuelCons);
-        }
-        else {
-            String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
-            curFuelCons.setText(fuelCons);
-        }
-
-        if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
-            String fuelCost = ConstantValues.FUEL_COST_DEFAULT + currency_prefix;
-            curFuelPrice.setText(fuelCost);
-        }
-        else {
-            String fuelCost = this.fuelCost + currency_prefix;
-            curFuelPrice.setText(fuelCost);
-        }
-
-        if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY_DEFAULT) {
-            String fuelCap = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
-            curFuelCapacity.setText(fuelCap);
-        }
-        else {
-            String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
-            curFuelCapacity.setText(fuelCapacity);
-        }
     }
 
     private void updateTextFields() {
@@ -359,6 +350,16 @@ import butterknife.Unbinder;
 
         String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
         curFuelCapacity.setText(fuelCapacity);
+    }
+
+    private void readDataFromFile() {
+        ReadInternalFile readFileTask = new ReadInternalFile();
+        readFileTask.execute();
+    }
+
+    private void writeDataToFile() {
+        WriteInternalFile writeFileTask = new WriteInternalFile();
+        writeFileTask.execute();
     }
 
     private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {

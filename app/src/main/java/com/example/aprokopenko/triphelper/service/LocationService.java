@@ -27,11 +27,11 @@ import com.google.android.gms.location.LocationServices;
 
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    public static final  boolean DEBUG              = BuildConfig.DEBUG;
     private static final String  LOG_TAG            = "LocationService:";
     private static final int     FM_NOTIFICATION_ID = 1;
+    private final        IBinder mBinder            = new LocalBinder();
+    public static final boolean DEBUG = BuildConfig.DEBUG;
 
-    private final IBinder mBinder = new LocalBinder();
     private GpsHandler      gpsHandler;
     private LocationRequest locationRequest;
     private GoogleApiClient googleApiClient;
@@ -75,37 +75,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
     }
 
-    private NotificationCompat.Builder createNotification() {
-        return new NotificationCompat.Builder(this).setSmallIcon(R.drawable.notification_icon_bw)
-                .setContentTitle(getResources().getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.notificationContent)))
-                .setContentText(getResources().getString(R.string.notificationContent));
-    }
-
-    private void createRestartAppIntent(NotificationCompat.Builder builder) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        builder.setContentIntent(pendingIntent);
-    }
-
-    private void notify(NotificationCompat.Builder builder) {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(FM_NOTIFICATION_ID, builder.build());
-    }
-
     @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (DEBUG) {
             Log.i(LOG_TAG, "onConnectionFailed: " + connectionResult);
         }
     }
 
-    @Override public void onCreate() {
-        if (DEBUG) {
-            Log.i(LOG_TAG, "service OnCreate");
-        }
+    @Override public IBinder onBind(Intent intent) {
+        return mBinder;
     }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
@@ -122,6 +99,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         return START_STICKY;
     }
 
+    @Override public void onCreate() {
+        if (DEBUG) {
+            Log.i(LOG_TAG, "service OnCreate");
+        }
+    }
+
     @Override public void onDestroy() {
         if (DEBUG) {
             Log.i(LOG_TAG, "service OnDestroy");
@@ -136,21 +119,38 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         super.onDestroy();
     }
 
-    @Override public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    private void removeNotification() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.cancel(FM_NOTIFICATION_ID);
-    }
-
     private LocationRequest setupLocRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
         locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
+    }
+
+    private void notify(NotificationCompat.Builder builder) {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(FM_NOTIFICATION_ID, builder.build());
+    }
+
+    private void createRestartAppIntent(NotificationCompat.Builder builder) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);
+    }
+
+    private NotificationCompat.Builder createNotification() {
+        return new NotificationCompat.Builder(this).setSmallIcon(R.drawable.notification_icon_bw)
+                .setContentTitle(getResources().getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.notificationContent)))
+                .setContentText(getResources().getString(R.string.notificationContent));
+    }
+
+    private void removeNotification() {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(FM_NOTIFICATION_ID);
     }
 
     public class LocalBinder extends Binder {
