@@ -26,6 +26,7 @@ public class ConstantValues {
     public static final int   PER_100            = 100;
 
     public static final int   START_VALUE                = 0;
+    public static final Float START_VALUE_f              = 0f;
     public static final float FUEL_COST_DEFAULT          = 21.8f;
     public static final int   FUEL_TANK_CAPACITY_DEFAULT = 60;
     public static final float FUEL_CONSUMPTION_DEFAULT   = 11;
@@ -64,7 +65,7 @@ public class ConstantValues {
 
     public static final int NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE = 111;
 
-    public static final int WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
-    public static final int WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
-    public static final String DATA_HOLDER_TAG="DATA_HOLDER";
+    public static final int    WIDTH_DELIMETER_FOR_PORTRAIT  = 6;
+    public static final int    WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
+    public static final String DATA_HOLDER_TAG               = "DATA_HOLDER";
 }

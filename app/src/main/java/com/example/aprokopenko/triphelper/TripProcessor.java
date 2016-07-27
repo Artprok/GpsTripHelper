@@ -74,7 +74,6 @@ public class TripProcessor implements Parcelable {
         setupStartingConditions(fuelConsFromSettings, fuelPrice, fuelCapacity);
         setupLocationService();
         setupTripData();
-
     }
 
     protected TripProcessor(Parcel in) {
@@ -629,14 +628,14 @@ public class TripProcessor implements Parcelable {
                 Log.d(LOG_TAG, "WRITE: avgSpeedForTripData " + tripData.getAvgSpeed());
             }
             int   tripsSize          = trips.size();
-            float distanceTravelled  = tripData.getDistanceTravelled();
-            float avgFuelConsumption = tripData.getAvgFuelConsumption();
-            float fuelSpent          = tripData.getFuelSpent();
-            float moneyOnFuelSpent   = tripData.getMoneyOnFuelSpent();
-            float avgSpeed           = tripData.getAvgSpeed();
-            float timeSpent          = tripData.getTimeSpentOnTrips();
-            float gasTankCapacity    = tripData.getGasTank();
-            float maxSpeed           = tripData.getMaxSpeed();
+            Float distanceTravelled  = tripData.getDistanceTravelled();
+            Float avgFuelConsumption = tripData.getAvgFuelConsumption();
+            Float fuelSpent          = tripData.getFuelSpent();
+            Float moneyOnFuelSpent   = tripData.getMoneyOnFuelSpent();
+            Float avgSpeed           = tripData.getAvgSpeed();
+            Float timeSpent          = tripData.getTimeSpentOnTrips();
+            Float gasTankCapacity    = tripData.getGasTank();
+            Float maxSpeed           = tripData.getMaxSpeed();
 
             try {
                 fos = context.openFileOutput(ConstantValues.FILE_NAME, Context.MODE_PRIVATE);
@@ -648,14 +647,14 @@ public class TripProcessor implements Parcelable {
                     }
                     writeTrip(trip, os);
                 }
-                os.writeFloat(avgFuelConsumption);
-                os.writeFloat(fuelSpent);
-                os.writeFloat(distanceTravelled);
-                os.writeFloat(moneyOnFuelSpent);
-                os.writeFloat(avgSpeed);
-                os.writeFloat(timeSpent);
-                os.writeFloat(gasTankCapacity);
-                os.writeFloat(maxSpeed);
+                writeToStreamWithNANcheck(avgFuelConsumption, os);
+                writeToStreamWithNANcheck(fuelSpent, os);
+                writeToStreamWithNANcheck(distanceTravelled, os);
+                writeToStreamWithNANcheck(moneyOnFuelSpent, os);
+                writeToStreamWithNANcheck(avgSpeed, os);
+                writeToStreamWithNANcheck(timeSpent, os);
+                writeToStreamWithNANcheck(gasTankCapacity, os);
+                writeToStreamWithNANcheck(maxSpeed, os);
                 os.close();
                 fos.close();
             }
@@ -666,6 +665,13 @@ public class TripProcessor implements Parcelable {
                 Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
             }
             return true;
+        }
+
+        private void writeToStreamWithNANcheck(Float valueToWrite, ObjectOutputStream os) throws IOException {
+            if (valueToWrite == null || valueToWrite.isNaN()) {
+                valueToWrite = 0f;
+            }
+            os.writeFloat(valueToWrite);
         }
 
         @Override protected void onPostExecute(Boolean result) {

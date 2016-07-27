@@ -26,15 +26,15 @@ public class Trip implements Parcelable {
     private ArrayList<Route> route;
 
     public Trip() {
-        avgFuelConsumption = ConstantValues.START_VALUE;
-        timeSpentInMotion = ConstantValues.START_VALUE;
-        distanceTravelled = ConstantValues.START_VALUE;
-        moneyOnFuelSpent = ConstantValues.START_VALUE;
-        timeSpentOnStop = ConstantValues.START_VALUE;
-        fuelSpent = ConstantValues.START_VALUE;
-        timeSpent = ConstantValues.START_VALUE;
-        avgSpeed = ConstantValues.START_VALUE;
-        maxSpeed = ConstantValues.START_VALUE;
+        avgFuelConsumption = ConstantValues.START_VALUE_f;
+        timeSpentInMotion = ConstantValues.START_VALUE_f;
+        distanceTravelled = ConstantValues.START_VALUE_f;
+        moneyOnFuelSpent = ConstantValues.START_VALUE_f;
+        timeSpentOnStop = ConstantValues.START_VALUE_f;
+        fuelSpent = ConstantValues.START_VALUE_f;
+        timeSpent = ConstantValues.START_VALUE_f;
+        avgSpeed = ConstantValues.START_VALUE_f;
+        maxSpeed = ConstantValues.START_VALUE_f;
         tripID = ConstantValues.START_VALUE;
         tripDate = "tripDateStartVal";
         route = new ArrayList<>();
@@ -192,28 +192,44 @@ public class Trip implements Parcelable {
     }
 
     public void writeTrip(ObjectOutputStream os) {
+        Float distanceTravelled  = getDistanceTravelled();
+        Float avgFuelConsumption = getAvgFuelConsumption();
+        Float fuelSpent          = getFuelSpent();
+        Float moneyOnFuelSpent   = getMoneyOnFuelSpent();
+        Float avgSpeed           = getAvgSpeed();
+        Float timeSpent          = getTimeSpentForTrip();
+        Float maxSpeed           = getMaxSpeed();
+        Float timeSpentInMotion  = getTimeSpentInMotion();
+
         try {
             os.writeInt(route.size());
             for (Route routePoint : route) {
                 LatLng tmpRoutePoint = routePoint.getRoutePoints();
                 os.writeDouble(tmpRoutePoint.latitude);
                 os.writeDouble(tmpRoutePoint.longitude);
-                os.writeFloat(routePoint.getSpeed());
+                writeToStreamWithNANcheck(os, routePoint.getSpeed());
             }
-            os.writeFloat(timeSpentInMotion);
-            os.writeFloat(distanceTravelled);
-            os.writeFloat(fuelSpent);
-            os.writeFloat(timeSpent);
+            writeToStreamWithNANcheck(os, timeSpentInMotion);
+            writeToStreamWithNANcheck(os, distanceTravelled);
+            writeToStreamWithNANcheck(os, fuelSpent);
+            writeToStreamWithNANcheck(os, timeSpent);
             os.writeInt(tripID);
             os.writeObject(tripDate);
-            os.writeFloat(avgSpeed);
-            os.writeFloat(moneyOnFuelSpent);
-            os.writeFloat(avgFuelConsumption);
-            os.writeFloat(maxSpeed);
+            writeToStreamWithNANcheck(os, avgSpeed);
+            writeToStreamWithNANcheck(os, moneyOnFuelSpent);
+            writeToStreamWithNANcheck(os, avgFuelConsumption);
+            writeToStreamWithNANcheck(os, maxSpeed);
         }
         catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeToStreamWithNANcheck(ObjectOutputStream os, Float valueToWrite) throws IOException {
+        if (valueToWrite == null || valueToWrite.isNaN()) {
+            valueToWrite = 0f;
+        }
+        os.writeFloat(valueToWrite);
     }
 
 
