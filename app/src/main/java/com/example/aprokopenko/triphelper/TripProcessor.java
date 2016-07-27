@@ -444,8 +444,6 @@ public class TripProcessor implements Parcelable {
         Float           maxSpeed             = startVal;
         Float           distTravelled;
         ArrayList<Trip> allTrips             = tripData.getTrips();
-        int             tripQuantity         = allTrips.size();
-
 
         for (Trip trip : allTrips) {
             fuelSpent = fuelSpent + trip.getFuelSpent();
