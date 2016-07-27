@@ -9,5 +9,7 @@
     <dimen name="margin_between_data">5dp</dimen>
     <dimen name="label_text_size">20sp</dimen>
     <dimen name="block_padding">10dp</dimen>
-    <dimen name="fab_margin">5dp</dimen>
+    <dimen name="fab_margin">7dp</dimen>
+    <dimen name="margin_between_elements">6dp</dimen>
+    <dimen name="margin_outer">7dp</dimen>
 </resources>

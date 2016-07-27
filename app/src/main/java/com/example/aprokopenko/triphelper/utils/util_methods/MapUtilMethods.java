@@ -65,6 +65,8 @@ public class MapUtilMethods {
     }
 
 
+
+
     public static void animateCamera(@Nullable Location location, @Nullable LatLng position, GoogleMap googleMap) {
         if (location != null) {
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(),

@@ -437,15 +437,15 @@ public class TripProcessor implements Parcelable {
     private void setMetricFieldsToTripData(float fuelPriceFromSettings) {
         final float     startVal             = ConstantValues.START_VALUE;
         TripData        tripData             = getTripData();
-        float           fuelSpent            = startVal;
-        float           timeSpentForAllTrips = startVal;
-        float           avgSpeedSum          = startVal;
-        float           avgFuelCons          = startVal;
-        float           maxSpeed             = startVal;
-        float           timeSum              = startVal;
-        float           distTravelled;
+        Float           fuelSpent            = startVal;
+        Float           timeSpentForAllTrips = startVal;
+        Float           avgSpeedSum          = startVal;
+        Float           avgFuelCons          = startVal;
+        Float           maxSpeed             = startVal;
+        Float           distTravelled;
         ArrayList<Trip> allTrips             = tripData.getTrips();
         int             tripQuantity         = allTrips.size();
+
 
         for (Trip trip : allTrips) {
             fuelSpent = fuelSpent + trip.getFuelSpent();
@@ -453,24 +453,28 @@ public class TripProcessor implements Parcelable {
             maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
         }
         for (Trip trip : allTrips) {
-            float multiplier  = (trip.getTimeSpentForTrip() * ConstantValues.PER_100) / timeSpentForAllTrips;
-            float timeForTrip = trip.getTimeSpentForTrip() / ConstantValues.MILLISECONDS_IN_HOUR;
-            avgFuelCons = (avgFuelCons + trip.getAvgFuelConsumption() * multiplier) / ConstantValues.PER_100;
-            avgSpeedSum = (avgSpeedSum + (trip.getDistanceTravelled() / (timeForTrip)) * timeForTrip);
-            timeSum = timeSum + timeForTrip;
+            float multiplier = (trip.getTimeSpentForTrip() / timeSpentForAllTrips) * ConstantValues.PER_100;
+            avgFuelCons = (avgFuelCons + ((trip.getAvgFuelConsumption() * multiplier) / ConstantValues.PER_100));
+            avgSpeedSum = (avgSpeedSum + ((trip.getAvgSpeed() * multiplier) / ConstantValues.PER_100));
         }
-        avgFuelCons = avgFuelCons / tripQuantity;
-        avgSpeedSum = avgSpeedSum / timeSum;
+        Log.d(LOG_TAG, " ");
         distTravelled = CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeedSum);
 
-        tripData.setMaxSpeed(maxSpeed);
-        tripData.setAvgSpeed(avgSpeedSum);
-        tripData.setTimeSpentOnTrips(timeSpentForAllTrips);
-        tripData.setDistanceTravelled(distTravelled);
-        tripData.setAvgFuelConsumption(avgFuelCons);
-        tripData.setFuelSpent(fuelSpent);
-        tripData.setGasTank(tripData.getGasTank() - getCurrentTrip().getFuelSpent());
-        tripData.setMoneyOnFuelSpent(fuelSpent * fuelPriceFromSettings);
+        tripData.setMaxSpeed(getValueCheckedOnNAN(maxSpeed));
+        tripData.setAvgSpeed(getValueCheckedOnNAN(avgSpeedSum));
+        tripData.setTimeSpentOnTrips(getValueCheckedOnNAN(timeSpentForAllTrips));
+        tripData.setDistanceTravelled(getValueCheckedOnNAN(distTravelled));
+        tripData.setAvgFuelConsumption(getValueCheckedOnNAN(avgFuelCons));
+        tripData.setFuelSpent(getValueCheckedOnNAN(fuelSpent));
+        tripData.setGasTank(getValueCheckedOnNAN(tripData.getGasTank() - getCurrentTrip().getFuelSpent()));
+        tripData.setMoneyOnFuelSpent(getValueCheckedOnNAN(fuelSpent * fuelPriceFromSettings));
+    }
+
+    private Float getValueCheckedOnNAN(Float value) {
+        if (value == null || value.isNaN()) {
+            value = 0f;
+        }
+        return value;
     }
 
     private void addRoutePoint(LatLng routePoints, float speed) {

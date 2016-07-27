@@ -15,7 +15,7 @@
         android:layout_height="40dp"
         android:layout_alignLeft="@+id/btn_TripList"
         android:layout_below="@+id/btn_TripList"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="@dimen/margin_between_elements"
         android:background="@drawable/btn_background"
         android:src="@drawable/btn_settings"
         />
@@ -26,7 +26,7 @@
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/image_statusView"
-        android:layout_marginRight="6dp"
+        android:layout_marginRight="@dimen/margin_outer"
         android:background="@drawable/btn_background"
         android:src="@drawable/btn_triplist"
         />
@@ -50,7 +50,7 @@
         android:layout_alignLeft="@id/image_statusView"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@id/refillButtonLayout"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/margin_outer"
         android:background="@drawable/btn_background"
         android:text="@string/start"/>
 
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/image_statusView"
         android:layout_below="@+id/image_statusView"
-        android:layout_marginTop="7dp">
+        >
 
         <ImageView
             android:id="@+id/image_fuelIcon"
@@ -122,9 +122,9 @@
         android:id="@+id/refillButtonLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/fuel_left_layout"
+        android:layout_alignLeft="@id/image_statusView"
         android:layout_below="@id/fuel_left_layout"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="@dimen/margin_outer"
         android:background="@drawable/btn_background"
         android:padding="4dp"
         >
@@ -154,9 +154,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/margin_between_elements"
+        android:layout_marginLeft="@dimen/margin_outer"
+        android:layout_marginTop="@dimen/margin_outer"
         android:background="@drawable/red_satellite"
         />
 </RelativeLayout>
