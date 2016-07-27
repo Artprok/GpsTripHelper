@@ -8,6 +8,9 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import java.util.ArrayList;
 
 public class TripInfoContainer {
+    private final ArrayList<Route> route;
+    private final String           date;
+    private final Trip             trip;
     private float avgFuelConsumption = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
     private float distanceTravelled  = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
     private float timeSpentInMotion  = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
@@ -18,10 +21,6 @@ public class TripInfoContainer {
     private float avgSpeed           = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
     private float maxSpeed           = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
     private int   id                 = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
-
-    private final ArrayList<Route> route;
-    private final String           date;
-    private final Trip             trip;
 
     public TripInfoContainer(@NonNull String date, float distanceTravelled, float avgSpeed, float timeSpentForTrip, float timeSpentInMotion,
                              float timeSpentOnStop, float avgFuelConsumption, float fuelSpent, int id, @NonNull ArrayList<Route> route,

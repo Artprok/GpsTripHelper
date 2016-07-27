@@ -29,11 +29,10 @@ import dagger.Module;
 import io.fabric.sdk.android.Fabric;
 
 @Module public class MainActivity extends AppCompatActivity {
+    public static final  boolean DEBUG   = BuildConfig.DEBUG;
+    private static final String  LOG_TAG = "MainActivity";
     @BindView(R.id.btn_fab)
     FloatingActionButton fab;
-
-    private static final String  LOG_TAG = "MainActivity";
-    public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private int fabTransitionValue;
 
     private Unbinder unbinder;
@@ -47,6 +46,11 @@ import io.fabric.sdk.android.Fabric;
         fabTransitionValue = getDataForFABanimation();
 
         proceedToFragmentCreating(savedInstanceState);
+    }
+
+    @Override protected void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     @Override public void onBackPressed() {
@@ -74,11 +78,6 @@ import io.fabric.sdk.android.Fabric;
             }
             super.onBackPressed();
         }
-    }
-
-    @Override protected void onDestroy() {
-        unbinder.unbind();
-        super.onDestroy();
     }
 
     private void proceedToFragmentCreating(Bundle savedInstanceState) {

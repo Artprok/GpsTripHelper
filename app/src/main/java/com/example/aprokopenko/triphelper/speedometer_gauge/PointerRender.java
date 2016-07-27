@@ -61,14 +61,14 @@ public class PointerRender extends View {
         }
     }
 
-    public GaugePointer getmGaugePointer() {
-        return mGaugePointer;
-    }
-
     public PointerRender(Context context, AttributeSet attrs) {
         super(context, attrs);
         value = 0.0f;
         mEnableAnimation = true;
+    }
+
+    public GaugePointer getmGaugePointer() {
+        return mGaugePointer;
     }
 
     public float getValue() {
@@ -390,11 +390,90 @@ public class PointerRender extends View {
         super.onDraw(canvas);
     }
 
+    private float getCenterYminusDivideBy4plusRimS(float rimSize) {
+        return (mCentreY - modif_minSizeDivideBy4) + rimSize;
+    }
+
+    private float getCenterXplusDivideBy2minusRimS(float rimSize) {
+        return (mCentreX + modif_minSizeDivideBy2) - rimSize;
+    }
+
+    private float getCenterYplus0dot75minusRimS(float rimSize) {
+        return (mCentreY + modif_minSizeMultBy0dot75) - rimSize;
+    }
+
+    private float getCenterYminus0dot75plusRimS(float rimSize) {
+        return (mCentreY - modif_minSizeMultBy0dot75) + rimSize;
+    }
+
+    private float getCenterXminusDivideBy4plusRimS(float rimSize) {
+        return (mCentreX - modif_minSizeDivideBy4) + rimSize;
+    }
+
+    private float getCenterYminusDivideBy2plusRimS(float rimSize) {
+        return (mCentreY - modif_minSizeDivideBy2) + rimSize;
+    }
+
+    private float getCenterXplus0dot75minusRimS(float rimSize) {
+        return (mCentreX + modif_minSizeMultBy0dot75) - rimSize;
+    }
+
+    private float getCenterYplusDivideBy4minusRimS(float rimSize) {
+        return (mCentreY + modif_minSizeDivideBy4) - rimSize;
+    }
+
+    private float getCenterXminus0dot75plusRimS(float rimSize) {
+        return (mCentreX - modif_minSizeMultBy0dot75) + rimSize;
+    }
+
+    private float getCenterXminus1dot125plusRimS(float rimSize) {
+        return (mCentreX - modif_minSizeMultBy1dot125) + rimSize;
+    }
+
+    private float getCenterXplusDivideBy4minusRimS(float rimSize) {
+        return (mCentreX + modif_minSizeDivideBy4) - rimSize;
+    }
+
+    private float getCenterYminus0dot375plusRimS(float rimSize) {
+        return (mCentreY - modif_minSizeMultBy0dot375) + rimSize;
+    }
+
+    private float getCenterXplus0dot375minusRimS(float rimSize) {
+        return (mCentreX + modif_minSizeMultBy0dot375) - rimSize;
+    }
+
+    private float getCenterYplus1dot125minusRimS(float rimSize) {
+        return (mCentreY + modif_minSizeMultBy1dot125) - rimSize;
+    }
+
+    private float getCenterXminus0dot375plusRimS(float rimSize) {
+        return (mCentreX - modif_minSizeMultBy0dot375) + rimSize;
+    }
+
+    private float getCenterXplus1dot125minusRimS(float rimSize) {
+        return (mCentreX + modif_minSizeMultBy1dot125) - rimSize;
+    }
+
+    private float getCenterYminus1dot125plusRimS(float rimSize) {
+        return (mCentreY - modif_minSizeMultBy1dot125) + rimSize;
+    }
+
+    private float getCenterYplus0dot375minusRimS(float rimSize) {
+        return (mCentreY + modif_minSizeMultBy0dot375) - rimSize;
+    }
+
+    private float getCenterYplusDivideBy2minusRimS(float rimSize) {
+        return (mCentreY + modif_minSizeDivideBy2) - rimSize;
+    }
+
+    private float getCenterXminusDivideBy2plusRimS(float rimSize) {
+        return (mCentreX - modif_minSizeDivideBy2) + rimSize;
+    }
+
     @NonNull private RectF getRectF(float factor, float centerXminusDivideBy4plusRimS, float centerXplusDivideBy2minusRimS,
                                     float centerYplus0dot75minusRimS) {
         return new RectF(centerXminusDivideBy4plusRimS, factor, centerXplusDivideBy2minusRimS, centerYplus0dot75minusRimS);
     }
-
 
     private void onDrawPointers(Canvas canvas, GaugeScale gaugeScale, RectF rectF) {
         Paint  paint = new Paint();
@@ -678,85 +757,5 @@ public class PointerRender extends View {
         }
         return startAngle + (((pointerValue - startVal) * (gaugeScale.getSweepAngle() / (gaugeScale
                 .getEndValue() - startVal))) * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY);
-    }
-
-    private float getCenterXminusDivideBy2plusRimS(float rimSize) {
-        return (mCentreX - modif_minSizeDivideBy2) + rimSize;
-    }
-
-    private float getCenterYplusDivideBy2minusRimS(float rimSize) {
-        return (mCentreY + modif_minSizeDivideBy2) - rimSize;
-    }
-
-    private float getCenterYplus0dot375minusRimS(float rimSize) {
-        return (mCentreY + modif_minSizeMultBy0dot375) - rimSize;
-    }
-
-    private float getCenterYminus1dot125plusRimS(float rimSize) {
-        return (mCentreY - modif_minSizeMultBy1dot125) + rimSize;
-    }
-
-    private float getCenterXplus1dot125minusRimS(float rimSize) {
-        return (mCentreX + modif_minSizeMultBy1dot125) - rimSize;
-    }
-
-    private float getCenterXminus0dot375plusRimS(float rimSize) {
-        return (mCentreX - modif_minSizeMultBy0dot375) + rimSize;
-    }
-
-    private float getCenterYplus1dot125minusRimS(float rimSize) {
-        return (mCentreY + modif_minSizeMultBy1dot125) - rimSize;
-    }
-
-    private float getCenterXplus0dot375minusRimS(float rimSize) {
-        return (mCentreX + modif_minSizeMultBy0dot375) - rimSize;
-    }
-
-    private float getCenterYminus0dot375plusRimS(float rimSize) {
-        return (mCentreY - modif_minSizeMultBy0dot375) + rimSize;
-    }
-
-    private float getCenterXplusDivideBy4minusRimS(float rimSize) {
-        return (mCentreX + modif_minSizeDivideBy4) - rimSize;
-    }
-
-    private float getCenterXminus1dot125plusRimS(float rimSize) {
-        return (mCentreX - modif_minSizeMultBy1dot125) + rimSize;
-    }
-
-    private float getCenterXminus0dot75plusRimS(float rimSize) {
-        return (mCentreX - modif_minSizeMultBy0dot75) + rimSize;
-    }
-
-    private float getCenterYplusDivideBy4minusRimS(float rimSize) {
-        return (mCentreY + modif_minSizeDivideBy4) - rimSize;
-    }
-
-    private float getCenterXplus0dot75minusRimS(float rimSize) {
-        return (mCentreX + modif_minSizeMultBy0dot75) - rimSize;
-    }
-
-    private float getCenterYminusDivideBy2plusRimS(float rimSize) {
-        return (mCentreY - modif_minSizeDivideBy2) + rimSize;
-    }
-
-    private float getCenterXminusDivideBy4plusRimS(float rimSize) {
-        return (mCentreX - modif_minSizeDivideBy4) + rimSize;
-    }
-
-    private float getCenterYminus0dot75plusRimS(float rimSize) {
-        return (mCentreY - modif_minSizeMultBy0dot75) + rimSize;
-    }
-
-    private float getCenterYplus0dot75minusRimS(float rimSize) {
-        return (mCentreY + modif_minSizeMultBy0dot75) - rimSize;
-    }
-
-    private float getCenterXplusDivideBy2minusRimS(float rimSize) {
-        return (mCentreX + modif_minSizeDivideBy2) - rimSize;
-    }
-
-    private float getCenterYminusDivideBy4plusRimS(float rimSize) {
-        return (mCentreY - modif_minSizeDivideBy4) + rimSize;
     }
 }

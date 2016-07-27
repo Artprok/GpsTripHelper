@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 
     private TripData tripData;
 
-    public static DataHolderFragment newInstance() {
-        return new DataHolderFragment();
-    }
-
     public DataHolderFragment() {
         // Required empty public constructor
+    }
+
+    public static DataHolderFragment newInstance() {
+        return new DataHolderFragment();
     }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {

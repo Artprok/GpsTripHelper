@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 
 public class UtilMethods {
     private static final String  LOG_TAG        = "UtilMethods";
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG          = BuildConfig.DEBUG;
     private static final float[] testingTempVal = {1};
     private static final Random  random         = new Random();
 
@@ -126,8 +126,7 @@ public class UtilMethods {
 
     public static void addFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
         FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(fragment, fragment_tag)
-                .commit();
+        fragmentTransaction.add(fragment, fragment_tag).commit();
     }
 
     public static void replaceFragment(Fragment fragment, String fragment_tag, android.support.v4.app.FragmentActivity fragmentActivity) {
@@ -190,12 +189,6 @@ public class UtilMethods {
         }).setDuration(ConstantValues.TEXT_ANIM_DURATION).translationX(transitionX).start();
     }
 
-    public static void showToast(Context context, CharSequence stringToShow) {
-        Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
-        toast.show();
-
-    }
-
     public static void firstStartTutorialDialog(final Context context) {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.how_to_use);
@@ -212,6 +205,21 @@ public class UtilMethods {
                 dialog.cancel();
             }
         });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private static void showTutorialDialog(Context context) {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.how_to_use);
+        builder.setTitle(context.getString(R.string.tutorialTitle));
+        builder.setMessage(R.string.tutorialInfo).setCancelable(true)
+                .setPositiveButton(R.string.tutorialThanks, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
         final android.support.v7.app.AlertDialog alert = builder.create();
         alert.show();
     }
@@ -268,9 +276,26 @@ public class UtilMethods {
         alert.show();
     }
 
-    public static boolean checkIfGpsEnabled(Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    private static void rateApp(Context context) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
+        }
+        catch (android.content.ActivityNotFoundException anfe) {
+            viewInBrowser(context, "https://play.google.com/store/apps/details?id=" + context.getPackageName());
+        }
+    }
+
+    public static void showToast(Context context, CharSequence stringToShow) {
+        Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
+        toast.show();
+
+    }
+
+    private static void viewInBrowser(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        if (null != intent.resolveActivity(context.getPackageManager())) {
+            context.startActivity(intent);
+        }
     }
 
     public static void checkIfGpsEnabledAndShowDialogs(Context context) {
@@ -286,6 +311,30 @@ public class UtilMethods {
                 Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: Gps Enabled");
             }
         }
+    }
+
+    public static boolean checkIfGpsEnabled(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private static void buildAlertMessageNoGps(final Context context) {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.gps_icon);
+        builder.setTitle(context.getString(R.string.gps_dialog_title));
+        builder.setMessage(R.string.gps_dialog_text_label).setCancelable(false)
+                .setPositiveButton(R.string.gps_dialog_agree_enable, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
+                                        @SuppressWarnings("unused") final int id) {
+                        context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                }).setNegativeButton(R.string.gps_dialog_disagree_enable, new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                dialog.cancel();
+            }
+        });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public static void setFabInvisible(Activity activity) {
@@ -311,56 +360,6 @@ public class UtilMethods {
             }
         }
         return result;
-    }
-
-    private static void buildAlertMessageNoGps(final Context context) {
-        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.gps_icon);
-        builder.setTitle(context.getString(R.string.gps_dialog_title));
-        builder.setMessage(R.string.gps_dialog_text_label).setCancelable(false)
-                .setPositiveButton(R.string.gps_dialog_agree_enable, new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                        @SuppressWarnings("unused") final int id) {
-                        context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                }).setNegativeButton(R.string.gps_dialog_disagree_enable, new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                dialog.cancel();
-            }
-        });
-        final android.support.v7.app.AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private static void showTutorialDialog(Context context) {
-        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.how_to_use);
-        builder.setTitle(context.getString(R.string.tutorialTitle));
-        builder.setMessage(R.string.tutorialInfo).setCancelable(true)
-                .setPositiveButton(R.string.tutorialThanks, new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                        @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final android.support.v7.app.AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private static void rateApp(Context context) {
-        try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
-        }
-        catch (android.content.ActivityNotFoundException anfe) {
-            viewInBrowser(context, "https://play.google.com/store/apps/details?id=" + context.getPackageName());
-        }
-    }
-
-    private static void viewInBrowser(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        if (null != intent.resolveActivity(context.getPackageManager())) {
-            context.startActivity(intent);
-        }
     }
 
     public static float generateRandomSpeed() {

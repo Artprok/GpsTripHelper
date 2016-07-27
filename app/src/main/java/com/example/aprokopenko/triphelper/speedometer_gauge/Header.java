@@ -28,15 +28,15 @@ public class Header {
         return this.text;
     }
 
-    public void setGauge(TripHelperGauge gauge) {
-        this.gauge = gauge;
-    }
-
     public void setText(String text) {
         this.text = text;
         if (gauge != null) {
             gauge.refreshGauge();
         }
+    }
+
+    public void setGauge(TripHelperGauge gauge) {
+        this.gauge = gauge;
     }
 
     public double getTextSize() {

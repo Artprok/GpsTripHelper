@@ -35,16 +35,16 @@ public class GaugePointer {
         return mGaugeScale;
     }
 
-    public void setmBaseGauge(TripHelperGauge mBaseGauge) {
-        this.mBaseGauge = mBaseGauge;
+    public void setmGaugeScale(GaugeScale mGaugeScale) {
+        this.mGaugeScale = mGaugeScale;
     }
 
     TripHelperGauge getmBaseGauge() {
         return mBaseGauge;
     }
 
-    public void setmGaugeScale(GaugeScale mGaugeScale) {
-        this.mGaugeScale = mGaugeScale;
+    public void setmBaseGauge(TripHelperGauge mBaseGauge) {
+        this.mBaseGauge = mBaseGauge;
     }
 
     public void setmPointerRender(PointerRender mPointerRender) {

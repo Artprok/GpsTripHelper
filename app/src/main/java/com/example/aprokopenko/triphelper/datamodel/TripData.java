@@ -9,6 +9,15 @@ import java.util.ArrayList;
 
 public class TripData implements Parcelable {
 
+    public static final Creator<TripData> CREATOR = new Creator<TripData>() {
+        public TripData createFromParcel(Parcel in) {
+            return new TripData(in);
+        }
+
+        @Override public TripData[] newArray(int size) {
+            return new TripData[size];
+        }
+    };
     private float           avgFuelConsumption;
     private float           distanceTravelled;
     private float           timeSpentOnTrips;
@@ -31,6 +40,18 @@ public class TripData implements Parcelable {
         gasTank = ConstantValues.START_VALUE;
     }
 
+    private TripData(Parcel in) {
+        avgFuelConsumption = in.readFloat();
+        distanceTravelled = in.readFloat();
+        timeSpentOnTrips = in.readFloat();
+        moneyOnFuelSpent = in.readFloat();
+        fuelSpent = in.readFloat();
+        avgSpeed = in.readFloat();
+        maxSpeed = in.readFloat();
+        gasTank = in.readFloat();
+        trips = in.createTypedArrayList(Trip.CREATOR);
+    }
+
     @Override public int describeContents() {
         return 0;
     }
@@ -47,19 +68,12 @@ public class TripData implements Parcelable {
         dest.writeTypedList(trips);
     }
 
-
-    public static final Creator<TripData> CREATOR = new Creator<TripData>() {
-        public TripData createFromParcel(Parcel in) {
-            return new TripData(in);
-        }
-
-        @Override public TripData[] newArray(int size) {
-            return new TripData[size];
-        }
-    };
-
     public ArrayList<Trip> getTrips() {
         return trips;
+    }
+
+    public void setTrips(ArrayList<Trip> trips) {
+        this.trips = trips;
     }
 
     public Trip getTrip(int index) {
@@ -70,64 +84,60 @@ public class TripData implements Parcelable {
         return avgFuelConsumption;
     }
 
-    public float getDistanceTravelled() {
-        return distanceTravelled;
-    }
-
-    public float getMoneyOnFuelSpent() {
-        return moneyOnFuelSpent;
-    }
-
-    public float getTimeSpentOnTrips() {
-        return timeSpentOnTrips;
-    }
-
-    public float getFuelSpent() {
-        return fuelSpent;
-    }
-
-    public float getAvgSpeed() {
-        return avgSpeed;
-    }
-
-    public float getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public float getGasTank() {
-        return gasTank;
-    }
-
     public void setAvgFuelConsumption(float avgFuelConsumption) {
         this.avgFuelConsumption = avgFuelConsumption;
+    }
+
+    public float getDistanceTravelled() {
+        return distanceTravelled;
     }
 
     public void setDistanceTravelled(float distanceTravelled) {
         this.distanceTravelled = distanceTravelled;
     }
 
+    public float getMoneyOnFuelSpent() {
+        return moneyOnFuelSpent;
+    }
+
     public void setMoneyOnFuelSpent(float moneyOnFuelSpent) {
         this.moneyOnFuelSpent = moneyOnFuelSpent;
+    }
+
+    public float getTimeSpentOnTrips() {
+        return timeSpentOnTrips;
     }
 
     public void setTimeSpentOnTrips(float timeSpentOnTrips) {
         this.timeSpentOnTrips = timeSpentOnTrips;
     }
 
+    public float getFuelSpent() {
+        return fuelSpent;
+    }
+
     public void setFuelSpent(float fuelSpent) {
         this.fuelSpent = fuelSpent;
+    }
+
+    public float getAvgSpeed() {
+        return avgSpeed;
     }
 
     public void setAvgSpeed(float avgSpeed) {
         this.avgSpeed = avgSpeed;
     }
 
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
     public void setMaxSpeed(float maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
 
-    public void setTrips(ArrayList<Trip> trips) {
-        this.trips = trips;
+    public float getGasTank() {
+        return gasTank;
     }
 
     public void setGasTank(float gasTank) {
@@ -140,18 +150,6 @@ public class TripData implements Parcelable {
 
     public void addTrip(Trip trip) {
         trips.add(trip);
-    }
-
-    private TripData(Parcel in) {
-        avgFuelConsumption = in.readFloat();
-        distanceTravelled = in.readFloat();
-        timeSpentOnTrips = in.readFloat();
-        moneyOnFuelSpent = in.readFloat();
-        fuelSpent = in.readFloat();
-        avgSpeed = in.readFloat();
-        maxSpeed = in.readFloat();
-        gasTank = in.readFloat();
-        trips = in.createTypedArrayList(Trip.CREATOR);
     }
 }
 

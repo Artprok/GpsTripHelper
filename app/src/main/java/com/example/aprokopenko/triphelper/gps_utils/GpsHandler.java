@@ -22,14 +22,21 @@ import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 public class GpsHandler implements LocationListener, Parcelable {
+    public static final  boolean             DEBUG   = BuildConfig.DEBUG;
+    public static final  Creator<GpsHandler> CREATOR = new Creator<GpsHandler>() {
+        @Override public GpsHandler createFromParcel(Parcel in) {
+            return new GpsHandler(in);
+        }
+
+        @Override public GpsHandler[] newArray(int size) {
+            return new GpsHandler[size];
+        }
+    };
+    private static final String              LOG_TAG = "GPSHandler";
     @Inject
     LocationManager locationManager;
     @Inject
     Context         context;
-
-    private static final String LOG_TAG = "GPSHandler";
-    public static final  boolean DEBUG   = BuildConfig.DEBUG;
-
     private float maxSpeed = ConstantValues.START_VALUE;
     private Observer<Location> locationSubscriber;
     private Observer<Float>    maxSpeedSubscriber;
@@ -48,16 +55,6 @@ public class GpsHandler implements LocationListener, Parcelable {
         maxSpeed = in.readFloat();
     }
 
-    public static final Creator<GpsHandler> CREATOR = new Creator<GpsHandler>() {
-        @Override public GpsHandler createFromParcel(Parcel in) {
-            return new GpsHandler(in);
-        }
-
-        @Override public GpsHandler[] newArray(int size) {
-            return new GpsHandler[size];
-        }
-    };
-
     public void setLocationSubscriber(Subscriber<Location> locationSubscriber) {
         this.locationSubscriber = locationSubscriber;
     }
@@ -68,39 +65,6 @@ public class GpsHandler implements LocationListener, Parcelable {
 
     public void setSpeedSubscriber(Subscriber<Float> speedSubscriber) {
         this.speedSubscriber = speedSubscriber;
-    }
-
-
-    private void setupLocationObservable(final Location location) {
-        Observable<Location> locationObservable = Observable.create(new Observable.OnSubscribe<Location>() {
-            @Override public void call(Subscriber<? super Location> sub) {
-                sub.onNext(location);
-            }
-        });
-        locationObservable.subscribe(locationSubscriber);
-    }
-
-    private void setupMaxSpeedObservable(final float maxSpeed) {
-        Observable<Float> maxSpeedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-            @Override public void call(Subscriber<? super Float> subscriber) {
-                subscriber.onNext(maxSpeed);
-            }
-        });
-        maxSpeedObservable.subscribe(maxSpeedSubscriber);
-    }
-
-    private void setupSpeedObservable(final float speed) {
-        Observable<Float> speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-            @Override public void call(final Subscriber<? super Float> sub) {
-                sub.onNext(speed);
-            }
-        });
-        speedObservable.observeOn(Schedulers.immediate()).subscribe(speedSubscriber);
-    }
-
-    private void getMaxSpeedAndSetupObservable(float speed) {
-        maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
-        setupMaxSpeedObservable(maxSpeed);
     }
 
     @Override public void onLocationChanged(final Location location) {
@@ -116,6 +80,38 @@ public class GpsHandler implements LocationListener, Parcelable {
         setupLocationObservable(location);
         getMaxSpeedAndSetupObservable(speed);
         setupSpeedObservable(speed);
+    }
+
+    private void setupLocationObservable(final Location location) {
+        Observable<Location> locationObservable = Observable.create(new Observable.OnSubscribe<Location>() {
+            @Override public void call(Subscriber<? super Location> sub) {
+                sub.onNext(location);
+            }
+        });
+        locationObservable.subscribe(locationSubscriber);
+    }
+
+    private void getMaxSpeedAndSetupObservable(float speed) {
+        maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
+        setupMaxSpeedObservable(maxSpeed);
+    }
+
+    private void setupSpeedObservable(final float speed) {
+        Observable<Float> speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
+            @Override public void call(final Subscriber<? super Float> sub) {
+                sub.onNext(speed);
+            }
+        });
+        speedObservable.observeOn(Schedulers.immediate()).subscribe(speedSubscriber);
+    }
+
+    private void setupMaxSpeedObservable(final float maxSpeed) {
+        Observable<Float> maxSpeedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
+            @Override public void call(Subscriber<? super Float> subscriber) {
+                subscriber.onNext(maxSpeed);
+            }
+        });
+        maxSpeedObservable.subscribe(maxSpeedSubscriber);
     }
 
     public void performExit() {

@@ -25,27 +25,32 @@ public class CircularGaugeFactory {
         return speedometer;
     }
 
-    private void setScale(TripHelperGauge gauge, GaugeScale scale, ArrayList<GaugeRange> ranges, ArrayList<GaugePointer> pointers,
-                          ArrayList<TickSettings> tickSettings) {
-        ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
-        scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
-        scale.setStartValue(GaugeFactorySettings.startValue);
-        scale.setStartAngle(GaugeFactorySettings.startAngle);
-        scale.setSweepAngle(GaugeFactorySettings.sweepAngle);
-        scale.setEndValue(GaugeFactorySettings.endValue);
-        scale.setInterval(GaugeFactorySettings.interval);
+    private void configureSpeedometer(TripHelperGauge gauge, String title) {
+        GaugeScale gaugeScale = new GaugeScale();
+        setHeader(gauge, title);
 
-        scale.setLabelTextSize(GaugeFactorySettings.labelTextSize);
-        scale.setLabelColor(GaugeFactorySettings.labelTextColor);
-        scale.setLabelOffset(GaugeFactorySettings.labelOffset);
+        ArrayList<GaugeRange>   gaugeRangeArrayList   = setupRanges(gaugeScale);
+        ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
+        ArrayList<TickSettings> tickSettingArrayList  = setupTicks();
 
-        setupTickSettings(tickSettings, scale);
+        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList);
+    }
 
-        scale.setGaugePointers(pointers);
-        scale.setGaugeRanges(ranges);
+    private void setHeader(TripHelperGauge gauge, @Nullable String title) {
+        ArrayList<Header> gaugeHeaders        = new ArrayList<>();
+        Header            circularGaugeHeader = new Header();
+        if (title == null) {
+            circularGaugeHeader.setText(GaugeFactorySettings.speedometerHeaderText);
+        }
+        else {
+            circularGaugeHeader.setText(title);
+        }
 
-        gaugeScales.add(0, scale);
-        gauge.setGaugeScales(gaugeScales);
+        circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
+        circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
+        circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
+        gaugeHeaders.add(0, circularGaugeHeader);
+        gauge.setHeaders(gaugeHeaders);
     }
 
     private ArrayList<GaugeRange> setupRanges(GaugeScale scale) {
@@ -112,6 +117,28 @@ public class CircularGaugeFactory {
         return tickSettingArrayList;
     }
 
+    private void setScale(TripHelperGauge gauge, GaugeScale scale, ArrayList<GaugeRange> ranges, ArrayList<GaugePointer> pointers,
+                          ArrayList<TickSettings> tickSettings) {
+        ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
+        scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
+        scale.setStartValue(GaugeFactorySettings.startValue);
+        scale.setStartAngle(GaugeFactorySettings.startAngle);
+        scale.setSweepAngle(GaugeFactorySettings.sweepAngle);
+        scale.setEndValue(GaugeFactorySettings.endValue);
+        scale.setInterval(GaugeFactorySettings.interval);
+
+        scale.setLabelTextSize(GaugeFactorySettings.labelTextSize);
+        scale.setLabelColor(GaugeFactorySettings.labelTextColor);
+        scale.setLabelOffset(GaugeFactorySettings.labelOffset);
+
+        setupTickSettings(tickSettings, scale);
+
+        scale.setGaugePointers(pointers);
+        scale.setGaugeRanges(ranges);
+
+        gaugeScales.add(0, scale);
+        gauge.setGaugeScales(gaugeScales);
+    }
 
     private void setupTickSettings(ArrayList<TickSettings> ts, GaugeScale scale) {
         TickSettings majorTickSetting = ts.get(0);
@@ -120,33 +147,5 @@ public class CircularGaugeFactory {
         scale.setMajorTickSettings(majorTickSetting);
         scale.setMinorTickSettings(minorTickSetting);
         scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
-    }
-
-    private void configureSpeedometer(TripHelperGauge gauge, String title) {
-        GaugeScale gaugeScale = new GaugeScale();
-        setHeader(gauge, title);
-
-        ArrayList<GaugeRange>   gaugeRangeArrayList   = setupRanges(gaugeScale);
-        ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
-        ArrayList<TickSettings> tickSettingArrayList  = setupTicks();
-
-        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList);
-    }
-
-    private void setHeader(TripHelperGauge gauge, @Nullable String title) {
-        ArrayList<Header> gaugeHeaders        = new ArrayList<>();
-        Header            circularGaugeHeader = new Header();
-        if (title == null) {
-            circularGaugeHeader.setText(GaugeFactorySettings.speedometerHeaderText);
-        }
-        else {
-            circularGaugeHeader.setText(title);
-        }
-
-        circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
-        circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
-        circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
-        gaugeHeaders.add(0, circularGaugeHeader);
-        gauge.setHeaders(gaugeHeaders);
     }
 }

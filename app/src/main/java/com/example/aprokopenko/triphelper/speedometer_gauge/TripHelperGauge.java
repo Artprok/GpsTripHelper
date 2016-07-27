@@ -13,9 +13,9 @@ import java.util.Iterator;
 
 public class TripHelperGauge extends FrameLayout {
     static float DENSITY = -1.0F;
-    private       GaugeType                GaugeType;
     private final ArrayList<ScaleRenderer> mScaleRenderers;
     private final ArrayList<PointerRender> mPointerRenderes;
+    private       GaugeType                GaugeType;
     private       ArrayList<GaugeScale>    gaugeScales;
     private       ArrayList<Header>        headers;
     private       GaugeHeaderRenderer      mGaugeHeader;
@@ -51,13 +51,6 @@ public class TripHelperGauge extends FrameLayout {
         DENSITY = getContext().getResources().getDisplayMetrics().density;
     }
 
-
-    private void init() {
-        mGaugeHeader = new GaugeHeaderRenderer(getContext());
-        mGaugeHeader.setmGauge(this);
-        addView(mGaugeHeader);
-    }
-
     public ArrayList<GaugeScale> getGaugeScales() {
         return gaugeScales;
     }
@@ -68,90 +61,6 @@ public class TripHelperGauge extends FrameLayout {
         if (mGaugeHeader == null) {
             init();
         }
-    }
-
-    public GaugeType getGaugeType() {
-        return GaugeType;
-    }
-
-    public RectF getmVisualRect() {
-        return mVisualRect;
-    }
-
-    public void setGaugeType(GaugeType gaugeType) {
-        this.GaugeType = gaugeType;
-        refreshGauge();
-    }
-
-    public void setmRangeFrame(RectF mRangeFrame) {
-        this.mRangeFrame = mRangeFrame;
-    }
-
-    public double getmCentreX() {
-        return mCentreX;
-    }
-
-    public double getmCentreY() {
-        return mCentreY;
-    }
-
-    public double getmGaugeHeight() {
-        return mGaugeHeight;
-    }
-
-    public double getmGaugeWidth() {
-        return mGaugeWidth;
-    }
-
-    public double getmMinSize() {
-        return mMinSize;
-    }
-
-    public RectF getmRangeFrame() {
-        return mRangeFrame;
-    }
-
-    public double getmInnerBevelWidth() {
-        return mInnerBevelWidth;
-    }
-
-    public double getmRimWidth() {
-        return mRimWidth;
-    }
-
-    public double getmKnobDiameter() {
-        return mKnobDiameter;
-    }
-
-    public void setmKnobDiameter(double mKnobDiameter) {
-        this.mKnobDiameter = (float) mKnobDiameter;
-    }
-
-    public double getmLabelsPathHeight() {
-        return mLabelsPathHeight;
-    }
-
-
-    public double getmRangePathWidth() {
-        return mRangePathWidth;
-    }
-
-    protected int getFrameBackgroundColor() {
-        return this.frameBackgroundColor;
-    }
-
-    protected void setFrameBackgroundColor(int frameBackgroundColor) {
-        this.frameBackgroundColor = frameBackgroundColor;
-        this.refreshGauge();
-    }
-
-    public ArrayList<Header> getHeaders() {
-        return headers;
-    }
-
-    public void setHeaders(ArrayList<Header> headers) {
-        this.headers = headers;
-        this.refreshGauge();
     }
 
     public void refreshGauge() {
@@ -272,6 +181,98 @@ public class TripHelperGauge extends FrameLayout {
             mGaugeHeader.requestLayout();
             mGaugeHeader.invalidate();
         }
+    }
+
+    private void init() {
+        mGaugeHeader = new GaugeHeaderRenderer(getContext());
+        mGaugeHeader.setmGauge(this);
+        addView(mGaugeHeader);
+    }
+
+    public void calculateMargin(double width) {
+        //optimizationModif
+        double marginSubtrahend = 2.0 * 10.0;
+
+        mRimWidth = width - 10.0;
+        double dimensionVariable = (mRimWidth - marginSubtrahend) - marginSubtrahend;
+
+        mLabelsPathHeight = dimensionVariable;
+        mRangePathWidth = dimensionVariable;
+    }
+
+    public RectF getmVisualRect() {
+        return mVisualRect;
+    }
+
+    public double getmCentreX() {
+        return mCentreX;
+    }
+
+    public double getmCentreY() {
+        return mCentreY;
+    }
+
+    public double getmGaugeHeight() {
+        return mGaugeHeight;
+    }
+
+    public double getmGaugeWidth() {
+        return mGaugeWidth;
+    }
+
+    public double getmMinSize() {
+        return mMinSize;
+    }
+
+    public RectF getmRangeFrame() {
+        return mRangeFrame;
+    }
+
+    public void setmRangeFrame(RectF mRangeFrame) {
+        this.mRangeFrame = mRangeFrame;
+    }
+
+    public double getmInnerBevelWidth() {
+        return mInnerBevelWidth;
+    }
+
+    public double getmRimWidth() {
+        return mRimWidth;
+    }
+
+    public double getmKnobDiameter() {
+        return mKnobDiameter;
+    }
+
+    public void setmKnobDiameter(double mKnobDiameter) {
+        this.mKnobDiameter = (float) mKnobDiameter;
+    }
+
+    public double getmLabelsPathHeight() {
+        return mLabelsPathHeight;
+    }
+
+
+    public double getmRangePathWidth() {
+        return mRangePathWidth;
+    }
+
+    protected int getFrameBackgroundColor() {
+        return this.frameBackgroundColor;
+    }
+
+    protected void setFrameBackgroundColor(int frameBackgroundColor) {
+        this.frameBackgroundColor = frameBackgroundColor;
+        this.refreshGauge();
+    }
+
+    public ArrayList<Header> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(ArrayList<Header> headers) {
+        this.headers = headers;
+        this.refreshGauge();
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -536,15 +537,13 @@ public class TripHelperGauge extends FrameLayout {
         calculateMargin(mInnerBevelWidth);
     }
 
-    public void calculateMargin(double width) {
-        //optimizationModif
-        double marginSubtrahend = 2.0 * 10.0;
+    public GaugeType getGaugeType() {
+        return GaugeType;
+    }
 
-        mRimWidth = width - 10.0;
-        double dimensionVariable = (mRimWidth - marginSubtrahend) - marginSubtrahend;
-
-        mLabelsPathHeight = dimensionVariable;
-        mRangePathWidth = dimensionVariable;
+    public void setGaugeType(GaugeType gaugeType) {
+        this.GaugeType = gaugeType;
+        refreshGauge();
     }
 }
 
