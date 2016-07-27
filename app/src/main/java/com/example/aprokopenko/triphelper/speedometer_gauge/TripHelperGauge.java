@@ -22,8 +22,8 @@ public class TripHelperGauge extends FrameLayout {
     private       RectF                    mVisualRect;
     private       RectF                    mRangeFrame;
     private       int                      frameBackgroundColor;
-    private       double                   mGaugeHeight;
-    private       double                   mGaugeWidth;
+    private       float                    mGaugeHeight;
+    private       float                    mGaugeWidth;
     private       double                   mMinSize;
     private       double                   mInnerBevelWidth;
     private       float                    mKnobDiameter;
@@ -46,8 +46,8 @@ public class TripHelperGauge extends FrameLayout {
         GaugeType = com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.Default;
         frameBackgroundColor = GaugeConstants.FRAME_BACKGROUND_COLOR;
         headers = new ArrayList<>();
-        mGaugeHeight = GaugeConstants.ZERO;
-        mGaugeWidth = GaugeConstants.ZERO;
+        mGaugeHeight = (float) GaugeConstants.ZERO;
+        mGaugeWidth = (float) GaugeConstants.ZERO;
         DENSITY = getContext().getResources().getDisplayMetrics().density;
     }
 
@@ -302,8 +302,8 @@ public class TripHelperGauge extends FrameLayout {
         }
 
         GaugeType gaugeType;
-        double    squarified;
-        double    rectCanvas;
+        float     squarified;
+        float     rectCanvas;
 
         //modif optimization
         float modifDiameter25 = 25.0f;
@@ -313,32 +313,32 @@ public class TripHelperGauge extends FrameLayout {
             squarified = Math.min(mGaugeHeight, mGaugeWidth);
             gaugeType = getGaugeType();
             //optimizationModif
-            double modifKnobDiameterBy4 = mKnobDiameter * 4.0D;
+            float modifKnobDiameterBy4 = mKnobDiameter * 4.0f;
 
             if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.North) {
                 gaugeType = getGaugeType();
                 if (gaugeType != com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.South) {
                     if (mKnobDiameter == GaugeConstants.ZERO) {
-                        rectCanvas = Math.max(mGaugeHeight - 30.0D, mGaugeWidth);
+                        rectCanvas = Math.max(mGaugeHeight - 30.0f, mGaugeWidth);
                     }
                     else if (mKnobDiameter <= modifDiameter25) {
                         rectCanvas = Math.max(mGaugeHeight - modifKnobDiameterBy4, mGaugeWidth);
                     }
                     else {
-                        rectCanvas = Math.max(mGaugeHeight - 100.0D, mGaugeWidth);
+                        rectCanvas = Math.max(mGaugeHeight - 100.0f, mGaugeWidth);
                     }
                     break label141;
                 }
             }
 
             if (mKnobDiameter == GaugeConstants.ZERO) {
-                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - 30.0D);
+                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - 30.0f);
             }
             else if (mKnobDiameter <= modifDiameter25) {
                 rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - modifKnobDiameterBy4);
             }
             else {
-                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - 100.0D);
+                rectCanvas = Math.max(mGaugeHeight, mGaugeWidth - 100.0f);
             }
         }
 
@@ -425,8 +425,8 @@ public class TripHelperGauge extends FrameLayout {
 
                         mVisualRect.top = mAvailableHeight / 2.0f - modifRectCanvasDelimBy2;
                         mVisualRect.left = mAvailableWidth / 2.0f - modifRectCanvasDelimBy2;
-                        mVisualRect.bottom = (float) (mVisualRect.top + rectCanvas);
-                        mVisualRect.right = (float) (mVisualRect.left + rectCanvas);
+                        mVisualRect.bottom = mVisualRect.top + rectCanvas;
+                        mVisualRect.right = mVisualRect.left + rectCanvas;
                     }
                     break label145;
                 }
@@ -510,8 +510,8 @@ public class TripHelperGauge extends FrameLayout {
 
                         mVisualRect.top = mAvailableHeight / modifRectCanvas;
                         mVisualRect.left = mAvailableWidth / modifRectCanvas;
-                        mVisualRect.bottom = (float) (mVisualRect.top + rectCanvas);
-                        mVisualRect.right = (float) (mVisualRect.left + rectCanvas);
+                        mVisualRect.bottom = mVisualRect.top + rectCanvas;
+                        mVisualRect.right = mVisualRect.left + rectCanvas;
                     }
                     break label145;
                 }
@@ -522,8 +522,8 @@ public class TripHelperGauge extends FrameLayout {
 
             mVisualRect.top = mAvailableHeight / modifDelimiter;
             mVisualRect.left = mAvailableWidth / modifDelimiter;
-            mVisualRect.bottom = (float) (mVisualRect.top + squarified);
-            mVisualRect.right = (float) (mVisualRect.left + squarified);
+            mVisualRect.bottom = mVisualRect.top + squarified;
+            mVisualRect.right = mVisualRect.left + squarified;
         }
 
         mMinSize = Math.min(mVisualRect.height(), mVisualRect.width());

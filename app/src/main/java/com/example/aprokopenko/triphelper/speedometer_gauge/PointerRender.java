@@ -91,7 +91,7 @@ public class PointerRender extends View {
     protected void onDraw(Canvas canvas) {
         if (!(mGauge == null || mGaugeScale == null || mGaugePointer == null)) {
             //modif optim
-            double radFactor                  = mGaugeScale.getRadiusFactor();
+            float  radFactor                  = (float) mGaugeScale.getRadiusFactor();
             double modif_widthMultRadFactor   = mInnerBevelWidth * radFactor;
             double modif_minSizeMultRadFactor = mMinSize * radFactor;
             double modfi_marginVar            = mInnerBevelWidth - modif_widthMultRadFactor;
@@ -225,10 +225,10 @@ public class PointerRender extends View {
                 if (mGaugePointer instanceof RangePointer) {
                     rangePointerPoisition = (float) ((RangePointer) mGaugePointer).getOffset();
                 }
-                float factor = (float) ((mRangeFrame.left + (((mRangeFrame
+                float factor = ((mRangeFrame.left + (((mRangeFrame
                         .width() / 2.0f) - mRangeFrame.left) * (radFactor))) + ((rangePointerPoisition) * (mCentreX - mRimWidth)));
                 if (mCentreY <= mCentreX) {
-                    factor = (float) ((mRangeFrame.top + (((mRangeFrame
+                    factor = ((mRangeFrame.top + (((mRangeFrame
                             .height() / 2.0f) - mRangeFrame.top) * (radFactor))) + ((rangePointerPoisition) * (mCentreY - mRimWidth)));
                     if (gaugeType == GaugeType.West) {
                         rectF = getRectF(factor, getCenterXminusDivideBy4plusRimS(factor), getCenterXplusDivideBy2minusRimS(factor),
@@ -414,14 +414,14 @@ public class PointerRender extends View {
         double y0;
         double x2;
         double y2;
-        float x1;
-        float y1;
+        float  x1;
+        float  y1;
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth((float) width);
         double pointerLength = (mLabelsPathHeight / 2.0) - (((NeedlePointer) mGaugePointer).getLengthFactor() * (mLabelsPathHeight / 2.0));
-        float innerSize     =(float) ((mLabelsPathHeight / 2.0) - pointerLength);
-        float pointerMargin = (float)((modif_minSizeDivideBy2 - (mLabelsPathHeight / 2.0)) + pointerLength);
+        float  innerSize     = (float) ((mLabelsPathHeight / 2.0) - pointerLength);
+        float  pointerMargin = (float) ((modif_minSizeDivideBy2 - (mLabelsPathHeight / 2.0)) + pointerLength);
         double angle         = getPointerAngle(value, gaugeScale);
 
         //modif optim

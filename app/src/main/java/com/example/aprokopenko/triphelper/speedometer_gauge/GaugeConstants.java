@@ -31,7 +31,7 @@ class GaugeConstants {
     public static final double RANGE_INIT_START_VALUE = 0.0;
     public static final double RANGE_INIT_END_VALUE   = 0.0;
     public static final double RANGE_INIT_WIDTH       = 7.0;
-    public static final double RANGE_INIT_OFFSET      = 0.4;
+    public static final float RANGE_INIT_OFFSET      = 0.4f;
 
     public static final double   SCALE_INIT_START_VALUE              = 0.0;
     public static final double   SCALE_INIT_END_VALUE                = 100.0;

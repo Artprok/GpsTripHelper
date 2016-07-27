@@ -5,7 +5,7 @@ public class GaugeRange {
 
     private int    color;
     private double endValue;
-    private double offset;
+    private float offset;
     private double startValue;
     private double width;
 
@@ -65,11 +65,11 @@ public class GaugeRange {
         }
     }
 
-    public double getOffset() {
+    public float getOffset() {
         return offset;
     }
 
-    public void setOffset(double offset) {
+    public void setOffset(float offset) {
         this.offset = offset;
         if (mGauge != null) {
             mGauge.refreshGauge();

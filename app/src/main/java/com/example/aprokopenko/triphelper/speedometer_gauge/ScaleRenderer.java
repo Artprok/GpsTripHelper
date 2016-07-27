@@ -87,7 +87,7 @@ public class ScaleRenderer extends View {
 
             if (endVal > startVal && startVal < endVal) {
                 double totalTicks = (gaugeScale.getEndValue() - gaugeScale.getStartValue()) / gaugeScale.getInterval();
-                rectF = calculateRectF(gaugeScale.getRadiusFactor());
+                rectF = calculateRectF((float) gaugeScale.getRadiusFactor());
                 paint.setAntiAlias(true);
                 paint.setColor(0);
                 paint.setStyle(Paint.Style.STROKE);
@@ -698,7 +698,7 @@ public class ScaleRenderer extends View {
 
             for (Iterator i$ = gaugeRanges.iterator(); i$.hasNext(); canvas
                     .drawArc(rectF, (float) startArc, (float) endtArc, false, rangePaint)) {
-                double     rimWidth   = gauge.getmRimWidth();
+                float      rimWidth   = (float) gauge.getmRimWidth();
                 GaugeRange gaugeRange = (GaugeRange) i$.next();
                 gaugeRange.setmGauge(gaugeScale.getmGauge());
                 rangePaint.setStrokeWidth((float) gaugeRange.getWidth());
@@ -711,7 +711,7 @@ public class ScaleRenderer extends View {
                 endtArc = getRangeAngle(gaugeRange.getEndValue(), gaugeScale) - getRangeAngle(startVal, gaugeScale);
 
                 //modif optimization
-                double radFactor                 = gaugeScale.getRadiusFactor();
+                float  radFactor                 = (float) gaugeScale.getRadiusFactor();
                 double modif_withdMultByRadius   = mInnerBevelWidth * radFactor;
                 double modif_minSizeMultByRadius = mMinSize * radFactor;
 
@@ -732,7 +732,8 @@ public class ScaleRenderer extends View {
 
                     if (mCentreY > mCentreX) {
                         Log.d("HERE1", "onDrawRanges: ");
-                        rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusMinSizeMinusRimSize, modif_centerYminusMinSizePlusRimSize);
+                        rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusMinSizeMinusRimSize,
+                                modif_centerYminusMinSizePlusRimSize);
                     }
                     else {
                         rectF = getRectF(modifCenterXminusDivideBy2plusRimSize, modif_centerXplusMinSizeMinusRimSize,
@@ -740,18 +741,18 @@ public class ScaleRenderer extends View {
                     }
 
                     mRangeFrame = rectF;
-                    float factor = mRangeFrame.left + (mRangeFrame
-                            .width() / 2.0F - mRangeFrame.left) * (float) radFactor + (float) (gaugeRange
+                    float factor = mRangeFrame.left + (mRangeFrame.width() / 2.0F - mRangeFrame.left) * radFactor + (gaugeRange
                             .getOffset() * (mCentreX - rimWidth));
                     if (mCentreY > mCentreX) {
                         Log.d("2", "onDrawRanges: ");
-                        rectF = new RectF(factor, getCenterYminusDivideBy2plusRimSize(factor), getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
+                        rectF = new RectF(factor, getCenterYminusDivideBy2plusRimSize(factor), getCenterXplusDivideBy2minusRimSize(factor),
+                                getCenterYplusDivideBy2minusRimSize(factor));
                     }
                     else {
-                        factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radFactor + (float) (gaugeRange
+                        factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * radFactor + (gaugeRange
                                 .getOffset() * (mCentreY - rimWidth));
-                        rectF = new RectF(getCenterXminusDivideBy2plusRimSize(factor), factor,
-                                getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
+                        rectF = new RectF(getCenterXminusDivideBy2plusRimSize(factor), factor, getCenterXplusDivideBy2minusRimSize(factor),
+                                getCenterYplusDivideBy2minusRimSize(factor));
                     }
                 }
                 else {
@@ -780,11 +781,12 @@ public class ScaleRenderer extends View {
                         float modif_centerYplusDivideBy4minusRimSize = getCenterYplusDivideBy4minusRimSize(rimSize);
 
                         if (gaugeType == GaugeType.North) {
-                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplus0dot75minusRimSize, modif_centerYminusDivideBy4plusRimSize);
+                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplus0dot75minusRimSize,
+                                    modif_centerYminusDivideBy4plusRimSize);
                         }
                         else if (gaugeType == GaugeType.South) {
-                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize,
-                                    modif_centerYplusDivideBy4minusRimSize, modif_centerYminus0dot75plusRimSize);
+                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusDivideBy4minusRimSize,
+                                    modif_centerYminus0dot75plusRimSize);
                         }
                         else if (gaugeType == GaugeType.West) {
                             rectF = getRectF(modif_centerXminusDivideBy4plusRimSize, modif_centerYplus0dot75minusRimSize,
@@ -811,7 +813,8 @@ public class ScaleRenderer extends View {
                                     modify_centerYplus0dot375minusRimSize, modify_centerYminus0dot125plusRimSize);
                         }
                         else {
-                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusMinSizeMinusRimSize, modif_centerYminusMinSizePlusRimSize);
+                            rectF = getRectF(rimSize, modif_centerXplusMinSizeMinusRimSize, modif_centerYplusMinSizeMinusRimSize,
+                                    modif_centerYminusMinSizePlusRimSize);
                         }
                     }
                     else {
@@ -893,7 +896,7 @@ public class ScaleRenderer extends View {
         return anglePartition * rangeValue;
     }
 
-    private RectF calculateRectF(double radiusFactor) {
+    private RectF calculateRectF(float radiusFactor) {
         float rimSize = (float) (mMinSize - (mInnerBevelWidth - 10.0) + gaugeScale.getRimWidth() / 2.0);
 
         //modif optimization
@@ -908,7 +911,8 @@ public class ScaleRenderer extends View {
             rimSize = mMinSize - 4.0f * 10.0f;
 
             if (mCentreY > mCentreX) {
-                rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy2minusRimSize, modif_centerYminusDivideBy2plusRimSize);
+                rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy2minusRimSize,
+                        modif_centerYminusDivideBy2plusRimSize);
             }
             else {
                 rectF = getRectF(modif_centerXminusDivideBy2plusRimSize, modif_centerXplusDivideBy2minusRimSize,
@@ -916,14 +920,15 @@ public class ScaleRenderer extends View {
             }
 
             mRangeFrame = rectF;
-            float factor = mRangeFrame.left + (mRangeFrame.width() / 2.0F - mRangeFrame.left) * (float) radiusFactor;
+            float factor = mRangeFrame.left + (mRangeFrame.width() / 2.0F - mRangeFrame.left) * radiusFactor;
             if (mCentreY > mCentreX) {
-                rectF = new RectF(factor, getCenterYminusDivideBy2plusRimSize(factor),
-                        getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
+                rectF = new RectF(factor, getCenterYminusDivideBy2plusRimSize(factor), getCenterXplusDivideBy2minusRimSize(factor),
+                        getCenterYplusDivideBy2minusRimSize(factor));
             }
             else {
-                factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * (float) radiusFactor;
-                rectF = new RectF(getCenterXminusDivideBy2plusRimSize(factor), factor, getCenterXplusDivideBy2minusRimSize(factor), getCenterYplusDivideBy2minusRimSize(factor));
+                factor = mRangeFrame.top + (mRangeFrame.height() / 2.0F - mRangeFrame.top) * radiusFactor;
+                rectF = new RectF(getCenterXminusDivideBy2plusRimSize(factor), factor, getCenterXplusDivideBy2minusRimSize(factor),
+                        getCenterYplusDivideBy2minusRimSize(factor));
             }
         }
         else {
@@ -950,10 +955,12 @@ public class ScaleRenderer extends View {
 
             if (mCentreY > mCentreX) {
                 if (gaugeType == GaugeType.North) {
-                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplus0dot75minusRimSize, modif_centerYminusDivideBy4plusRimSize);
+                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplus0dot75minusRimSize,
+                            modif_centerYminusDivideBy4plusRimSize);
                 }
                 else if (gaugeType == GaugeType.South) {
-                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy4minusRimSize, modif_centerYminus0dot75plusRimSize);
+                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy4minusRimSize,
+                            modif_centerYminus0dot75plusRimSize);
                 }
                 else if (gaugeType == GaugeType.West) {
                     rectF = getRectF(modif_centerXminusDidiveBy4plusRimSize, modif_centerXplus0dot75minusRimSize,
@@ -980,7 +987,8 @@ public class ScaleRenderer extends View {
                             modif_centerYplus0dot375minusRimSize, modif_centerYminus0dot125plusRimSize);
                 }
                 else {
-                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy2minusRimSize, modif_centerYminusDivideBy2plusRimSize);
+                    rectF = getRectF(rimSize, modif_centerXplusDivideBy2minusRimSize, modif_centerYplusDivideBy2minusRimSize,
+                            modif_centerYminusDivideBy2plusRimSize);
                 }
             }
             else if (gaugeType == GaugeType.West) {
