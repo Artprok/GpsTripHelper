@@ -232,7 +232,6 @@ public class Trip implements Parcelable {
         os.writeFloat(valueToWrite);
     }
 
-
     private Trip createTripFromData(TripInfoContainer tripInfoContainer) {
         Trip trip = tripInfoContainer.getTrip();
         trip.setTripDate(tripInfoContainer.getDate());

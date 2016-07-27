@@ -18,7 +18,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,8 +71,8 @@ import butterknife.Unbinder;
     Button         startButton;
     @BindView(R.id.btn_stop)
     Button         stopButton;
-    @BindView(R.id.fuelLayout)
-    RelativeLayout fuelLayout;
+    @BindView(R.id.fuel_left_layout)
+    RelativeLayout fuel_left_layout;
     @BindView(R.id.text_fuelLeftView)
     TextView       fuelLeft;
     @BindView(R.id.btn_Settings)
@@ -298,9 +297,9 @@ import butterknife.Unbinder;
     }
 
     private void setSpeedometerLayoutParams() {
-        fuelLayout.post(new Runnable() {
+        fuel_left_layout.post(new Runnable() {
             @Override public void run() {
-                if (fuelLayout != null) {
+                if (fuel_left_layout != null) {
                     RelativeLayout.LayoutParams layoutParams = getLayoutParams();
                     speedometerContainer.setLayoutParams(layoutParams);
                     speedometerContainer.setVisibility(View.VISIBLE);
@@ -330,7 +329,7 @@ import butterknife.Unbinder;
     private RelativeLayout.LayoutParams getLayoutParams() {
         DisplayMetrics dis     = getResources().getDisplayMetrics();
         int            w       = dis.heightPixels;
-        int            padding = (int) (fuelLayout.getMeasuredWidth() * 1.1);//get padding for speedometer
+        int            padding = (int) (fuel_left_layout.getMeasuredWidth() * 1.1);//get padding for speedometer
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
         layoutParams.setMargins(padding, 7, 7, 7);
@@ -358,9 +357,6 @@ import butterknife.Unbinder;
     private void setupFuelFields() {
         String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
         fuelLeft.setText(fuelLeftString);
-        if (!TextUtils.equals(fuelLeft.getText(), getString(R.string.fuel_left_initial_val))) {
-            fuelLayout.setVisibility(View.VISIBLE);
-        }
     }
 
     private void setFirstStartToFalse(SharedPreferences preferences) {
@@ -509,7 +505,7 @@ import butterknife.Unbinder;
 
     private void restoreFuelLayoutVisibility(boolean firstState) {
         if (!firstState) {
-            fuelLayout.setVisibility(View.VISIBLE);
+            fuel_left_layout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -577,7 +573,7 @@ import butterknife.Unbinder;
     private void stopTracking() {
         tripProcessor.stopTracking();
         if (firstStart) {
-            fuelLayout.setVisibility(View.VISIBLE);
+            fuel_left_layout.setVisibility(View.VISIBLE);
             firstStart = false;
         }
         restoreFuelLevel();
