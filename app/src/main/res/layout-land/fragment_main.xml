@@ -35,9 +35,10 @@
         android:id="@+id/btn_stop"
         android:layout_width="90dp"
         android:layout_height="45dp"
+        android:layout_alignLeft="@id/image_statusView"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="7dp"
+        android:layout_alignRight="@id/refillButtonLayout"
+        android:layout_marginBottom="@dimen/margin_outer"
         android:background="@drawable/btn_background"
         android:text="@string/stop"
         android:visibility="invisible"
@@ -52,7 +53,8 @@
         android:layout_alignRight="@id/refillButtonLayout"
         android:layout_marginBottom="@dimen/margin_outer"
         android:background="@drawable/btn_background"
-        android:text="@string/start"/>
+        android:text="@string/start"
+        />
 
     <RelativeLayout
         android:id="@+id/speedometerContainer"

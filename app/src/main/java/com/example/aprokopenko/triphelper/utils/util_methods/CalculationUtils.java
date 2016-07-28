@@ -71,7 +71,6 @@ public class CalculationUtils {
     }
 
     public static float setDistanceCoveredForTrip(Trip trip, long timeSpent) {
-
         float avgSpeed = trip.getAvgSpeed();
         return calcDistTravelled(timeSpent, avgSpeed);
     }
@@ -93,9 +92,14 @@ public class CalculationUtils {
     }
 
     public static long calcTimeInTrip(long tripStartTime) {
-        Calendar curCal  = Calendar.getInstance();
-        long     endTime = curCal.getTime().getTime();
-        return endTime - tripStartTime;
+        if (tripStartTime <= 0) {
+            return 0;
+        }
+        else {
+            Calendar curCal  = Calendar.getInstance();
+            long     endTime = curCal.getTime().getTime();
+            return endTime - tripStartTime;
+        }
     }
 
     public static void setMeasurementMultiplier(int position) {

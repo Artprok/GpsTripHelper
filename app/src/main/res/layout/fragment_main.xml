@@ -24,8 +24,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignBottom="@id/btn_TripList"
-        android:layout_marginRight="@dimen/margin_between_elements"
         android:layout_alignTop="@id/image_statusView"
+        android:layout_marginRight="@dimen/margin_between_elements"
         android:layout_toLeftOf="@+id/btn_TripList"
         android:background="@drawable/btn_background"
         android:src="@drawable/btn_settings"
@@ -63,87 +63,86 @@
         />
 
 
+    <RelativeLayout
+        android:id="@+id/fuel_left_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/refillButtonLayout"
+        android:layout_alignLeft="@id/image_statusView"
+        android:layout_marginBottom="@dimen/margin_between_elements"
+        android:layout_marginRight="@dimen/margin_outer">
 
-        <RelativeLayout
-            android:id="@+id/fuel_left_layout"
+        <TextView
+            android:id="@+id/text_fuelLeftHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_between_elements"
-            android:layout_alignLeft="@id/image_statusView"
-            android:layout_above="@+id/refillButtonLayout"
-            android:layout_marginRight="@dimen/margin_outer">
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="2dp"
+            android:layout_toRightOf="@+id/image_fuelIcon"
+            android:text="@string/fuel_left_label"
+            android:textSize="@dimen/metricPortraitTextSize"
+            android:textStyle="bold|italic"
+            android:typeface="sans"/>
 
-            <TextView
-                android:id="@+id/text_fuelLeftHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="2dp"
-                android:layout_toRightOf="@+id/image_fuelIcon"
-                android:text="@string/fuel_left_label"
-                android:textSize="@dimen/metricPortraitTextSize"
-                android:textStyle="bold|italic"
-                android:typeface="sans"/>
+        <ImageView
+            android:id="@+id/image_fuelIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/gas_station_icon"
+            />
 
-            <ImageView
-                android:id="@+id/image_fuelIcon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/gas_station_icon"
-                />
+        <TextView
+            android:id="@+id/text_fuelLeftView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/text_fuelLeftHint"
+            android:text="@string/fuel_left_initial_val"
+            android:textSize="@dimen/metricPortraitTextSize"
+            />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/text_fuelLeftView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/text_fuelLeftHint"
-                android:text="@string/fuel_left_initial_val"
-                android:textSize="@dimen/metricPortraitTextSize"
-                />
-        </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/refillButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_start"
+        android:layout_alignLeft="@id/image_statusView"
+        android:layout_marginBottom="@dimen/margin_between_elements"
+        android:background="@drawable/btn_background"
+        android:padding="4dp"
+        >
 
-        <RelativeLayout
-            android:id="@+id/refillButtonLayout"
+        <ImageButton
+            android:id="@+id/btn_refill"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/btn_refill"
+            android:padding="2dp"
+            />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/image_statusView"
-            android:background="@drawable/btn_background"
-            android:padding="4dp"
-            android:layout_marginBottom="@dimen/margin_between_elements"
-            android:layout_above="@+id/btn_start"
-            >
-
-            <ImageButton
-                android:id="@+id/btn_refill"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/btn_refill"
-                android:padding="2dp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/btn_refill"
-                android:layout_marginLeft="5dp"
-                android:text="@string/refill_hint"
-                android:textSize="@dimen/metricPortraitTextSize"
-                android:textStyle="bold|italic"
-                android:typeface="sans"/>
-        </RelativeLayout>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/btn_refill"
+            android:text="@string/refill_hint"
+            android:textSize="@dimen/metricPortraitTextSize"
+            android:textStyle="bold|italic"
+            android:typeface="sans"/>
+    </RelativeLayout>
 
 
     <Button
         android:id="@+id/btn_stop"
         android:layout_width="90dp"
         android:layout_height="45dp"
+        android:layout_alignLeft="@id/image_statusView"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="9dp"
+        android:layout_alignRight="@id/refillButtonLayout"
+        android:layout_marginBottom="@dimen/margin_outer"
         android:background="@drawable/btn_background"
         android:text="@string/stop"
         android:visibility="invisible"
@@ -153,10 +152,10 @@
         android:id="@+id/btn_start"
         android:layout_width="90dp"
         android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/margin_between_elements"
         android:layout_alignLeft="@id/image_statusView"
+        android:layout_alignParentBottom="true"
         android:layout_alignRight="@id/refillButtonLayout"
+        android:layout_marginBottom="@dimen/margin_outer"
         android:background="@drawable/btn_background"
         android:text="@string/start"
         />

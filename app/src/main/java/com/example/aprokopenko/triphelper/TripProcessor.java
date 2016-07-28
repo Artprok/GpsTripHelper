@@ -42,6 +42,7 @@ public class TripProcessor implements Parcelable {
     private final Context context;
 
     private ArrayList<Float>  avgSpeedArrayList;
+    private boolean           fileIsInReadMode;
     private boolean           fileIsInWriteMode;
     private ServiceConnection serviceConnection;
     private LocationService   locationService;
@@ -77,7 +78,7 @@ public class TripProcessor implements Parcelable {
     }
 
     protected TripProcessor(Parcel in) {
-        fileIsInWriteMode = in.readByte() != 0;
+        fileIsInReadMode = in.readByte() != 0;
         tripStartTime = in.readLong();
         currentTripId = in.readInt();
         serviceIntent = in.readParcelable(Intent.class.getClassLoader());
@@ -108,7 +109,7 @@ public class TripProcessor implements Parcelable {
     }
 
     public boolean isFileNotInWriteMode() {
-        return !fileIsInWriteMode;
+        return !fileIsInReadMode;
     }
 
     public String getFuelLeftString(String distancePrefix) {
@@ -176,12 +177,12 @@ public class TripProcessor implements Parcelable {
     }
 
     public void startNewTrip() {
+        Calendar currentCalendarInstance = Calendar.getInstance();
+        Date     date                    = currentCalendarInstance.getTime();
+        tripStartTime = date.getTime();
         avgSpeedArrayList = new ArrayList<>();
         routes = new ArrayList<>();
-        Calendar currentCalendarInstance = Calendar.getInstance();
-        tripStartTime = currentCalendarInstance.getTime().getTime();
         currentTripId = tripData.getTrips().size();
-        Date   date          = currentCalendarInstance.getTime();
         String formattedDate = UtilMethods.parseDate(date);
         Trip   trip          = new Trip(currentTripId, formattedDate);
         trip.setRoute(routes);
@@ -367,6 +368,7 @@ public class TripProcessor implements Parcelable {
         this.fuelCapacity = fuelCapacity;
         this.fuelPrice = fuelPrice;
         routes = new ArrayList<>();
+        fileIsInReadMode = false;
         fileIsInWriteMode = false;
     }
 
@@ -446,18 +448,17 @@ public class TripProcessor implements Parcelable {
         ArrayList<Trip> allTrips             = tripData.getTrips();
 
         for (Trip trip : allTrips) {
-            fuelSpent = fuelSpent + trip.getFuelSpent();
             timeSpentForAllTrips = timeSpentForAllTrips + trip.getTimeSpentForTrip();
             maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
+            fuelSpent = fuelSpent + trip.getFuelSpent();
         }
         for (Trip trip : allTrips) {
-            float multiplier = (trip.getTimeSpentForTrip() / timeSpentForAllTrips) * ConstantValues.PER_100;
-            avgFuelCons = (avgFuelCons + ((trip.getAvgFuelConsumption() * multiplier) / ConstantValues.PER_100));
-            avgSpeedSum = (avgSpeedSum + ((trip.getAvgSpeed() * multiplier) / ConstantValues.PER_100));
+            float majority_multiplier = (trip.getTimeSpentForTrip() / timeSpentForAllTrips) * ConstantValues.PER_100;
+            avgFuelCons = (avgFuelCons + ((trip.getAvgFuelConsumption() * majority_multiplier) / ConstantValues.PER_100));
+            avgSpeedSum = (avgSpeedSum + ((trip.getAvgSpeed() * majority_multiplier) / ConstantValues.PER_100));
         }
-        Log.d(LOG_TAG, " ");
         distTravelled = CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeedSum);
-
+        //double assurance that NULL won't be passed to trip data. Method "getValueCheckedOnNAN" replaces NULL&NAN values by 0f;
         tripData.setMaxSpeed(getValueCheckedOnNAN(maxSpeed));
         tripData.setAvgSpeed(getValueCheckedOnNAN(avgSpeedSum));
         tripData.setTimeSpentOnTrips(getValueCheckedOnNAN(timeSpentForAllTrips));
@@ -516,16 +517,15 @@ public class TripProcessor implements Parcelable {
     }
 
     private void getTripDataFieldsValues() {
-        float distanceTravelled  = ConstantValues.START_VALUE;
-        float fuelSpent          = ConstantValues.START_VALUE;
-        float avgFuelConsumption = ConstantValues.START_VALUE;
+        float distanceTravelled = ConstantValues.START_VALUE;
+        float fuelSpent         = ConstantValues.START_VALUE;
+        float avgFuelConsumption;
         for (Trip trip : tripData.getTrips()) {
             distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
             fuelSpent = fuelSpent + trip.getFuelSpent();
-            avgFuelConsumption = avgFuelConsumption + trip.getAvgFuelConsumption();
         }
         float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
-        avgFuelConsumption = avgFuelConsumption / tripData.getTrips().size();
+        avgFuelConsumption = tripData.getAvgFuelConsumption();
         tripData.setDistanceTravelled(distanceTravelled);
         tripData.setAvgFuelConsumption(avgFuelConsumption);
         tripData.setMoneyOnFuelSpent(moneySpent);
@@ -569,8 +569,11 @@ public class TripProcessor implements Parcelable {
     }
 
     private void writeDataToFile() {
-        WriteFileTask writeFileTask = new WriteFileTask();
-        writeFileTask.execute(tripData);
+        if (!fileIsInWriteMode) {
+            WriteFileTask writeFileTask = new WriteFileTask();
+            writeFileTask.execute(tripData);
+        }
+
     }
 
     private void endTrip() {
@@ -599,7 +602,7 @@ public class TripProcessor implements Parcelable {
     }
 
     @Override public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByte((byte) (fileIsInWriteMode ? 1 : 0));
+        parcel.writeByte((byte) (fileIsInReadMode ? 1 : 0));
         parcel.writeLong(tripStartTime);
         parcel.writeInt(currentTripId);
         parcel.writeParcelable(serviceIntent, i);
@@ -614,6 +617,11 @@ public class TripProcessor implements Parcelable {
     }
 
     private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
+        @Override protected void onPreExecute() {
+            super.onPreExecute();
+            fileIsInWriteMode = true;
+        }
+
         @Override protected Boolean doInBackground(TripData... params) {
             if (DEBUG) {
                 Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
@@ -669,6 +677,7 @@ public class TripProcessor implements Parcelable {
             return true;
         }
 
+
         private void writeToStreamWithNANcheck(Float valueToWrite, ObjectOutputStream os) throws IOException {
             if (valueToWrite == null || valueToWrite.isNaN()) {
                 valueToWrite = 0f;
@@ -681,6 +690,7 @@ public class TripProcessor implements Parcelable {
                 if (DEBUG) {
                     Log.d(LOG_TAG, "file written successfully");
                 }
+                fileIsInWriteMode = false;
             }
         }
     }
@@ -690,7 +700,7 @@ public class TripProcessor implements Parcelable {
             if (DEBUG) {
                 Log.d(LOG_TAG, "readFile");
             }
-            fileIsInWriteMode = true;
+            fileIsInReadMode = true;
             File file = context.getFileStreamPath(ConstantValues.FILE_NAME);
             if (file.exists()) {
                 if (DEBUG) {
@@ -745,7 +755,7 @@ public class TripProcessor implements Parcelable {
 
         @Override protected void onPostExecute(TripData tripData) {
             super.onPostExecute(tripData);
-            fileIsInWriteMode = false;
+            fileIsInReadMode = false;
         }
     }
 }

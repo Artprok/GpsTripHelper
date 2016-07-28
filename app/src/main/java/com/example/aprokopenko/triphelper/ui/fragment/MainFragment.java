@@ -129,7 +129,7 @@ import butterknife.Unbinder;
         setupButtons();
         setupSpeedometer();
         setupTripProcessor();
-        setupFuelFields();
+
 
         visualizeSpeedometer();
     }
@@ -207,7 +207,8 @@ import butterknife.Unbinder;
         else {
             fileErasedFlag = false;
         }
-        setInternalSettingsToTripProcessor();
+        setupFuelFields();
+
         UtilMethods.setFabVisible(getActivity());
         checkGpsStatus();
         super.onResume();
@@ -355,6 +356,7 @@ import butterknife.Unbinder;
     }
 
     private void setupFuelFields() {
+        setInternalSettingsToTripProcessor();
         String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
         fuelLeft.setText(fuelLeftString);
     }
