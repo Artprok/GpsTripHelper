@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_name">Автопомощник</string>
     <!--hints-->
     <string name="money_on_fuel_spent_hint">Денег на топливо потрачено &#160;</string>
     <string name="time_spent_in_motion_hint">Времени в движении &#160;</string>
@@ -51,7 +53,7 @@
     <string name="trip_started_toast">Поездка начата</string>
     <!--/Toasts-->
 
-    <string name="app_name">Автопомощник</string>
+
 
 
    <!--GPS dialog-->

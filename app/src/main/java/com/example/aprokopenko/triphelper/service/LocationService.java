@@ -29,8 +29,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private static final String  LOG_TAG            = "LocationService:";
     private static final int     FM_NOTIFICATION_ID = 1;
+    private static final boolean DEBUG              = BuildConfig.DEBUG;
     private final        IBinder mBinder            = new LocalBinder();
-    public static final boolean DEBUG = BuildConfig.DEBUG;
 
     private GpsHandler      gpsHandler;
     private LocationRequest locationRequest;

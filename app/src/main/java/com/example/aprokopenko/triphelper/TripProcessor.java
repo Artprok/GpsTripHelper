@@ -168,7 +168,7 @@ public class TripProcessor implements Parcelable {
         float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
         float maximumSpeed = maxSpeedVal;
 
-        updateSpeed(averageSpeed, maximumSpeed);
+        updateSpeedInTrip(averageSpeed, maximumSpeed);
         endTrip();
         setMetricFieldsToTripData(fuelPrice);
         writeDataToFile();
@@ -193,11 +193,11 @@ public class TripProcessor implements Parcelable {
         tripData = new TripData();
     }
 
-    public void restoreAvgList(ArrayList<String> avgSpeedList) {
-        if (avgSpeedList != null && avgSpeedList.size() == 0) {
+    public void restoreAvgList(ArrayList<String> restoredAvgSpdList) {
+        if (restoredAvgSpdList != null && restoredAvgSpdList.size() == 0) {
             ArrayList<Float> avgSpeedArrayList = new ArrayList<>();
-            for (String tmpStr : avgSpeedList) {
-                avgSpeedArrayList.add(Float.valueOf(tmpStr));
+            for (String restoredAvgSpdValue : restoredAvgSpdList) {
+                avgSpeedArrayList.add(Float.valueOf(restoredAvgSpdValue));
             }
             setAvgSpeedArrayList(avgSpeedArrayList);
         }
@@ -425,7 +425,7 @@ public class TripProcessor implements Parcelable {
                 }
 
                 @Override public void onNext(final Float speed) {
-                    storeSpeedTicks(speed);
+                    addSpeedTick(speed);
                     speedChangeListener.speedChanged(speed);
                 }
             };
@@ -481,7 +481,7 @@ public class TripProcessor implements Parcelable {
         addRoutePoint(routePoint);
     }
 
-    private void updateSpeed(float avgSpeed, float maxSpd) {
+    private void updateSpeedInTrip(float avgSpeed, float maxSpd) {
         averageSpeed = avgSpeed;
         Trip trip = tripData.getTrip(currentTripId);
         trip.setAvgSpeed(avgSpeed);
@@ -489,19 +489,13 @@ public class TripProcessor implements Parcelable {
     }
 
     private void addPointToRouteList(Location location) {
-        LatLng routePoints = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng routePoint = new LatLng(location.getLatitude(), location.getLongitude());
         float  speed;
-        // fixme: 10.05.2016 remove debug code
-        if (BuildConfig.DEBUG) {//debug code for testing, adds random speedValue in each location tick
-            speed = UtilMethods.generateRandomSpeed();
-        }
-        else {
-            speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
-        }
-        addRoutePoint(routePoints, speed);
+        speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+        addRoutePoint(routePoint, speed);
     }
 
-    private void storeSpeedTicks(final float speed) {
+    private void addSpeedTick(final float speed) {
         if (avgSpeedArrayList != null) {
             avgSpeedArrayList.add(speed);
         }
@@ -514,6 +508,7 @@ public class TripProcessor implements Parcelable {
     private void setTripFieldsToStartState() {
         tripStartTime = ConstantValues.START_VALUE;
         averageSpeed = ConstantValues.START_VALUE;
+        maxSpeedVal = ConstantValues.START_VALUE;
     }
 
     private void getTripDataFieldsValues() {
@@ -556,7 +551,7 @@ public class TripProcessor implements Parcelable {
             Log.d(LOG_TAG, "updateTrip: called");
         }
         trip.setAvgSpeed(averageSpeed);
-        if (routes.size() == 0) {
+        if (routes.size() == 0 || routes == null) {
             Route tmpRoutePoint = new Route(ConstantValues.BERMUDA_COORDINATES, ConstantValues.SPEED_VALUE_WORKAROUND);
             routes.add(tmpRoutePoint);
         }
@@ -755,7 +750,9 @@ public class TripProcessor implements Parcelable {
 
         @Override protected void onPostExecute(TripData tripData) {
             super.onPostExecute(tripData);
-            fileIsInReadMode = false;
+            if (tripData != null) {
+                fileIsInReadMode = false;
+            }
         }
     }
 }

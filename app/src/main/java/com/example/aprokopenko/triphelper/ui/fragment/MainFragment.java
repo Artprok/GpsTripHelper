@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -88,8 +89,10 @@ import butterknife.Unbinder;
     private boolean firstStart = true;
     private boolean fileErasedFlag;
     private boolean gpsIsActive;
+    private long    gpsFirstFixTime;
 
     private TripProcessor     tripProcessor;
+    private LocationManager   locationManager;
     private SharedPreferences preferences;
     private TripHelperGauge   speedometer;
     private MapFragment       mapFragment;
@@ -130,7 +133,6 @@ import butterknife.Unbinder;
         setupSpeedometer();
         setupTripProcessor();
 
-
         visualizeSpeedometer();
     }
 
@@ -149,7 +151,6 @@ import butterknife.Unbinder;
                 requestPermissionWithRationale();
             }
         }
-
     }
 
     @Override public void onAttach(Context context) {
@@ -190,7 +191,7 @@ import butterknife.Unbinder;
     @Override public void onPause() {
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f != null && f instanceof MainFragment) {
-            checkGpsStatus();
+            turnOffGpsIfAdapterDisabler();
             saveState();
         }
 
@@ -199,6 +200,9 @@ import butterknife.Unbinder;
 
     @Override public void onResume() {
         UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
+        if (locationManager == null) {
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        }
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         if (state != null && !fileErasedFlag) {
@@ -210,7 +214,7 @@ import butterknife.Unbinder;
         setupFuelFields();
 
         UtilMethods.setFabVisible(getActivity());
-        checkGpsStatus();
+        turnOffGpsIfAdapterDisabler();
         super.onResume();
     }
 
@@ -244,6 +248,40 @@ import butterknife.Unbinder;
                 UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
                 setGpsIconActive();
                 break;
+            case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+                checkIfSattelitesAreStillAvaliableWithInterval(ConstantValues.FIVE_MINUTES);
+                break;
+        }
+    }
+
+    private void checkIfSattelitesAreStillAvaliableWithInterval(long interval) {
+        long curTime = System.currentTimeMillis();
+        if ((curTime - gpsFirstFixTime) > interval) {
+            int       satCount = 0;
+            GpsStatus status;
+            if (locationManager != null) {
+                status = locationManager.getGpsStatus(null);
+            }
+            else {
+                locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                status = locationManager.getGpsStatus(null);
+            }
+            Iterable<GpsSatellite> sats = status.getSatellites();
+            for (GpsSatellite satellite : sats) {
+                if (satellite.usedInFix()) {
+                    satCount++;
+                    UtilMethods.showToast(context, "Sat used in Fix!");
+                }
+            }
+            if (satCount >= 3) {
+                if (!UtilMethods.checkIfGpsEnabled(context)) {
+                    setGpsIconActive();
+                    UtilMethods.showToast(context, ">3 sats are used in Fix!");
+                }
+            }
+            else {
+                setGpsIconNotActive();
+            }
         }
     }
 
@@ -286,7 +324,7 @@ import butterknife.Unbinder;
         }
     }
 
-    private void checkGpsStatus() {
+    private void turnOffGpsIfAdapterDisabler() {
         if (!UtilMethods.checkIfGpsEnabled(context)) {
             setGpsIconNotActive();
         }
@@ -557,18 +595,23 @@ import butterknife.Unbinder;
 
     private void gpsStatusListener(boolean register) {
         if (register) {
-            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
             // TODO: 24.06.2016 fix permission issue here. Need to add condition when addListener is allowed
             if (UtilMethods.isPermissionAllowed(context)) {
-                lm.addGpsStatusListener(this);
+                if (locationManager == null) {
+                    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                }
+                locationManager.addGpsStatusListener(this);
             }
             else {
                 requestLocationPermissions();
             }
         }
         else {
-            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            lm.removeGpsStatusListener(this);
+            if (locationManager == null) {
+                locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            }
+            locationManager.removeGpsStatusListener(this);
         }
     }
 
@@ -613,6 +656,7 @@ import butterknife.Unbinder;
                 statusImage.setImageDrawable(greenSatellite);
             }
             gpsIsActive = true;
+            gpsFirstFixTime = System.currentTimeMillis();
         }
     }
 
@@ -654,6 +698,7 @@ import butterknife.Unbinder;
         }
         tripProcessor.performExit();
         gpsStatusListener(REMOVE);
+        locationManager = null;
         tripProcessor = null;
         mapFragment = null;
         preferences = null;
