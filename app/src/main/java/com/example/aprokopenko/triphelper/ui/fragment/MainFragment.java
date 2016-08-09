@@ -257,31 +257,33 @@ import butterknife.Unbinder;
     private void checkIfSattelitesAreStillAvaliableWithInterval(long interval) {
         long curTime = System.currentTimeMillis();
         if ((curTime - gpsFirstFixTime) > interval) {
-            int       satCount = 0;
-            GpsStatus status;
-            if (locationManager != null) {
-                status = locationManager.getGpsStatus(null);
-            }
-            else {
-                locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                status = locationManager.getGpsStatus(null);
-            }
-            Iterable<GpsSatellite> sats = status.getSatellites();
-            for (GpsSatellite satellite : sats) {
-                if (satellite.usedInFix()) {
-                    satCount++;
-                    UtilMethods.showToast(context, "Sat used in Fix!");
+            if (UtilMethods.checkIfGpsEnabled(context)) {
+                GpsStatus status;
+                if (locationManager != null) {
+                    status = locationManager.getGpsStatus(null);
                 }
-            }
-            if (satCount >= 3) {
-                if (!UtilMethods.checkIfGpsEnabled(context)) {
-                    setGpsIconActive();
-                    UtilMethods.showToast(context, ">3 sats are used in Fix!");
+                else {
+                    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    status = locationManager.getGpsStatus(null);
+                }
+                Iterable<GpsSatellite> sats = status.getSatellites();
+                for (GpsSatellite satellite : sats) {
+                    if (satellite.usedInFix()) {
+                        UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
+                        setGpsIconActive();
+                        gpsFirstFixTime = System.currentTimeMillis();
+                    }
+                    else {
+                        setGpsIconNotActive();
+                        gpsFirstFixTime = System.currentTimeMillis();
+                    }
                 }
             }
             else {
                 setGpsIconNotActive();
+                gpsFirstFixTime = System.currentTimeMillis();
             }
+
         }
     }
 
