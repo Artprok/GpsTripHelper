@@ -258,35 +258,39 @@ import butterknife.Unbinder;
     }
 
     private void deactivateGpsStatusIcon() {
-        if (!UtilMethods.checkIfGpsEnabled(context)) {
-            setGpsIconNotActive();
-            gpsFirstFixTime = System.currentTimeMillis();
-        }
+        setGpsIconNotActive();
+        gpsFirstFixTime = System.currentTimeMillis();
     }
 
     private void checkIfSattelitesAreStillAvaliableWithInterval(long interval) {
         long curTime = System.currentTimeMillis();
         if ((curTime - gpsFirstFixTime) > interval) {
-            GpsStatus status;
-            if (locationManager != null) {
-                status = locationManager.getGpsStatus(null);
-            }
-            else {
-                locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                status = locationManager.getGpsStatus(null);
-            }
-            Iterable<GpsSatellite> sats = status.getSatellites();
-            for (GpsSatellite satellite : sats) {
-                if (satellite.usedInFix()) {
-                    UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
-                    setGpsIconActive();
-                    gpsFirstFixTime = System.currentTimeMillis();
+            if (UtilMethods.checkIfGpsEnabled(context)) {
+                GpsStatus status;
+                if (locationManager != null) {
+                    status = locationManager.getGpsStatus(null);
                 }
                 else {
-                    setGpsIconNotActive();
-                    gpsFirstFixTime = System.currentTimeMillis();
+                    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    status = locationManager.getGpsStatus(null);
+                }
+                Iterable<GpsSatellite> sats = status.getSatellites();
+                for (GpsSatellite satellite : sats) {
+                    if (satellite.usedInFix()) {
+                        UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
+                        setGpsIconActive();
+                        gpsFirstFixTime = System.currentTimeMillis();
+                    }
+                    else {
+                        deactivateGpsStatusIcon();
+                    }
                 }
             }
+            else {
+                setGpsIconNotActive();
+                gpsFirstFixTime = System.currentTimeMillis();
+            }
+
         }
     }
 
