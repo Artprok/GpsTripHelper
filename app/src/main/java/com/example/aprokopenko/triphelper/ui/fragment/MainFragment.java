@@ -277,7 +277,6 @@ import butterknife.Unbinder;
                 Iterable<GpsSatellite> sats = status.getSatellites();
                 for (GpsSatellite satellite : sats) {
                     if (satellite.usedInFix()) {
-                        UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
                         setGpsIconActive();
                         gpsFirstFixTime = System.currentTimeMillis();
                     }
@@ -287,10 +286,8 @@ import butterknife.Unbinder;
                 }
             }
             else {
-                setGpsIconNotActive();
-                gpsFirstFixTime = System.currentTimeMillis();
+                deactivateGpsStatusIcon();
             }
-
         }
     }
 

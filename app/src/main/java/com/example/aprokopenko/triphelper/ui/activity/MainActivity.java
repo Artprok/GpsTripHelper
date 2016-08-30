@@ -85,36 +85,36 @@ import io.fabric.sdk.android.Fabric;
         UtilMethods.setFabInvisible(this);
         DataHolderFragment dataHolderFragment;
         if (savedInstanceState == null) {
-            if (DEBUG) {
-                Log.i(LOG_TAG, "onCreate: new fragment");
-            }
-
-            dataHolderFragment = DataHolderFragment.newInstance();
-            UtilMethods.addFragment(dataHolderFragment, ConstantValues.DATA_HOLDER_TAG, this);
-
-            MainFragment mainFragment = MainFragment.newInstance();
-            assert fab != null;
-            setFabToMap(mainFragment);
-            UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-        }
-        else {
-            Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-            MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-            if (fragment instanceof MainFragment) {
                 if (DEBUG) {
-                    Log.i(LOG_TAG, "onCreate: old fragment");
+                    Log.i(LOG_TAG, "onCreate: new fragment");
                 }
+
+                dataHolderFragment = DataHolderFragment.newInstance();
+                UtilMethods.addFragment(dataHolderFragment, ConstantValues.DATA_HOLDER_TAG, this);
+
+                MainFragment mainFragment = MainFragment.newInstance();
                 assert fab != null;
-                setFabToMap((MainFragment) fragment);
-                UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-            }
-            if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
-                setFabToSpeedometer(mainFragment);
-                fab.setVisibility(View.VISIBLE);
+                setFabToMap(mainFragment);
+                UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
             }
             else {
-                setFabToMap(mainFragment);
-            }
+                Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+                MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
+                if (fragment instanceof MainFragment) {
+                    if (DEBUG) {
+                        Log.i(LOG_TAG, "onCreate: old fragment");
+                    }
+                    assert fab != null;
+                    setFabToMap((MainFragment) fragment);
+                    UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+                }
+                if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
+                    setFabToSpeedometer(mainFragment);
+                    fab.setVisibility(View.VISIBLE);
+                }
+                else {
+                    setFabToMap(mainFragment);
+                }
         }
     }
 
