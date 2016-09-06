@@ -134,7 +134,8 @@ public class TripData implements Parcelable {
         this.gasTank = gasTank;
     }
 
-    public void updateTrip(Trip trip, int index) {
+    public void updateTrip(Trip trip) {
+        int index = trip.getTripID();
         trips.set(index, trip);
     }
 

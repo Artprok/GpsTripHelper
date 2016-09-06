@@ -24,6 +24,8 @@
 -dontskipnonpubliclibraryclasses
 -repackageclasses ''
 
+-keep class android.support.v4.** { *; }
+-keep class android.support.v7.** { *; }
 
 # rxjava
 -keep class rx.schedulers.Schedulers {
@@ -56,10 +58,6 @@
 -dontwarn butterknife.internal.**
 -keep class **$$ViewBinder { *; }
 
--keep class SfCircularGauge{}
--keep class Syncfusion.SfGauge.Android{}
-
-
 -dontwarn android.support.**
 
 -keepclasseswithmembernames class * {
@@ -70,12 +68,7 @@
     @butterknife.* <methods>;
 }
 
--keepclasseswithmembers class * extends android.app.Activity
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-}
+-keepclasseswithmembers class * extends android.app.Activity{*;}
 
 -assumenosideeffects class android.util.Log {
     public static boolean isLoggable(java.lang.String, int);

@@ -87,7 +87,7 @@ import butterknife.Unbinder;
     private static final boolean REGISTER = true;
 
     private boolean firstStart = true;
-    private boolean fileErasedFlag;
+    private boolean fileErased;
     private boolean gpsIsActive;
     private long    gpsFirstFixTime;
 
@@ -122,9 +122,7 @@ import butterknife.Unbinder;
         unbinder = ButterKnife.bind(this, view);
         gpsIsActive = false;
 
-        if (savedInstanceState != null && savedStateIsCorrect(savedInstanceState)) {
-            state = savedInstanceState;
-        }
+        getSavedStateInstanceIfPossible(savedInstanceState);
         getContextIfNull();
         getInternalSettings();
         getStateFromPrefs();
@@ -136,21 +134,34 @@ import butterknife.Unbinder;
         visualizeSpeedometer();
     }
 
+    private void getSavedStateInstanceIfPossible(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedStateIsCorrect(savedInstanceState)) {
+            state = savedInstanceState;
+        }
+    }
+
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                tripProcessor.performExit();
-                tripProcessor = null;
-
-                tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
-                tripProcessor.setSpeedChangeListener(this);
-                gpsStatusListener(REGISTER);
+                configureTripProcessor();
             }
             else {
                 requestPermissionWithRationale();
             }
         }
+    }
+
+    private void configureTripProcessor() {
+        resetTripProcessor();
+
+        tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+        registerListenersToTripProcessor();
+    }
+
+    private void resetTripProcessor() {
+        tripProcessor.performExit();
+        tripProcessor = null;
     }
 
     @Override public void onAttach(Context context) {
@@ -161,13 +172,7 @@ import butterknife.Unbinder;
     @Override public void onSaveInstanceState(Bundle outState) {
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f instanceof MainFragment) {
-            ArrayList<Float>  avgSpeedArrayList = tripProcessor.getAvgSpeedArrayList();
-            ArrayList<String> avgStrArrList     = new ArrayList<>();
-            if (avgSpeedArrayList != null) {
-                for (float avgListItem : avgSpeedArrayList) {
-                    avgStrArrList.add(String.valueOf(avgListItem));
-                }
-            }
+            ArrayList<String> avgStrArrList = ConfigureAvgSpdListToStore();
             if (DEBUG) {
                 Log.i(LOG_TAG, "onSaveInstanceState: Save called");
                 Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + isButtonVisible(startButton));
@@ -180,12 +185,30 @@ import butterknife.Unbinder;
             outState.putStringArrayList("AvgSpeedList", avgStrArrList);
             outState.putParcelable("TripProcessor", tripProcessor);
 
-            DataHolderFragment dataHolder = (DataHolderFragment) getActivity().getSupportFragmentManager()
-                    .findFragmentByTag(ConstantValues.DATA_HOLDER_TAG);
-            dataHolder.setTripData(tripProcessor.getTripData());
-
+            configureDataHolderToStore();
             super.onSaveInstanceState(outState);
         }
+    }
+
+    private void configureDataHolderToStore() {
+        DataHolderFragment dataHolder = (DataHolderFragment) getActivity().getSupportFragmentManager()
+                .findFragmentByTag(ConstantValues.DATA_HOLDER_TAG);
+        dataHolder.setTripData(tripProcessor.getTripData());
+    }
+
+    @NonNull private ArrayList<String> ConfigureAvgSpdListToStore() {
+        ArrayList<Float>  avgSpeedArrayList = getAvgSpeedListFromProcessor();
+        ArrayList<String> avgStrArrList     = new ArrayList<>();
+        if (avgSpeedArrayList != null) {
+            for (float avgListItem : avgSpeedArrayList) {
+                avgStrArrList.add(String.valueOf(avgListItem));
+            }
+        }
+        return avgStrArrList;
+    }
+
+    private ArrayList<Float> getAvgSpeedListFromProcessor() {
+        return tripProcessor.getAvgSpeedArrayList();
     }
 
     @Override public void onPause() {
@@ -200,22 +223,30 @@ import butterknife.Unbinder;
 
     @Override public void onResume() {
         UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
-        if (locationManager == null) {
-            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        }
+        getLocationMangerIfNull();
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
-        if (state != null && !fileErasedFlag) {
-            restoreState(state);
-        }
-        else {
-            fileErasedFlag = false;
-        }
+        restoreStateIfPossible();
         setupFuelFields();
 
         UtilMethods.setFabVisible(getActivity());
         turnOffGpsIfAdapterDisabler();
         super.onResume();
+    }
+
+    private void restoreStateIfPossible() {
+        if (state != null && !fileErased) {
+            restoreState(state);
+        }
+        else {
+            fileErased = false;
+        }
+    }
+
+    private void getLocationMangerIfNull() {
+        if (locationManager == null) {
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        }
     }
 
     @Override public void onDetach() {
@@ -236,17 +267,13 @@ import butterknife.Unbinder;
 
     @Override public void onFileErased() {
         tripProcessor.eraseTripData();
-        fileErasedFlag = true;
+        fileErased = true;
     }
 
     @Override public void onGpsStatusChanged(int event) {
         switch (event) {
             case GpsStatus.GPS_EVENT_FIRST_FIX:
-                if (DEBUG) {
-                    Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
-                }
-                UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
-                setGpsIconActive();
+                performGpsInitialFix();
                 break;
             case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
                 checkIfSattelitesAreStillAvaliableWithInterval(ConstantValues.FIVE_MINUTES);
@@ -255,6 +282,14 @@ import butterknife.Unbinder;
                 deactivateGpsStatusIcon();
                 break;
         }
+    }
+
+    private void performGpsInitialFix() {
+        if (DEBUG) {
+            Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
+        }
+        UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
+        setGpsIconActive();
     }
 
     private void deactivateGpsStatusIcon() {
@@ -266,15 +301,7 @@ import butterknife.Unbinder;
         long curTime = System.currentTimeMillis();
         if ((curTime - gpsFirstFixTime) > interval) {
             if (UtilMethods.checkIfGpsEnabled(context)) {
-                GpsStatus status;
-                if (locationManager != null) {
-                    status = locationManager.getGpsStatus(null);
-                }
-                else {
-                    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    status = locationManager.getGpsStatus(null);
-                }
-                Iterable<GpsSatellite> sats = status.getSatellites();
+                Iterable<GpsSatellite> sats = getSattelitesList();
                 for (GpsSatellite satellite : sats) {
                     if (satellite.usedInFix()) {
                         setGpsIconActive();
@@ -291,11 +318,28 @@ import butterknife.Unbinder;
         }
     }
 
+    private Iterable<GpsSatellite> getSattelitesList() {
+        GpsStatus status = getGpsStatus();
+        return status.getSatellites();
+    }
+
+    private GpsStatus getGpsStatus() {
+        GpsStatus status;
+        if (locationManager != null) {
+            status = locationManager.getGpsStatus(null);
+        }
+        else {
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            status = locationManager.getGpsStatus(null);
+        }
+        return status;
+    }
+
     public void openMapFragment() {
         configureMapFragment();
         saveState();
         mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
-        setRouteToMapFragment();
+        setRoutesToMapFragment();
         UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
     }
 
@@ -390,13 +434,17 @@ import butterknife.Unbinder;
                 tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
             }
             if (UtilMethods.isPermissionAllowed(context)) {
-                tripProcessor.setSpeedChangeListener(this);
-                gpsStatusListener(REGISTER);
+                registerListenersToTripProcessor();
             }
             else {
                 requestLocationPermissions();
             }
         }
+    }
+
+    private void registerListenersToTripProcessor() {
+        tripProcessor.setSpeedChangeListener(this);
+        gpsStatusListener(REGISTER);
     }
 
     private void setupFuelFields() {
@@ -604,9 +652,7 @@ import butterknife.Unbinder;
 
             // TODO: 24.06.2016 fix permission issue here. Need to add condition when addListener is allowed
             if (UtilMethods.isPermissionAllowed(context)) {
-                if (locationManager == null) {
-                    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                }
+                getLocationMangerIfNull();
                 locationManager.addGpsStatusListener(this);
             }
             else {
@@ -614,9 +660,7 @@ import butterknife.Unbinder;
             }
         }
         else {
-            if (locationManager == null) {
-                locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            }
+            getLocationMangerIfNull();
             locationManager.removeGpsStatusListener(this);
         }
     }
@@ -655,15 +699,20 @@ import butterknife.Unbinder;
         ButterKnife.bind(R.id.image_statusView, getActivity());
         Drawable greenSatellite = ContextCompat.getDrawable(context, R.drawable.green_satellite);
         if (statusImage != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                statusImage.setBackground(greenSatellite);
-            }
-            else {
-                statusImage.setImageDrawable(greenSatellite);
-            }
+            setAppropriateImageStatusColor(greenSatellite);
             gpsIsActive = true;
             gpsFirstFixTime = System.currentTimeMillis();
         }
+    }
+
+    private void setAppropriateImageStatusColor(Drawable greenSatellite) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            statusImage.setBackground(greenSatellite);
+        }
+        else {
+            statusImage.setImageDrawable(greenSatellite);
+        }
+
     }
 
     private void setGpsIconNotActive() {
@@ -671,12 +720,7 @@ import butterknife.Unbinder;
         ButterKnife.bind(R.id.image_statusView, getActivity());
         Drawable redSatellite = ContextCompat.getDrawable(context, R.drawable.red_satellite);
         if (statusImage != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                statusImage.setBackground(redSatellite);
-            }
-            else {
-                statusImage.setImageDrawable(redSatellite);
-            }
+            setAppropriateImageStatusColor(redSatellite);
             gpsIsActive = false;
         }
     }
@@ -718,7 +762,7 @@ import butterknife.Unbinder;
         }
     }
 
-    private void setRouteToMapFragment() {
+    private void setRoutesToMapFragment() {
         if (tripProcessor.getRoutes() != null) {
             mapFragment.setRoutes(tripProcessor.getRoutes());
         }
@@ -727,20 +771,20 @@ import butterknife.Unbinder;
     private void animateSpeedUpdate(final float speed) {
         getActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
-                updatePointerLocation(speed);
-                updateSpeedTextField(speed);
+                updateSpeedometerNeedleLocation(speed);
+                updateSpeedometerTextField(speed);
             }
         });
     }
 
-    private void updatePointerLocation(float speed) {
+    private void updateSpeedometerNeedleLocation(float speed) {
         GaugePointer pointer = speedometer.getGaugeScales().get(0).getGaugePointers().get(0);
         if (pointer != null) {
             pointer.setValue(speed);
         }
     }
 
-    private void updateSpeedTextField(float speed) {
+    private void updateSpeedometerTextField(float speed) {
         if (speedometerTextView != null) {
             String        formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
             final int     initialValue   = Integer.valueOf(speedometerTextView.getText().toString());
