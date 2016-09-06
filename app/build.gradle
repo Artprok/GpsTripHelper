@@ -38,6 +38,15 @@ android {
         incremental true
     }
 
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi', 'armeabi-v7a', 'mips'
+            universalApk false
+        }
+    }
+
     productFlavors {
         production_ {
             defaultConfig {
@@ -56,19 +65,7 @@ android {
             signingConfig signingConfigs.release
             targetSdkVersion 23
             versionCode 1
-            versionName '1.0 specialy for Oleg'
-        }
-    }
-
-    sourceSets {
-        main {
-            res.srcDirs = ['/src/main/res']
-        }
-        production_ {
-            res.srcDirs = ['/src/main/releaseFlavour/res', '/src/main/res']
-        }
-        forOleg_ {
-            res.srcDirs = ['/src/main/forOlegFlavour/res', '/src/main/res']
+            versionName '1.0paid'
         }
     }
 
@@ -96,5 +93,7 @@ android {
         compile 'com.jakewharton:butterknife:8.2.1'
         compile 'com.google.dagger:dagger:2.5'
         compile 'io.reactivex:rxandroid:1.2.1'
+        compile 'com.google.firebase:firebase-ads:9.4.0'
     }
+
 }

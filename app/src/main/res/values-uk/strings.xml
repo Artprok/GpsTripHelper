@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Автопомiчник</string>
+    <string name="average_speed_hint">Середня швидкiсть &#160;</string>
+    <string name="maximum_speed_hint">Максимальна швидкiсть &#160;</string>
+    <string name="average_fuel_consumption_hint">Середня витрата палива &#160;</string>
+    <string name="distance_travelled_hint">Расстояние пройдено -&#160;</string>
+    <string name="distance_prefix">&#160;км</string>
+    <string name="fill_fuel_tank">Залити паливо</string>
+    <string name="fuel_spent_layout_label">Паливо&#160;</string>
+    <string name="fuel_filled_val">Скiльки палива залити?</string>
+    <string name="fuel_left_label">Палива залишилось:&#160;</string>
+    <string name="fuel_prefix">&#160;литрiв</string>
+    <string name="fuel_spent_hint">Палива израсходовано&#160;</string>
+    <string name="info_about_all_trip_header_label">Iнформацiя о всiх поездках&#160;</string>
+    <string name="list_of_trips_label">Перелiк усiх поездок&#160;</string>
+    <string name="money_on_fuel_spent_hint">Грошей на паливо потрачено &#160;</string>
+    <string name="refill_hint">Залити паливо</string>
+    <string name="speed_layout_label">Швидкiсть&#160;</string>
+    <string name="speed_prefix">&#160;км/год</string>
+    <string name="time_spent_layout_label">Час&#160;</string>
+    <string name="time_spent_in_motion_hint">Час в русi&#160;</string>
+    <string name="time_spent_on_all_hint">Час усiх поездок&#160;</string>
+    <string name="time_spent_on_stop_hint">Час простою&#160;</string>
+    <string name="time_spent_on_trip_hint">Час поездки&#160;</string>
+    <string name="trip_data_layout_label">Загальна iнформацiя&#160;</string>
+    <string name="trip_ID_hint">Номер поездки&#160;</string>
+    <string name="trip_date_label">Дата поездки&#160;</string>
+    <string name="secondPref">&#160;c</string>
+    <string name="minutePref">&#160;хв</string>
+    <string name="hourPrefix">&#160;год</string>
+    <string name="fuel_cons_prefix">литрiв/100км</string>
+    <string name="fuel_overload_toast">Указано топлива, бiльн нiж об`єм бака</string>
+    <string name="fuel_spent_toast">Палива залито&#160;</string>
+    <string name="file_erased_toast">Данные стертi</string>
+    <string name="file_not_erased_toast">Щось пошло не так та даннi не вдалось стерти</string>
+    <string name="gps_first_fix_toast">Звязок зi супутниками встановлен</string>
+    <string name="trip_ended_toast">Поездка закiнчена</string>
+    <string name="trip_started_toast">Поездка почата</string>
+    <string name="gps_dialog_disagree_enable">Нi</string>
+    <string name="gps_dialog_agree_enable">Увiмкнути</string>
+    <string name="gps_dialog_text_label">GPS вимкнений, щоб продовжити його треба увiмкнути. Увiмкнути?</string>
+    <string name="fuel_price">Цiна палива</string>
+    <string name="fuel_consumption">Расход палива</string>
+    <string name="fuel_capacity">Эмнiсть бака</string>
+    <string name="gps_dialog_title">GPS вимкнений</string>
+    <string name="exit_dialog_no">Нi</string>
+    <string name="exit_dialog_yes">Так</string>
+    <string name="exit_dialog_title">Вихiд</string>
+    <string name="exit_dialog_string">Ви впевненi що бажаэте вийти?</string>
+    <string name="aboutTitle">Про автопомiчнiка:</string>
+    <string name="aboutMainText"> Разработчик Автопомощника - Артур Прокопенко"\n"
+        "\n"
+        Версия 1.0
+        "\n"
+        "\n"
+        "\n"
+        Автопомощник был создан для тех людей, кому важно знать основную информацию о их поездках и их показателях.
+        "\n"
+        "\n"
+        Автопомощник позволяет Вам:
+        "\n"
+        -Узнать расстояние пройденное Вами.
+        "\n"
+        -Узнать сколько топлива было потрачено и на сколько километров хватит остатка в баке.
+        "\n"
+        -Узнать скорость движения с помощью высокоточного спидометра.
+        "\n"
+        -Посмотреть на пройденные Вами маршруты на карте.
+        "\n"
+        -Посмотреть Ваши скоростные характеристики: среднюю скорость,максимальную скорость.
+        "\n"
+        -Посмотреть сколько денег Вы тратите на топливо.
+        "\n"
+        -Посмотреть сколько времени Вы находились в движении, а сколько простояли в пробке.
+        "\n"
+        "\n"
+        Надеемся, что Вам понравился Автопомощник, оцените пожалуйста его на GooglePlay, чтобы помочь нам сделать его ещё лучше!</string>
+    <string name="aboutNegativeButton">Дякую, можливо пiзнiше</string>
+    <string name="aboutRateButton">Круто, хочу оценить!</string>
+    <string name="aboutFeedbackButton">Послать отзыв разработчику</string>
+    <string name="tutorialTitle">Як користуватися автопомiчником?</string>
+    <string name="tutorialNext">Да, конечно я хочу узнать что делать!</string>
+    <string name="tutorialInfo">Трип</string>
+    <string name="tutorialNo">Нi, дякую, я вмiю користуватися автопомiчником</string>
+    <string name="tutorialThanks">Я зрозумiв, дякую!</string>
+    <string name="tutorialWantToKnowInfo">Бажаэте узнати як користуватися автопомiчником?</string>
+    <string name="kilometreUnit">км/год</string>
+    <string name="knots">вузлiв</string>
+    <string name="measurementUnitSpinnerTitle">Пожалуйста выберите единицы измерения скорости</string>
+    <string name="milesUnit">миль/год</string>
+    <string name="measurementUnitText">Единицы измерения</string>
+    <string name="sendWithFeedback">Послати email з помiччю…?</string>
+    <string name="subjectForFeedback">Вiдкуг про Автопомiчника</string>
+    <string name="extraTextInFeedback">Добрый день, у меня возникли некоторые проблемы с приложением или у меня есть едеи как сделать его лучше</string>
+    <string name="somethingWentWrongMessage"> Автопомощник не может отобразить Ваш путь на карте, потому что у него нету ни одной записанной GPS координаты.
+         "\n"
+         "\n"
+        Причины почему это могло произойти:
+        "\n"
+        -GPS был выключен в течении этой поездки
+         "\n"
+        -Вы забыли нажать кнопку Старт в начале поездки
+         "\n"
+        -Вы забыли нажать кнопку Стоп в конце поездки
+         "\n"
+         "\n"</string>
+    <string name="somethingWentWrongOk">Ок</string>
+    <string name="somethingWentWrongTitle">Что-то пошло не так..</string>
+    <string name="start">Старт</string>
+    <string name="stop">Стоп</string>
+    <string name="switchOff">Вимк</string>
+    <string name="switchOn">Вкл</string>
+    <string name="workInBackGround">Работа в фоне (увеличивает расход батареи)</string>
+    <string name="notificationTitle">Автопомощник</string>
+    <string name="notificationContent">Автопомощник до сих пор работает, если он Вам сейчас больше не нужен, рекомендуем выйти из приложения, чтобы предотвратить разряд батареи.</string>
+    <string name="permissionExplanation">Щоб Автопомiчник мiг определить Вашу швидкiсть треба разрешить использовать GPS</string>
+
+    <string name="currencyUnitText">Пожалуйста выберите удобную для Вас валюту</string>
+    <string name="currencyUnitSpinnerTitle">Валюта</string>
+    <string name="eur">&#160;евро</string>
+    <string name="rub">&#160;руб</string>
+    <string name="usd">&#160;дол</string>
+    <string name="grn">&#160;грн</string>
+
+    <string name="eur_label">&#160;Евро</string>
+    <string name="rub_label">&#160;Рубли</string>
+    <string name="usd_label">&#160;Доллары</string>
+    <string name="grn_label">&#160;Гривны</string>
+</resources>

@@ -44,6 +44,9 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,25 +62,27 @@ import butterknife.Unbinder;
 
 @Singleton public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
     @BindView(R.id.speedometerContainer)
-    RelativeLayout speedometerContainer;
+    RelativeLayout                    speedometerContainer;
     @BindView(R.id.text_SpeedometerView)
-    TextView       speedometerTextView;
+    TextView                          speedometerTextView;
     @BindView(R.id.refillButtonLayout)
-    RelativeLayout refillButtonLayout;
+    RelativeLayout                    refillButtonLayout;
     @BindView(R.id.btn_TripList)
-    ImageButton    tripListButton;
+    ImageButton                       tripListButton;
     @BindView(R.id.image_statusView)
-    ImageView      statusImage;
+    ImageView                         statusImage;
     @BindView(R.id.btn_start)
-    Button         startButton;
+    Button                            startButton;
     @BindView(R.id.btn_stop)
-    Button         stopButton;
+    Button                            stopButton;
     @BindView(R.id.fuel_left_layout)
-    RelativeLayout fuel_left_layout;
+    RelativeLayout                    fuel_left_layout;
     @BindView(R.id.text_fuelLeftView)
-    TextView       fuelLeft;
+    TextView                          fuelLeft;
     @BindView(R.id.btn_Settings)
-    ImageButton    settingsButton;
+    ImageButton                       settingsButton;
+    @BindView(R.id.advView)
+    com.google.android.gms.ads.AdView advertView;
 
     private static final int     LOCATION_REQUEST_CODE = 1;
     private static final boolean DEBUG                 = BuildConfig.DEBUG;
@@ -122,6 +127,13 @@ import butterknife.Unbinder;
         unbinder = ButterKnife.bind(this, view);
         gpsIsActive = false;
 
+        if (BuildConfig.FLAVOR.contains(context.getString(R.string.paidVersion_code))) {
+            advertView.setVisibility(View.GONE);
+        }
+        else {
+            setupAdvert();
+        }
+
         getSavedStateInstanceIfPossible(savedInstanceState);
         getContextIfNull();
         getInternalSettings();
@@ -133,6 +145,39 @@ import butterknife.Unbinder;
 
         visualizeSpeedometer();
     }
+
+    private void setupAdvert() {
+        MobileAds.initialize(getActivity(), "ca-app-pub-3940256099942544~3347511713");
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        advertView.loadAd(adRequest);
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
+                .build();
+        advertView.loadAd(request);
+        advertView.setAdListener(new AdListener() {
+            @Override public void onAdClosed() {
+                super.onAdClosed();
+            }
+
+            @Override public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+            }
+
+            @Override public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+
+            @Override public void onAdOpened() {
+                super.onAdOpened();
+            }
+
+            @Override public void onAdLoaded() {
+                super.onAdLoaded();
+            }
+        });
+    }
+
 
     private void getSavedStateInstanceIfPossible(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null && savedStateIsCorrect(savedInstanceState)) {
@@ -212,6 +257,9 @@ import butterknife.Unbinder;
     }
 
     @Override public void onPause() {
+        if (advertView != null) {
+            advertView.pause();
+        }
         final Fragment f = getFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (f != null && f instanceof MainFragment) {
             turnOffGpsIfAdapterDisabler();
@@ -222,6 +270,9 @@ import butterknife.Unbinder;
     }
 
     @Override public void onResume() {
+        if (advertView != null) {
+            advertView.pause();
+        }
         UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
         getLocationMangerIfNull();
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..

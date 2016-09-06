@@ -21,6 +21,7 @@ import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
+import com.google.android.gms.ads.MobileAds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +44,7 @@ import io.fabric.sdk.android.Fabric;
         setContentView(R.layout.activity_main);
         unbinder = ButterKnife.bind(this);
         //        Debug.startMethodTracing("Bottlenecks");
+        MobileAds.initialize(getApplicationContext(), getString(R.string.admob_publisher_testid_forAct));
         Fabric.with(this, new Crashlytics());
         fabTransitionValue = getDataForFABanimation();
 
@@ -85,36 +87,36 @@ import io.fabric.sdk.android.Fabric;
         UtilMethods.setFabInvisible(this);
         DataHolderFragment dataHolderFragment;
         if (savedInstanceState == null) {
+            if (DEBUG) {
+                Log.i(LOG_TAG, "onCreate: new fragment");
+            }
+
+            dataHolderFragment = DataHolderFragment.newInstance();
+            UtilMethods.addFragment(dataHolderFragment, ConstantValues.DATA_HOLDER_TAG, this);
+
+            MainFragment mainFragment = MainFragment.newInstance();
+            assert fab != null;
+            setFabToMap(mainFragment);
+            UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+        }
+        else {
+            Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+            MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
+            if (fragment instanceof MainFragment) {
                 if (DEBUG) {
-                    Log.i(LOG_TAG, "onCreate: new fragment");
+                    Log.i(LOG_TAG, "onCreate: old fragment");
                 }
-
-                dataHolderFragment = DataHolderFragment.newInstance();
-                UtilMethods.addFragment(dataHolderFragment, ConstantValues.DATA_HOLDER_TAG, this);
-
-                MainFragment mainFragment = MainFragment.newInstance();
                 assert fab != null;
-                setFabToMap(mainFragment);
-                UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+                setFabToMap((MainFragment) fragment);
+                UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+            }
+            if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
+                setFabToSpeedometer(mainFragment);
+                fab.setVisibility(View.VISIBLE);
             }
             else {
-                Fragment     fragment     = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-                MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-                if (fragment instanceof MainFragment) {
-                    if (DEBUG) {
-                        Log.i(LOG_TAG, "onCreate: old fragment");
-                    }
-                    assert fab != null;
-                    setFabToMap((MainFragment) fragment);
-                    UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-                }
-                if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
-                    setFabToSpeedometer(mainFragment);
-                    fab.setVisibility(View.VISIBLE);
-                }
-                else {
-                    setFabToMap(mainFragment);
-                }
+                setFabToMap(mainFragment);
+            }
         }
     }
 
