@@ -8,7 +8,7 @@ import com.example.aprokopenko.triphelper.datamodel.TripData;
 
 import javax.inject.Singleton;
 
-@Singleton public class DataHolderFragment extends Fragment {
+@Singleton public class DataHolderFragment extends android.support.v4.app.Fragment {
     private static final String LOG_TAG = "DataHolder";
 
     private TripData tripData;

@@ -25,6 +25,26 @@ public class CircularGaugeFactory {
         return speedometer;
     }
 
+    public TripHelperGauge getConfiguredSpeedometerGaugeForLandscape(Context context, String title) {
+        TripHelperGauge speedometer = new TripHelperGauge(context);
+        configureSpeedometerForLadscape(speedometer, title);
+
+        return speedometer;
+    }
+
+    private void configureSpeedometerForLadscape(TripHelperGauge gauge, String title) {
+        GaugeScale gaugeScale = new GaugeScale();
+        setHeader(gauge, title);
+
+        ArrayList<GaugeRange>   gaugeRangeArrayList   = setupRanges(gaugeScale);
+        ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
+        ArrayList<TickSettings> tickSettingArrayList  = setupTicks();
+
+        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList,
+                GaugeFactorySettings.startAngleForLand, GaugeFactorySettings.sweepAngleForLand,
+                GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSizeForLand);
+    }
+
     private void configureSpeedometer(TripHelperGauge gauge, String title) {
         GaugeScale gaugeScale = new GaugeScale();
         setHeader(gauge, title);
@@ -33,7 +53,8 @@ public class CircularGaugeFactory {
         ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
         ArrayList<TickSettings> tickSettingArrayList  = setupTicks();
 
-        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList);
+        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList, GaugeFactorySettings.startAngle,
+                GaugeFactorySettings.sweepAngle, GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSize);
     }
 
     private void setHeader(TripHelperGauge gauge, @Nullable String title) {
@@ -118,16 +139,16 @@ public class CircularGaugeFactory {
     }
 
     private void setScale(TripHelperGauge gauge, GaugeScale scale, ArrayList<GaugeRange> ranges, ArrayList<GaugePointer> pointers,
-                          ArrayList<TickSettings> tickSettings) {
+                          ArrayList<TickSettings> tickSettings, int startAngle, int SweepAngle, int interval, int labelTextSize) {
         ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
         scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
         scale.setStartValue(GaugeFactorySettings.startValue);
-        scale.setStartAngle(GaugeFactorySettings.startAngle);
-        scale.setSweepAngle(GaugeFactorySettings.sweepAngle);
+        scale.setStartAngle(startAngle);
+        scale.setSweepAngle(SweepAngle);
         scale.setEndValue(GaugeFactorySettings.endValue);
-        scale.setInterval(GaugeFactorySettings.interval);
+        scale.setInterval(interval);
 
-        scale.setLabelTextSize(GaugeFactorySettings.labelTextSize);
+        scale.setLabelTextSize(labelTextSize);
         scale.setLabelColor(GaugeFactorySettings.labelTextColor);
         scale.setLabelOffset(GaugeFactorySettings.labelOffset);
 

@@ -37,6 +37,7 @@ import io.fabric.sdk.android.Fabric;
     public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private int fabTransitionValue;
 
+
     private Unbinder unbinder;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ import io.fabric.sdk.android.Fabric;
         setContentView(R.layout.activity_main);
         unbinder = ButterKnife.bind(this);
         //        Debug.startMethodTracing("Bottlenecks");
-        MobileAds.initialize(getApplicationContext(), getString(R.string.admob_publisher_testid_forAct));
+        MobileAds.initialize(this, getString(R.string.admob_publisher_testid_forAct));
         Fabric.with(this, new Crashlytics());
         fabTransitionValue = getDataForFABanimation();
 

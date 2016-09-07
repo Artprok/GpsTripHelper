@@ -42,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-@Singleton public class TripInfoFragment extends Fragment implements OnMapReadyCallback {
+@Singleton public class TripInfoFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
 
     @BindView(R.id.text_tripAvgFuelConsumption)
     TextView       tripAvgFuelConsumptionView;

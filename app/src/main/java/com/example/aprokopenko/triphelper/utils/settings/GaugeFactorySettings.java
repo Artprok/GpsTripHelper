@@ -8,6 +8,9 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.enums.NeedleType;
 public class GaugeFactorySettings {
     public static final int startAngle            = 120;
     public static final int sweepAngle            = 300;
+    public static final int startAngleForLand            = 110;
+    public static final int sweepAngleForLand            = 320;
+
     public static final int endValue              = 200;
     public static final int interval              = 10;
     public static final int minorTicksPerInterval = 5;
@@ -41,10 +44,12 @@ public class GaugeFactorySettings {
     public static final double     needleLengthFactor    = 0.9;
     public static final int        minorTickSize         = 10;
     public static final int        majorTickSize         = 18;
-    public static final int        labelTextSize         = 19;
+    public static final int        labelTextSize         = 18;
+    public static final int        labelTextSizeForLand         = 14;
     public static final int        needleWidth           = 20;
     public static final int        knobRadius            = 20;
     public static final int        ticksWidth            = 3;
 
-    public static final PointF headerPosition = new PointF(0.43f, 0.7f);
+    public static final PointF headerPosition              = new PointF(0.43f, 0.7f);
+    public static       int    intervalForLandscapeNotPaid = 20;
 }

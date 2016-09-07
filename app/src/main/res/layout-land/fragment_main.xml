@@ -1,7 +1,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -13,8 +13,9 @@
         android:id="@+id/advView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorOfBlock"
         ads:adSize="BANNER"
         ads:adUnitId="@string/admob_publisher_testid">
     </com.google.android.gms.ads.AdView>
@@ -71,9 +72,8 @@
         android:id="@+id/speedometerContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/btn_Settings"
-        android:layout_toRightOf="@id/fuel_left_layout"
-        >
+        android:layout_below="@id/advView"
+        android:layout_toRightOf="@+id/fuel_left_layout">
 
         <TextView
             android:id="@+id/text_SpeedometerView"
@@ -81,8 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:paddingBottom="8dp"
-            android:paddingRight="25dp"
+            android:layout_marginBottom="-8dp"
             android:text="@string/initial_speedometer_val"
             android:textSize="@dimen/speedometerTextViewSize"/>
 

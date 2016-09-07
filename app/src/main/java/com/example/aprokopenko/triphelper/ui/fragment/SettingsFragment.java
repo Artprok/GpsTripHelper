@@ -41,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-@Singleton public class SettingsFragment extends Fragment {
+@Singleton public class SettingsFragment extends android.support.v4.app.Fragment {
 
     @BindView(R.id.editText_fuelPrice)
     EditText    fuelPriceEditText;

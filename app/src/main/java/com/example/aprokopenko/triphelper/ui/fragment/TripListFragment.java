@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-@Singleton public class TripListFragment extends Fragment implements ListFragmentInteractionListener {
+@Singleton public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener {
     @BindView(R.id.text_avgFuelConsListFrag)
     TextView     avgFuelConsumptionView;
     @BindView(R.id.text_distanceTravelledListFrag)

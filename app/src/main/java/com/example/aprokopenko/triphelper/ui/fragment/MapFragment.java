@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 
 import rx.Subscriber;
 
-@Singleton public class MapFragment extends Fragment implements OnMapReadyCallback {
+@Singleton public class MapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
     private static final String  LOG_TAG = "MAP_FRAGMENT";
     public static final  boolean DEBUG   = BuildConfig.DEBUG;
     private LatLng               previousLocationFromData;

@@ -9,17 +9,19 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +48,6 @@ import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -130,9 +131,6 @@ import butterknife.Unbinder;
         if (BuildConfig.FLAVOR.contains(context.getString(R.string.paidVersion_code))) {
             advertView.setVisibility(View.GONE);
         }
-        else {
-            setupAdvert();
-        }
 
         getSavedStateInstanceIfPossible(savedInstanceState);
         getContextIfNull();
@@ -140,20 +138,30 @@ import butterknife.Unbinder;
         getStateFromPrefs();
 
         setupButtons();
-        setupSpeedometer();
+        setupSpeedometerView();
         setupTripProcessor();
-
         visualizeSpeedometer();
     }
 
     private void setupAdvert() {
-        MobileAds.initialize(getActivity(), "ca-app-pub-3940256099942544~3347511713");
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        advertView.loadAd(adRequest);
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
-                .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
-                .build();
+        if (!BuildConfig.FLAVOR.contains(context.getString(R.string.paidVersion_code))) {
+            if (!advertInstalled()) {
+                //                AdRequest adRequest = new AdRequest.Builder().build();
+                //                advertView.loadAd(adRequest);
+                AdRequest request = setupAdRequest();
+                setupAdView(request);
+                setAdverInstalled(true);
+            }
+        }
+    }
+
+    private void setAdverInstalled(boolean b) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(getString(R.string.PREFERENCE_KEY_ADVERT_INSTALATION), b);
+        editor.apply();
+    }
+
+    private void setupAdView(AdRequest request) {
         advertView.loadAd(request);
         advertView.setAdListener(new AdListener() {
             @Override public void onAdClosed() {
@@ -178,6 +186,85 @@ import butterknife.Unbinder;
         });
     }
 
+    @NonNull private AdRequest setupAdRequest() {
+        Location loc = getLocationForAdvert();
+        return new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
+                .setGender(AdRequest.GENDER_MALE).setLocation(loc).build();
+    }
+
+    private boolean advertInstalled() {
+        return preferences.getBoolean(getString(R.string.PREFERENCE_KEY_ADVERT_INSTALATION), false);
+    }
+
+
+    private Location getLocationForAdvert() {
+        Log.i(LOG_TAG, "getLocationForAdvert: ");
+        Location lastKnownLocation = getLastKnownLocation();
+        if (lastKnownLocation != null) {
+            return lastKnownLocation;
+        }
+        else {
+            Location locationIfLastKnowNull = getLocationIfLastKnownIsNull();
+            return locationIfLastKnowNull;
+        }
+    }
+
+    private Location getLastKnownLocation() {
+        locationManager = getLocationMangerIfNull();
+        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
+
+    private Location getLocationIfLastKnownIsNull() {
+        final Location[] locationForAd    = new Location[1];
+        Looper           looper           = addLooper();
+        LocationListener locationListener = setLocationListener(locationForAd);
+        requestSingleGpsUpdate(looper, locationListener);
+        locationManager.removeUpdates(locationListener);
+        stopLooper(looper);
+        return locationForAd[0];
+    }
+
+    private Looper addLooper() {
+        Looper.prepare();
+        return setLooper(Looper.myLooper());
+    }
+
+    private void requestSingleGpsUpdate(Looper looper, LocationListener locationListener) {
+        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, looper);
+    }
+
+    @NonNull private LocationListener setLocationListener(final Location[] locations) {
+        return new LocationListener() {
+            @Override public void onLocationChanged(Location location) {
+                locations[1] = location;
+            }
+
+            @Override public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override public void onProviderDisabled(String provider) {
+
+            }
+        };
+    }
+
+    private synchronized Looper setLooper(Looper looper) {
+        Looper loop = looper;
+        return loop;
+    }
+
+    private synchronized void stopLooper(Looper looper) {
+        if (looper == null) {
+            return;
+        }
+        looper.quit();
+    }
 
     private void getSavedStateInstanceIfPossible(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null && savedStateIsCorrect(savedInstanceState)) {
@@ -274,7 +361,7 @@ import butterknife.Unbinder;
             advertView.pause();
         }
         UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
-        getLocationMangerIfNull();
+        locationManager = getLocationMangerIfNull();
         // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
         //        changeWakeLockStateAfterSettings();
         restoreStateIfPossible();
@@ -294,10 +381,11 @@ import butterknife.Unbinder;
         }
     }
 
-    private void getLocationMangerIfNull() {
+    private LocationManager getLocationMangerIfNull() {
         if (locationManager == null) {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
+        return locationManager;
     }
 
     @Override public void onDetach() {
@@ -325,6 +413,7 @@ import butterknife.Unbinder;
         switch (event) {
             case GpsStatus.GPS_EVENT_FIRST_FIX:
                 performGpsInitialFix();
+                setupAdvert();
                 break;
             case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
                 checkIfSattelitesAreStillAvaliableWithInterval(ConstantValues.FIVE_MINUTES);
@@ -404,6 +493,11 @@ import butterknife.Unbinder;
         return circularGaugeFactory.getConfiguredSpeedometerGauge(context, preferences.getString("measurementUnit", ""));
     }
 
+    private TripHelperGauge createSpeedometerGaugeForLandscape(Context context) {
+        CircularGaugeFactory circularGaugeFactory = new CircularGaugeFactory();
+        return circularGaugeFactory.getConfiguredSpeedometerGaugeForLandscape(context, preferences.getString("measurementUnit", ""));
+    }
+
     private boolean isButtonVisible(Button button) {
         Boolean visibility = false;
         if (button != null) {
@@ -416,13 +510,8 @@ import butterknife.Unbinder;
         return savedState.containsKey("ControlButtonVisibility");
     }
 
-    private void visualizeSpeedometer() {
-        if (getResources().getConfiguration().orientation == 2) {//if landscape
-            setSpeedometerLayoutParams();
-        }
-        else {
-            speedometerContainer.setVisibility(View.VISIBLE);
-        }
+    private boolean landscapeOrientation() {
+        return getResources().getConfiguration().orientation == 2;
     }
 
     private void turnOffGpsIfAdapterDisabler() {
@@ -434,18 +523,6 @@ import butterknife.Unbinder;
     private void requestLocationPermissions() {
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,},
                 LOCATION_REQUEST_CODE);
-    }
-
-    private void setSpeedometerLayoutParams() {
-        fuel_left_layout.post(new Runnable() {
-            @Override public void run() {
-                if (fuel_left_layout != null) {
-                    RelativeLayout.LayoutParams layoutParams = getLayoutParams();
-                    speedometerContainer.setLayoutParams(layoutParams);
-                    speedometerContainer.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 
     private void requestPermissionWithRationale() {
@@ -464,16 +541,6 @@ import butterknife.Unbinder;
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_REQUEST_CODE);
         }
-    }
-
-    private RelativeLayout.LayoutParams getLayoutParams() {
-        DisplayMetrics dis     = getResources().getDisplayMetrics();
-        int            w       = dis.heightPixels;
-        int            padding = (int) (fuel_left_layout.getMeasuredWidth() * 1.1);//get padding for speedometer
-
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
-        layoutParams.setMargins(padding, 7, 7, 7);
-        return layoutParams;
     }
 
     private void setupTripProcessor() {
@@ -700,10 +767,9 @@ import butterknife.Unbinder;
 
     private void gpsStatusListener(boolean register) {
         if (register) {
-
             // TODO: 24.06.2016 fix permission issue here. Need to add condition when addListener is allowed
             if (UtilMethods.isPermissionAllowed(context)) {
-                getLocationMangerIfNull();
+                locationManager = getLocationMangerIfNull();
                 locationManager.addGpsStatusListener(this);
             }
             else {
@@ -711,7 +777,7 @@ import butterknife.Unbinder;
             }
         }
         else {
-            getLocationMangerIfNull();
+            locationManager = getLocationMangerIfNull();
             locationManager.removeGpsStatusListener(this);
         }
     }
@@ -766,6 +832,39 @@ import butterknife.Unbinder;
 
     }
 
+    private void visualizeSpeedometer() {
+        if (landscapeOrientation()) {
+            setSpeedometerLayoutParams();
+        }
+        else {
+            speedometerContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setSpeedometerLayoutParams() {
+        fuel_left_layout.post(new Runnable() {
+            @Override public void run() {
+                RelativeLayout.LayoutParams layoutParams = getLayoutParams();
+                speedometerContainer.setLayoutParams(layoutParams);
+                speedometerContainer.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private RelativeLayout.LayoutParams getLayoutParams() {
+        int w       = speedometer.getHeight();
+        int padding = getLeftPaddingForSpeedometer();
+
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, w);
+
+        layoutParams.setMargins(padding, advertView.getHeight(), 3, 3);
+        return layoutParams;
+    }
+
+    private int getLeftPaddingForSpeedometer() {
+        return (int) (fuel_left_layout.getMeasuredWidth() * 1.1);
+    }
+
     private void setGpsIconNotActive() {
         getContextIfNull();
         ButterKnife.bind(R.id.image_statusView, getActivity());
@@ -782,12 +881,15 @@ import butterknife.Unbinder;
         }
     }
 
-    private void setupSpeedometer() {
-        speedometer = createSpeedometerGauge(context);
+    private void setupSpeedometerView() {
+        if (landscapeOrientation() && !BuildConfig.FLAVOR.equals(getString(R.string.paidVersion_code))) {
+            speedometer = createSpeedometerGaugeForLandscape(context);
+        }
+        else {
+            speedometer = createSpeedometerGauge(context);
+        }
         speedometer.setScaleX(ConstantValues.SPEEDOMETER_WIDTH);
         speedometer.setScaleY(ConstantValues.SPEEDOMETER_HEIGHT);
-        //todo set invisible here. Can be replaced by some splash screen with reference or something like this.
-        speedometerContainer.setVisibility(View.INVISIBLE);
         speedometerContainer.addView(speedometer);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/android_7.ttf");
         speedometerTextView.setTypeface(tf);
