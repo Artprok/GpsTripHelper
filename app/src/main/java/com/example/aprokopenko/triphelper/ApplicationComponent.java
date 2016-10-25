@@ -7,6 +7,8 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
-@Singleton @Component(modules = {AppModule.class}) public interface ApplicationComponent {
-    void injectInto(GpsHandler GpsHandler);
+@Singleton
+@Component(modules = {AppModule.class})
+public interface ApplicationComponent {
+  void injectInto(final GpsHandler GpsHandler);
 }

@@ -2,6 +2,7 @@ package com.example.aprokopenko.triphelper.speedometer_factory;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
@@ -16,157 +17,156 @@ import com.example.aprokopenko.triphelper.utils.settings.GaugeFactorySettings;
 import java.util.ArrayList;
 
 public class CircularGaugeFactory {
-    public CircularGaugeFactory() {
+  public CircularGaugeFactory() {
+  }
+
+  public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title) {
+    final TripHelperGauge speedometer = new TripHelperGauge(context);
+    configureSpeedometer(speedometer, title);
+    return speedometer;
+  }
+
+  public TripHelperGauge getConfiguredSpeedometerGaugeForLandscape(@NonNull final Context context, @Nullable final String title) {
+    final TripHelperGauge speedometer = new TripHelperGauge(context);
+    configureSpeedometerForLadscape(speedometer, title);
+
+    return speedometer;
+  }
+
+  private void configureSpeedometerForLadscape(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
+    final GaugeScale gaugeScale = new GaugeScale();
+    setHeader(gauge, title);
+
+    final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
+    final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
+    final ArrayList<TickSettings> tickSettingArrayList = setupTicks();
+
+    setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList,
+            GaugeFactorySettings.startAngleForLand, GaugeFactorySettings.sweepAngleForLand,
+            GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSizeForLand);
+  }
+
+  private void configureSpeedometer(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
+    final GaugeScale gaugeScale = new GaugeScale();
+    setHeader(gauge, title);
+
+    final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
+    final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
+    final ArrayList<TickSettings> tickSettingArrayList = setupTicks();
+
+    setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList, GaugeFactorySettings.startAngle,
+            GaugeFactorySettings.sweepAngle, GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSize);
+  }
+
+  private void setHeader(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
+    final ArrayList<Header> gaugeHeaders = new ArrayList<>();
+    final Header circularGaugeHeader = new Header();
+    if (title == null) {
+      circularGaugeHeader.setText(GaugeFactorySettings.speedometerHeaderText);
+    } else {
+      circularGaugeHeader.setText(title);
     }
 
-    public TripHelperGauge getConfiguredSpeedometerGauge(Context context, String title) {
-        TripHelperGauge speedometer = new TripHelperGauge(context);
-        configureSpeedometer(speedometer, title);
-        return speedometer;
-    }
+    circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
+    circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
+    circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
+    gaugeHeaders.add(0, circularGaugeHeader);
+    gauge.setHeaders(gaugeHeaders);
+  }
 
-    public TripHelperGauge getConfiguredSpeedometerGaugeForLandscape(Context context, String title) {
-        TripHelperGauge speedometer = new TripHelperGauge(context);
-        configureSpeedometerForLadscape(speedometer, title);
+  private ArrayList<GaugeRange> setupRanges(@NonNull final GaugeScale scale) {
+    final ArrayList<GaugeRange> gaugeRangeArrayList = new ArrayList<>();
+    final GaugeRange gaugeRange1 = new GaugeRange();
+    gaugeRange1.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
+    gaugeRange1.setStartValue(GaugeFactorySettings.cityLimitationSpeedFrom);
+    gaugeRange1.setEndValue(GaugeFactorySettings.cityLimitationSpeedTo);
+    gaugeRange1.setWidth(GaugeFactorySettings.rangeScaleWidth);
+    gaugeRange1.setOffset(GaugeFactorySettings.rangeOffset);
+    gaugeRangeArrayList.add(0, gaugeRange1);
 
-        return speedometer;
-    }
+    scale.setGaugeRanges(gaugeRangeArrayList);
+    final GaugeRange gaugeRange2 = new GaugeRange();
+    gaugeRange2.setColor(Color.parseColor(GaugeFactorySettings.outCityColorString));
+    gaugeRange2.setStartValue(GaugeFactorySettings.outOfTownLimitationSpeedFrom);
+    gaugeRange2.setEndValue(GaugeFactorySettings.outOfTownLimitationSpeedTo);
+    gaugeRange2.setWidth(GaugeFactorySettings.rangeScaleWidth);
+    gaugeRange2.setOffset(GaugeFactorySettings.rangeOffset);
+    gaugeRangeArrayList.add(1, gaugeRange2);
 
-    private void configureSpeedometerForLadscape(TripHelperGauge gauge, String title) {
-        GaugeScale gaugeScale = new GaugeScale();
-        setHeader(gauge, title);
+    scale.setGaugeRanges(gaugeRangeArrayList);
+    final GaugeRange gaugeRange3 = new GaugeRange();
+    gaugeRange3.setColor(Color.parseColor(GaugeFactorySettings.deniedSpeedColorString));
+    gaugeRange3.setStartValue(GaugeFactorySettings.deniedSpeedLimitationSpeedFrom);
+    gaugeRange3.setEndValue(GaugeFactorySettings.deniedSpeedLimitationSpeedTo);
+    gaugeRange3.setWidth(GaugeFactorySettings.rangeScaleWidth);
+    gaugeRange3.setOffset(GaugeFactorySettings.rangeOffset);
+    gaugeRangeArrayList.add(2, gaugeRange3);
 
-        ArrayList<GaugeRange>   gaugeRangeArrayList   = setupRanges(gaugeScale);
-        ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
-        ArrayList<TickSettings> tickSettingArrayList  = setupTicks();
+    return gaugeRangeArrayList;
+  }
 
-        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList,
-                GaugeFactorySettings.startAngleForLand, GaugeFactorySettings.sweepAngleForLand,
-                GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSizeForLand);
-    }
+  private ArrayList<GaugePointer> setupPointer() {
+    final ArrayList<GaugePointer> gaugePointerArrayList = new ArrayList<>();
+    final NeedlePointer needlePointer = new NeedlePointer();
+    needlePointer.setKnobColor(Color.parseColor(GaugeFactorySettings.knobNeedleColorString));
+    needlePointer.setLengthFactor(GaugeFactorySettings.needleLengthFactor);
+    needlePointer.setColor(GaugeFactorySettings.needleColorString);
+    needlePointer.setValue(GaugeFactorySettings.pointerStartValue);
+    needlePointer.setKnobRadius(GaugeFactorySettings.knobRadius);
+    needlePointer.setWidth(GaugeFactorySettings.needleWidth);
+    needlePointer.setType(GaugeFactorySettings.needleType);
+    gaugePointerArrayList.add(0, needlePointer);
+    return gaugePointerArrayList;
+  }
 
-    private void configureSpeedometer(TripHelperGauge gauge, String title) {
-        GaugeScale gaugeScale = new GaugeScale();
-        setHeader(gauge, title);
+  private ArrayList<TickSettings> setupTicks() {
+    final ArrayList<TickSettings> tickSettingArrayList = new ArrayList<>();
+    final TickSettings majorTicksSettings = new TickSettings();
+    majorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
+    majorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
+    majorTicksSettings.setSize(GaugeFactorySettings.majorTickSize);
+    majorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
 
-        ArrayList<GaugeRange>   gaugeRangeArrayList   = setupRanges(gaugeScale);
-        ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
-        ArrayList<TickSettings> tickSettingArrayList  = setupTicks();
+    final TickSettings minorTicksSettings = new TickSettings();
+    minorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
+    minorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
+    minorTicksSettings.setSize(GaugeFactorySettings.minorTickSize);
+    minorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
 
-        setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList, GaugeFactorySettings.startAngle,
-                GaugeFactorySettings.sweepAngle, GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSize);
-    }
+    tickSettingArrayList.add(0, majorTicksSettings);
+    tickSettingArrayList.add(1, minorTicksSettings);
+    return tickSettingArrayList;
+  }
 
-    private void setHeader(TripHelperGauge gauge, @Nullable String title) {
-        ArrayList<Header> gaugeHeaders        = new ArrayList<>();
-        Header            circularGaugeHeader = new Header();
-        if (title == null) {
-            circularGaugeHeader.setText(GaugeFactorySettings.speedometerHeaderText);
-        }
-        else {
-            circularGaugeHeader.setText(title);
-        }
+  private void setScale(@NonNull final TripHelperGauge gauge, @NonNull final GaugeScale scale, @NonNull final ArrayList<GaugeRange> ranges, @NonNull final ArrayList<GaugePointer> pointers,
+                        @NonNull final ArrayList<TickSettings> tickSettings, final int startAngle, final int SweepAngle, final int interval, final int labelTextSize) {
+    final ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
+    scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
+    scale.setStartValue(GaugeFactorySettings.startValue);
+    scale.setStartAngle(startAngle);
+    scale.setSweepAngle(SweepAngle);
+    scale.setEndValue(GaugeFactorySettings.endValue);
+    scale.setInterval(interval);
 
-        circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
-        circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
-        circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
-        gaugeHeaders.add(0, circularGaugeHeader);
-        gauge.setHeaders(gaugeHeaders);
-    }
+    scale.setLabelTextSize(labelTextSize);
+    scale.setLabelColor(GaugeFactorySettings.labelTextColor);
+    scale.setLabelOffset(GaugeFactorySettings.labelOffset);
 
-    private ArrayList<GaugeRange> setupRanges(GaugeScale scale) {
-        ArrayList<GaugeRange> gaugeRangeArrayList = new ArrayList<>();
-        GaugeRange            gaugeRange1         = new GaugeRange();
-        gaugeRange1.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
-        gaugeRange1.setStartValue(GaugeFactorySettings.cityLimitationSpeedFrom);
-        gaugeRange1.setEndValue(GaugeFactorySettings.cityLimitationSpeedTo);
-        gaugeRange1.setWidth(GaugeFactorySettings.rangeScaleWidth);
-        gaugeRange1.setOffset(GaugeFactorySettings.rangeOffset);
-        gaugeRangeArrayList.add(0, gaugeRange1);
+    setupTickSettings(tickSettings, scale);
 
-        scale.setGaugeRanges(gaugeRangeArrayList);
-        GaugeRange gaugeRange2 = new GaugeRange();
-        gaugeRange2.setColor(Color.parseColor(GaugeFactorySettings.outCityColorString));
-        gaugeRange2.setStartValue(GaugeFactorySettings.outOfTownLimitationSpeedFrom);
-        gaugeRange2.setEndValue(GaugeFactorySettings.outOfTownLimitationSpeedTo);
-        gaugeRange2.setWidth(GaugeFactorySettings.rangeScaleWidth);
-        gaugeRange2.setOffset(GaugeFactorySettings.rangeOffset);
-        gaugeRangeArrayList.add(1, gaugeRange2);
+    scale.setGaugePointers(pointers);
+    scale.setGaugeRanges(ranges);
 
-        scale.setGaugeRanges(gaugeRangeArrayList);
-        GaugeRange gaugeRange3 = new GaugeRange();
-        gaugeRange3.setColor(Color.parseColor(GaugeFactorySettings.deniedSpeedColorString));
-        gaugeRange3.setStartValue(GaugeFactorySettings.deniedSpeedLimitationSpeedFrom);
-        gaugeRange3.setEndValue(GaugeFactorySettings.deniedSpeedLimitationSpeedTo);
-        gaugeRange3.setWidth(GaugeFactorySettings.rangeScaleWidth);
-        gaugeRange3.setOffset(GaugeFactorySettings.rangeOffset);
-        gaugeRangeArrayList.add(2, gaugeRange3);
+    gaugeScales.add(0, scale);
+    gauge.setGaugeScales(gaugeScales);
+  }
 
-        return gaugeRangeArrayList;
-    }
+  private void setupTickSettings(@NonNull final ArrayList<TickSettings> ts, @NonNull final GaugeScale scale) {
+    final TickSettings majorTickSetting = ts.get(0);
+    final TickSettings minorTickSetting = ts.get(1);
 
-    private ArrayList<GaugePointer> setupPointer() {
-        ArrayList<GaugePointer> gaugePointerArrayList = new ArrayList<>();
-        NeedlePointer           needlePointer         = new NeedlePointer();
-        needlePointer.setKnobColor(Color.parseColor(GaugeFactorySettings.knobNeedleColorString));
-        needlePointer.setLengthFactor(GaugeFactorySettings.needleLengthFactor);
-        needlePointer.setColor(GaugeFactorySettings.needleColorString);
-        needlePointer.setValue(GaugeFactorySettings.pointerStartValue);
-        needlePointer.setKnobRadius(GaugeFactorySettings.knobRadius);
-        needlePointer.setWidth(GaugeFactorySettings.needleWidth);
-        needlePointer.setType(GaugeFactorySettings.needleType);
-        gaugePointerArrayList.add(0, needlePointer);
-        return gaugePointerArrayList;
-    }
-
-    private ArrayList<TickSettings> setupTicks() {
-        ArrayList<TickSettings> tickSettingArrayList = new ArrayList<>();
-        TickSettings            majorTicksSettings   = new TickSettings();
-        majorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
-        majorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
-        majorTicksSettings.setSize(GaugeFactorySettings.majorTickSize);
-        majorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
-
-        TickSettings minorTicksSettings = new TickSettings();
-        minorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
-        minorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
-        minorTicksSettings.setSize(GaugeFactorySettings.minorTickSize);
-        minorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
-
-        tickSettingArrayList.add(0, majorTicksSettings);
-        tickSettingArrayList.add(1, minorTicksSettings);
-        return tickSettingArrayList;
-    }
-
-    private void setScale(TripHelperGauge gauge, GaugeScale scale, ArrayList<GaugeRange> ranges, ArrayList<GaugePointer> pointers,
-                          ArrayList<TickSettings> tickSettings, int startAngle, int SweepAngle, int interval, int labelTextSize) {
-        ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
-        scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
-        scale.setStartValue(GaugeFactorySettings.startValue);
-        scale.setStartAngle(startAngle);
-        scale.setSweepAngle(SweepAngle);
-        scale.setEndValue(GaugeFactorySettings.endValue);
-        scale.setInterval(interval);
-
-        scale.setLabelTextSize(labelTextSize);
-        scale.setLabelColor(GaugeFactorySettings.labelTextColor);
-        scale.setLabelOffset(GaugeFactorySettings.labelOffset);
-
-        setupTickSettings(tickSettings, scale);
-
-        scale.setGaugePointers(pointers);
-        scale.setGaugeRanges(ranges);
-
-        gaugeScales.add(0, scale);
-        gauge.setGaugeScales(gaugeScales);
-    }
-
-    private void setupTickSettings(ArrayList<TickSettings> ts, GaugeScale scale) {
-        TickSettings majorTickSetting = ts.get(0);
-        TickSettings minorTickSetting = ts.get(1);
-
-        scale.setMajorTickSettings(majorTickSetting);
-        scale.setMinorTickSettings(minorTickSetting);
-        scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
-    }
+    scale.setMajorTickSettings(majorTickSetting);
+    scale.setMinorTickSettings(minorTickSetting);
+    scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
+  }
 }

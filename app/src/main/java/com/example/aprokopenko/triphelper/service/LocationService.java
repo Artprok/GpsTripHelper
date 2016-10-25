@@ -27,135 +27,134 @@ import com.google.android.gms.location.LocationServices;
 
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String  LOG_TAG            = "LocationService:";
-    private static final int     FM_NOTIFICATION_ID = 1;
-    private static final boolean DEBUG              = BuildConfig.DEBUG;
-    private final        IBinder mBinder            = new LocalBinder();
+  private static final String LOG_TAG = "LocationService:";
+  private static final int FM_NOTIFICATION_ID = 1;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
+  private final IBinder mBinder = new LocalBinder();
 
-    private GpsHandler      gpsHandler;
-    private LocationRequest locationRequest;
-    private GoogleApiClient googleApiClient;
-    private Thread          locationServiceThread;
-    private Runnable        locationUpdateRunnable;
+  private GpsHandler gpsHandler;
+  private LocationRequest locationRequest;
+  private GoogleApiClient googleApiClient;
+  private Thread locationServiceThread;
+  private Runnable locationUpdateRunnable;
 
-    private com.google.android.gms.location.LocationListener gmsLocationListener;
+  private com.google.android.gms.location.LocationListener gmsLocationListener;
 
-    public GpsHandler getGpsHandler() {
-        return gpsHandler;
-    }
+  public GpsHandler getGpsHandler() {
+    return gpsHandler;
+  }
 
-    @Override public void onConnected(@Nullable Bundle bundle) {
-        NotificationCompat.Builder builder = createNotification();
-        createRestartAppIntent(builder);
-        notify(builder);
+  @Override public void onConnected(@Nullable final Bundle bundle) {
+    final NotificationCompat.Builder builder = createNotification();
+    createRestartAppIntent(builder);
+    notify(builder);
 
-        locationUpdateRunnable = new Runnable() {
-            public void run() {
-                Looper.prepare();
-                if (UtilMethods.isPermissionAllowed(getApplicationContext())) {
-                    if (DEBUG) {
-                        Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
-                    }
-                    LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
-                }
-                else {
-                    // TODO: 22.06.2016 ask for turningOn permission.
-                }
-                Looper.loop();
-            }
-        };
-
-        locationServiceThread = new Thread(locationUpdateRunnable);
-        locationServiceThread.start();
-    }
-
-    @Override public void onConnectionSuspended(int i) {
-        if (DEBUG) {
-            Log.i(LOG_TAG, "onConnectionSuspended: ");
+    locationUpdateRunnable = new Runnable() {
+      public void run() {
+        Looper.prepare();
+        if (UtilMethods.isPermissionAllowed(getApplicationContext())) {
+          if (DEBUG) {
+            Log.i(LOG_TAG, "onConnected: " + googleApiClient + locationRequest + gmsLocationListener);
+          }
+          LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, gmsLocationListener);
+        } else {
+          // TODO: 22.06.2016 ask for turningOn permission.
         }
-    }
+        Looper.loop();
+      }
+    };
 
-    @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (DEBUG) {
-            Log.i(LOG_TAG, "onConnectionFailed: " + connectionResult);
-        }
-    }
+    locationServiceThread = new Thread(locationUpdateRunnable);
+    locationServiceThread.start();
+  }
 
-    @Override public IBinder onBind(Intent intent) {
-        return mBinder;
+  @Override public void onConnectionSuspended(final int i) {
+    if (DEBUG) {
+      Log.i(LOG_TAG, "onConnectionSuspended: ");
     }
+  }
 
-    @Override public int onStartCommand(Intent intent, int flags, int startId) {
-        if (DEBUG) {
-            Log.i(LOG_TAG, "onStartCommand");
-        }
-        super.onStartCommand(intent, flags, startId);
-        gpsHandler = new GpsHandler();
-        gmsLocationListener = gpsHandler;
-        setupLocRequest();
-        googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
-        googleApiClient.connect();
-        return START_STICKY;
+  @Override public void onConnectionFailed(@NonNull final ConnectionResult connectionResult) {
+    if (DEBUG) {
+      Log.i(LOG_TAG, "onConnectionFailed: " + connectionResult);
     }
+  }
 
-    @Override public void onCreate() {
-        if (DEBUG) {
-            Log.i(LOG_TAG, "service OnCreate");
-        }
+  @Override public IBinder onBind(@NonNull final Intent intent) {
+    return mBinder;
+  }
+
+  @Override public int onStartCommand(@NonNull final Intent intent, final int flags, final int startId) {
+    if (DEBUG) {
+      Log.i(LOG_TAG, "onStartCommand");
     }
+    super.onStartCommand(intent, flags, startId);
+    gpsHandler = new GpsHandler();
+    gmsLocationListener = gpsHandler;
+    setupLocRequest();
+    googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this).build();
+    googleApiClient.connect();
+    return START_STICKY;
+  }
 
-    @Override public void onDestroy() {
-        if (DEBUG) {
-            Log.i(LOG_TAG, "service OnDestroy");
-        }
-        removeNotification();
-        googleApiClient.disconnect();
-        gmsLocationListener = null;
-        locationRequest = null;
-        gpsHandler = null;
-        locationServiceThread = null;
-        locationUpdateRunnable = null;
-        super.onDestroy();
+  @Override public void onCreate() {
+    if (DEBUG) {
+      Log.i(LOG_TAG, "service OnCreate");
     }
+  }
 
-    private LocationRequest setupLocRequest() {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
-        locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return locationRequest;
+  @Override public void onDestroy() {
+    if (DEBUG) {
+      Log.i(LOG_TAG, "service OnDestroy");
     }
+    removeNotification();
+    googleApiClient.disconnect();
+    gmsLocationListener = null;
+    locationRequest = null;
+    gpsHandler = null;
+    locationServiceThread = null;
+    locationUpdateRunnable = null;
+    super.onDestroy();
+  }
 
-    private void notify(NotificationCompat.Builder builder) {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(FM_NOTIFICATION_ID, builder.build());
+  private LocationRequest setupLocRequest() {
+    locationRequest = new LocationRequest();
+    locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
+    locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
+    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    return locationRequest;
+  }
+
+  private void notify(@NonNull final NotificationCompat.Builder builder) {
+    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    manager.notify(FM_NOTIFICATION_ID, builder.build());
+  }
+
+  private void createRestartAppIntent(@NonNull final NotificationCompat.Builder builder) {
+    final Intent intent = new Intent(this, MainActivity.class);
+    intent.setAction(Intent.ACTION_MAIN);
+    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+    final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+    builder.setContentIntent(pendingIntent);
+  }
+
+  private NotificationCompat.Builder createNotification() {
+    return new NotificationCompat.Builder(this).setSmallIcon(R.drawable.notification_icon_bw).setOngoing(true)
+            .setContentTitle(getResources().getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
+            .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.notificationContent)))
+            .setContentText(getResources().getString(R.string.notificationContent));
+  }
+
+  private void removeNotification() {
+    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    manager.cancel(FM_NOTIFICATION_ID);
+  }
+
+  public class LocalBinder extends Binder {
+    public LocationService getService() {
+      return LocationService.this;
     }
-
-    private void createRestartAppIntent(NotificationCompat.Builder builder) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        builder.setContentIntent(pendingIntent);
-    }
-
-    private NotificationCompat.Builder createNotification() {
-        return new NotificationCompat.Builder(this).setSmallIcon(R.drawable.notification_icon_bw).setOngoing(true)
-                .setContentTitle(getResources().getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.notificationContent)))
-                .setContentText(getResources().getString(R.string.notificationContent));
-    }
-
-    private void removeNotification() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.cancel(FM_NOTIFICATION_ID);
-    }
-
-    public class LocalBinder extends Binder {
-        public LocationService getService() {
-            return LocationService.this;
-        }
-    }
+  }
 }

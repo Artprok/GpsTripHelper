@@ -1,78 +1,80 @@
 package com.example.aprokopenko.triphelper.speedometer_gauge;
 
+import android.support.annotation.NonNull;
+
 public class GaugeRange {
-    private TripHelperGauge mGauge;
+  private TripHelperGauge mGauge;
 
-    private int    color;
-    private double endValue;
-    private float offset;
-    private double startValue;
-    private double width;
+  private int color;
+  private double endValue;
+  private float offset;
+  private double startValue;
+  private double width;
 
-    public GaugeRange() {
-        color = GaugeConstants.RANGE_INIT_COLOR;
-        startValue = GaugeConstants.RANGE_INIT_START_VALUE;
-        endValue = GaugeConstants.RANGE_INIT_END_VALUE;
-        width = GaugeConstants.RANGE_INIT_WIDTH;
-        offset = GaugeConstants.RANGE_INIT_OFFSET;
+  public GaugeRange() {
+    color = GaugeConstants.RANGE_INIT_COLOR;
+    startValue = GaugeConstants.RANGE_INIT_START_VALUE;
+    endValue = GaugeConstants.RANGE_INIT_END_VALUE;
+    width = GaugeConstants.RANGE_INIT_WIDTH;
+    offset = GaugeConstants.RANGE_INIT_OFFSET;
+  }
+
+  public void setmGauge(@NonNull final TripHelperGauge mGauge) {
+    this.mGauge = mGauge;
+  }
+
+  public int getColor() {
+    return this.color;
+  }
+
+  public void setColor(int color) {
+    this.color = color;
+    if (mGauge != null) {
+      mGauge.refreshGauge();
     }
+  }
 
-    public void setmGauge(TripHelperGauge mGauge) {
-        this.mGauge = mGauge;
-    }
+  public double getStartValue() {
+    return startValue;
+  }
 
-    public int getColor() {
-        return this.color;
+  public void setStartValue(final double startValue) {
+    this.startValue = startValue;
+    if (mGauge != null) {
+      mGauge.refreshGauge();
     }
+  }
 
-    public void setColor(int color) {
-        this.color = color;
-        if (mGauge != null) {
-            mGauge.refreshGauge();
-        }
-    }
+  public double getEndValue() {
+    return endValue;
+  }
 
-    public double getStartValue() {
-        return startValue;
+  public void setEndValue(final double endValue) {
+    this.endValue = endValue;
+    if (mGauge != null) {
+      mGauge.refreshGauge();
     }
+  }
 
-    public void setStartValue(double startValue) {
-        this.startValue = startValue;
-        if (mGauge != null) {
-            mGauge.refreshGauge();
-        }
-    }
+  public double getWidth() {
+    return width;
+  }
 
-    public double getEndValue() {
-        return endValue;
+  public void setWidth(final double width) {
+    this.width = width;
+    if (mGauge != null) {
+      mGauge.refreshGauge();
     }
+  }
 
-    public void setEndValue(double endValue) {
-        this.endValue = endValue;
-        if (mGauge != null) {
-            mGauge.refreshGauge();
-        }
-    }
+  public float getOffset() {
+    return offset;
+  }
 
-    public double getWidth() {
-        return width;
+  public void setOffset(final float offset) {
+    this.offset = offset;
+    if (mGauge != null) {
+      mGauge.refreshGauge();
     }
-
-    public void setWidth(double width) {
-        this.width = width;
-        if (mGauge != null) {
-            mGauge.refreshGauge();
-        }
-    }
-
-    public float getOffset() {
-        return offset;
-    }
-
-    public void setOffset(float offset) {
-        this.offset = offset;
-        if (mGauge != null) {
-            mGauge.refreshGauge();
-        }
-    }
+  }
 }

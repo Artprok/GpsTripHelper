@@ -74,7 +74,6 @@ android {
         maven { url 'https://maven.fabric.io/public' }
     }
 
-
     dependencies {
         compile fileTree(include: ['*.jar'], dir: 'libs')
         testCompile 'junit:junit:4.12'
@@ -92,13 +91,10 @@ android {
         compile 'io.reactivex:rxandroid:1.2.1'
         compile 'com.google.firebase:firebase-ads:9.4.0'
 
-
         compile 'com.jakewharton:butterknife:8.2.1'
         apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
         compile 'com.google.dagger:dagger:2.5'
         apt 'com.google.dagger:dagger-compiler:2.5'
     }
-
-
 }

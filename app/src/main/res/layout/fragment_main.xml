@@ -20,7 +20,7 @@
     </com.google.android.gms.ads.AdView>
 
     <ImageButton
-        android:id="@+id/btn_TripList"
+        android:id="@+id/btn_tripList"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
@@ -31,13 +31,13 @@
         />
 
     <ImageButton
-        android:id="@+id/btn_Settings"
+        android:id="@+id/btn_settings"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignBottom="@id/btn_TripList"
+        android:layout_alignBottom="@id/btn_tripList"
         android:layout_alignTop="@id/image_statusView"
         android:layout_marginRight="@dimen/margin_between_elements"
-        android:layout_toLeftOf="@+id/btn_TripList"
+        android:layout_toLeftOf="@+id/btn_tripList"
         android:background="@drawable/btn_background"
         android:src="@drawable/btn_settings"
         />
