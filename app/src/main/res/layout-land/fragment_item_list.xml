@@ -5,260 +5,269 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    >
+    android:animateLayoutChanges="true">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:paddingBottom="7dp"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        android:weightSum="5">
 
-
-        <RelativeLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:id="@+id/listTripInfoLayout"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            >
+            android:layout_weight="2.6"
+            android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_headerForAllInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/info_about_all_trip_header_label"
-                android:textSize="@dimen/metricsTextSize"
-                />
+                android:textSize="@dimen/metricsTextSize"/>
 
-            <RelativeLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/listDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_headerForAllInfo"
                 android:layout_marginBottom="@dimen/margin_between_blocks_list"
                 android:background="@drawable/blocks_with_shadow"
-                android:padding="@dimen/block_padding"
-                >
+                android:orientation="vertical"
+                android:padding="@dimen/block_padding">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_tripDataLayoutLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/trip_data_layout_label"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/metricsTextSize"
-                    />
+                    android:textSize="@dimen/metricsTextSize"/>
 
-                <TextView
-                    android:id="@+id/text_timeSpentOnAllTripsLabel"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_tripDataLayoutLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
-                    android:text="@string/time_spent_on_all_hint"
-                    />
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/text_timeSpentOnAllTripsListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/text_timeSpentOnAllTripsLabel"
-                    android:layout_alignParentRight="true"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_timeSpentOnAllTripsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:text="@string/time_spent_on_all_hint"/>
 
-                <TextView
-                    android:id="@+id/text_distanceTravelledLabel"
-                    android:layout_width="wrap_content"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_timeSpentOnAllTripsListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_timeSpentOnAllTripsLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:layout_marginTop="@dimen/margin_between_items"
                     android:paddingBottom="@dimen/block_bottom_padding"
-                    android:text="@string/distance_travelled_hint"
-                    />
+                    android:weightSum="10"
+                    >
 
-                <TextView
-                    android:id="@+id/text_distanceTravelledListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/text_distanceTravelledLabel"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_distanceTravelledLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:text="@string/distance_travelled_hint"/>
 
-            </RelativeLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_distanceTravelledListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+            </android.support.v7.widget.LinearLayoutCompat>
 
-            <RelativeLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/listSpeedLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/listDataLayout"
                 android:layout_marginBottom="@dimen/margin_between_blocks_list"
                 android:background="@drawable/blocks_with_shadow"
-                android:padding="@dimen/block_padding"
-                >
+                android:orientation="vertical"
+                android:padding="@dimen/block_padding">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_speedLayoutLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/speed_layout_label"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/metricsTextSize"
-                    />
+                    android:textSize="@dimen/metricsTextSize"/>
 
-                <TextView
-                    android:id="@+id/text_maxSpeedLabel"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/text_speedLayoutLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
-                    android:text="@string/maximum_speed_hint"
-                    />
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/text_maxSpeedListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/text_maxSpeedLabel"
-                    android:layout_alignParentRight="true"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_maxSpeedLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:text="@string/maximum_speed_hint"/>
 
-                <TextView
-                    android:id="@+id/text_tripAvgSpeedLabel"
-                    android:layout_width="wrap_content"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_maxSpeedListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_maxSpeedLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
-                    android:paddingBottom="@dimen/block_bottom_padding"
-                    android:text="@string/average_speed_hint"
-                    />
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/text_avgSpeedListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/text_tripAvgSpeedLabel"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_tripAvgSpeedLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:paddingBottom="@dimen/block_bottom_padding"
+                        android:text="@string/average_speed_hint"/>
 
-            </RelativeLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_avgSpeedListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+            </android.support.v7.widget.LinearLayoutCompat>
 
-            <RelativeLayout
+            <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/listSpeedLayout"
                 android:background="@drawable/blocks_with_shadow"
-                android:padding="@dimen/block_padding"
-                >
+                android:orientation="vertical"
+                android:padding="@dimen/block_padding">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_fuelSpentLayoutLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/fuel_spent_layout_label"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/metricsTextSize"
-                    />
+                    android:textSize="@dimen/metricsTextSize"/>
 
-                <TextView
-                    android:id="@+id/text_avgFuelConsumptionLabel"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/text_fuelSpentLayoutLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
-                    android:text="@string/average_fuel_consumption_hint"
-                    />
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/text_avgFuelConsListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/text_avgFuelConsumptionLabel"
-                    android:layout_alignParentRight="true"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_avgFuelConsumptionLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:text="@string/average_fuel_consumption_hint"/>
 
-                <TextView
-                    android:id="@+id/text_fuelSpentLabel"
-                    android:layout_width="wrap_content"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_avgFuelConsListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_avgFuelConsumptionLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
-                    android:text="@string/fuel_spent_hint"
-                    />
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/text_fuelSpentListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/text_fuelSpentLabel"
-                    android:layout_alignParentRight="true"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_fuelSpentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:text="@string/fuel_spent_hint"/>
 
-                <TextView
-                    android:id="@+id/text_moneyOnFuelSpentLabel"
-                    android:layout_width="wrap_content"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_fuelSpentListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_fuelSpentLabel"
                     android:layout_marginLeft="@dimen/block_item_start_margin"
                     android:paddingBottom="@dimen/block_bottom_padding"
-                    android:text="@string/money_on_fuel_spent_hint"
-                    />
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/text_moneyOnFuelSpentListFrag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/text_moneyOnFuelSpentLabel"
-                    />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_moneyOnFuelSpentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.5"
+                        android:text="@string/money_on_fuel_spent_hint"/>
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_moneyOnFuelSpentListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"/>
+                </android.support.v7.widget.LinearLayoutCompat>
+            </android.support.v7.widget.LinearLayoutCompat>
+        </android.support.v7.widget.LinearLayoutCompat>
 
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/listTripInfoLayout"
-            android:layout_toRightOf="@+id/listTripInfoLayout">
+            android:layout_toRightOf="@+id/listTripInfoLayout"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_tripListHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/list_of_trips_label"
-                android:textSize="@dimen/metricsTextSize"
-                />
+                android:textSize="@dimen/metricsTextSize"/>
 
             <android.support.v7.widget.RecyclerView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/tripList"
                 android:name="com.example.aprokopenko.triphelper.ui.fragment.TripListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignLeft="@+id/text_tripListHeader"
-                android:layout_below="@+id/text_tripListHeader"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:background="@drawable/blocks_with_shadow"
                 android:paddingBottom="5dp"
                 app:layoutManager="LinearLayoutManager"
                 tools:context=".ui.fragment.TripListFragment"
-                tools:listitem="@layout/fragment_item"
-                />
-
-        </RelativeLayout>
-    </RelativeLayout>
+                tools:listitem="@layout/fragment_item"/>
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible"/>
 </RelativeLayout>

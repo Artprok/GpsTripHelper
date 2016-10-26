@@ -35,12 +35,11 @@ public class CircularGaugeFactory {
 
   private void configureSpeedometerForLadscape(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
     final GaugeScale gaugeScale = new GaugeScale();
-    setHeader(gauge, title);
-
     final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
     final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
     final ArrayList<TickSettings> tickSettingArrayList = setupTicks();
 
+    setHeader(gauge, title, true);
     setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList,
             GaugeFactorySettings.startAngleForLand, GaugeFactorySettings.sweepAngleForLand,
             GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSizeForLand);
@@ -48,17 +47,16 @@ public class CircularGaugeFactory {
 
   private void configureSpeedometer(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
     final GaugeScale gaugeScale = new GaugeScale();
-    setHeader(gauge, title);
-
     final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
     final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
     final ArrayList<TickSettings> tickSettingArrayList = setupTicks();
 
+    setHeader(gauge, title, false);
     setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList, GaugeFactorySettings.startAngle,
             GaugeFactorySettings.sweepAngle, GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSize);
   }
 
-  private void setHeader(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
+  private void setHeader(@NonNull final TripHelperGauge gauge, @Nullable final String title, @NonNull final Boolean isLandscape) {
     final ArrayList<Header> gaugeHeaders = new ArrayList<>();
     final Header circularGaugeHeader = new Header();
     if (title == null) {
@@ -68,7 +66,11 @@ public class CircularGaugeFactory {
     }
 
     circularGaugeHeader.setTextColor(GaugeFactorySettings.textColor);
-    circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
+    if (isLandscape) {
+      circularGaugeHeader.setPosition(GaugeFactorySettings.headerPositionLandscape);
+    } else {
+      circularGaugeHeader.setPosition(GaugeFactorySettings.headerPosition);
+    }
     circularGaugeHeader.setTextSize(GaugeFactorySettings.textSize);
     gaugeHeaders.add(0, circularGaugeHeader);
     gauge.setHeaders(gaugeHeaders);

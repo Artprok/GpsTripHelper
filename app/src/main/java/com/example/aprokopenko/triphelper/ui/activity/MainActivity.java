@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override public void onBackPressed() {
-    final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+    final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentConatiner);
     if (f instanceof MainFragment) {
       new AlertDialog.Builder(this).setIcon(R.drawable.btn_exit).setTitle(getString(R.string.exit_dialog_title))
               .setMessage(getString(R.string.exit_dialog_string))
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
       setFabToMap(mainFragment);
       UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
     } else {
-      final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+      final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentConatiner);
       final MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
       if (fragment instanceof MainFragment) {
         if (DEBUG) {

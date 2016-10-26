@@ -51,5 +51,6 @@ public class GaugeFactorySettings {
   public static final int ticksWidth = 3;
 
   public static final PointF headerPosition = new PointF(0.43f, 0.7f);
+  public static final PointF headerPositionLandscape = new PointF(0.43f, 0.8f);
   public static int intervalForLandscapeNotPaid = 20;
 }

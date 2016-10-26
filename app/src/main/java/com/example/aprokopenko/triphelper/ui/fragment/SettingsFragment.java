@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -66,7 +67,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   @BindView(R.id.currencyUnitSpinner)
   Spinner currencyUnitSpinner;
   @BindView(R.id.backgroundSwitch)
-  Switch backgroundSwitch;
+  SwitchCompat backgroundSwitch;
 
   private static final String LOG_TAG = "Settings fragment";
   public static final boolean DEBUG = BuildConfig.DEBUG;

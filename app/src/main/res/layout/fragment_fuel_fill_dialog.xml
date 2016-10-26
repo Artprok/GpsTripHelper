@@ -1,32 +1,28 @@
-<RelativeLayout
+<android.support.v7.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".ui.activity.MainActivity"
+    android:orientation="vertical"
+    tools:context=".ui.activity.MainActivity">
 
-    >
-
-    <EditText
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/editText_fuelToFill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:hint="@string/fuel_filled_val"
         android:inputType="number"
-        android:maxLength="3"
-        />
+        android:maxLength="3"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_refill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText_fuelToFill"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:layout_margin="5dp"
         android:background="@drawable/btn_shape"
         android:padding="10dp"
         android:text="@string/fill_fuel_tank"
         android:textSize="12sp"/>
-
-</RelativeLayout>
+</android.support.v7.widget.LinearLayoutCompat>

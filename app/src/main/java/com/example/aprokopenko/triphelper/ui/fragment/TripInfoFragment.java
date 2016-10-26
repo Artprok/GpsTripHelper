@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,7 +68,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   @BindView(R.id.btn_mapTurnActive)
   ImageButton openMapButton;
   @BindView(R.id.textDataContainer)
-  RelativeLayout dataContainer;
+  LinearLayoutCompat dataContainer;
   @BindView(R.id.text_tripDate)
   TextView tripDateView;
   @BindView(R.id.text_tripId)

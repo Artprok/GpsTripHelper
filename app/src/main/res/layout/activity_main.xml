@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:application="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activity.MainActivity"
-    >
+    tools:context=".ui.activity.MainActivity">
 
-    <include layout="@layout/content_main"/>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/fragmentConatiner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="5dp"
         android:src="@drawable/map_black"
-        application:backgroundTint="@android:color/holo_blue_dark"
-        />
-
-</android.support.design.widget.CoordinatorLayout>
+        application:backgroundTint="@android:color/holo_blue_dark"/>
+</merge>

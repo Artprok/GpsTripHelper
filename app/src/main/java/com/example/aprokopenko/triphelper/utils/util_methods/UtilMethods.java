@@ -146,7 +146,7 @@ public class UtilMethods {
 
     final FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
     fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
-    fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag())
+    fragmentTransaction.replace(R.id.fragmentConatiner, fragment, fragment_tag).addToBackStack(fragment.getTag())
             .commitAllowingStateLoss();
   }
 
