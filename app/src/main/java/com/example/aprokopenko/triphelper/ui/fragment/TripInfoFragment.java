@@ -43,6 +43,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+/**
+ * Class representing a {@link View} populated with {@link com.example.aprokopenko.triphelper.datamodel.TripData}.
+ */
 @Singleton
 public class TripInfoFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
 

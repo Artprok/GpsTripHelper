@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Class responsible for configuring a scales in {@link TripHelperGauge}.
+ */
 public class GaugeScale {
   private double LabelOffset;
   private ArrayList<GaugePointer> GaugePointers;
@@ -71,6 +74,11 @@ public class GaugeScale {
     return gaugeRanges;
   }
 
+  /**
+   * Method for set different ranges to one {@link GaugeScale}.
+   *
+   * @param gaugeRanges {@link ArrayList<GaugeRange>} list of {@link GaugeRange}
+   */
   public void setGaugeRanges(@NonNull final ArrayList<GaugeRange> gaugeRanges) {
     this.gaugeRanges = gaugeRanges;
     if (mGauge != null) {
@@ -137,6 +145,11 @@ public class GaugeScale {
     return interval;
   }
 
+  /**
+   * Method setting interval between ticks in {@link TripHelperGauge}.
+   *
+   * @param interval {@link Double} interval
+   */
   public void setInterval(double interval) {
     this.interval = interval;
     if (mGauge != null) {
@@ -170,6 +183,11 @@ public class GaugeScale {
     return rimColor;
   }
 
+  /**
+   * Method for adding color of outer ring of {@link TripHelperGauge}.
+   *
+   * @param rimColor {@link Integer} color id
+   */
   public void setRimColor(int rimColor) {
     this.rimColor = rimColor;
     if (mGauge != null) {
@@ -181,6 +199,11 @@ public class GaugeScale {
     return rimWidth;
   }
 
+  /**
+   * Method for setting width of outer ring of {@link TripHelperGauge}.
+   *
+   * @param rimWidth {@link Double} width value
+   */
   public void setRimWidth(double rimWidth) {
     this.rimWidth = rimWidth;
     if (mGauge != null) {
@@ -192,6 +215,11 @@ public class GaugeScale {
     return labelTextSize;
   }
 
+  /**
+   * Method for setting label text size.
+   *
+   * @param labelTextSize {@link Double} value representing text size
+   */
   public void setLabelTextSize(double labelTextSize) {
     this.labelTextSize = labelTextSize;
     if (mGauge != null) {
@@ -203,6 +231,11 @@ public class GaugeScale {
     return labelTextStyle;
   }
 
+  /**
+   * Method for setting style for label text.
+   *
+   * @param labelTextStyle {@link Typeface} style
+   */
   public void setLabelTextStyle(Typeface labelTextStyle) {
     this.labelTextStyle = labelTextStyle;
     if (mGauge != null) {
@@ -225,6 +258,11 @@ public class GaugeScale {
     return minorTicksPerInterval;
   }
 
+  /**
+   * Method for set quantity of ticks per interval.
+   *
+   * @param minorTicksPerInterval {@link Double} value for minor ticks per interval
+   */
   public void setMinorTicksPerInterval(double minorTicksPerInterval) {
     this.minorTicksPerInterval = minorTicksPerInterval;
     if (mGauge != null) {
@@ -236,6 +274,11 @@ public class GaugeScale {
     return showLabels;
   }
 
+  /**
+   * Method for enable showing labels.
+   *
+   * @param showLabels {@link Boolean} if true - show, else - hide.
+   */
   public void setShowLabels(final boolean showLabels) {
     this.showLabels = showLabels;
     if (mGauge != null) {
@@ -247,6 +290,11 @@ public class GaugeScale {
     return showTicks;
   }
 
+  /**
+   * Method for enable showing ticks.
+   *
+   * @param showTicks {@link Boolean} if true - show, else - hide.
+   */
   public void setShowTicks(final boolean showTicks) {
     this.showTicks = showTicks;
     if (mGauge != null) {
@@ -258,6 +306,11 @@ public class GaugeScale {
     return showRim;
   }
 
+  /**
+   * Method for enable showing outer ring.
+   *
+   * @param showRim {@link Boolean} if true - show, else - hide.
+   */
   public void setShowRim(boolean showRim) {
     this.showRim = showRim;
     if (mGauge != null) {

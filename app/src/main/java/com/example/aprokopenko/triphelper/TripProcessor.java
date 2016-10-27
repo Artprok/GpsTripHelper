@@ -39,6 +39,9 @@ import java.util.concurrent.ExecutionException;
 
 import rx.Subscriber;
 
+/**
+ * Class in which all logic happens.
+ */
 public class TripProcessor implements Parcelable {
   private static final String LOG_TAG = "TripProcessor";
   private static final boolean DEBUG = BuildConfig.DEBUG;
@@ -70,6 +73,14 @@ public class TripProcessor implements Parcelable {
   private SpeedChangeListener speedChangeListener;
 
 
+  /**
+   * Default constructor with some settings.
+   *
+   * @param context                  {@link Context}
+   * @param fuelConsFromSettings     {@link Float} fuel consumption got from settings
+   * @param fuelPriceFromSettings    {@link Float} fuel price got from settings
+   * @param fuelCapacityFromSettings {@link Integer} capacity of fuel tank got from settings
+   */
   public TripProcessor(@NonNull final Context context, final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings) {
     if (DEBUG) {
       Log.i(LOG_TAG, "TripProcessor: IsConstructed");
@@ -81,9 +92,158 @@ public class TripProcessor implements Parcelable {
     setupTripData();
   }
 
+  public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
+    @Override public TripProcessor createFromParcel(@NonNull final Parcel in) {
+      return new TripProcessor(in);
+    }
+
+    @Override public TripProcessor[] newArray(final int size) {
+      return new TripProcessor[size];
+    }
+  };
+
+  public ArrayList<Float> getAvgSpeedArrayList() {
+    return avgSpeedArrayList;
+  }
+
+  /**
+   * Method for get information if File is in write mode now.
+   *
+   * @return {@link Boolean} true - file file free to use, false - file is busy (in write mode)
+   */
+  public boolean isFileNotInWriteMode() {
+    return !fileIsInReadMode;
+  }
+
+  /**
+   * Method for concat value and fuel prefix.
+   *
+   * @param distancePrefix {@link String} appropriate fuel prefix
+   * @return {@link String} value with prefix
+   */
+  public String getFuelLeftString(@NonNull final String distancePrefix) {
+    final float fuelLeftVal = getFuelLeft();
+    if (DEBUG) {
+      Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
+    }
+    final float distanceToDriveLeft = getLeftDistanceToDrive(fuelLeftVal);
+    return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
+            .formatFloatDecimalFormat(distanceToDriveLeft) + distancePrefix + ")");
+  }
+
+  /**
+   * Method for "fill" gas tank and that return its "new" fuel level.
+   *
+   * @param fuel   {@link Float} amount to fill
+   * @param prefix {@link String} appropriate prefix (litres)
+   * @return {@link} fuel level
+   */
+  public String getFuelLevel(final float fuel, @NonNull final String prefix) {
+    fillGasTank(fuel);
+    return getFuelLeftString(prefix);
+  }
+
+  public GpsHandler getGpsHandler() {
+    return gpsHandler;
+  }
+
+  public ArrayList<Route> getRoutes() {
+    return routes;
+  }
+
+  public TripData getTripData() {
+    return tripData;
+  }
+
+  public void setFuelConsFromSettings(final float fuelConsFromSettings) {
+    this.fuelConsFromSettings = fuelConsFromSettings;
+  }
+
+  public void setFuelCapacity(final int fuelCapacity) {
+    this.fuelCapacity = fuelCapacity;
+  }
+
+  public void setFuelPrice(final float fuelPrice) {
+    this.fuelPrice = fuelPrice;
+  }
+
+  public void setSpeedChangeListener(@NonNull final SpeedChangeListener speedChangeListener) {
+    this.speedChangeListener = speedChangeListener;
+  }
+
+  /**
+   * Method for stop {@link Trip}, store all data and write it to internal storage.
+   */
+  public void stopTracking() {
+    final ArrayList<Float> avgArrayList = getAvgSpeedArrayList();
+    if (DEBUG) {
+      Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
+      for (float f : avgArrayList) {
+        Log.d(LOG_TAG, "stopTracking: " + f);
+      }
+    }
+
+    updateAvgAndMaxSpeedInTrip(avgArrayList);
+    endTrip();
+    setMetricFieldsToTripData(fuelPrice);
+    writeDataToFile();
+    currentTripId = ConstantValues.START_VALUE;
+    avgArrayList.clear();
+  }
+
+  /**
+   * Method to start new {@link Trip}, add it to overall trip data.
+   */
+  public void startNewTrip() {
+    avgSpeedArrayList = getEmptyArrayList_float();
+    routes = getEmptyArrayList_route();
+
+    final Date date = getDateInstance();
+    final String formattedDateToDisplay = getDateToDisplay(date);
+    tripStartTime = getTimeOfStart(date);
+
+    currentTripId = getTripId();
+    final Trip trip = getNewTrip(formattedDateToDisplay);
+    setRoutesToTrip(trip);
+    addTripToOverallTripsData(trip);
+  }
+
+  /**
+   * Method for erasing overall tripData.
+   */
+  public void eraseTripData() {
+    tripData = new TripData();
+  }
+
+  /**
+   * Method for restoring average speed list from {@link ArrayList<String>}.
+   *
+   * @param restoredAvgSpdList {@link ArrayList<String>} restored average speed list populated with {@link String}
+   */
+  public void restoreAvgList(@Nullable final ArrayList<String> restoredAvgSpdList) {
+    if (restoredAvgSpdList != null && restoredAvgSpdList.size() == 0) {
+      final ArrayList<Float> avgSpeedArrayList = getEmptyArrayList_float();
+      for (String restoredAvgSpdValue : restoredAvgSpdList) {
+        avgSpeedArrayList.add(Float.valueOf(restoredAvgSpdValue));
+      }
+      setAvgSpeedArrayList(avgSpeedArrayList);
+    }
+  }
+
+  /**
+   * Method for safe exit from application. Ending all process, etc.
+   */
+  public void performExit() {
+    unsubscribeRx();
+    unregisterServiceConnection();
+    killLocationService();
+    killGpsHandler();
+    killSpeedChangeListener();
+  }
+
   private Bundle configureSettingsBundle(final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings) {
     final Bundle settings = new Bundle();
-    settings.putFloat(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_CONSUMTPION_KEY), fuelConsFromSettings);
+    settings.putFloat(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_CONSUMPTION_KEY), fuelConsFromSettings);
     settings.putFloat(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_PRICE_KEY), fuelPriceFromSettings);
     settings.putInt(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_CAPACITY_KEY), fuelCapacityFromSettings);
     return settings;
@@ -110,99 +270,6 @@ public class TripProcessor implements Parcelable {
     fuelPrice = in.readFloat();
     context = TripHelperApp.getAppContext();
     return context;
-  }
-
-  public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
-    @Override public TripProcessor createFromParcel(@NonNull final Parcel in) {
-      return new TripProcessor(in);
-    }
-
-    @Override public TripProcessor[] newArray(final int size) {
-      return new TripProcessor[size];
-    }
-  };
-
-  public ArrayList<Float> getAvgSpeedArrayList() {
-    return avgSpeedArrayList;
-  }
-
-  public boolean isFileNotInWriteMode() {
-    return !fileIsInReadMode;
-  }
-
-  public String getFuelLeftString(@NonNull final String distancePrefix) {
-    final float fuelLeftVal = getFuelLeft();
-    if (DEBUG) {
-      Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
-    }
-    final float distanceToDriveLeft = getLeftDistanceToDrive(fuelLeftVal);
-    return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
-            .formatFloatDecimalFormat(distanceToDriveLeft) + distancePrefix + ")");
-  }
-
-  public String getFuelLevel(final float fuel, @NonNull final String prefix) {
-    fillGasTank(fuel);
-    return getFuelLeftString(prefix);
-  }
-
-  public GpsHandler getGpsHandler() {
-    return gpsHandler;
-  }
-
-  public ArrayList<Route> getRoutes() {
-    return routes;
-  }
-
-  public TripData getTripData() {
-    return tripData;
-  }
-
-
-  public void setFuelConsFromSettings(final float fuelConsFromSettings) {
-    this.fuelConsFromSettings = fuelConsFromSettings;
-  }
-
-  public void setFuelCapacity(final int fuelCapacity) {
-    this.fuelCapacity = fuelCapacity;
-  }
-
-  public void setFuelPrice(final float fuelPrice) {
-    this.fuelPrice = fuelPrice;
-  }
-
-  public void setSpeedChangeListener(@NonNull final SpeedChangeListener speedChangeListener) {
-    this.speedChangeListener = speedChangeListener;
-  }
-
-  public void stopTracking() {
-    final ArrayList<Float> avgArrayList = getAvgSpeedArrayList();
-    if (DEBUG) {
-      Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
-      for (float f : avgArrayList) {
-        Log.d(LOG_TAG, "stopTracking: " + f);
-      }
-    }
-
-    updateAvgAndMaxSpeedInTrip(avgArrayList);
-    endTrip();
-    setMetricFieldsToTripData(fuelPrice);
-    writeDataToFile();
-    currentTripId = ConstantValues.START_VALUE;
-    avgArrayList.clear();
-  }
-
-  public void startNewTrip() {
-    avgSpeedArrayList = getEmptyArrayList_float();
-    routes = getEmptyArrayList_route();
-
-    final Date date = getDateInstance();
-    final String formattedDateToDisplay = getDateToDisplay(date);
-    tripStartTime = getTimeOfStart(date);
-
-    currentTripId = getTripId();
-    final Trip trip = getNewTrip(formattedDateToDisplay);
-    setRoutesToTrip(trip);
-    addTripToOverallTripsData(trip);
   }
 
   private void addTripToOverallTripsData(@NonNull final Trip trip) {
@@ -242,28 +309,6 @@ public class TripProcessor implements Parcelable {
     return new ArrayList<>();
   }
 
-  public void eraseTripData() {
-    tripData = new TripData();
-  }
-
-  public void restoreAvgList(@Nullable final ArrayList<String> restoredAvgSpdList) {
-    if (restoredAvgSpdList != null && restoredAvgSpdList.size() == 0) {
-      final ArrayList<Float> avgSpeedArrayList = getEmptyArrayList_float();
-      for (String restoredAvgSpdValue : restoredAvgSpdList) {
-        avgSpeedArrayList.add(Float.valueOf(restoredAvgSpdValue));
-      }
-      setAvgSpeedArrayList(avgSpeedArrayList);
-    }
-  }
-
-  public void performExit() {
-    unsubscribeRx();
-    unregisterServiceConnection();
-    killLocationService();
-    killGpsHandler();
-    killSpeedChangeListener();
-  }
-
   private void killSpeedChangeListener() {
     setSpeedChangeListener(null);
   }
@@ -292,7 +337,6 @@ public class TripProcessor implements Parcelable {
     locationSubscriber.unsubscribe();
     speedSubscriber.unsubscribe();
   }
-
 
   private TripData createTripData(@NonNull final ArrayList<Trip> trips, final float avgFuelConsumption, final float fuelSpent, final float distanceTravelled,
                                   final float moneyOnFuelSpent, final float avgSpeed, final float timeSpent, final float gasTank, final float maxSpeed) {
@@ -381,7 +425,6 @@ public class TripProcessor implements Parcelable {
     return trip;
   }
 
-
   private void setupLocationService() {
     serviceIntent = new Intent(context, LocationService.class);
     if (serviceConnection == null && !serviceBound) {
@@ -469,7 +512,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private void setupStartingConditions(@NonNull final Bundle settings) {
-    this.fuelConsFromSettings = settings.getFloat(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_CONSUMTPION_KEY));
+    this.fuelConsFromSettings = settings.getFloat(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_CONSUMPTION_KEY));
     this.fuelCapacity = settings.getInt(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_CAPACITY_KEY));
     this.fuelPrice = settings.getFloat(context.getString(R.string.TRIP_PROCESSOR_SETTING_FUEL_PRICE_KEY));
     routes = getEmptyArrayList_route();

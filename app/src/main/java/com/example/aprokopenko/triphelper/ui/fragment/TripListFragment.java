@@ -34,6 +34,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+/**
+ * Class representing a list populated with {@link Trip}.
+ */
 @Singleton
 public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener {
   @BindView(R.id.text_avgFuelConsListFrag)

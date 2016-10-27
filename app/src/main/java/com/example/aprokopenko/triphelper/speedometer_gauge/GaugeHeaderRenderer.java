@@ -14,6 +14,9 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignmen
 
 import java.util.ArrayList;
 
+/**
+ * Class representing a renderer for render a {@link TripHelperGauge}
+ */
 public class GaugeHeaderRenderer extends View {
   private TripHelperGauge mGauge;
   private Paint mPaint;

@@ -54,7 +54,7 @@
         </android.support.v7.widget.LinearLayoutCompat>
     </FrameLayout>
 
-    <FrameLayout
+    <com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge
         android:id="@+id/speedometerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

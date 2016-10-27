@@ -7,6 +7,9 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;
 
+/**
+ * Util class that contains common information about {@link Trip}
+ */
 public class TripInfoContainer {
   private float avgFuelConsumption = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
   private float distanceTravelled = ConstantValues.NEGATIVE_VALUE_OF_TRIPINFO_ERROR_CODE;
@@ -23,6 +26,23 @@ public class TripInfoContainer {
   private final String date;
   private final Trip trip;
 
+  /**
+   * Default constructor with all needed params.
+   *
+   * @param date               Date of trip in {@link String} format
+   * @param distanceTravelled  distance travelled in {@link Float} format
+   * @param avgSpeed           average speed in {@link Float} format
+   * @param timeSpentForTrip   overall time spent for trip in {@link Float} format
+   * @param timeSpentInMotion  part of all time spent in motion in {@link Float} format
+   * @param timeSpentOnStop    part of all time spent while not moving in {@link Float} format
+   * @param avgFuelConsumption average fuel consumption in {@link Float} format
+   * @param fuelSpent          fuel spent during trip in {@link Float} format
+   * @param id                 id of trip in {@link Integer} format
+   * @param route              route (set of coordinates) represented by {@link ArrayList} of {@link Route}
+   * @param moneyOnFuelSpent   amount of money spent on fuel in {@link Float} format
+   * @param maxSpeed           value of maximum speed fixed in {@link Float} format
+   * @param trip               {@link Trip} itself
+   */
   public TripInfoContainer(@NonNull final String date, final float distanceTravelled, final float avgSpeed, final float timeSpentForTrip, final float timeSpentInMotion, final
   float timeSpentOnStop, final float avgFuelConsumption, final float fuelSpent, final int id, @NonNull final ArrayList<Route> route,
                            final float moneyOnFuelSpent, final float maxSpeed, @Nullable final Trip trip) {

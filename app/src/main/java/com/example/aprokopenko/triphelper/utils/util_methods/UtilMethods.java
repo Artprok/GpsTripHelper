@@ -35,12 +35,22 @@ import java.util.Random;
 
 import butterknife.ButterKnife;
 
+/**
+ * Class with some util methods.
+ */
 public class UtilMethods {
   private static final String LOG_TAG = "UtilMethods";
   private static final boolean DEBUG = BuildConfig.DEBUG;
   private static final float[] testingTempVal = {1};
   private static final Random random = new Random();
 
+  /**
+   * Method for getting consumption level depends on average speed.
+   *
+   * @param avgSpeed {@link Float} average speed
+   * @param fuelCons {@link Float} fuelConsumption
+   * @return {@link Float} value representing fuel consumption for moving at this average speed.
+   */
   public static float getFuelConsumptionLevel(final float avgSpeed, final float fuelCons) {
     if (avgSpeed >= ConstantValues.HIGHWAY_SPEED_AVG_SPEED) {
       if (DEBUG) {
@@ -81,6 +91,12 @@ public class UtilMethods {
     }
   }
 
+  /**
+   * Util method for format {@link Float} to format with one digit after ".".
+   *
+   * @param floatToFormat {@link Float} value to format
+   * @return {@link Float} formatted value
+   */
   public static String formatFloatDecimalFormat(@Nullable final Float floatToFormat) {
     if (floatToFormat != null) {
       final DecimalFormat df = new DecimalFormat("######.#");
@@ -93,6 +109,12 @@ public class UtilMethods {
     }
   }
 
+  /**
+   * Method to format {@link Float} to {@link Integer} and cut all digits after '.'.
+   *
+   * @param floatToFormat {@link Float} value to format
+   * @return {@link Integer} formatted value
+   */
   public static String formatFloatToIntFormat(@Nullable final Float floatToFormat) {
     if (floatToFormat != null) {
       if (DEBUG) {
@@ -108,22 +130,50 @@ public class UtilMethods {
     }
   }
 
+  /**
+   * Util method for delete file with internal app data.
+   *
+   * @param context {@link Context}
+   * @return {@link Boolean} value that represents state of file deleting:
+   * true - deleted
+   * false - not deleted
+   */
   public static boolean eraseFile(@NonNull final Context context) {
     context.deleteFile(ConstantValues.INTERNAL_SETTING_FILE_NAME);
     return context.deleteFile(ConstantValues.FILE_NAME);
   }
 
+  /**
+   * Method for parsing {@link Date} to {@link String}.
+   *
+   * @param dateString {@link Date} value to parse
+   * @return {@link String} parsed value
+   */
   public static String parseDate(@NonNull final Date dateString) {
     final SimpleDateFormat sdf = ConstantValues.DATE_FORMAT;
     return sdf.format(dateString);
   }
 
+  /**
+   * Method for adding a fragment.
+   *
+   * @param fragment         {@link Fragment} to add
+   * @param fragment_tag     {@link String} tag of added fragment
+   * @param fragmentActivity {@link android.support.v4.app.FragmentActivity} parent activity
+   */
   public static void addFragment(@NonNull final Fragment fragment, @NonNull final String fragment_tag, @NonNull final android.support.v4.app.FragmentActivity fragmentActivity) {
     final FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
     fragmentTransaction.add(fragment, fragment_tag)
             .commit();
   }
 
+  /**
+   * Method for replacing current {@link Fragment}
+   *
+   * @param fragment         {@link Fragment} new {@link Fragment}
+   * @param fragment_tag     {@link Fragment} tag of new {@link Fragment}
+   * @param fragmentActivity {@link android.support.v4.app.FragmentActivity} parent activity
+   */
   public static void replaceFragment(@NonNull final Fragment fragment, @NonNull final String fragment_tag, @NonNull final android.support.v4.app.FragmentActivity fragmentActivity) {
     final int orientation = fragmentActivity.getResources()
             .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape
@@ -146,10 +196,17 @@ public class UtilMethods {
 
     final FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
     fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
-    fragmentTransaction.replace(R.id.fragmentConatiner, fragment, fragment_tag).addToBackStack(fragment.getTag())
+    fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag())
             .commitAllowingStateLoss();
   }
 
+  /**
+   * Method for animating {@link TextView}.
+   *
+   * @param initialValue {@link Integer} initial value of {@link TextView}
+   * @param finalValue   {@link Integer} value to set in {@link TextView}
+   * @param textview     {@link TextView} itself
+   */
   public static void animateTextView(final int initialValue, final int finalValue, @Nullable final TextView textview) {
     final ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);
     valueAnimator.setDuration(ConstantValues.SPEEDOMETER_TEXT_ANIM_DURATION);
@@ -163,6 +220,12 @@ public class UtilMethods {
     valueAnimator.start();
   }
 
+  /**
+   * Method for animating {@link FloatingActionButton} animation. (floating left when open, and floating back (right) when close).
+   *
+   * @param fab         {@link FloatingActionButton} to animate
+   * @param transitionX {@link Integer} value to move left and right
+   */
   public static void animateFabTransition(@NonNull final FloatingActionButton fab, final int transitionX) {
     fab.animate().setListener(new Animator.AnimatorListener() {
       @Override public void onAnimationStart(@NonNull final Animator animator) {
@@ -180,11 +243,22 @@ public class UtilMethods {
     }).setDuration(ConstantValues.TEXT_ANIM_DURATION).translationX(transitionX).start();
   }
 
+  /**
+   * Method for show {@link Toast} with set text.
+   *
+   * @param context      {@link Context}
+   * @param stringToShow {@link String} text to show in {@link Toast}
+   */
   public static void showToast(@NonNull final Context context, @NonNull final CharSequence stringToShow) {
     Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
     toast.show();
   }
 
+  /**
+   * Method that showing start dialog with full tutorial.
+   *
+   * @param context {@link Context}
+   */
   public static void firstStartTutorialDialog(@NonNull final Context context) {
     final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
     builder.setIcon(R.drawable.how_to_use);
@@ -205,6 +279,11 @@ public class UtilMethods {
     alert.show();
   }
 
+  /**
+   * Method showing a dialog when application can't open a map in a good manner.
+   *
+   * @param context {@link Context}
+   */
   public static void MapNotAvailableDialog(@NonNull final Context context) {
     final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
     builder.setIcon(R.drawable.something_went_wrong);
@@ -220,6 +299,11 @@ public class UtilMethods {
     alert.show();
   }
 
+  /**
+   * Method for showing default about dialog.
+   *
+   * @param context {@link Context}
+   */
   public static void buildAndShowAboutDialog(@NonNull final Context context) {
     final Resources res = context.getResources();
     final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
@@ -256,11 +340,22 @@ public class UtilMethods {
     alert.show();
   }
 
+  /**
+   * Method that checks if GPS is enabled now.
+   *
+   * @param context {@link Context}
+   * @return {@link Boolean} true - if enabled, false - disabled
+   */
   public static boolean checkIfGpsEnabled(@NonNull final Context context) {
     final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
   }
 
+  /**
+   * Method that checks if GPS is enabled and show dialog that offer to enable GPS.
+   *
+   * @param context {@link Context}
+   */
   public static void checkIfGpsEnabledAndShowDialogs(@NonNull final Context context) {
     final boolean isGpsEnabled = checkIfGpsEnabled(context);
     if (!isGpsEnabled) {
@@ -275,16 +370,32 @@ public class UtilMethods {
     }
   }
 
-  public static void setFabInvisible(@NonNull final Activity activity) {
+  /**
+   * Util method to set {@link FloatingActionButton} invisible.
+   *
+   * @param activity {@link Activity}
+   */
+  public static void hideFab(@NonNull final Activity activity) {
     final FloatingActionButton fab = ButterKnife.findById(activity, R.id.btn_fab);
     fab.setVisibility(View.INVISIBLE);
   }
 
-  public static void setFabVisible(@NonNull final Activity activity) {
+  /**
+   * Util method to set {@link FloatingActionButton} visible.
+   *
+   * @param activity {@link Activity}
+   */
+  public static void showFab(@NonNull final Activity activity) {
     final FloatingActionButton fab = ButterKnife.findById(activity, R.id.btn_fab);
     fab.setVisibility(View.VISIBLE);
   }
 
+  /**
+   * Method for checking if permission allowed.
+   *
+   * @param context {@link Context}
+   * @return {@link Boolean} value represents if allowed. True - allowed, False - no
+   */
   public static boolean isPermissionAllowed(@Nullable final Context context) {
     boolean result = false;
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -299,6 +410,11 @@ public class UtilMethods {
     return result;
   }
 
+  /**
+   * Method that show alert that GPS not enabled and user needs to enable it.
+   *
+   * @param context {@link Context}
+   */
   private static void buildAlertMessageNoGps(@NonNull final Context context) {
     final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
     builder.setIcon(R.drawable.gps_icon);
@@ -348,6 +464,11 @@ public class UtilMethods {
     }
   }
 
+  /**
+   * Test method which generating a random {@link Float} values.
+   *
+   * @return {@link Float} random value
+   */
   public static float generateRandomSpeed() {
     float speed;
     speed = 0 + testingTempVal[0];

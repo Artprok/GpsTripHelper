@@ -19,6 +19,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+/**
+ * Class extends {@link  DialogFragment} responsible for showing a dialog with form that asks for amount fuel to fill.
+ */
 public class FuelFillDialog extends DialogFragment {
   @BindView(R.id.btn_refill)
   Button fillButton;
@@ -39,7 +42,7 @@ public class FuelFillDialog extends DialogFragment {
   }
 
   @OnClick(R.id.btn_refill)
-  public void onRefillButtonClick(){
+  public void onRefillButtonClick() {
     final String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
     float fuel = 0;
     if (!TextUtils.equals(fuelToFill, "")) {

@@ -13,6 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * Class that represents user Trip and parameters of this trip.
+ */
 public class Trip implements Parcelable {
   private float avgFuelConsumption;
   private float timeSpentInMotion;
@@ -42,6 +45,12 @@ public class Trip implements Parcelable {
     route = new ArrayList<>();
   }
 
+  /**
+   * Constructor for {@link Trip}.
+   *
+   * @param tripID   {@link Integer} id of trip
+   * @param tripDate {@link String} Date of trip in {@link String} format
+   */
   public Trip(int tripID, String tripDate) {
     this.tripID = tripID;
     this.tripDate = tripDate;
@@ -120,6 +129,12 @@ public class Trip implements Parcelable {
     return tripDate;
   }
 
+  /**
+   * Method for reading Trip from internal storage
+   *
+   * @param is {@link java.io.InputStream}
+   * @return {@link Trip}
+   */
   public Trip readTrip(@NonNull final ObjectInputStream is) {
     ArrayList<Route> route = new ArrayList<>();
     final int routeSize;
@@ -192,15 +207,20 @@ public class Trip implements Parcelable {
     this.maxSpeed = maxSpeed;
   }
 
+  /**
+   * Method for writing {@link Trip} to internal storage
+   *
+   * @param os {@link java.io.OutputStream}
+   */
   public void writeTrip(@NonNull final ObjectOutputStream os) {
-    Float distanceTravelled = getDistanceTravelled();
-    Float avgFuelConsumption = getAvgFuelConsumption();
-    Float fuelSpent = getFuelSpent();
-    Float moneyOnFuelSpent = getMoneyOnFuelSpent();
-    Float avgSpeed = getAvgSpeed();
-    Float timeSpent = getTimeSpentForTrip();
-    Float maxSpeed = getMaxSpeed();
-    Float timeSpentInMotion = getTimeSpentInMotion();
+    final Float distanceTravelled = getDistanceTravelled();
+    final Float avgFuelConsumption = getAvgFuelConsumption();
+    final Float fuelSpent = getFuelSpent();
+    final Float moneyOnFuelSpent = getMoneyOnFuelSpent();
+    final Float avgSpeed = getAvgSpeed();
+    final Float timeSpent = getTimeSpentForTrip();
+    final Float maxSpeed = getMaxSpeed();
+    final Float timeSpentInMotion = getTimeSpentInMotion();
 
     try {
       os.writeInt(route.size());

@@ -6,10 +6,19 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * Class for representing user driven route on map.
+ */
 public class Route implements Parcelable {
   private final LatLng routePoints;
   private final float speed;
 
+  /**
+   * Constructor for {@link Route}.
+   *
+   * @param routePoints {@link LatLng} coordinates of route.
+   * @param speed       {@link Float} value of speed to draw route with appropriate color
+   */
   public Route(@NonNull final LatLng routePoints, final float speed) {
     this.routePoints = routePoints;
     this.speed = speed;
@@ -39,10 +48,18 @@ public class Route implements Parcelable {
     }
   };
 
+  /**
+   * Method for getting coordinate of route in {@link LatLng}.
+   * @return {@link LatLng} coordinates
+   */
   public LatLng getRoutePoints() {
     return routePoints;
   }
 
+  /**
+   * Method for getting speed of {@link Route}.
+   * @return {@link Float} speed
+   */
   public float getSpeed() {
     return speed;
   }

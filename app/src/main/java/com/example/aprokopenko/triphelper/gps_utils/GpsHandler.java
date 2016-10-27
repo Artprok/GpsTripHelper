@@ -21,6 +21,9 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
+/**
+ * Class responsible for work with GPS utils.
+ */
 public class GpsHandler implements LocationListener, Parcelable {
   @Inject
   LocationManager locationManager;
@@ -62,18 +65,48 @@ public class GpsHandler implements LocationListener, Parcelable {
     }
   };
 
+  @Override public void onLocationChanged(@NonNull final Location location) {
+    final float speed;
+    speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+    setupLocationObservable(location);
+    getMaxSpeedAndSetupObservable(speed);
+    setupSpeedObservable(speed);
+  }
+
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(@NonNull final Parcel parcel, final int i) {
+    parcel.writeFloat(maxSpeed);
+  }
+
+  /**
+   * Method for adding a {@link Subscriber} for listening for {@link Location}.
+   *
+   * @param locationSubscriber {@link Subscriber}
+   */
   public void setLocationSubscriber(@NonNull final Subscriber<Location> locationSubscriber) {
     this.locationSubscriber = locationSubscriber;
   }
 
+  /**
+   * Method for adding a {@link Subscriber} for listening for {@link Float} maxSpeed.
+   *
+   * @param maxSpeedSubscriber {@link Subscriber}
+   */
   public void setMaxSpeedSubscriber(@NonNull final Subscriber<Float> maxSpeedSubscriber) {
     this.maxSpeedSubscriber = maxSpeedSubscriber;
   }
 
+  /**
+   * Method for adding a {@link Subscriber} for listening for {@link Float} speed.
+   *
+   * @param speedSubscriber {@link Subscriber}
+   */
   public void setSpeedSubscriber(@NonNull final Subscriber<Float> speedSubscriber) {
     this.speedSubscriber = speedSubscriber;
   }
-
 
   private void setupLocationObservable(@NonNull final Location location) {
     if (locationObservable == null) {
@@ -119,14 +152,9 @@ public class GpsHandler implements LocationListener, Parcelable {
     setupMaxSpeedObservable(maxSpeed);
   }
 
-  @Override public void onLocationChanged(@NonNull final Location location) {
-    final float speed;
-    speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
-    setupLocationObservable(location);
-    getMaxSpeedAndSetupObservable(speed);
-    setupSpeedObservable(speed);
-  }
-
+  /**
+   * Method for performing exit, interrupt threads and safe ending of all process.
+   */
   public void performExit() {
     if (locationThread != null) {
       locationThread.interrupt();
@@ -137,13 +165,5 @@ public class GpsHandler implements LocationListener, Parcelable {
     locationSubscriber = null;
     speedSubscriber = null;
     maxSpeedSubscriber = null;
-  }
-
-  @Override public int describeContents() {
-    return 0;
-  }
-
-  @Override public void writeToParcel(@NonNull final Parcel parcel, final int i) {
-    parcel.writeFloat(maxSpeed);
   }
 }

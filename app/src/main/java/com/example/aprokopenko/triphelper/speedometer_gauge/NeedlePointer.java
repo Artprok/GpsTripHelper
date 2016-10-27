@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.NeedleType;
 
+/**
+ * Class responsible for configuring NeedleType pointer for {@link TripHelperGauge}.
+ */
 public class NeedlePointer extends GaugePointer {
   private int knobColor;
   private double knobRadius;
@@ -13,7 +16,7 @@ public class NeedlePointer extends GaugePointer {
   public NeedlePointer() {
     knobRadius = GaugeConstants.DEFAULT_KNOB_RADIUS;
     knobColor = GaugeConstants.DEFAULT_KNOB_COLOR;
-    lengthFactor = GaugeConstants.LENGHT_FACTOR;
+    lengthFactor = GaugeConstants.LENGTH_FACTOR;
     type = NeedleType.Bar;
   }
 

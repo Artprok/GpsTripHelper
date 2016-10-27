@@ -1,5 +1,8 @@
 package com.example.aprokopenko.triphelper.speedometer_gauge;
 
+/**
+ * Class responsible for configuring a {@link GaugePointer}.
+ */
 class RangePointer extends GaugePointer {
   private double offset;
 

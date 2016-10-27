@@ -5,6 +5,9 @@ import android.graphics.PointF;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.NeedleType;
 
+/**
+ * Class storing {@link com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge} settings.
+ */
 public class GaugeFactorySettings {
   public static final int startAngle = 120;
   public static final int sweepAngle = 300;

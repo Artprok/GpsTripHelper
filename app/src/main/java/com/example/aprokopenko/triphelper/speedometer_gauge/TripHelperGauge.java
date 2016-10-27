@@ -13,11 +13,14 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Class extends {@link FrameLayout} and represents a circle gauge with {@link GaugeRange}, {@link NeedlePointer}, {@link GaugeScale}.
+ */
 public class TripHelperGauge extends FrameLayout {
   static float DENSITY = -1.0F;
   private GaugeType GaugeType;
-  private final ArrayList<ScaleRenderer> mScaleRenderers;
-  private final ArrayList<PointerRender> mPointerRenderes;
+  private final ArrayList<ScaleRenderer> mScaleRenders;
+  private final ArrayList<PointerRender> mPointerRenders;
   private ArrayList<GaugeScale> gaugeScales;
   private ArrayList<Header> headers;
   private GaugeHeaderRenderer mGaugeHeader;
@@ -42,8 +45,8 @@ public class TripHelperGauge extends FrameLayout {
 
   public TripHelperGauge(@NonNull final Context context, @Nullable final AttributeSet attrs) {
     super(context, attrs);
-    mScaleRenderers = new ArrayList<>();
-    mPointerRenderes = new ArrayList<>();
+    mScaleRenders = new ArrayList<>();
+    mPointerRenders = new ArrayList<>();
     gaugeScales = new ArrayList<>();
     GaugeType = com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.Default;
     frameBackgroundColor = GaugeConstants.FRAME_BACKGROUND_COLOR;
@@ -165,7 +168,7 @@ public class TripHelperGauge extends FrameLayout {
     final ArrayList<ScaleRenderer> removeScaleRen = new ArrayList<>();
     final ArrayList<PointerRender> removedPointerRender = new ArrayList<>();
 
-    for (ScaleRenderer scaleRenderer : mScaleRenderers) {
+    for (ScaleRenderer scaleRenderer : mScaleRenders) {
       removeScaleRen.add(scaleRenderer);
     }
 
@@ -176,7 +179,7 @@ public class TripHelperGauge extends FrameLayout {
     while (i$1.hasNext()) {
       final GaugeScale poinRen = (GaugeScale) i$1.next();
       ScaleRenderer pointRen = null;
-      anim = mScaleRenderers.iterator();
+      anim = mScaleRenders.iterator();
 
       while (true) {
         if (anim.hasNext()) {
@@ -189,7 +192,7 @@ public class TripHelperGauge extends FrameLayout {
 
         if (pointRen == null) {
           final ScaleRenderer anim1 = new ScaleRenderer(this.getContext(), this, poinRen);
-          mScaleRenderers.add(anim1);
+          mScaleRenders.add(anim1);
           this.addView(anim1);
         } else {
           removeScaleRen.remove(pointRen);
@@ -218,7 +221,7 @@ public class TripHelperGauge extends FrameLayout {
       this.removeView(poinRen1);
     }
 
-    i$1 = mPointerRenderes.iterator();
+    i$1 = mPointerRenders.iterator();
 
     PointerRender poinRen2;
     while (i$1.hasNext()) {
@@ -231,7 +234,7 @@ public class TripHelperGauge extends FrameLayout {
     while (i$1.hasNext()) {
       final GaugePointer poinRen3 = (GaugePointer) i$1.next();
       PointerRender pointRen1 = null;
-      anim = mPointerRenderes.iterator();
+      anim = mPointerRenders.iterator();
 
       while (true) {
         if (anim.hasNext()) {
@@ -245,7 +248,7 @@ public class TripHelperGauge extends FrameLayout {
 
         if (pointRen1 == null) {
           final PointerRender anim2 = new PointerRender(this.getContext(), this, poinRen3.getmGaugeScale(), poinRen3);
-          mPointerRenderes.add(anim2);
+          mPointerRenders.add(anim2);
           poinRen3.setmPointerRender(anim2);
           this.addView(anim2);
         } else {

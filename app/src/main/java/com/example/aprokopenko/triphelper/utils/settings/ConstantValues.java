@@ -7,6 +7,9 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+/**
+ * Class storing constant values of application.
+ */
 public class ConstantValues {
 
   public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.getDefault());

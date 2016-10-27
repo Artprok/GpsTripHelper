@@ -16,24 +16,40 @@ import com.example.aprokopenko.triphelper.utils.settings.GaugeFactorySettings;
 
 import java.util.ArrayList;
 
+/**
+ * Class responsible for creating a {@link TripHelperGauge}.
+ */
 public class CircularGaugeFactory {
   public CircularGaugeFactory() {
   }
 
+  /**
+   * Method for getting configured {@link TripHelperGauge} for portrait layout(by default).
+   *
+   * @param context {@link Context}
+   * @param title   {@link String} title of {@link TripHelperGauge}
+   * @return configured for portrait layout {@link TripHelperGauge}
+   */
   public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title) {
     final TripHelperGauge speedometer = new TripHelperGauge(context);
     configureSpeedometer(speedometer, title);
     return speedometer;
   }
 
+  /**
+   * Method for getting configured {@link TripHelperGauge} for landscape layout.
+   *
+   * @param context {@link Context}
+   * @param title   {@link String} title of {@link TripHelperGauge}
+   * @return configured for landscape layout {@link TripHelperGauge}
+   */
   public TripHelperGauge getConfiguredSpeedometerGaugeForLandscape(@NonNull final Context context, @Nullable final String title) {
     final TripHelperGauge speedometer = new TripHelperGauge(context);
-    configureSpeedometerForLadscape(speedometer, title);
-
+    configureSpeedometerForLandscape(speedometer, title);
     return speedometer;
   }
 
-  private void configureSpeedometerForLadscape(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
+  private void configureSpeedometerForLandscape(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
     final GaugeScale gaugeScale = new GaugeScale();
     final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
     final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();

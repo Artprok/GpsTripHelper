@@ -25,6 +25,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+/**
+ * Class representing a {@link Service} responsible for GPS processing in background.
+ */
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
   private static final String LOG_TAG = "LocationService:";

@@ -29,6 +29,9 @@ import javax.inject.Singleton;
 
 import rx.Subscriber;
 
+/**
+ * {@link android.support.v4.app.Fragment} responsible for showing map with driven routes.
+ */
 @Singleton
 public class MapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
   private static final String LOG_TAG = "MAP_FRAGMENT";

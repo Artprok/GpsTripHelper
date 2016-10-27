@@ -3,6 +3,9 @@ package com.example.aprokopenko.triphelper.speedometer_gauge;
 import android.animation.ObjectAnimator;
 import android.support.annotation.NonNull;
 
+/**
+ * Class responsible for configuration a pointer in {@link TripHelperGauge}.
+ */
 public class GaugePointer {
   private int color;
   private boolean enableAnimation;
@@ -23,6 +26,10 @@ public class GaugePointer {
     return value;
   }
 
+  /**
+   * Method for setting value for pointer to point.
+   * @param newValue {@link Double} new value to point
+   */
   public void setValue(final double newValue) {
     if (mPointerRender != null) {
       ObjectAnimator animator = ObjectAnimator.ofFloat(mPointerRender, "value", (float) value, (float) newValue);

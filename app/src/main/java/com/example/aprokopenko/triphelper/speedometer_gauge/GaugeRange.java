@@ -2,6 +2,9 @@ package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 import android.support.annotation.NonNull;
 
+/**
+ * Class responsible for configuration a Range for {@link TripHelperGauge}.
+ */
 public class GaugeRange {
   private TripHelperGauge mGauge;
 
@@ -38,6 +41,11 @@ public class GaugeRange {
     return startValue;
   }
 
+  /**
+   * Method for set value from {@link GaugeRange} is starting.
+   *
+   * @param startValue {@link Double} startValue
+   */
   public void setStartValue(final double startValue) {
     this.startValue = startValue;
     if (mGauge != null) {
@@ -49,6 +57,11 @@ public class GaugeRange {
     return endValue;
   }
 
+  /**
+   * Method for set value that {@link GaugeRange} ends.
+   *
+   * @param endValue {@link Double} end value
+   */
   public void setEndValue(final double endValue) {
     this.endValue = endValue;
     if (mGauge != null) {

@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 
+/**
+ * Class representing a common settings constants for configuration {@link TripHelperGauge}
+ */
 class GaugeConstants {
 
   static final double ZERO = 0.0;
@@ -15,7 +18,7 @@ class GaugeConstants {
   public static final double ANGLE_360 = 360.0;
 
   static final double DEFAULT_KNOB_RADIUS = 15.0;
-  static final double LENGHT_FACTOR = 1;
+  static final double LENGTH_FACTOR = 1;
   static final int DEFAULT_KNOB_COLOR = Color.parseColor("#FF777777");
 
   static final double DEFAULT_HEADER_TEXT_SIZE = 12.0;

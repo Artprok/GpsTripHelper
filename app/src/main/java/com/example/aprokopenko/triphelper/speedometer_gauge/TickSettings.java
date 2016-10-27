@@ -2,6 +2,9 @@ package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 import android.support.annotation.NonNull;
 
+/**
+ * Class contains settings about ticks on {@link GaugeScale}.
+ */
 public class TickSettings {
   private TripHelperGauge mGauge;
   private int color;

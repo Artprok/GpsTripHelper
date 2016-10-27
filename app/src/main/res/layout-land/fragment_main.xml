@@ -106,9 +106,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/margin_outer"
                     android:background="@android:color/transparent"
                     android:text="@string/stop"
-                    android:layout_margin="@dimen/margin_outer"
                     android:visibility="invisible"/>
 
                 <Button
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
+            <com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge
                 android:id="@+id/speedometerContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
@@ -136,11 +136,11 @@
                 android:id="@+id/text_SpeedometerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="-50dp"
                 android:text="@string/initial_speedometer_val"
                 android:textSize="@dimen/speedometerTextViewSize"
-                android:layout_gravity="center_horizontal"
-                tools:text="0"
-                android:layout_marginTop="-50dp"/>
+                tools:text="0"/>
         </android.support.v7.widget.LinearLayoutCompat>
 
         <android.support.v7.widget.LinearLayoutCompat

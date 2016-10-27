@@ -42,6 +42,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+/**
+ * Class responsible for store and changing settings.
+ */
 @Singleton
 public class SettingsFragment extends android.support.v4.app.Fragment {
 

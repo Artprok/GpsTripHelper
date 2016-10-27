@@ -15,6 +15,9 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Class responsible for rendering a {@link GaugeScale}.
+ */
 public class ScaleRenderer extends View {
 
   private TripHelperGauge gauge;

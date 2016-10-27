@@ -13,6 +13,9 @@ import android.view.View;
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType;
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.NeedleType;
 
+/**
+ * Class responsible for rendering {@link NeedlePointer}.
+ */
 public class PointerRender extends View {
 
   private GaugePointer mGaugePointer;

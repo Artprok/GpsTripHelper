@@ -31,6 +31,9 @@ import butterknife.Unbinder;
 import dagger.Module;
 import io.fabric.sdk.android.Fabric;
 
+/**
+ * Class representing a main {@link AppCompatActivity}
+ */
 @Module
 public class MainActivity extends AppCompatActivity {
   @BindView(R.id.btn_fab)
@@ -39,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
   private static final String LOG_TAG = "MainActivity";
   public static final boolean DEBUG = BuildConfig.DEBUG;
   private int fabTransitionValue;
-
-
   private Unbinder unbinder;
 
   @Override protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override public void onBackPressed() {
-    final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentConatiner);
+    final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
     if (f instanceof MainFragment) {
       new AlertDialog.Builder(this).setIcon(R.drawable.btn_exit).setTitle(getString(R.string.exit_dialog_title))
               .setMessage(getString(R.string.exit_dialog_string))
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void proceedToFragmentCreating(@Nullable final Bundle savedInstanceState) {
-    UtilMethods.setFabInvisible(this);
+    UtilMethods.hideFab(this);
     final DataHolderFragment dataHolderFragment;
     if (savedInstanceState == null) {
       if (DEBUG) {
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
       setFabToMap(mainFragment);
       UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
     } else {
-      final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentConatiner);
+      final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
       final MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
       if (fragment instanceof MainFragment) {
         if (DEBUG) {

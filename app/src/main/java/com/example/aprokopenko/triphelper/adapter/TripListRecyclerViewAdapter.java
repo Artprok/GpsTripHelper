@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Class represents an {@link android.widget.BaseAdapter} for populating a {@link RecyclerView} with {@link Trip}
+ */
 public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRecyclerViewAdapter.ViewHolder> {
   public static final String LOG_TAG = "RECYCLER_ADAPTER";
 

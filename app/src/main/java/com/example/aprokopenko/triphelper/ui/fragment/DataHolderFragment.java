@@ -8,6 +8,9 @@ import com.example.aprokopenko.triphelper.datamodel.TripData;
 
 import javax.inject.Singleton;
 
+/**
+ * Class responsible for transfer a {@link TripData} between fragments and state.
+ */
 @Singleton
 public class DataHolderFragment extends android.support.v4.app.Fragment {
   private static final String LOG_TAG = "DataHolder";

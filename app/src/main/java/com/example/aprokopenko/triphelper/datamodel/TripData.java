@@ -8,6 +8,9 @@ import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.util.ArrayList;
 
+/**
+ * Class represents overall information about all {@link Trip}
+ */
 public class TripData implements Parcelable {
 
   private float avgFuelConsumption;

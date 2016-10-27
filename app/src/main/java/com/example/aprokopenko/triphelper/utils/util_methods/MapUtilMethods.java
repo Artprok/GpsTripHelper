@@ -18,11 +18,22 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+/**
+ * Class with {@link com.example.aprokopenko.triphelper.ui.fragment.MapFragment} utils.
+ */
 public class MapUtilMethods {
 
   private static final String LOG_TAG = "MapUtilMethods";
   public static final boolean DEBUG = BuildConfig.DEBUG;
 
+  /**
+   * Method for unwrap route from params.
+   *
+   * @param latitudes  {@link ArrayList<String>} list of latitudes
+   * @param longitudes {@link ArrayList<String>} list of longitudes
+   * @param speedArr   {@link ArrayList<String>} list of speed values
+   * @return {@link ArrayList<Route>} list of {@link Route} built with provided params
+   */
   public static ArrayList<Route> unwrapRoute(@NonNull final ArrayList<String> latitudes, @NonNull final ArrayList<String> longitudes, @NonNull final ArrayList<String> speedArr) {
     final ArrayList<Route> route = new ArrayList<>();
     Float speed;
@@ -36,6 +47,14 @@ public class MapUtilMethods {
     return route;
   }
 
+  /**
+   * Method for getting previous location. Needed to draw a route on map in appropriate way.
+   *
+   * @param routes       {@link ArrayList<Route>} list of {@link Route}
+   * @param size         {@link Integer} size of route to draw, how many points it has
+   * @param currentIndex {@link Integer} current node of route on map
+   * @return {@link LatLng} previous node of route on map in coordinates
+   */
   public static LatLng getPreviousLocation(@NonNull final ArrayList<Route> routes, final int size, final int currentIndex) {
     final LatLng previousLocation;
     if (size > 1 && currentIndex > 1) {
@@ -46,6 +65,13 @@ public class MapUtilMethods {
     return previousLocation;
   }
 
+  /**
+   * Method for drawing route (path) on map from given data
+   *
+   * @param routes    {@link ArrayList<Route>} list of {@link Route} to get positions of path nodes
+   * @param googleMap {@link GoogleMap} map itself
+   * @return {@link Boolean} boolean value for approve that path is drawn
+   */
   public static boolean drawPathFromData(@Nullable final ArrayList<Route> routes, @NonNull final GoogleMap googleMap) {
     if (routes != null) {
       for (int i = 0; i < routes.size(); i++) {
@@ -63,6 +89,13 @@ public class MapUtilMethods {
   }
 
 
+  /**
+   * Method for animate camera motion to current location
+   *
+   * @param location {@link Location} location
+   * @param position {@link LatLng} position to move in coordinates
+   * @param googleMap {@link GoogleMap} map itself
+   */
   public static void animateCamera(@Nullable final Location location, @Nullable final LatLng position, @NonNull final GoogleMap googleMap) {
     if (location != null) {
       final CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(),
@@ -85,6 +118,14 @@ public class MapUtilMethods {
     }
   }
 
+  /**
+   * Method that draw path in appropriate color depends on speed.
+   *
+   * @param googleMap {@link GoogleMap} a map itself
+   * @param prevLoc {@link LatLng} previous location in coordinates
+   * @param curLoc {@link LatLng} current location in coordinates
+   * @param speed {@link Float} a speed to choose color of drawing
+   */
   public static void addPolylineDependsOnSpeed(@NonNull final GoogleMap googleMap, @NonNull final LatLng prevLoc, @NonNull final LatLng curLoc, @Nullable final Float speed) {
     int color = Color.BLACK;
     if (speed != null) {

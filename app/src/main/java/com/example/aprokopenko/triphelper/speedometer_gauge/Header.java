@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 
 import com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignment;
 
+/**
+ * Class for configuring header for {@link TripHelperGauge}
+ */
 public class Header {
   private com.example.aprokopenko.triphelper.speedometer_gauge.enums.HeaderAlignment HeaderAlignment;
 
