@@ -11,8 +11,7 @@
         android:id="@+id/textDataContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10"
-        android:layout_margin="5dp">
+        android:weightSum="10">
 
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
@@ -23,10 +22,12 @@
                 android:id="@+id/tripDataLayout"
                 android:layout_width="250dp"
                 android:layout_height="@dimen/fragment_trip_info_block_height"
-                android:layout_margin="@dimen/margin_between_blocks_info"
                 android:background="@drawable/blocks_with_shadow"
                 android:orientation="vertical"
-                android:padding="@dimen/block_padding">
+                android:padding="@dimen/block_padding"
+                android:layout_marginBottom="@dimen/margin_between_blocks_info"
+                android:layout_marginEnd="@dimen/margin_between_blocks_info"
+                android:layout_marginStart="@dimen/margin_between_blocks_info">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_tripDataLayoutLabel"
@@ -100,11 +101,12 @@
             <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/tripTimeSpentLayout"
                 android:layout_width="250dp"
-                android:layout_margin="@dimen/margin_between_blocks_info"
+                android:layout_height="@dimen/fragment_trip_info_block_height"
                 android:background="@drawable/blocks_with_shadow"
                 android:orientation="vertical"
                 android:padding="@dimen/block_padding"
-                android:layout_height="@dimen/fragment_trip_info_block_height">
+                android:layout_marginEnd="@dimen/margin_between_blocks_info"
+                android:layout_marginStart="@dimen/margin_between_blocks_info">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tripTimeSpentLayoutLabel"
@@ -185,10 +187,11 @@
                 android:id="@+id/tripFuelSpentLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/fragment_trip_info_block_height"
-                android:layout_margin="@dimen/margin_between_blocks_info"
                 android:background="@drawable/blocks_with_shadow"
                 android:orientation="vertical"
-                android:padding="@dimen/block_padding">
+                android:padding="@dimen/block_padding"
+                android:layout_marginBottom="@dimen/margin_between_blocks_info"
+                android:layout_marginEnd="@dimen/margin_between_blocks_info">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tripFuelSpentLayoutLabel"
@@ -266,7 +269,8 @@
                 android:background="@drawable/blocks_with_shadow"
                 android:orientation="vertical"
                 android:padding="@dimen/block_padding"
-                android:layout_margin="@dimen/margin_between_blocks_info">
+                android:layout_marginEnd="@dimen/margin_between_blocks_info"
+                android:layout_marginBottom="@dimen/margin_between_blocks_info">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_speedLayoutLabel"
@@ -331,7 +335,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_gravity="bottom|right"
-        android:layout_margin="5dp"
         android:background="@drawable/btn_background"
-        android:src="@drawable/btn_map"/>
+        android:src="@drawable/btn_map"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"/>
 </FrameLayout>

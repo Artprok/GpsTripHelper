@@ -16,11 +16,10 @@
         android:src="@drawable/btn_erase"/>
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="5dp">
 
         <FrameLayout
             android:layout_width="match_parent"

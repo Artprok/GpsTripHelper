@@ -34,9 +34,6 @@ android {
             minifyEnabled false
         }
     }
-    dexOptions {
-        incremental true
-    }
 
     splits {
         abi {

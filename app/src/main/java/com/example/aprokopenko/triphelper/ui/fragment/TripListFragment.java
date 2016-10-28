@@ -39,23 +39,23 @@ import butterknife.Unbinder;
  */
 @Singleton
 public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener {
-  @BindView(R.id.text_avgFuelConsListFrag)
+  @BindView(R.id.fragment_item_list_avgFuelConsListFrag)
   TextView avgFuelConsumptionView;
-  @BindView(R.id.text_distanceTravelledListFrag)
+  @BindView(R.id.fragment_item_list_distanceTravelledListFrag)
   TextView distanceTravelledView;
-  @BindView(R.id.text_moneyOnFuelSpentListFrag)
+  @BindView(R.id.fragment_item_list_moneyOnFuelSpentListFrag)
   TextView moneyOnFuelView;
-  @BindView(R.id.text_timeSpentOnAllTripsListFrag)
+  @BindView(R.id.fragment_item_list_timeSpentOnAllTripsListFrag)
   TextView timeSpentView;
-  @BindView(R.id.text_fuelSpentListFrag)
+  @BindView(R.id.fragment_item_list_fuelSpentListFrag)
   TextView fuelSpentView;
-  @BindView(R.id.tripList)
+  @BindView(R.id.fragment_item_list_tripList)
   RecyclerView tripListView;
-  @BindView(R.id.text_avgSpeedListFrag)
+  @BindView(R.id.fragment_item_list_avgSpeedListFrag)
   TextView avgSpeedView;
-  @BindView(R.id.text_maxSpeedListFrag)
+  @BindView(R.id.fragment_item_list_maxSpeedListFrag)
   TextView maxSpeedView;
-  @BindView(R.id.progressBar)
+  @BindView(R.id.fragment_item_list_progressBar)
   ProgressBar progressBar;
 
   private static final String LOG_TAG = "TripListFragment";
