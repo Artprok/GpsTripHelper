@@ -42,11 +42,9 @@ public class GaugeHeaderRenderer extends View {
     if (mGauge != null && headerArrayList != null) {
 
       headerArrayList = mGauge.getHeaders();
-      RectF mVisualRect = mGauge.getmVisualRect();
+      final RectF mVisualRect = mGauge.getmVisualRect();
       final double mCentreX = mGauge.getmCentreX();
       final double mCentreY = mGauge.getmCentreY();
-      final double mGaugeWidth = mGauge.getmGaugeWidth();
-      final double mGaugeHeight = mGauge.getmGaugeHeight();
 
       for (Header header : headerArrayList) {
         header.setGauge(mGauge);
@@ -98,12 +96,12 @@ public class GaugeHeaderRenderer extends View {
                     top = modif_centerYmultBy2minus10;
                   } else if (mCentreY > mCentreX) {
                     final PointF pointF = header.getPosition();
-                    left = mGaugeWidth * (pointF.x);
+                    left = mGauge.getmGaugeWidth() * (pointF.x);
                     top = (mCentreY - ((mVisualRect.height() / 2.0f))) + ((mVisualRect.height() * pointF.y));
                   } else {
                     PointF pointF = header.getPosition();
                     left = (mCentreX - ((mVisualRect.width() / 2.0f))) + ((mVisualRect.width() * pointF.x));
-                    top = mGaugeHeight * (pointF.y);
+                    top = mGauge.getmGaugeHeight() * (pointF.y);
                   }
                 }
               }

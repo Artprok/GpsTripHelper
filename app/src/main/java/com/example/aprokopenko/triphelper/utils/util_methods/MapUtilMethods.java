@@ -35,16 +35,11 @@ public class MapUtilMethods {
    * @return {@link ArrayList<Route>} list of {@link Route} built with provided params
    */
   public static ArrayList<Route> unwrapRoute(@NonNull final ArrayList<String> latitudes, @NonNull final ArrayList<String> longitudes, @NonNull final ArrayList<String> speedArr) {
-    final ArrayList<Route> route = new ArrayList<>();
-    Float speed;
-    Route routePoint;
+    final ArrayList<Route> routes = new ArrayList<>();
     for (int i = 0; i < latitudes.size(); i++) {
-      final LatLng routePointCoordinates = new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i)));
-      speed = Float.valueOf(speedArr.get(i));
-      routePoint = new Route(routePointCoordinates, speed);
-      route.add(routePoint);
+      routes.add(new Route(new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i))), Float.valueOf(speedArr.get(i))));
     }
-    return route;
+    return routes;
   }
 
   /**
@@ -56,13 +51,11 @@ public class MapUtilMethods {
    * @return {@link LatLng} previous node of route on map in coordinates
    */
   public static LatLng getPreviousLocation(@NonNull final ArrayList<Route> routes, final int size, final int currentIndex) {
-    final LatLng previousLocation;
     if (size > 1 && currentIndex > 1) {
-      previousLocation = (routes.get(currentIndex - 1).getRoutePoints());
+      return (routes.get(currentIndex - 1).getRoutePoints());
     } else {
-      previousLocation = (routes.get(currentIndex).getRoutePoints());
+      return (routes.get(currentIndex).getRoutePoints());
     }
-    return previousLocation;
   }
 
   /**
@@ -75,15 +68,12 @@ public class MapUtilMethods {
   public static boolean drawPathFromData(@Nullable final ArrayList<Route> routes, @NonNull final GoogleMap googleMap) {
     if (routes != null) {
       for (int i = 0; i < routes.size(); i++) {
-        final LatLng currentLocation = (routes.get(i).getRoutePoints());
-        final LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
         if (DEBUG) {
           Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
         }
-        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
+        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, MapUtilMethods.getPreviousLocation(routes, routes.size(), i), (routes.get(i).getRoutePoints()), routes.get(i).getSpeed());
       }
-      final LatLng positionToAnimate = MapUtilMethods.getPositionForCamera(routes);
-      MapUtilMethods.animateCamera(null, positionToAnimate, googleMap);
+      MapUtilMethods.animateCamera(null, MapUtilMethods.getPositionForCamera(routes), googleMap);
       return true;
     } else return false;
   }
@@ -92,8 +82,8 @@ public class MapUtilMethods {
   /**
    * Method for animate camera motion to current location
    *
-   * @param location {@link Location} location
-   * @param position {@link LatLng} position to move in coordinates
+   * @param location  {@link Location} location
+   * @param position  {@link LatLng} position to move in coordinates
    * @param googleMap {@link GoogleMap} map itself
    */
   public static void animateCamera(@Nullable final Location location, @Nullable final LatLng position, @NonNull final GoogleMap googleMap) {
@@ -122,9 +112,9 @@ public class MapUtilMethods {
    * Method that draw path in appropriate color depends on speed.
    *
    * @param googleMap {@link GoogleMap} a map itself
-   * @param prevLoc {@link LatLng} previous location in coordinates
-   * @param curLoc {@link LatLng} current location in coordinates
-   * @param speed {@link Float} a speed to choose color of drawing
+   * @param prevLoc   {@link LatLng} previous location in coordinates
+   * @param curLoc    {@link LatLng} current location in coordinates
+   * @param speed     {@link Float} a speed to choose color of drawing
    */
   public static void addPolylineDependsOnSpeed(@NonNull final GoogleMap googleMap, @NonNull final LatLng prevLoc, @NonNull final LatLng curLoc, @Nullable final Float speed) {
     int color = Color.BLACK;
@@ -135,12 +125,9 @@ public class MapUtilMethods {
   }
 
   private static LatLng getPositionForCamera(@NonNull final ArrayList<Route> routes) {
-    final LatLng lastPoint;
     final int routeSize = routes.size();
-    final int index = routeSize - 1;
-    if (index > 0) {
-      lastPoint = routes.get(routeSize - 1).getRoutePoints();
-      return lastPoint;
+    if (routeSize - 1 > 0) {
+      return routes.get(routeSize - 1).getRoutePoints();
     } else {
       return ConstantValues.BERMUDA_COORDINATES;
     }

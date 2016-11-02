@@ -66,8 +66,7 @@ public class GpsHandler implements LocationListener, Parcelable {
   };
 
   @Override public void onLocationChanged(@NonNull final Location location) {
-    final float speed;
-    speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+    final float speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
     setupLocationObservable(location);
     getMaxSpeedAndSetupObservable(speed);
     setupSpeedObservable(speed);

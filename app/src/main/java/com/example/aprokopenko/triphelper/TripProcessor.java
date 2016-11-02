@@ -26,7 +26,6 @@ import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -71,7 +70,6 @@ public class TripProcessor implements Parcelable {
   private Subscriber<Float> speedSubscriber;
 
   private SpeedChangeListener speedChangeListener;
-
 
   /**
    * Default constructor with some settings.
@@ -126,9 +124,8 @@ public class TripProcessor implements Parcelable {
     if (DEBUG) {
       Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
     }
-    final float distanceToDriveLeft = getLeftDistanceToDrive(fuelLeftVal);
     return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
-            .formatFloatDecimalFormat(distanceToDriveLeft) + distancePrefix + ")");
+            .formatFloatDecimalFormat(getLeftDistanceToDrive(fuelLeftVal)) + distancePrefix + ")");
   }
 
   /**
@@ -195,15 +192,12 @@ public class TripProcessor implements Parcelable {
    * Method to start new {@link Trip}, add it to overall trip data.
    */
   public void startNewTrip() {
+    final Date date = getDateInstance();
+    final Trip trip = getNewTrip(getDateToDisplay(date));
     avgSpeedArrayList = getEmptyArrayList_float();
     routes = getEmptyArrayList_route();
-
-    final Date date = getDateInstance();
-    final String formattedDateToDisplay = getDateToDisplay(date);
     tripStartTime = getTimeOfStart(date);
-
     currentTripId = getTripId();
-    final Trip trip = getNewTrip(formattedDateToDisplay);
     setRoutesToTrip(trip);
     addTripToOverallTripsData(trip);
   }
@@ -255,7 +249,6 @@ public class TripProcessor implements Parcelable {
   }
 
   private Context setupTripProcessorFromParcel(@NonNull final Parcel in) {
-    final Context context;
     fileIsInReadMode = in.readByte() != 0;
     tripStartTime = in.readLong();
     currentTripId = in.readInt();
@@ -268,8 +261,7 @@ public class TripProcessor implements Parcelable {
     fuelConsFromSettings = in.readFloat();
     fuelCapacity = in.readInt();
     fuelPrice = in.readFloat();
-    context = TripHelperApp.getAppContext();
-    return context;
+    return TripHelperApp.getAppContext();
   }
 
   private void addTripToOverallTripsData(@NonNull final Trip trip) {
@@ -374,20 +366,18 @@ public class TripProcessor implements Parcelable {
   }
 
   private float getAverageSpeedFromOverallTrips() {
-    float avgSpeed = getTripData().getAvgSpeed();
+    final float avgSpeed = getTripData().getAvgSpeed();
     if (avgSpeed == 0) {
-      avgSpeed = ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
+      return ConstantValues.MEDIUM_TRAFFIC_AVG_SPEED;
     }
     return avgSpeed;
   }
 
   private float calculateDistanceLeftToDrive(final float fuelLeftVal) {
-    final float avgSpeed = getAverageSpeedFromOverallTrips();
     if (DEBUG) {
-      Log.d(LOG_TAG, "getLeftDistanceToDrive: " + fuelConsFromSettings + "avgSped" + avgSpeed);
+      Log.d(LOG_TAG, "getLeftDistanceToDrive: " + fuelConsFromSettings + "avgSped" + getAverageSpeedFromOverallTrips());
     }
-    final float fuelConsLevel = getFuelConsumptionLevelFromAvgSpeed(avgSpeed);
-    return (fuelLeftVal / fuelConsLevel) * ConstantValues.PER_100;
+    return (fuelLeftVal / getFuelConsumptionLevelFromAvgSpeed(getAverageSpeedFromOverallTrips())) * ConstantValues.PER_100;
   }
 
   private float getFuelConsumptionLevelFromAvgSpeed(final float avgSpeed) {
@@ -420,9 +410,8 @@ public class TripProcessor implements Parcelable {
   }
 
   private Trip readTrip(@NonNull final ObjectInputStream is) {
-    Trip trip = new Trip();
-    trip = trip.readTrip(is);
-    return trip;
+    final Trip trip = new Trip();
+    return trip.readTrip(is);
   }
 
   private void setupLocationService() {
@@ -458,8 +447,8 @@ public class TripProcessor implements Parcelable {
   private void setupServiceConnection() {
     serviceConnection = new ServiceConnection() {
       @Override public void onServiceConnected(@NonNull final ComponentName className, @NonNull final IBinder service) {
-        serviceBound = true;
         final LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
+        serviceBound = true;
         locationService = binder.getService();
         configureGpsHandler();
         if (DEBUG) {
@@ -590,6 +579,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private void setMetricFieldsToTripData(final float fuelPriceFromSettings) {
+    final ArrayList<Trip> allTrips = tripData.getTrips();
     final float startVal = ConstantValues.START_VALUE;
     final TripData tripData = getTripData();
     Float fuelSpent = startVal;
@@ -597,8 +587,6 @@ public class TripProcessor implements Parcelable {
     Float avgSpeedSum = startVal;
     Float avgFuelCons = startVal;
     Float maxSpeed = startVal;
-    final Float distTravelled;
-    final ArrayList<Trip> allTrips = tripData.getTrips();
 
     for (Trip trip : allTrips) {
       timeSpentForAllTrips = timeSpentForAllTrips + trip.getTimeSpentForTrip();
@@ -610,12 +598,11 @@ public class TripProcessor implements Parcelable {
       avgFuelCons = (avgFuelCons + ((trip.getAvgFuelConsumption() * majority_multiplier) / ConstantValues.PER_100));
       avgSpeedSum = (avgSpeedSum + ((trip.getAvgSpeed() * majority_multiplier) / ConstantValues.PER_100));
     }
-    distTravelled = CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeedSum);
     //double assurance that NULL won't be passed to trip data. Method "getValueCheckedOnNAN" replaces NULL&NAN values by 0f;
     tripData.setMaxSpeed(getValueCheckedOnNAN(maxSpeed));
     tripData.setAvgSpeed(getValueCheckedOnNAN(avgSpeedSum));
     tripData.setTimeSpentOnTrips(getValueCheckedOnNAN(timeSpentForAllTrips));
-    tripData.setDistanceTravelled(getValueCheckedOnNAN(distTravelled));
+    tripData.setDistanceTravelled(getValueCheckedOnNAN(CalculationUtils.calcDistTravelled(timeSpentForAllTrips, avgSpeedSum)));
     tripData.setAvgFuelConsumption(getValueCheckedOnNAN(avgFuelCons));
     tripData.setFuelSpent(getValueCheckedOnNAN(fuelSpent));
     tripData.setGasTank(getValueCheckedOnNAN(tripData.getGasTank() - getCurrentTrip().getFuelSpent()));
@@ -630,16 +617,13 @@ public class TripProcessor implements Parcelable {
   }
 
   private void addRoutePoint(@NonNull final LatLng routePoints, final float speed) {
-    final Route routePoint = new Route(routePoints, speed);
-    addRoutePoint(routePoint);
+    addRoutePoint(new Route(routePoints, speed));
   }
 
   private void updateAvgAndMaxSpeedInTrip(@NonNull final ArrayList<Float> avgArrayList) {
-    final float averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
-    final float maximumSpeed = maxSpeedVal;
     final Trip trip = getCurrentTripFromTripData();
-    trip.setAvgSpeed(averageSpeed);
-    trip.setMaxSpeed(maximumSpeed);
+    trip.setAvgSpeed(CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList));
+    trip.setMaxSpeed(maxSpeedVal);
   }
 
   private Trip getCurrentTripFromTripData() {
@@ -647,9 +631,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private void addPointToRouteList(@NonNull final Location location) {
-    final LatLng routePoint = getRoutePointFromLocation(location);
-    final float speed = getSpeedFromLocation(location);
-    addRoutePoint(routePoint, speed);
+    addRoutePoint(getRoutePointFromLocation(location), getSpeedFromLocation(location));
   }
 
   private float getSpeedFromLocation(@NonNull final Location location) {
@@ -679,29 +661,27 @@ public class TripProcessor implements Parcelable {
   private void getTripDataFieldsValues() {
     float distanceTravelled = ConstantValues.START_VALUE;
     float fuelSpent = ConstantValues.START_VALUE;
-    final float avgFuelConsumption;
     for (Trip trip : tripData.getTrips()) {
       distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
       fuelSpent = fuelSpent + trip.getFuelSpent();
     }
     final float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
-    avgFuelConsumption = tripData.getAvgFuelConsumption();
     tripData.setDistanceTravelled(distanceTravelled);
-    tripData.setAvgFuelConsumption(avgFuelConsumption);
+    tripData.setAvgFuelConsumption(tripData.getAvgFuelConsumption());
     tripData.setMoneyOnFuelSpent(moneySpent);
     tripData.setFuelSpent(fuelSpent);
   }
 
   private void fillGasTank(final float fuel) {
     if (tripData != null) {
-      float gasTank = tripData.getGasTank();
+      final float gasTank = tripData.getGasTank();
       if (DEBUG) {
         Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
       }
       if (gasTank + fuel <= fuelCapacity) {
-        tripData.setGasTank(gasTank + fuel);
         final CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
                 .getString(R.string.fuel_prefix);
+        tripData.setGasTank(gasTank + fuel);
         UtilMethods.showToast(context, resCharSequence);
       } else {
         UtilMethods.showToast(context, context.getString(R.string.fuel_overload_toast));
@@ -716,15 +696,13 @@ public class TripProcessor implements Parcelable {
     }
     trip.setAvgSpeed(averageSpeed);
     if (routes.size() == 0 || routes == null) {
-      final Route tmpRoutePoint = new Route(ConstantValues.BERMUDA_COORDINATES, ConstantValues.SPEED_VALUE_WORKAROUND);
-      routes.add(tmpRoutePoint);
+      routes.add(new Route(ConstantValues.BERMUDA_COORDINATES, ConstantValues.SPEED_VALUE_WORKAROUND));
     }
     setRoutesToTrip(trip);
   }
 
   private void updateTripState() {
-    final Trip trip = getCurrentTripFromTripData();
-    tripData.updateTrip(trip);
+    tripData.updateTrip(getCurrentTripFromTripData());
   }
 
   private void writeDataToFile() {
@@ -739,14 +717,13 @@ public class TripProcessor implements Parcelable {
       Log.d(LOG_TAG, "endTrip: end trip called");
     }
     final Trip trip = getCurrentTrip();
-    updateTrip(trip);
     final long timeSpent = CalculationUtils.calcTimeInTrip(tripStartTime);
     final float distanceTraveled = CalculationUtils.setDistanceCoveredForTrip(trip, timeSpent);
     final float fuelConsumption = getFuelConsumptionLevelFromAvgSpeed(averageSpeed);
     final float fuelSpent = CalculationUtils.calcFuelSpent(distanceTraveled, fuelConsumption);
-    final float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
+    updateTrip(trip);
 
-    trip.setMoneyOnFuelSpent(moneySpent);
+    trip.setMoneyOnFuelSpent(CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice));
     trip.setFuelSpent(fuelSpent);
     trip.setDistanceTravelled(distanceTraveled);
     trip.setTimeSpent(timeSpent);
@@ -781,12 +758,12 @@ public class TripProcessor implements Parcelable {
     }
 
     @Override protected Boolean doInBackground(@Nullable final TripData... params) {
+      final FileOutputStream fos;
+      final ArrayList<Trip> trips = tripData.getTrips();
       if (DEBUG) {
         Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
         Log.d(LOG_TAG, "writeTripDataToFile: avgSpeed - " + tripData.getAvgSpeed());
       }
-      final FileOutputStream fos;
-      final ArrayList<Trip> trips = tripData.getTrips();
       getTripDataFieldsValues();
       if (DEBUG) {
         Log.d(LOG_TAG, "WRITE: distTravelledForTripData " + tripData.getDistanceTravelled());
@@ -795,34 +772,25 @@ public class TripProcessor implements Parcelable {
         Log.d(LOG_TAG, "WRITE: moneyOnFuelForTripData " + tripData.getMoneyOnFuelSpent());
         Log.d(LOG_TAG, "WRITE: avgSpeedForTripData " + tripData.getAvgSpeed());
       }
-      final int tripsSize = trips.size();
-      final Float distanceTravelled = tripData.getDistanceTravelled();
-      final Float avgFuelConsumption = tripData.getAvgFuelConsumption();
-      final Float fuelSpent = tripData.getFuelSpent();
-      final Float moneyOnFuelSpent = tripData.getMoneyOnFuelSpent();
-      final Float avgSpeed = tripData.getAvgSpeed();
-      final Float timeSpent = tripData.getTimeSpentOnTrips();
-      final Float gasTankCapacity = tripData.getGasTank();
-      final Float maxSpeed = tripData.getMaxSpeed();
 
       try {
         fos = context.openFileOutput(ConstantValues.FILE_NAME, Context.MODE_PRIVATE);
         final ObjectOutputStream os = new ObjectOutputStream(fos);
-        os.writeInt(tripsSize);
+        os.writeInt(trips.size());
         for (Trip trip : trips) {
           if (DEBUG) {
             Log.d(LOG_TAG, "writeTripDataToFile: trip to string - " + trip.toString());
           }
           writeTrip(trip, os);
         }
-        writeToStreamWithNANcheck(avgFuelConsumption, os);
-        writeToStreamWithNANcheck(fuelSpent, os);
-        writeToStreamWithNANcheck(distanceTravelled, os);
-        writeToStreamWithNANcheck(moneyOnFuelSpent, os);
-        writeToStreamWithNANcheck(avgSpeed, os);
-        writeToStreamWithNANcheck(timeSpent, os);
-        writeToStreamWithNANcheck(gasTankCapacity, os);
-        writeToStreamWithNANcheck(maxSpeed, os);
+        writeToStreamWithNANcheck(tripData.getAvgFuelConsumption(), os);
+        writeToStreamWithNANcheck(tripData.getFuelSpent(), os);
+        writeToStreamWithNANcheck(tripData.getDistanceTravelled(), os);
+        writeToStreamWithNANcheck(tripData.getMoneyOnFuelSpent(), os);
+        writeToStreamWithNANcheck(tripData.getAvgSpeed(), os);
+        writeToStreamWithNANcheck(tripData.getTimeSpentOnTrips(), os);
+        writeToStreamWithNANcheck(tripData.getGasTank(), os);
+        writeToStreamWithNANcheck(tripData.getMaxSpeed(), os);
         os.close();
         fos.close();
       } catch (IOException e) {
@@ -833,7 +801,6 @@ public class TripProcessor implements Parcelable {
       }
       return true;
     }
-
 
     private void writeToStreamWithNANcheck(@Nullable Float valueToWrite, @NonNull final ObjectOutputStream os) throws IOException {
       if (valueToWrite == null || valueToWrite.isNaN()) {
@@ -858,21 +825,17 @@ public class TripProcessor implements Parcelable {
         Log.d(LOG_TAG, "readFile");
       }
       fileIsInReadMode = true;
-      final File file = context.getFileStreamPath(ConstantValues.FILE_NAME);
-      if (file.exists()) {
+      if (context.getFileStreamPath(ConstantValues.FILE_NAME).exists()) {
+        final ArrayList<Trip> trips = new ArrayList<>();
         if (DEBUG) {
           Log.d(LOG_TAG, "readTripDataFromFile: ");
         }
-        final ArrayList<Trip> trips = new ArrayList<>();
-        final FileInputStream fis;
-        final int tripsSize;
         try {
-          fis = context.openFileInput(ConstantValues.FILE_NAME);
+          final FileInputStream fis = context.openFileInput(ConstantValues.FILE_NAME);
           final ObjectInputStream is = new ObjectInputStream(fis);
-          tripsSize = is.readInt();
+          final int tripsSize = is.readInt();
           for (int i = 0; i < tripsSize; i++) {
-            Trip trip = readTrip(is);
-            trips.add(trip);
+            trips.add(readTrip(is));
           }
           final float avgFuelConsumption = is.readFloat();
           final float fuelSpent = is.readFloat();

@@ -32,7 +32,7 @@ public class GaugePointer {
    */
   public void setValue(final double newValue) {
     if (mPointerRender != null) {
-      ObjectAnimator animator = ObjectAnimator.ofFloat(mPointerRender, "value", (float) value, (float) newValue);
+      final ObjectAnimator animator = ObjectAnimator.ofFloat(mPointerRender, "value", (float) value, (float) newValue);
       animator.setDuration(GaugeConstants.GAUGE_ANIMATION_TIME);
       animator.start();
     }
@@ -47,7 +47,7 @@ public class GaugePointer {
     this.mBaseGauge = mBaseGauge;
   }
 
-  TripHelperGauge getmBaseGauge() {
+  TripHelperGauge getBaseGauge() {
     return mBaseGauge;
   }
 

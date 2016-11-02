@@ -37,8 +37,6 @@ public class PointerRender extends View {
   private float mCentreX;
   private float mCentreY;
   private GaugeType gaugeType;
-  private float mInnerBevelWidth;
-  private float mMinSize;
   private float mRimWidth;
   private float mLabelsPathHeight;
 
@@ -47,11 +45,8 @@ public class PointerRender extends View {
     this(context, null);
     if (mGauge != null) {
       this.mGauge = mGauge;
-
       gaugeType = mGauge.getGaugeType();
       mRimWidth = (float) mGauge.getmRimWidth();
-
-
     }
     if (mGaugeScale != null) {
       this.mGaugeScale = mGaugeScale;
@@ -95,21 +90,15 @@ public class PointerRender extends View {
   protected void onDraw(@NonNull final Canvas canvas) {
     if (!(mGauge == null || mGaugeScale == null || mGaugePointer == null)) {
       //modif optim
+      final float mInnerBevelWidth = (float) mGauge.getmInnerBevelWidth();
       final float radFactor = (float) mGaugeScale.getRadiusFactor();
-      final double modif_widthMultRadFactor = mInnerBevelWidth * radFactor;
-      final double modif_minSizeMultRadFactor = mMinSize * radFactor;
-      final double modfi_marginVar = mInnerBevelWidth - modif_widthMultRadFactor;
-
       final RectF mRangeFrame = mGauge.getmRangeFrame();
+      final float mMinSize = (float) mGauge.getmMinSize();
       mCentreX = (float) mGauge.getmCentreX();
       mCentreY = (float) mGauge.getmCentreY();
-      mMinSize = (float) mGauge.getmMinSize();
-      mInnerBevelWidth = (float) mGauge.getmInnerBevelWidth();
       mRimWidth = (float) mGauge.getmRimWidth();
       mLabelsPathHeight = (float) mGauge.getmLabelsPathHeight();
-      final double mRangePathWidth = mGauge.getmRangePathWidth();
-
-      mGauge.calculateMargin(modfi_marginVar);
+      mGauge.calculateMargin(mInnerBevelWidth - (mInnerBevelWidth * radFactor));
       float rimSize = mMinSize - mRimWidth;
 
       modif_minSizeDivideBy4 = mMinSize / 4.0f;
@@ -143,12 +132,8 @@ public class PointerRender extends View {
 
       RectF rectF;
       if (radFactor > GaugeConstants.ZERO) {
-        //modif optim
-        final double marginVar = mMinSize - modif_minSizeMultRadFactor;
-
-        mGauge.calculateMargin(marginVar);
-        final double d = mRangePathWidth - mRimWidth;
-        rimSize = (float) (d - (4.0 * 10.0));
+        mGauge.calculateMargin(mMinSize - (mMinSize * radFactor));
+        rimSize = (float) ((mGauge.getmRangePathWidth() - mRimWidth) - (4.0 * 10.0));
 
         if (mCentreY > mCentreX) {
           if (gaugeType == GaugeType.North) {
@@ -565,11 +550,10 @@ public class PointerRender extends View {
       pointerValue = endVal;
     }
     final double startVal = gaugeScale.getStartValue();
-    final double startAngle = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
     if (pointerValue < startVal) {
       pointerValue = startVal;
     }
-    return startAngle + (((pointerValue - startVal) * (gaugeScale.getSweepAngle() / (gaugeScale
+    return (gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY) + (((pointerValue - startVal) * (gaugeScale.getSweepAngle() / (gaugeScale
             .getEndValue() - startVal))) * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY);
   }
 

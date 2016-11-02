@@ -145,9 +145,7 @@ public class Trip implements Parcelable {
         final double tmpLatitude = is.readDouble();
         final double tmpLongitude = is.readDouble();
         final float tmpSpeed = is.readFloat();
-
-        final Route tmpRoutePoint = new Route(new LatLng(tmpLatitude, tmpLongitude), tmpSpeed);
-        route.add(tmpRoutePoint);
+        route.add(new Route(new LatLng(tmpLatitude, tmpLongitude), tmpSpeed));
       }
 
       final float timeSpentInMotion = is.readFloat();
@@ -213,15 +211,6 @@ public class Trip implements Parcelable {
    * @param os {@link java.io.OutputStream}
    */
   public void writeTrip(@NonNull final ObjectOutputStream os) {
-    final Float distanceTravelled = getDistanceTravelled();
-    final Float avgFuelConsumption = getAvgFuelConsumption();
-    final Float fuelSpent = getFuelSpent();
-    final Float moneyOnFuelSpent = getMoneyOnFuelSpent();
-    final Float avgSpeed = getAvgSpeed();
-    final Float timeSpent = getTimeSpentForTrip();
-    final Float maxSpeed = getMaxSpeed();
-    final Float timeSpentInMotion = getTimeSpentInMotion();
-
     try {
       os.writeInt(route.size());
       for (Route routePoint : route) {
@@ -230,16 +219,16 @@ public class Trip implements Parcelable {
         os.writeDouble(tmpRoutePoint.longitude);
         writeToStreamWithNANcheck(os, routePoint.getSpeed());
       }
-      writeToStreamWithNANcheck(os, timeSpentInMotion);
-      writeToStreamWithNANcheck(os, distanceTravelled);
-      writeToStreamWithNANcheck(os, fuelSpent);
-      writeToStreamWithNANcheck(os, timeSpent);
+      writeToStreamWithNANcheck(os, getTimeSpentInMotion());
+      writeToStreamWithNANcheck(os, getDistanceTravelled());
+      writeToStreamWithNANcheck(os, getFuelSpent());
+      writeToStreamWithNANcheck(os, getTimeSpentForTrip());
       os.writeInt(tripID);
       os.writeObject(tripDate);
-      writeToStreamWithNANcheck(os, avgSpeed);
-      writeToStreamWithNANcheck(os, moneyOnFuelSpent);
-      writeToStreamWithNANcheck(os, avgFuelConsumption);
-      writeToStreamWithNANcheck(os, maxSpeed);
+      writeToStreamWithNANcheck(os, getAvgSpeed());
+      writeToStreamWithNANcheck(os, getMoneyOnFuelSpent());
+      writeToStreamWithNANcheck(os, getAvgFuelConsumption());
+      writeToStreamWithNANcheck(os, getMaxSpeed());
     } catch (IOException | NullPointerException e) {
       e.printStackTrace();
     }

@@ -113,8 +113,7 @@ public class CalculationUtils {
    * @return {@link Float} value representing distance covered
    */
   public static float setDistanceCoveredForTrip(@NonNull final Trip trip, final long timeSpent) {
-    final float avgSpeed = trip.getAvgSpeed();
-    return calcDistTravelled(timeSpent, avgSpeed);
+    return calcDistTravelled(timeSpent, trip.getAvgSpeed());
   }
 
   /**
@@ -127,7 +126,7 @@ public class CalculationUtils {
   public static float calcDistTravelled(final float timeSpent, final float avgSpeed) {
     Float distanceTravelled = avgSpeed * getTimeFromMills(timeSpent);
     if (distanceTravelled.isNaN()) {
-      distanceTravelled = (float) ConstantValues.START_VALUE;
+      return (float) ConstantValues.START_VALUE;
     }
     return distanceTravelled;
   }
@@ -156,9 +155,7 @@ public class CalculationUtils {
     if (tripStartTime <= 0) {
       return 0;
     } else {
-      final Calendar curCal = Calendar.getInstance();
-      final long endTime = curCal.getTime().getTime();
-      return endTime - tripStartTime;
+      return Calendar.getInstance().getTime().getTime() - tripStartTime;
     }
   }
 
@@ -173,19 +170,19 @@ public class CalculationUtils {
    *                 default: Kilometers per hour
    */
   public static void setMeasurementMultiplier(final int position) {
-    float result = ConstantValues.KMH_MULTIPLIER;
     switch (position) {
       case 0:
-        result = ConstantValues.KMH_MULTIPLIER;
+        measurementUnitMultiplier = ConstantValues.KMH_MULTIPLIER;
         break;
       case 1:
-        result = ConstantValues.MPH_MULTIPLIER;
+        measurementUnitMultiplier = ConstantValues.MPH_MULTIPLIER;
         break;
       case 2:
-        result = ConstantValues.KNOTS_MULTIPLIER;
+        measurementUnitMultiplier = ConstantValues.KNOTS_MULTIPLIER;
         break;
+      default:
+        measurementUnitMultiplier = ConstantValues.KMH_MULTIPLIER;
     }
-    measurementUnitMultiplier = result;
   }
 
 
@@ -221,17 +218,15 @@ public class CalculationUtils {
 
   private static float getTimeFromMills(final float timeInMills) {
     float result;
-    final int secondsInHour = ConstantValues.SECONDS_IN_HOUR;
     final float seconds = getSecondsFromMills(timeInMills);
     final float minutes = getMinutesFromMills(timeInMills);
-    final float hours = getHoursFromMills(timeInMills);
-    if (hours == 0) {
-      result = (minutes / 60) + (seconds / secondsInHour);
+    if (getHoursFromMills(timeInMills) == 0) {
+      result = (minutes / 60) + (seconds / ConstantValues.SECONDS_IN_HOUR);
       if (minutes == 0) {
-        result = seconds / secondsInHour;
+        result = seconds / ConstantValues.SECONDS_IN_HOUR;
       }
     } else {
-      result = hours + (minutes / 60) + (seconds / secondsInHour);
+      result = getHoursFromMills(timeInMills) + (minutes / 60) + (seconds / ConstantValues.SECONDS_IN_HOUR);
     }
     return result;
   }

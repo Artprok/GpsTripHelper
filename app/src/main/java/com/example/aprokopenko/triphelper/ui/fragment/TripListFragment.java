@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +16,6 @@ import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
@@ -59,7 +57,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   ProgressBar progressBar;
 
   private static final String LOG_TAG = "TripListFragment";
-  public static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private TripData tripData;
   private ArrayList<Trip> trips;
@@ -103,32 +101,23 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
     if (savedInstanceState != null) {
       state = savedInstanceState;
     }
-    final Resources res = getResources();
-    final String distance;
-    final String avgFuelCons;
-    final String moneyOnFuelSpent;
-    final String fuelSpent;
-    final String avgSpeed;
-    final String maxSpeed;
-    final float timeSpentOnTrips;
-
-    distance = UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
-    avgFuelCons = UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
+    final String distance = UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
+    final String avgFuelCons = UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
     String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
     if (TextUtils.equals(curUnit, "")) {
       curUnit = getString(R.string.grn);
     }
-    moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
-    fuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
-    avgSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
-    maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
-    timeSpentOnTrips = tripData.getTimeSpentOnTrips();
+    final String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
+    final String fuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
+    final String avgSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
+    final String maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
+    final float timeSpentOnTrips = tripData.getTimeSpentOnTrips();
 
     distanceTravelledView.setText(distance);
     avgFuelConsumptionView.setText(avgFuelCons);
     moneyOnFuelView.setText(moneyOnFuelSpent);
     fuelSpentView.setText(fuelSpent);
-    timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpentOnTrips, res));
+    timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpentOnTrips, getResources()));
     avgSpeedView.setText(avgSpeed);
     maxSpeedView.setText(maxSpeed);
   }
@@ -163,21 +152,8 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
   @Override public void onListItemClick(@NonNull final Trip trip) {
     progressBar.setVisibility(View.VISIBLE);
-    final float fuelConsumed = trip.getAvgFuelConsumption();
-    final float distTravelled = trip.getDistanceTravelled();
-    final float timeSpentInMotion = trip.getTimeSpentInMotion();
-    final float moneyOnFuelSpent = trip.getMoneyOnFuelSpent();
-    final float timeSpentOnStop = trip.getTimeSpentOnStop();
-    final float fuelSpent = trip.getFuelSpent();
-    final float timeSpent = trip.getTimeSpentForTrip();
-    final String tripDate = trip.getTripDate();
-    final float avgSpeed = trip.getAvgSpeed();
-    final float maxSpeed = trip.getMaxSpeed();
-    final int tripId = trip.getTripID();
-    final ArrayList<Route> routes = trip.getRoute();
-
-    final TripInfoContainer tripInfoContainer = new TripInfoContainer(tripDate, distTravelled, avgSpeed, timeSpent, timeSpentInMotion,
-            timeSpentOnStop, fuelConsumed, fuelSpent, tripId, routes, moneyOnFuelSpent, maxSpeed, trip);
+    final TripInfoContainer tripInfoContainer = new TripInfoContainer(trip.getTripDate(), trip.getDistanceTravelled(), trip.getAvgSpeed(), trip.getTimeSpentForTrip(), trip.getTimeSpentInMotion(),
+            trip.getTimeSpentOnStop(), trip.getAvgFuelConsumption(), trip.getFuelSpent(), trip.getTripID(), trip.getRoute(), trip.getMoneyOnFuelSpent(), trip.getMaxSpeed(), trip);
     final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoContainer);
     UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
   }

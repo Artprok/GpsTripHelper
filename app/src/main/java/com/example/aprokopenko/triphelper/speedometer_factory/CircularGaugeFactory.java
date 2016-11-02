@@ -26,50 +26,28 @@ public class CircularGaugeFactory {
   /**
    * Method for getting configured {@link TripHelperGauge} for portrait layout(by default).
    *
-   * @param context {@link Context}
-   * @param title   {@link String} title of {@link TripHelperGauge}
+   * @param context    {@link Context}
+   * @param title      {@link String} title of {@link TripHelperGauge}
+   * @param isLandcape {@link Boolean} true - if gauge for Landscape, false - for portrait
    * @return configured for portrait layout {@link TripHelperGauge}
    */
-  public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title) {
+  public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title, final boolean isLandcape) {
     final TripHelperGauge speedometer = new TripHelperGauge(context);
-    configureSpeedometer(speedometer, title);
+    configureSpeedometer(speedometer, title, isLandcape);
     return speedometer;
   }
 
-  /**
-   * Method for getting configured {@link TripHelperGauge} for landscape layout.
-   *
-   * @param context {@link Context}
-   * @param title   {@link String} title of {@link TripHelperGauge}
-   * @return configured for landscape layout {@link TripHelperGauge}
-   */
-  public TripHelperGauge getConfiguredSpeedometerGaugeForLandscape(@NonNull final Context context, @Nullable final String title) {
-    final TripHelperGauge speedometer = new TripHelperGauge(context);
-    configureSpeedometerForLandscape(speedometer, title);
-    return speedometer;
-  }
-
-  private void configureSpeedometerForLandscape(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
+  private void configureSpeedometer(@NonNull final TripHelperGauge gauge, @Nullable final String title, final boolean isLandscape) {
     final GaugeScale gaugeScale = new GaugeScale();
-    final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
-    final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
-    final ArrayList<TickSettings> tickSettingArrayList = setupTicks();
-
-    setHeader(gauge, title, true);
-    setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList,
-            GaugeFactorySettings.startAngleForLand, GaugeFactorySettings.sweepAngleForLand,
-            GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSizeForLand);
-  }
-
-  private void configureSpeedometer(@NonNull final TripHelperGauge gauge, @Nullable final String title) {
-    final GaugeScale gaugeScale = new GaugeScale();
-    final ArrayList<GaugeRange> gaugeRangeArrayList = setupRanges(gaugeScale);
-    final ArrayList<GaugePointer> gaugePointerArrayList = setupPointer();
-    final ArrayList<TickSettings> tickSettingArrayList = setupTicks();
-
-    setHeader(gauge, title, false);
-    setScale(gauge, gaugeScale, gaugeRangeArrayList, gaugePointerArrayList, tickSettingArrayList, GaugeFactorySettings.startAngle,
-            GaugeFactorySettings.sweepAngle, GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSize);
+    setHeader(gauge, title, !isLandscape);
+    if (isLandscape) {
+      setScale(gauge, gaugeScale, getRanges(gaugeScale), getPointer(), getTicks(),
+              GaugeFactorySettings.startAngleForLand, GaugeFactorySettings.sweepAngleForLand,
+              GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSizeForLand);
+    } else {
+      setScale(gauge, gaugeScale, getRanges(gaugeScale), getPointer(), getTicks(), GaugeFactorySettings.startAngle,
+              GaugeFactorySettings.sweepAngle, GaugeFactorySettings.interval, GaugeFactorySettings.labelTextSize);
+    }
   }
 
   private void setHeader(@NonNull final TripHelperGauge gauge, @Nullable final String title, @NonNull final Boolean isLandscape) {
@@ -92,7 +70,7 @@ public class CircularGaugeFactory {
     gauge.setHeaders(gaugeHeaders);
   }
 
-  private ArrayList<GaugeRange> setupRanges(@NonNull final GaugeScale scale) {
+  private ArrayList<GaugeRange> getRanges(@NonNull final GaugeScale scale) {
     final ArrayList<GaugeRange> gaugeRangeArrayList = new ArrayList<>();
     final GaugeRange gaugeRange1 = new GaugeRange();
     gaugeRange1.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
@@ -123,7 +101,7 @@ public class CircularGaugeFactory {
     return gaugeRangeArrayList;
   }
 
-  private ArrayList<GaugePointer> setupPointer() {
+  private ArrayList<GaugePointer> getPointer() {
     final ArrayList<GaugePointer> gaugePointerArrayList = new ArrayList<>();
     final NeedlePointer needlePointer = new NeedlePointer();
     needlePointer.setKnobColor(Color.parseColor(GaugeFactorySettings.knobNeedleColorString));
@@ -137,7 +115,7 @@ public class CircularGaugeFactory {
     return gaugePointerArrayList;
   }
 
-  private ArrayList<TickSettings> setupTicks() {
+  private ArrayList<TickSettings> getTicks() {
     final ArrayList<TickSettings> tickSettingArrayList = new ArrayList<>();
     final TickSettings majorTicksSettings = new TickSettings();
     majorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
@@ -179,12 +157,9 @@ public class CircularGaugeFactory {
     gauge.setGaugeScales(gaugeScales);
   }
 
-  private void setupTickSettings(@NonNull final ArrayList<TickSettings> ts, @NonNull final GaugeScale scale) {
-    final TickSettings majorTickSetting = ts.get(0);
-    final TickSettings minorTickSetting = ts.get(1);
-
-    scale.setMajorTickSettings(majorTickSetting);
-    scale.setMinorTickSettings(minorTickSetting);
+  private void setupTickSettings(@NonNull final ArrayList<TickSettings> tickSettings, @NonNull final GaugeScale scale) {
+    scale.setMajorTickSettings(tickSettings.get(0));
+    scale.setMinorTickSettings(tickSettings.get(1));
     scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
   }
 }

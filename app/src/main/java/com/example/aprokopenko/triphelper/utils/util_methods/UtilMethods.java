@@ -29,7 +29,6 @@ import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -99,8 +98,7 @@ public class UtilMethods {
    */
   public static String formatFloatDecimalFormat(@Nullable final Float floatToFormat) {
     if (floatToFormat != null) {
-      final DecimalFormat df = new DecimalFormat("######.#");
-      return df.format(floatToFormat);
+      return new DecimalFormat("######.#").format(floatToFormat);
     } else {
       if (DEBUG) {
         Log.e(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
@@ -120,8 +118,7 @@ public class UtilMethods {
       if (DEBUG) {
         Log.d(LOG_TAG, "formatFloatToIntFormat inUtilMethod: " + floatToFormat);
       }
-      final DecimalFormat df = new DecimalFormat("######");
-      return df.format(floatToFormat);
+      return new DecimalFormat("######").format(floatToFormat);
     } else {
       if (DEBUG) {
         Log.e(LOG_TAG, "formatFloatDecimalFormat: PROBLEM WITH FORMAT (floatToFormat is NULL), returned 0.00");
@@ -150,8 +147,7 @@ public class UtilMethods {
    * @return {@link String} parsed value
    */
   public static String parseDate(@NonNull final Date dateString) {
-    final SimpleDateFormat sdf = ConstantValues.DATE_FORMAT;
-    return sdf.format(dateString);
+    return ConstantValues.DATE_FORMAT.format(dateString);
   }
 
   /**
@@ -175,14 +171,14 @@ public class UtilMethods {
    * @param fragmentActivity {@link android.support.v4.app.FragmentActivity} parent activity
    */
   public static void replaceFragment(@NonNull final Fragment fragment, @NonNull final String fragment_tag, @NonNull final android.support.v4.app.FragmentActivity fragmentActivity) {
-    final int orientation = fragmentActivity.getResources()
-            .getConfiguration().orientation; // choice of animations: 1 - portrait, or 2 - landscape
     final int animEnter;
     final int animExit;
     final int animPopEnter;
     final int animPopExit;
 
-    if (orientation == 1) {
+    // choice of animations: 1 - portrait, or 2 - landscape
+    if (fragmentActivity.getResources()
+            .getConfiguration().orientation == 1) {
       animEnter = R.anim.fragment_enter_vertical;
       animExit = R.anim.fragment_exit_vertical;
       animPopEnter = R.anim.pop_enter_vertical;
@@ -250,7 +246,7 @@ public class UtilMethods {
    * @param stringToShow {@link String} text to show in {@link Toast}
    */
   public static void showToast(@NonNull final Context context, @NonNull final CharSequence stringToShow) {
-    Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
+    final Toast toast = Toast.makeText(context, stringToShow, Toast.LENGTH_SHORT);
     toast.show();
   }
 
@@ -357,8 +353,7 @@ public class UtilMethods {
    * @param context {@link Context}
    */
   public static void checkIfGpsEnabledAndShowDialogs(@NonNull final Context context) {
-    final boolean isGpsEnabled = checkIfGpsEnabled(context);
-    if (!isGpsEnabled) {
+    if (!checkIfGpsEnabled(context)) {
       if (DEBUG) {
         Log.i(LOG_TAG, "checkIfGpsEnabledAndShowDialogs: NotEnabled");
       }
@@ -397,17 +392,16 @@ public class UtilMethods {
    * @return {@link Boolean} value represents if allowed. True - allowed, False - no
    */
   public static boolean isPermissionAllowed(@Nullable final Context context) {
-    boolean result = false;
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
       return true;
     } else {
       if (context != null) {
-        result = ActivityCompat.checkSelfPermission(context,
+        return ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
       }
     }
-    return result;
+    return false;
   }
 
   /**
@@ -470,8 +464,7 @@ public class UtilMethods {
    * @return {@link Float} random value
    */
   public static float generateRandomSpeed() {
-    float speed;
-    speed = 0 + testingTempVal[0];
+    float speed = 0 + testingTempVal[0];
     if (speed != 0) {           //speed increment by 5 each tick
       testingTempVal[0] += 5;
     }

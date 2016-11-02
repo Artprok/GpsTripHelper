@@ -93,7 +93,7 @@
                 android:textSize="@dimen/metricPortraitTextSize"/>
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/measurementUnitSpinner"
+                android:id="@+id/settings_fragment_measurements_unit_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -116,7 +116,7 @@
                 android:textSize="@dimen/metricPortraitTextSize"/>
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/currencyUnitSpinner"
+                android:id="@+id/settings_fragment_currency_unit_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"

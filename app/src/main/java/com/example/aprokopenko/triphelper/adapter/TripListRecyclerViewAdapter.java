@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * Class represents an {@link android.widget.BaseAdapter} for populating a {@link RecyclerView} with {@link Trip}
  */
 public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRecyclerViewAdapter.ViewHolder> {
-  public static final String LOG_TAG = "RECYCLER_ADAPTER";
+  private static final String LOG_TAG = "RECYCLER_ADAPTER";
 
   private final ListFragmentInteractionListener listFragmentInteractionListener;
   private final ArrayList<Trip> tripList;
@@ -33,8 +33,7 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
   }
 
   @Override public ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_item, parent, false);
-    return new ViewHolder(view);
+    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_item, parent, false));
   }
 
   @Override public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
@@ -49,12 +48,12 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
       @Override public void onClick(View v) {
         listFragmentInteractionListener.onListItemClick(holder.trip);
 
-        TripInfoContainer tripInfoContainer = new TripInfoContainer(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(),
+        final TripInfoContainer tripInfoContainer = new TripInfoContainer(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(),
                 curTrip.getTimeSpentForTrip(), curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(),
                 curTrip.getAvgFuelConsumption(), curTrip.getFuelSpent(), id, curTrip.getRoute(), curTrip.getMoneyOnFuelSpent(),
                 curTrip.getMaxSpeed(), null);
 
-        TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoContainer);
+        final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoContainer);
         listFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
       }
     });
@@ -70,8 +69,8 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     @BindView(R.id.text_content)
     TextView contentView;
 
-    public Trip trip;
-    final View mView;
+    private final View mView;
+    private Trip trip;
 
     ViewHolder(@NonNull final View view) {
       super(view);

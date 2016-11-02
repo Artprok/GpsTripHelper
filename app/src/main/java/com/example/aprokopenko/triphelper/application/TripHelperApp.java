@@ -29,9 +29,9 @@ public class TripHelperApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+    final AppModule module = new AppModule(this);
     context = getApplicationContext();
     sharedPreferences = this.getSharedPreferences("tripPreferences", Context.MODE_PRIVATE);
-    final AppModule module = new AppModule(this);
     applicationComponent = DaggerApplicationComponent.builder().appModule(module).build();
   }
 }

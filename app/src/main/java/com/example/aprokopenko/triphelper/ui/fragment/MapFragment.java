@@ -99,9 +99,9 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
     if (locationSubscriber != null) {
       locationSubscriber.unsubscribe();
     }
-    final Fragment f = getChildFragmentManager().findFragmentById(R.id.mapFragment);
-    if (f != null) {
-      getChildFragmentManager().beginTransaction().remove(f).commitAllowingStateLoss();
+    final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.mapFragment);
+    if (fragment != null) {
+      getChildFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
     }
   }
 
@@ -166,11 +166,10 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   }
 
   private void locationTracking(@NonNull final GoogleMap googleMap, @NonNull final Location location, @NonNull final Float speed) {
-    drawPathFromData();
-    final LatLng tempPreviousLocation = getStartingPosition(location);
     final LatLng tempLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    drawPathFromData();
     previousLocation = tempLocation;
-    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, tempLocation, speed);
+    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, getStartingPosition(location), tempLocation, speed);
   }
 
   private void setupSubscribers() {

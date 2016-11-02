@@ -57,24 +57,24 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override public void onBackPressed() {
-    final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-    if (f instanceof MainFragment) {
+    final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+    if (fragment instanceof MainFragment) {
       new AlertDialog.Builder(this).setIcon(R.drawable.btn_exit).setTitle(getString(R.string.exit_dialog_title))
               .setMessage(getString(R.string.exit_dialog_string))
               .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
-                  performExitFromApplication((MainFragment) f);
+                  performExitFromApplication((MainFragment) fragment);
                 }
               }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
         @Override public void onClick(DialogInterface dialogInterface, int i) {
-          UtilMethods.replaceFragment(f, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
+          UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
         }
       }).show();
     } else {
-      if (f instanceof TripInfoFragment) {  // if we in TripInfoFragment, to prevent laggy behaviour onBackPress duplicates.
+      if (fragment instanceof TripInfoFragment) {  // if we in TripInfoFragment, to prevent laggy behaviour onBackPress duplicates.
         super.onBackPressed();
       }
-      if (f instanceof MapFragment) { // if we in MapFragment, set FAB toMap state.
+      if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toMap state.
         final MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
         setFabToMap(mainFragment);
       }
@@ -89,22 +89,17 @@ public class MainActivity extends AppCompatActivity {
 
   private void proceedToFragmentCreating(@Nullable final Bundle savedInstanceState) {
     UtilMethods.hideFab(this);
-    final DataHolderFragment dataHolderFragment;
     if (savedInstanceState == null) {
       if (DEBUG) {
         Log.i(LOG_TAG, "onCreate: new fragment");
       }
-
-      dataHolderFragment = DataHolderFragment.newInstance();
-      UtilMethods.addFragment(dataHolderFragment, ConstantValues.DATA_HOLDER_TAG, this);
-
       final MainFragment mainFragment = MainFragment.newInstance();
+      UtilMethods.addFragment(DataHolderFragment.newInstance(), ConstantValues.DATA_HOLDER_TAG, this);
       assert fab != null;
       setFabToMap(mainFragment);
       UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
     } else {
       final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-      final MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
       if (fragment instanceof MainFragment) {
         if (DEBUG) {
           Log.i(LOG_TAG, "onCreate: old fragment");
@@ -114,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
         UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
       }
       if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
-        setFabToSpeedometer(mainFragment);
+        setFabToSpeedometer((MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG));
         fab.setVisibility(View.VISIBLE);
       } else {
-        setFabToMap(mainFragment);
+        setFabToMap((MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG));
       }
     }
   }
@@ -127,24 +122,19 @@ public class MainActivity extends AppCompatActivity {
     final Point sizePoint = new Point();
     defaultDisplay.getSize(sizePoint);
 
-    final int delimiter = getDelimiterDependsOnOrientation(defaultDisplay);
-    final int width = sizePoint.x;
-
-    return -(width / delimiter);
+    return -(sizePoint.x / getDelimiterDependsOnOrientation(defaultDisplay));
   }
 
   private int getDelimiterDependsOnOrientation(@NonNull final Display defaultDisplay) {
-    int widthDelimiter = ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
     final int rotation = defaultDisplay.getRotation();
     if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-      widthDelimiter = ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
+      return ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
     }
-    return widthDelimiter;
+    return ConstantValues.WIDTH_DELIMETER_FOR_PORTRAIT;
   }
 
   private void setFabToMap(@NonNull final MainFragment mainFragment) {
-    final int res = R.drawable.map_black;
-    fab.setImageResource(res);
+    fab.setImageResource(R.drawable.map_black);
     UtilMethods.animateFabTransition(fab, 0);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
@@ -154,20 +144,17 @@ public class MainActivity extends AppCompatActivity {
     });
   }
 
-  private void performExitFromApplication(@NonNull final MainFragment f) {
+  private void performExitFromApplication(@NonNull final MainFragment mainFragment) {
     //        Debug.stopMethodTracing();
-    f.performExit();
-    f.onDetach();
+    mainFragment.performExit();
+    mainFragment.onDetach();
     finish();
     System.exit(0);
   }
 
   private void setFabToSpeedometer(@NonNull final MainFragment mainFragment) {
-    final int res = R.drawable.road_black;
-    fab.setImageResource(res);
-
+    fab.setImageResource(R.drawable.road_black);
     UtilMethods.animateFabTransition(fab, fabTransitionValue);
-
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);

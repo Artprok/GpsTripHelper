@@ -183,16 +183,16 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   }
 
   @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-    final View v = inflater.inflate(R.layout.fragment_trip_info, container, false);
-    unbinder = ButterKnife.bind(this, v);
+    final View view = inflater.inflate(R.layout.fragment_trip_info, container, false);
+    unbinder = ButterKnife.bind(this, view);
     setupMapView(savedInstanceState);
-    return v;
+    return view;
   }
 
   @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    context = getActivity();
     final String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
+    context = getActivity();
     if (TextUtils.equals(curUnit, "")) {
       currency_prefix = getString(R.string.grn);
     } else {
@@ -222,8 +222,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       if (UtilMethods.isPermissionAllowed(context)) {
         googleMap.setMyLocationEnabled(true);
       }
-      final boolean drawn = MapUtilMethods.drawPathFromData(routes, googleMap);
-      if (drawn) {
+      if (MapUtilMethods.drawPathFromData(routes, googleMap)) {
         drawMap = true;
         routes = null;
       }
@@ -236,8 +235,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   @OnClick(R.id.btn_mapTurnActive)
   public void onOpenMapButtonClick(View view) {
     if (drawMap) {
-      final int orientation = getActivity().getResources().getConfiguration().orientation;
-      if (orientation == 1) {                    //animations for portrait orientation
+      if (getActivity().getResources().getConfiguration().orientation == 1) {                    //animations for portrait orientation
         if (mapOpened) {
           animateMapClosingForPortrait(view);
         } else {

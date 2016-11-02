@@ -39,7 +39,7 @@ public class TripData implements Parcelable {
     return 0;
   }
 
-  @Override public void writeToParcel(@NonNull final Parcel dest,final int flags) {
+  @Override public void writeToParcel(@NonNull final Parcel dest, final int flags) {
     dest.writeFloat(avgFuelConsumption);
     dest.writeFloat(distanceTravelled);
     dest.writeFloat(timeSpentOnTrips);
@@ -138,8 +138,7 @@ public class TripData implements Parcelable {
   }
 
   public void updateTrip(@NonNull final Trip trip) {
-    int index = trip.getTripID();
-    trips.set(index, trip);
+    trips.set(trip.getTripID(), trip);
   }
 
   public void addTrip(@NonNull final Trip trip) {

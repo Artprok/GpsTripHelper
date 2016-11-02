@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,6 @@ import com.example.aprokopenko.triphelper.listener.FileEraseListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,6 +37,7 @@ import javax.inject.Singleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 /**
@@ -64,15 +62,15 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   ImageButton eraseButton;
   @BindView(R.id.btn_about)
   ImageButton aboutButton;
-  @BindView(R.id.measurementUnitSpinner)
+  @BindView(R.id.settings_fragment_measurements_unit_spinner)
   Spinner measurementUnitSpinner;
-  @BindView(R.id.currencyUnitSpinner)
+  @BindView(R.id.settings_fragment_currency_unit_spinner)
   Spinner currencyUnitSpinner;
   @BindView(R.id.backgroundSwitch)
   SwitchCompat backgroundSwitch;
 
   private static final String LOG_TAG = "Settings fragment";
-  public static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private int fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
   private float fuelConsumption = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
@@ -101,12 +99,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     unbinder = ButterKnife.bind(this, view);
     preferences = TripHelperApp.getSharedPreferences();
     context = getActivity();
-    setupEditTextFields();
-    readDataFromFile();
+//    setupEditTextFields();
     setupMeasurementUnitSpinner();
+    readDataFromFile();
     setupCurrencyUnitSpinner();
-
-
     // TODO: 07.06.2016 not working due to problems with WakeLock that called in OnLocationChanged,whatever you do..
     //        setupBackgroundSwitch();
   }
@@ -118,8 +114,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   @OnClick({R.id.btn_about, R.id.btn_erase})
   public void onClickButton(@NonNull final View view) {
-    final int idView = view.getId();
-    switch (idView) {
+    switch (view.getId()) {
       case R.id.btn_about:
         UtilMethods.buildAndShowAboutDialog(getActivity());
         break;
@@ -135,7 +130,33 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
       default:
         throw new IllegalArgumentException();
     }
+  }
 
+  @OnTextChanged(R.id.editText_fuelPrice)
+  public void onFuelPriceChanged(CharSequence s) {
+    if (DEBUG) {
+      Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
+    }
+    if (!TextUtils.equals(s, "")) {
+      fuelCost = Float.valueOf(s.toString());
+      writeDataToFile();
+    }
+  }
+
+  @OnTextChanged(R.id.editText_fuelConsumption)
+  public void onFuelConsumptionChanged(CharSequence s) {
+    if (!TextUtils.equals(s, "")) {
+      fuelConsumption = (Float.valueOf(s.toString()));
+      writeDataToFile();
+    }
+  }
+
+  @OnTextChanged(R.id.editText_fuelCapacity)
+  public void onFuelCapacityChanged(CharSequence s) {
+    if (!TextUtils.equals(s, "")) {
+      fuelTankCapacity = (Integer.valueOf(s.toString()));
+      writeDataToFile();
+    }
   }
 
   public void setFileEraseListener(@NonNull final FileEraseListener fileEraseListener) {
@@ -160,6 +181,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         editor.putInt("measurementUnitPosition", position);
         editor.apply();
         break;
+      default:
+        editor.putString("measurementUnit", kmh);
+        editor.putInt("measurementUnitPosition", position);
+        editor.apply();
     }
   }
 
@@ -186,63 +211,11 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         editor.putInt("currencyUnitPosition", position);
         editor.apply();
         break;
+      default:
+        editor.putString("currencyUnit", usd);
+        editor.putInt("currencyUnitPosition", position);
+        editor.apply();
     }
-  }
-
-  private void setupEditTextFields() {
-    fuelPriceEditText.addTextChangedListener(new TextWatcher() {
-      @Override public void beforeTextChanged(@NonNull final CharSequence s, final int start, final int count, final int after) {
-
-      }
-
-      @Override public void onTextChanged(@NonNull final CharSequence s, final int start, final int before, final int count) {
-        if (DEBUG) {
-          Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
-        }
-        if (!TextUtils.equals(s, "")) {
-          fuelCost = Float.valueOf(s.toString());
-          writeDataToFile();
-        }
-      }
-
-      @Override public void afterTextChanged(@NonNull final Editable s) {
-
-      }
-    });
-
-    fuelConsEditText.addTextChangedListener(new TextWatcher() {
-      @Override public void beforeTextChanged(@NonNull final CharSequence s, final int start, final int count, final int after) {
-
-      }
-
-      @Override public void onTextChanged(@NonNull final CharSequence s, final int start, final int before, final int count) {
-        if (!TextUtils.equals(s, "")) {
-          fuelConsumption = (Float.valueOf(s.toString()));
-          writeDataToFile();
-        }
-      }
-
-      @Override public void afterTextChanged(@NonNull final Editable s) {
-
-      }
-    });
-
-    fuelCapacityEditText.addTextChangedListener(new TextWatcher() {
-      @Override public void beforeTextChanged(@NonNull final CharSequence s, final int start, final int count, final int after) {
-
-      }
-
-      @Override public void onTextChanged(@NonNull final CharSequence s, final int start, final int before, final int count) {
-        if (!TextUtils.equals(s, "")) {
-          fuelTankCapacity = (Integer.valueOf(s.toString()));
-          writeDataToFile();
-        }
-      }
-
-      @Override public void afterTextChanged(@NonNull final Editable s) {
-
-      }
-    });
   }
 
   private void setupTextFields() {
@@ -272,22 +245,16 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   private void setupMeasurementUnitSpinner() {
-    final String kmh = getString(R.string.kilometreUnit);
-    final String mph = getString(R.string.milesUnit);
-    final String knots = getString(R.string.knots);
-    final String title = getString(R.string.measurementUnitSpinnerTitle);
-
-    final String[] data = {kmh, mph, knots};
+    final String[] data = {getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots)};
     final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     measurementUnitSpinner.setAdapter(adapter);
-    measurementUnitSpinner.setPrompt(title);
-
+    measurementUnitSpinner.setPrompt(getString(R.string.measurementUnitSpinnerTitle));
     measurementUnitSpinner.setSelection(preferences.getInt("measurementUnitPosition", 0));
     measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
-        setMeasurementUnit(position, kmh, mph, knots);
+        setMeasurementUnit(position, getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots));
       }
 
       @Override public void onNothingSelected(@NonNull final AdapterView<?> arg0) {
@@ -296,34 +263,21 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   private void setupCurrencyUnitSpinner() {
-    final String grn_label = getString(R.string.grn_label);
-    final String rub_label = getString(R.string.rub_label);
-    final String usd_label = getString(R.string.usd_label);
-    final String eur_label = getString(R.string.eur_label);
-
-    final String grn = getString(R.string.grn);
-    final String rub = getString(R.string.rub);
-    final String usd = getString(R.string.usd);
-    final String eur = getString(R.string.eur);
-
     currency_prefix = preferences.getString("currencyUnit", "");
     if (TextUtils.equals(currency_prefix, "")) {
-      currency_prefix = grn;
+      currency_prefix = getString(R.string.grn);
     }
 
-    final String title = getString(R.string.currencyUnitText);
-
-    final String[] data = {grn_label, rub_label, usd_label, eur_label};
+    final String[] data = {getString(R.string.grn_label), getString(R.string.rub_label), getString(R.string.usd_label), getString(R.string.eur_label)};
     final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     currencyUnitSpinner.setAdapter(adapter);
-    currencyUnitSpinner.setPrompt(title);
-
+    currencyUnitSpinner.setPrompt(getString(R.string.currencyUnitText));
     currencyUnitSpinner.setSelection(preferences.getInt("currencyUnitPosition", 0));
     currencyUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
-        setCurrencyUnit(position, grn, rub, usd, eur);
+        setCurrencyUnit(position, getString(R.string.grn), getString(R.string.rub), getString(R.string.usd), getString(R.string.eur));
         updateFuelCost();
       }
 
@@ -333,8 +287,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   private void updateFuelCost() {
-    currency_prefix = preferences.getString("currencyUnit", "");
-    final String fuelCost = this.fuelCost + currency_prefix;
+    final String fuelCost = this.fuelCost + preferences.getString("currencyUnit", "");
     curFuelPrice.setText(fuelCost);
     curFuelPrice.invalidate();
   }
@@ -362,24 +315,17 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
     @Override protected Boolean doInBackground(@NonNull final Void... params) {
-
-      final FileOutputStream fos;
-
-      final float consumption = fuelConsumption;
-      final float price = fuelCost;
-      final int capacity = fuelTankCapacity;
-
       if (DEBUG) {
         Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
-        Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + consumption + price + capacity);
+        Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + fuelConsumption + fuelCost + fuelTankCapacity);
       }
 
       try {
-        fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
+        final FileOutputStream fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
         final ObjectOutputStream os = new ObjectOutputStream(fos);
-        os.writeFloat(consumption);
-        os.writeFloat(price);
-        os.writeInt(capacity);
+        os.writeFloat(fuelConsumption);
+        os.writeFloat(fuelCost);
+        os.writeInt(fuelTankCapacity);
 
         os.close();
         fos.close();
@@ -404,14 +350,12 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
       if (DEBUG) {
         Log.d(LOG_TAG, "readFileSettings");
       }
-      final File file = context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME);
-      if (file.exists()) {
+      if (context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
         if (DEBUG) {
           Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
         }
-        final FileInputStream fis;
         try {
-          fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
+          final FileInputStream fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
           final ObjectInputStream is = new ObjectInputStream(fis);
           final float consumption = is.readFloat();
           final float fuelPrice = is.readFloat();

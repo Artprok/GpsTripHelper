@@ -160,20 +160,19 @@ public class TripHelperGauge extends FrameLayout {
   }
 
   public void refreshGauge() {
+    final ArrayList<GaugePointer> scaleCircularPointers = new ArrayList<>();
+    final ArrayList<ScaleRenderer> removeScaleRen = new ArrayList<>();
+    final ArrayList<PointerRender> removedPointerRender = new ArrayList<>();
     calculateMargin(mGaugeWidth);
     mGaugeHeader = new GaugeHeaderRenderer(this.getContext());
     mGaugeHeader.setmGauge(this);
     this.addView(mGaugeHeader);
-    final ArrayList<GaugePointer> scaleCircularPointers = new ArrayList<>();
-    final ArrayList<ScaleRenderer> removeScaleRen = new ArrayList<>();
-    final ArrayList<PointerRender> removedPointerRender = new ArrayList<>();
 
     for (ScaleRenderer scaleRenderer : mScaleRenders) {
       removeScaleRen.add(scaleRenderer);
     }
 
     Iterator i$1 = gaugeScales.iterator();
-
     Iterator anim;
     label91:
     while (i$1.hasNext()) {
@@ -437,7 +436,6 @@ public class TripHelperGauge extends FrameLayout {
             final float modifAvaliableWidthMinus20 = (mAvailableWidth - 20.0f);
             final float modifAvaliableWidthMinus10 = mAvailableWidth - 10.0f;
 
-
             if (mKnobDiameter == GaugeConstants.ZERO) {
               mAvailableHeight = (modifAvaliableWidthMinus10) * 2.0f;
               gaugeType = getGaugeType();
@@ -510,22 +508,17 @@ public class TripHelperGauge extends FrameLayout {
     }
 
     mMinSize = Math.min(mVisualRect.height(), mVisualRect.width());
-    final double mScaleCentreY = mVisualRect.top + mVisualRect.height() / 2.0;
-    final double mScaleCentreX = mVisualRect.left + mVisualRect.width() / 2.0;
-    mCentreY = mScaleCentreY;
-    mCentreX = mScaleCentreX;
-    final double dimensionVar = mVisualRect.width();
-    mInnerBevelWidth = dimensionVar + 10.0;
+    mCentreY = mVisualRect.top + mVisualRect.height() / 2.0;
+    mCentreX = mVisualRect.left + mVisualRect.width() / 2.0;
+    mInnerBevelWidth = mVisualRect.width() + 10.0;
     calculateMargin(mInnerBevelWidth);
   }
 
   public void calculateMargin(final double width) {
     //optimizationModif
     final double marginSubtrahend = 2.0 * 10.0;
-
     mRimWidth = width - 10.0;
     final double dimensionVariable = (mRimWidth - marginSubtrahend) - marginSubtrahend;
-
     mLabelsPathHeight = dimensionVariable;
     mRangePathWidth = dimensionVariable;
   }
