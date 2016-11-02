@@ -786,6 +786,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         speedometerContainer.setVisibility(View.VISIBLE);
       }
     });
+    speedometerContainer.invalidate();
   }
 
   private LinearLayoutCompat.LayoutParams getLayoutParams(final boolean isPortrait) {

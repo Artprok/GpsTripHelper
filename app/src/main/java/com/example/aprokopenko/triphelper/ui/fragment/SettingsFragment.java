@@ -326,7 +326,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         os.writeFloat(fuelConsumption);
         os.writeFloat(fuelCost);
         os.writeInt(fuelTankCapacity);
-
         os.close();
         fos.close();
       } catch (IOException e) {

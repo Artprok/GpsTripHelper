@@ -38,7 +38,6 @@ public class GpsHandler implements LocationListener, Parcelable {
   private Observer<Float> maxSpeedSubscriber;
   private Observer<Float> speedSubscriber;
   private Thread locationThread;
-
   private Observable<Location> locationObservable;
   private Observable<Float> maxSpeedObservable;
   private Observable<Float> speedObservable;
