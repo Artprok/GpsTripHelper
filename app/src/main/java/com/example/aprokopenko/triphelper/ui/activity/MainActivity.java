@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
   FloatingActionButton fab;
 
   private static final String LOG_TAG = "MainActivity";
-  public static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
   private int fabTransitionValue;
   private Unbinder unbinder;
 

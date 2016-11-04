@@ -162,7 +162,7 @@ public class CalculationUtils {
   /**
    * Method for setting measurement unit multiplier (kmh,mph,knots).
    *
-   * @param position {@link Integer} position for choise type of multiplier:
+   * @param position {@link Integer} position for choice type of multiplier:
    *                 0 - Kilometer per hour
    *                 1 - Mile per hour
    *                 2 - Knots

@@ -28,12 +28,12 @@ public class CircularGaugeFactory {
    *
    * @param context    {@link Context}
    * @param title      {@link String} title of {@link TripHelperGauge}
-   * @param isLandcape {@link Boolean} true - if gauge for Landscape, false - for portrait
+   * @param isLandscape {@link Boolean} true - if gauge for Landscape, false - for portrait
    * @return configured for portrait layout {@link TripHelperGauge}
    */
-  public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title, final boolean isLandcape) {
+  public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title, final boolean isLandscape) {
     final TripHelperGauge speedometer = new TripHelperGauge(context);
-    configureSpeedometer(speedometer, title, isLandcape);
+    configureSpeedometer(speedometer, title, isLandscape);
     return speedometer;
   }
 

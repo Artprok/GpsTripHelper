@@ -425,17 +425,17 @@ public class TripHelperGauge extends FrameLayout {
 
           if (mAvailableHeight / 2.0D > mAvailableWidth) {
             final float modifAvaliableWidthMinus20 = (mAvailableWidth - 20.0f);
-            final float modifAvaliableWidthMinus10 = mAvailableWidth - 10.0f;
+            final float modifAvailableWidthMinus10 = mAvailableWidth - 10.0f;
 
             if (mKnobDiameter == GaugeConstants.ZERO) {
-              mAvailableHeight = (modifAvaliableWidthMinus10) * 2.0f;
+              mAvailableHeight = (modifAvailableWidthMinus10) * 2.0f;
               gaugeType = getGaugeType();
               if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.East) {
-                mVisualRect.left = modifAvaliableWidthMinus10 / 2.0f - modifAvaliableWidthMinus20;
+                mVisualRect.left = modifAvailableWidthMinus10 / 2.0f - modifAvaliableWidthMinus20;
               } else {
                 gaugeType = getGaugeType();
                 if (gaugeType == com.example.aprokopenko.triphelper.speedometer_gauge.enums.GaugeType.West) {
-                  mVisualRect.left = modifAvaliableWidthMinus10 / 2.0f - modifAvaliableWidthMinus10;
+                  mVisualRect.left = modifAvailableWidthMinus10 / 2.0f - modifAvailableWidthMinus10;
                 }
               }
 

@@ -226,7 +226,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupAdvert();
         break;
       case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-        checkIfSattelitesAreStillAvaliableWithInterval(ConstantValues.FIVE_MINUTES);
+        checkIfSatelitesAreStillAvailableWithInterval(ConstantValues.FIVE_MINUTES);
         break;
       case GpsStatus.GPS_EVENT_STOPPED:
         deactivateGpsStatusIcon();
@@ -496,10 +496,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     gpsFirstFixTime = System.currentTimeMillis();
   }
 
-  private void checkIfSattelitesAreStillAvaliableWithInterval(final long interval) {
+  private void checkIfSatelitesAreStillAvailableWithInterval(final long interval) {
     if ((System.currentTimeMillis() - gpsFirstFixTime) > interval) {
       if (UtilMethods.checkIfGpsEnabled(context)) {
-        for (GpsSatellite satellite : getSattelitesList()) {
+        for (GpsSatellite satellite : getSatelitesList()) {
           if (satellite.usedInFix()) {
             setGpsIconActive();
             gpsFirstFixTime = System.currentTimeMillis();
@@ -513,7 +513,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
   }
 
-  private Iterable<GpsSatellite> getSattelitesList() {
+  private Iterable<GpsSatellite> getSatelitesList() {
     return getGpsStatus().getSatellites();
   }
 

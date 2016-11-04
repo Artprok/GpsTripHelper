@@ -164,7 +164,7 @@ public class TripProcessor implements Parcelable {
     this.fuelPrice = fuelPrice;
   }
 
-  public void setSpeedChangeListener(@NonNull final SpeedChangeListener speedChangeListener) {
+  public void setSpeedChangeListener(@Nullable final SpeedChangeListener speedChangeListener) {
     this.speedChangeListener = speedChangeListener;
   }
 
@@ -536,11 +536,9 @@ public class TripProcessor implements Parcelable {
     if (maxSpeedSubscriber == null) {
       maxSpeedSubscriber = new Subscriber<Float>() {
         @Override public void onCompleted() {
-
         }
 
         @Override public void onError(@NonNull final Throwable e) {
-
         }
 
         @Override public void onNext(@NonNull final Float speed) {

@@ -356,13 +356,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         try {
           final FileInputStream fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
           final ObjectInputStream is = new ObjectInputStream(fis);
-          final float consumption = is.readFloat();
-          final float fuelPrice = is.readFloat();
-          final int capacity = is.readInt();
 
-          fuelConsumption = consumption;
-          fuelCost = fuelPrice;
-          fuelTankCapacity = capacity;
+          fuelConsumption = is.readFloat();
+          fuelCost = is.readFloat();
+          fuelTankCapacity = is.readInt();
 
           is.close();
           fis.close();
