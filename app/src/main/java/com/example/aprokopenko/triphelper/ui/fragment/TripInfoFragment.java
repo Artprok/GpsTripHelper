@@ -279,6 +279,9 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     final String avgSpeed = UtilMethods.formatFloatDecimalFormat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
     final String maxSpeed = UtilMethods.formatFloatDecimalFormat(this.maxSpeed) + " " + getString(R.string.speed_prefix);
     final String distance = UtilMethods.formatFloatDecimalFormat(distTravelled) + " " + getString(R.string.distance_prefix);
+    final float valInMotion = getInMotionValue();
+    final float valWithoutMotion = getWithoutMotionValue(valInMotion);
+    final Resources res = getResources();
 
     for (String value : speedValues) {
       if (Float.valueOf(value) == 0) {
@@ -289,11 +292,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, null));
     }
-
-    final float valInMotion = getInMotionValue();
-    final float valWithoutMotion = getWithoutMotionValue(valInMotion);
-
-    final Resources res = getResources();
 
     tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(valWithoutMotion, res));
     tripTimeSpentInMotionView.setText(CalculationUtils.getTimeInNormalFormat(valInMotion, res));
@@ -314,7 +312,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
     dataContainerAnimator.addListener(new Animator.AnimatorListener() {
       @Override public void onAnimationStart(@NonNull final Animator animation) {
-
       }
 
       @Override public void onAnimationEnd(@NonNull final Animator animation) {
@@ -329,26 +326,21 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
           }
 
           @Override public void onAnimationEnd(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
           }
         });
         mapViewAnimator.start();
       }
 
       @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
       }
 
       @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
       }
     });
     dataContainerAnimator.start();
@@ -374,26 +366,21 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
           }
 
           @Override public void onAnimationEnd(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
           }
         });
         dataContainerAnimator.start();
       }
 
       @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
       }
 
       @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
       }
     });
     mapViewAnimator.start();
@@ -405,7 +392,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
     dataContainerAnimator.addListener(new Animator.AnimatorListener() {
       @Override public void onAnimationStart(@NonNull final Animator animation) {
-
       }
 
       @Override public void onAnimationEnd(@NonNull final Animator animation) {
@@ -420,26 +406,21 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
           }
 
           @Override public void onAnimationEnd(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
           }
         });
         mapViewAnimator.start();
       }
 
       @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
       }
 
       @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
       }
     });
     dataContainerAnimator.start();
@@ -465,26 +446,21 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
           }
 
           @Override public void onAnimationEnd(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
           }
 
           @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
           }
         });
         dataContainerAnimator.start();
       }
 
       @Override public void onAnimationCancel(@NonNull final Animator animation) {
-
       }
 
       @Override public void onAnimationRepeat(@NonNull final Animator animation) {
-
       }
     });
     mapViewAnimator.start();
