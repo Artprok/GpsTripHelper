@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.aprokopenko.triphelper">
+<manifest package="com.example.aprokopenko.triphelper"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="com.example.googlemaps.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -36,9 +36,6 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="b37d202ce9072757d659fa6c30fde3a8f4320af6"
-            />
-
+            android:value="b37d202ce9072757d659fa6c30fde3a8f4320af6"/>
     </application>
-
 </manifest>

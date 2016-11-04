@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">TripHelper</string>
     <string name="testVal" translatable="false">testVal</string>
     <string name="TRIP_PROCESSOR_SETTING_FUEL_CONSUMPTION_KEY" translatable="false">fuelConsumption</string>
     <string name="TRIP_PROCESSOR_SETTING_FUEL_PRICE_KEY" translatable="false">fuelPrice</string>
     <string name="TRIP_PROCESSOR_SETTING_FUEL_CAPACITY_KEY" translatable="false">fuelCapacity</string>
-
     <string name="admob_publisher_id" translatable="false">pub-5786989627330841</string>
     <string name="admob_publisher_testid" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_publisher_testid_forAct" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
-
-    <string name="app_name">TripHelper</string>
 
     <!--hints-->
     <string name="average_fuel_consumption_hint">Average fuel consumption &#160;</string>
@@ -25,7 +23,6 @@
     <string name="trip_ID_hint">Trip id &#160;</string>
     <!--/hints-->
 
-
     <!--labels-->
     <string name="info_about_all_trip_header_label">Info about all trips:&#160;</string>
     <string name="list_of_trips_label">List of trips:&#160;</string>
@@ -37,7 +34,6 @@
     <string name="speed_layout_label">Speed:&#160;</string>
     <!--/labels-->
 
-
     <!--prefixes:-->
     <string name="fuel_cons_prefix">&#160;litre/100km</string>
     <string name="distance_prefix">&#160;km</string>
@@ -48,13 +44,11 @@
     <string name="secondPref">&#160;s</string>
     <!--/prefixes-->
 
-
     <!--fill_fuel_dialog-->
     <string name="fuel_filled_val">How much fuel to fill?</string>
     <string name="fill_fuel_tank">Fill fuel tank</string>
     <string name="refill_hint">Refill</string>
     <!--/fill_fuel_dialog-->
-
 
     <!--Toasts-->
     <string name="file_not_erased_toast">Something went wrong with data_erasing</string>
@@ -66,13 +60,11 @@
     <string name="trip_ended_toast">Trip ended</string>
     <!--/Toasts-->
 
-
     <!--SettingsHints-->
     <string name="fuel_price">Fuel price</string>
     <string name="fuel_consumption">Fuel consumption</string>
     <string name="fuel_capacity">Fuel capacity</string>
     <!--/SettingsHints-->
-
 
     <!--GPS dialog-->
     <string name="gps_dialog_text_label">Your GPS seems to be disabled, do you want to enable it?</string>
@@ -80,7 +72,6 @@
     <string name="gps_dialog_disagree_enable">No</string>
     <string name="gps_dialog_title">Gps disabled</string>
     <!--/GPS dialog-->
-
 
     <!--Exit dialog-->
     <string name="exit_dialog_string">Are you sure you want to exit?</string>
@@ -122,8 +113,7 @@
         -Watch on how much time You spent in motion or in a traffic jam
         "\n"
         "\n"
-        Do you enjoy TripHelper? Please rate us on GooglePlay and help us to get better!
-    </string>
+        Do you enjoy TripHelper? Please rate us on GooglePlay and help us to get better!</string>
     <string name="aboutRateButton">It\'s cool, I want to rate!</string>
     <string name="aboutNegativeButton">Thanks, maybe later</string>
     <string name="aboutFeedbackButton">Send a feedback to developer</string>
@@ -154,8 +144,7 @@
         Highly recommended to plug in Your device when You using a TripHelper to get battery in charging state!
         "\n"
         "\n"
-        Hope you will like TripHelper!
-    </string>
+        Hope you will like TripHelper!</string>
     <!--/TutorialDialog-->
 
     <!--MeasurementsUnit-->
@@ -187,9 +176,7 @@
          "\n"
         -You forgot to press "Start" button at start of trip
          "\n"
-        -You forgot to press "Stop" button when you arrived to your destination place
-    </string>
-
+        -You forgot to press "Stop" button when you arrived to your destination place</string>
     <string name="somethingWentWrongOk">Ok</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
@@ -208,13 +195,10 @@
     <string name="usd">&#160;dol</string>
     <string name="grn">&#160;uah</string>
 
-
     <string name="eur_label">&#160;Euro</string>
     <string name="rub_label">&#160;Rub</string>
     <string name="usd_label">&#160;Dollar</string>
     <string name="grn_label">&#160;Uah</string>
     <string name="paidVersion_code" translatable="false">forOleg_</string>
     <string name="PREFERENCE_KEY_ADVERT_INSTALLATION" translatable="false">advertInstalled</string>
-
-
 </resources>

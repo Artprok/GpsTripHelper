@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Автопомощник</string>
     <!--hints-->
     <string name="money_on_fuel_spent_hint">Денег на топливо потрачено &#160;</string>
@@ -53,9 +52,6 @@
     <string name="trip_started_toast">Поездка начата</string>
     <!--/Toasts-->
 
-
-
-
     <!--GPS dialog-->
     <string name="gps_dialog_disagree_enable">Нет</string>
     <string name="gps_dialog_agree_enable">Включить</string>
@@ -104,8 +100,7 @@
         -Посмотреть сколько времени Вы находились в движении, а сколько простояли в пробке.
         "\n"
         "\n"
-        Надеемся, что Вам понравился Автопомощник, оцените пожалуйста его на GooglePlay, чтобы помочь нам сделать его ещё лучше!
-    </string>
+        Надеемся, что Вам понравился Автопомощник, оцените пожалуйста его на GooglePlay, чтобы помочь нам сделать его ещё лучше!</string>
     <string name="aboutNegativeButton">Cпасибо, может быть позже</string>
     <string name="aboutRateButton">Круто, хочу оценить!</string>
     <string name="aboutFeedbackButton">Написать отзыв разработчику</string>
@@ -135,8 +130,7 @@
         Настоятельно рекомендуется подключить телефон к зарядному устройству, во избежание быстрой разрядки
         "\n"
         "\n"
-        Надеюсь, Вам понравится пользоваться Автопомощником!
-    </string>
+        Надеюсь, Вам понравится пользоваться Автопомощником!</string>
     <string name="tutorialNo">Нет, спасибо</string>
     <string name="tutorialThanks">Я понял, спасибо</string>
     <string name="tutorialWantToKnowInfo">Хотите узнать как пользоваться автопомощником?</string>
@@ -156,7 +150,6 @@
     <string name="subjectForFeedback">Отзыв о Автопомощнике</string>
     <!--/Feedback-->
 
-
     <!--SomethingWentWrongDialog-->
     <string name="somethingWentWrongTitle">Что-то пошло не так..</string>
     <string name="somethingWentWrongMessage">
@@ -171,9 +164,7 @@
          "\n"
         -Вы забыли нажать кнопку Стоп в конце поездки
          "\n"
-         "\n"
-    </string>
-
+         "\n"</string>
     <string name="somethingWentWrongOk">Ок</string>
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
@@ -197,5 +188,4 @@
     <string name="rub_label">&#160;Рубли</string>
     <string name="usd_label">&#160;Доллары</string>
     <string name="grn_label">&#160;Гривны</string>
-
 </resources>
