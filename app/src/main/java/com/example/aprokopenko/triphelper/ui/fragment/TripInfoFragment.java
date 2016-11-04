@@ -111,7 +111,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   private String currency_prefix;
 
   private ArrayList<String> speedValues;
-  private Context context;
   private ArrayList<Route> routes;
 
   private boolean mapOpened;
@@ -192,13 +191,16 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     final String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
-    context = getActivity();
+    setCurrencyUnit(curUnit);
+    setDataToInfoFragmentFields();
+  }
+
+  private void setCurrencyUnit(String curUnit) {
     if (TextUtils.equals(curUnit, "")) {
       currency_prefix = getString(R.string.grn);
     } else {
       currency_prefix = curUnit;
     }
-    setDataToInfoFragmentFields();
   }
 
   @Override public void onDestroyView() {
@@ -208,11 +210,11 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   @Override public void onDetach() {
     super.onDetach();
-    context = null;
   }
 
   @Override public void onMapReady(@NonNull final GoogleMap googleMap) {
     if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
+      final Context context = getActivity();
       googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
       UtilMethods.isPermissionAllowed(context);
       googleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -249,7 +251,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         }
       }
     } else {
-      UtilMethods.MapNotAvailableDialog(context);
+      UtilMethods.MapNotAvailableDialog(getActivity());
     }
   }
 

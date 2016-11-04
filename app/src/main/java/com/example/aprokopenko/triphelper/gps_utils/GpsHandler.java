@@ -31,7 +31,7 @@ public class GpsHandler implements LocationListener, Parcelable {
   Context context;
 
   private static final String LOG_TAG = "GPSHandler";
-  public static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private float maxSpeed = ConstantValues.START_VALUE;
   private Observer<Location> locationSubscriber;

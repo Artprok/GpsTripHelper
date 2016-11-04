@@ -302,8 +302,6 @@ public class TripHelperGauge extends FrameLayout {
     GaugeType gaugeType;
     final float squarified;
     final float rectCanvas;
-
-    //modif optimization
     final float modifDiameter25 = 25.0f;
 
     label141:

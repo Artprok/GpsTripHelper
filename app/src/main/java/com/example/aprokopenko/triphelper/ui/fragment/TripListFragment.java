@@ -111,13 +111,12 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
     final String fuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
     final String avgSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
     final String maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
-    final float timeSpentOnTrips = tripData.getTimeSpentOnTrips();
 
     distanceTravelledView.setText(distance);
     avgFuelConsumptionView.setText(avgFuelCons);
     moneyOnFuelView.setText(moneyOnFuelSpent);
     fuelSpentView.setText(fuelSpent);
-    timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpentOnTrips, getResources()));
+    timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips(), getResources()));
     avgSpeedView.setText(avgSpeed);
     maxSpeedView.setText(maxSpeed);
   }

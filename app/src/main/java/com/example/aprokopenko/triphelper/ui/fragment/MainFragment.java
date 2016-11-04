@@ -92,8 +92,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private static final String LOG_TAG = "MainFragment";
-  private static final boolean REMOVE = false;
-  private static final boolean REGISTER = true;
+  private final boolean REMOVE = false;
+  private final boolean REGISTER = true;
 
   private boolean firstStart = true;
   private boolean fileErased;
@@ -795,7 +795,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (isPortrait) {
       dimension = speedometer.getWidth();
       layoutParams = new LinearLayoutCompat.LayoutParams(dimension, dimension);
-      layoutParams.setMargins(7, 0, 0, 0);
+      layoutParams.setMargins(7, 2, 2, 2);
     } else {
       dimension = speedometer.getHeight();
       layoutParams = new LinearLayoutCompat.LayoutParams(dimension, dimension);

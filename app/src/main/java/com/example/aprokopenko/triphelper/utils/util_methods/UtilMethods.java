@@ -217,7 +217,7 @@ public class UtilMethods {
   }
 
   /**
-   * Method for animating {@link FloatingActionButton} animation. (floating left when open, and floating back (right) when close).
+   * Method for animating {@link FloatingActionButton}  animation. Extends{@link android.view.animation.Animation.AnimationListener}. (floating left when open, and floating back (right) when close).
    *
    * @param fab         {@link FloatingActionButton} to animate
    * @param transitionX {@link Integer} value to move left and right

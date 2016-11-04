@@ -590,13 +590,13 @@ public class TripProcessor implements Parcelable {
 
     for (Trip trip : allTrips) {
       timeSpentForAllTrips = timeSpentForAllTrips + trip.getTimeSpentForTrip();
-      maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
-      fuelSpent = fuelSpent + trip.getFuelSpent();
     }
     for (Trip trip : allTrips) {
       final float majority_multiplier = (trip.getTimeSpentForTrip() / timeSpentForAllTrips) * ConstantValues.PER_100;
       avgFuelCons = (avgFuelCons + ((trip.getAvgFuelConsumption() * majority_multiplier) / ConstantValues.PER_100));
       avgSpeedSum = (avgSpeedSum + ((trip.getAvgSpeed() * majority_multiplier) / ConstantValues.PER_100));
+      maxSpeed = CalculationUtils.findMaxSpeed(trip.getMaxSpeed(), maxSpeed);
+      fuelSpent = fuelSpent + trip.getFuelSpent();
     }
     //double assurance that NULL won't be passed to trip data. Method "getValueCheckedOnNAN" replaces NULL&NAN values by 0f;
     tripData.setMaxSpeed(getValueCheckedOnNAN(maxSpeed));
@@ -659,16 +659,10 @@ public class TripProcessor implements Parcelable {
   }
 
   private void getTripDataFieldsValues() {
-    float distanceTravelled = ConstantValues.START_VALUE;
-    float fuelSpent = ConstantValues.START_VALUE;
-    for (Trip trip : tripData.getTrips()) {
-      distanceTravelled = distanceTravelled + trip.getDistanceTravelled();
-      fuelSpent = fuelSpent + trip.getFuelSpent();
-    }
-    final float moneySpent = CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice);
-    tripData.setDistanceTravelled(distanceTravelled);
+    float fuelSpent = tripData.getFuelSpent();
+    tripData.setDistanceTravelled(tripData.getDistanceTravelled());
     tripData.setAvgFuelConsumption(tripData.getAvgFuelConsumption());
-    tripData.setMoneyOnFuelSpent(moneySpent);
+    tripData.setMoneyOnFuelSpent(CalculationUtils.calcMoneySpent(fuelSpent, fuelPrice));
     tripData.setFuelSpent(fuelSpent);
   }
 
