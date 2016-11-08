@@ -46,7 +46,9 @@ public class CalculationUtils {
    * @return {@link String} representing time in hours, minutes and seconds
    */
   public static String getTimeInNormalFormat(final float timeInMills, @Nullable final Resources res) {
-    String resultString;
+    final int seconds = getSecondsFromMills(timeInMills);
+    final int minutes = getMinutesFromMills(timeInMills);
+    final int hours = getHoursFromMills(timeInMills);
     final String hoursPrefix;
     final String minutePrefix;
     final String secondsPrefix;
@@ -60,9 +62,7 @@ public class CalculationUtils {
       secondsPrefix = res.getString(R.string.secondPref);
     }
 
-    final int seconds = getSecondsFromMills(timeInMills);
-    final int minutes = getMinutesFromMills(timeInMills);
-    final int hours = getHoursFromMills(timeInMills);
+    String resultString;
     if (hours == 0) {
       resultString = minutes + minutePrefix + ", " + seconds + secondsPrefix;
       if (minutes == 0) {
