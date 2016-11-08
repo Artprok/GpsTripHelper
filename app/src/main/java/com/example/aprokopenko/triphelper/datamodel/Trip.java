@@ -243,7 +243,7 @@ public class Trip implements Parcelable {
   }
 
   private Trip createTripFromData(@NonNull final TripInfoContainer tripInfoContainer) {
-    Trip trip = tripInfoContainer.getTrip();
+    final Trip trip = tripInfoContainer.getTrip();
     trip.setTripDate(tripInfoContainer.getDate());
     trip.setRoute(tripInfoContainer.getRoutes());
     trip.setDistanceTravelled(tripInfoContainer.getDistanceTravelled());

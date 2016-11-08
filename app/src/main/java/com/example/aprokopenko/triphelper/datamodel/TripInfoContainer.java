@@ -46,36 +46,16 @@ public class TripInfoContainer {
   public TripInfoContainer(@NonNull final String date, final float distanceTravelled, final float avgSpeed, final float timeSpentForTrip, final float timeSpentInMotion, final
   float timeSpentOnStop, final float avgFuelConsumption, final float fuelSpent, final int id, @NonNull final ArrayList<Route> route,
                            final float moneyOnFuelSpent, final float maxSpeed, @Nullable final Trip trip) {
-    if (distanceTravelled >= 0) {
-      this.distanceTravelled = distanceTravelled;
-    }
-    if (avgSpeed >= 0) {
-      this.avgSpeed = avgSpeed;
-    }
-    if (timeSpentForTrip >= 0) {
-      this.timeSpentForTrip = timeSpentForTrip;
-    }
-    if (timeSpentInMotion >= 0) {
-      this.timeSpentInMotion = timeSpentInMotion;
-    }
-    if (timeSpentOnStop >= 0) {
-      this.timeSpentOnStop = timeSpentOnStop;
-    }
-    if (avgFuelConsumption >= 0) {
-      this.avgFuelConsumption = avgFuelConsumption;
-    }
-    if (fuelSpent >= 0) {
-      this.fuelSpent = fuelSpent;
-    }
-    if (id >= 0) {
-      this.id = id;
-    }
-    if (moneyOnFuelSpent >= 0) {
-      this.moneyOnFuelSpent = moneyOnFuelSpent;
-    }
-    if (maxSpeed >= 0) {
-      this.maxSpeed = maxSpeed;
-    }
+    this.distanceTravelled = distanceTravelled;
+    this.avgSpeed = avgSpeed;
+    this.timeSpentForTrip = timeSpentForTrip;
+    this.timeSpentInMotion = timeSpentInMotion;
+    this.timeSpentOnStop = timeSpentOnStop;
+    this.avgFuelConsumption = avgFuelConsumption;
+    this.fuelSpent = fuelSpent;
+    this.id = id;
+    this.moneyOnFuelSpent = moneyOnFuelSpent;
+    this.maxSpeed = maxSpeed;
     this.route = route;
     this.trip = trip;
     this.date = date;

@@ -17,7 +17,7 @@ import java.util.Iterator;
  * Class extends {@link FrameLayout} and represents a circle gauge with {@link GaugeRange}, {@link NeedlePointer}, {@link GaugeScale}.
  */
 public class TripHelperGauge extends FrameLayout {
-  static float DENSITY = -1.0F;
+  public static float DENSITY = -1.0F;
   private GaugeType GaugeType;
   private final ArrayList<ScaleRenderer> mScaleRenders;
   private final ArrayList<PointerRender> mPointerRenders;
@@ -400,7 +400,6 @@ public class TripHelperGauge extends FrameLayout {
             mVisualRect.bottom = mVisualRect.top + mAvailableWidth;
             mVisualRect.right = mVisualRect.left + mAvailableWidth;
           } else {
-            //optimizationModif
             final float modifRectCanvasDelimBy2 = (float) (rectCanvas / 2.0);
 
             mVisualRect.top = mAvailableHeight / 2.0f - modifRectCanvasDelimBy2;

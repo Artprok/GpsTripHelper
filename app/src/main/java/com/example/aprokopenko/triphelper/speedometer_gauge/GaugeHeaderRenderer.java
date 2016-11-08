@@ -40,19 +40,18 @@ public class GaugeHeaderRenderer extends View {
 
   protected void onDraw(@NonNull final Canvas canvas) {
     if (mGauge != null && headerArrayList != null) {
-
-      headerArrayList = mGauge.getHeaders();
       final RectF mVisualRect = mGauge.getmVisualRect();
       final double mCentreX = mGauge.getmCentreX();
       final double mCentreY = mGauge.getmCentreY();
+      headerArrayList = mGauge.getHeaders();
 
       for (Header header : headerArrayList) {
-        header.setGauge(mGauge);
+        final double headerTextWidth = mPaint.measureText(header.getText());
         final double textSize = header.getTextSize();
+        header.setGauge(mGauge);
         mPaint.setColor(header.getTextColor());
         mPaint.setTextSize(((float) textSize) * TripHelperGauge.DENSITY);
         mPaint.setTypeface(header.getTextStyle());
-        final double headerTextWidth = mPaint.measureText(header.getText());
         if (header.getHeaderAlignment() != null) {
           final double left;
           final double top;
@@ -99,7 +98,7 @@ public class GaugeHeaderRenderer extends View {
                     left = mGauge.getmGaugeWidth() * (pointF.x);
                     top = (mCentreY - ((mVisualRect.height() / 2.0f))) + ((mVisualRect.height() * pointF.y));
                   } else {
-                    PointF pointF = header.getPosition();
+                    final PointF pointF = header.getPosition();
                     left = (mCentreX - ((mVisualRect.width() / 2.0f))) + ((mVisualRect.width() * pointF.x));
                     top = mGauge.getmGaugeHeight() * (pointF.y);
                   }

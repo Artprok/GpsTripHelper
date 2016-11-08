@@ -26,8 +26,8 @@ public class CircularGaugeFactory {
   /**
    * Method for getting configured {@link TripHelperGauge} for portrait layout(by default).
    *
-   * @param context    {@link Context}
-   * @param title      {@link String} title of {@link TripHelperGauge}
+   * @param context     {@link Context}
+   * @param title       {@link String} title of {@link TripHelperGauge}
    * @param isLandscape {@link Boolean} true - if gauge for Landscape, false - for portrait
    * @return configured for portrait layout {@link TripHelperGauge}
    */
@@ -73,31 +73,31 @@ public class CircularGaugeFactory {
   private ArrayList<GaugeRange> getRanges(@NonNull final GaugeScale scale) {
     final ArrayList<GaugeRange> gaugeRangeArrayList = new ArrayList<>();
     final GaugeRange gaugeRange1 = new GaugeRange();
+    final GaugeRange gaugeRange2 = new GaugeRange();
+    final GaugeRange gaugeRange3 = new GaugeRange();
+
     gaugeRange1.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
     gaugeRange1.setStartValue(GaugeFactorySettings.cityLimitationSpeedFrom);
     gaugeRange1.setEndValue(GaugeFactorySettings.cityLimitationSpeedTo);
     gaugeRange1.setWidth(GaugeFactorySettings.rangeScaleWidth);
     gaugeRange1.setOffset(GaugeFactorySettings.rangeOffset);
-    gaugeRangeArrayList.add(0, gaugeRange1);
 
-    scale.setGaugeRanges(gaugeRangeArrayList);
-    final GaugeRange gaugeRange2 = new GaugeRange();
     gaugeRange2.setColor(Color.parseColor(GaugeFactorySettings.outCityColorString));
     gaugeRange2.setStartValue(GaugeFactorySettings.outOfTownLimitationSpeedFrom);
     gaugeRange2.setEndValue(GaugeFactorySettings.outOfTownLimitationSpeedTo);
     gaugeRange2.setWidth(GaugeFactorySettings.rangeScaleWidth);
     gaugeRange2.setOffset(GaugeFactorySettings.rangeOffset);
-    gaugeRangeArrayList.add(1, gaugeRange2);
 
-    scale.setGaugeRanges(gaugeRangeArrayList);
-    final GaugeRange gaugeRange3 = new GaugeRange();
     gaugeRange3.setColor(Color.parseColor(GaugeFactorySettings.deniedSpeedColorString));
     gaugeRange3.setStartValue(GaugeFactorySettings.deniedSpeedLimitationSpeedFrom);
     gaugeRange3.setEndValue(GaugeFactorySettings.deniedSpeedLimitationSpeedTo);
     gaugeRange3.setWidth(GaugeFactorySettings.rangeScaleWidth);
     gaugeRange3.setOffset(GaugeFactorySettings.rangeOffset);
-    gaugeRangeArrayList.add(2, gaugeRange3);
 
+    gaugeRangeArrayList.add(0, gaugeRange1);
+    gaugeRangeArrayList.add(1, gaugeRange2);
+    gaugeRangeArrayList.add(2, gaugeRange3);
+    scale.setGaugeRanges(gaugeRangeArrayList);
     return gaugeRangeArrayList;
   }
 
@@ -143,18 +143,15 @@ public class CircularGaugeFactory {
     scale.setSweepAngle(SweepAngle);
     scale.setEndValue(GaugeFactorySettings.endValue);
     scale.setInterval(interval);
-
     scale.setLabelTextSize(labelTextSize);
     scale.setLabelColor(GaugeFactorySettings.labelTextColor);
     scale.setLabelOffset(GaugeFactorySettings.labelOffset);
-
-    setupTickSettings(tickSettings, scale);
-
     scale.setGaugePointers(pointers);
     scale.setGaugeRanges(ranges);
 
     gaugeScales.add(0, scale);
     gauge.setGaugeScales(gaugeScales);
+    setupTickSettings(tickSettings, scale);
   }
 
   private void setupTickSettings(@NonNull final ArrayList<TickSettings> tickSettings, @NonNull final GaugeScale scale) {

@@ -47,7 +47,7 @@ public class GaugePointer {
     this.mBaseGauge = mBaseGauge;
   }
 
-  TripHelperGauge getBaseGauge() {
+  public TripHelperGauge getBaseGauge() {
     return mBaseGauge;
   }
 

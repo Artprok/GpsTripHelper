@@ -10,25 +10,25 @@ import android.graphics.Typeface;
  */
 class GaugeConstants {
 
-  static final double ZERO = 0.0;
-  static final int FRAME_BACKGROUND_COLOR = -16777216;
-  static final long GAUGE_ANIMATION_TIME = 1500;
+  public static final double ZERO = 0.0;
+  public static final int FRAME_BACKGROUND_COLOR = -16777216;
+  public static final long GAUGE_ANIMATION_TIME = 1500;
 
-  static final double STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY = 0.017453292519943295D;
+  public static final double STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY = 0.017453292519943295D;
   public static final double ANGLE_360 = 360.0;
 
-  static final double DEFAULT_KNOB_RADIUS = 15.0;
-  static final double LENGTH_FACTOR = 1;
-  static final int DEFAULT_KNOB_COLOR = Color.parseColor("#FF777777");
+  public static final double DEFAULT_KNOB_RADIUS = 15.0;
+  public static final double LENGTH_FACTOR = 1;
+  public static final int DEFAULT_KNOB_COLOR = Color.parseColor("#FF777777");
 
-  static final double DEFAULT_HEADER_TEXT_SIZE = 12.0;
-  static final int DEFAULT_HEADER_TEXT_COLOR = -1;
-  static final PointF DEFAULT_HEADER_POSITION = new PointF(50.0f, 70.0f);
-  static final Typeface DEFAULT_HEADER_TEXT_STYLE = Typeface.create("Helvetica", 0);
+  public static final double DEFAULT_HEADER_TEXT_SIZE = 12.0;
+  public static final int DEFAULT_HEADER_TEXT_COLOR = -1;
+  public static final PointF DEFAULT_HEADER_POSITION = new PointF(50.0f, 70.0f);
+  public static final Typeface DEFAULT_HEADER_TEXT_STYLE = Typeface.create("Helvetica", 0);
 
-  static final double POINTER_INIT_WIDTH_VALUE = 3.0;
-  static final double POINTER_INIT_HEIGHT_VALUE = 0.0;
-  static final int POINTER_INIT_COLOR = Color.parseColor("#FF777777");
+  public static final double POINTER_INIT_WIDTH_VALUE = 3.0;
+  public static final double POINTER_INIT_HEIGHT_VALUE = 0.0;
+  public static final int POINTER_INIT_COLOR = Color.parseColor("#FF777777");
 
   static final int RANGE_INIT_COLOR = -16711681;
   static final double RANGE_INIT_START_VALUE = 0.0;

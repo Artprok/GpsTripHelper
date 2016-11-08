@@ -90,10 +90,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private static final int LOCATION_REQUEST_CODE = 1;
   private static final boolean DEBUG = BuildConfig.DEBUG;
-
   private static final String LOG_TAG = "MainFragment";
-  private final boolean REMOVE = false;
-  private final boolean REGISTER = true;
+
+  private static final boolean REMOVE = false;
+  private static final boolean REGISTER = true;
 
   private boolean firstStart = true;
   private boolean fileErased;
@@ -394,15 +394,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       }
 
       @Override public void onStatusChanged(@NonNull final String provider, final int status, @Nullable final Bundle extras) {
-
       }
 
       @Override public void onProviderEnabled(@NonNull final String provider) {
-
       }
 
       @Override public void onProviderDisabled(@NonNull final String provider) {
-
       }
     };
   }
@@ -437,7 +434,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void configureTripProcessor() {
     resetTripProcessor();
-
     tripProcessor = new TripProcessor(context, fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
     registerListenersToTripProcessor();
   }

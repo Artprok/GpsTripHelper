@@ -14,7 +14,6 @@ import javax.inject.Singleton;
 @Singleton
 public class DataHolderFragment extends android.support.v4.app.Fragment {
   private static final String LOG_TAG = "DataHolder";
-
   private TripData tripData;
 
   public static DataHolderFragment newInstance() {

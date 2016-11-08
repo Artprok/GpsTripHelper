@@ -66,6 +66,9 @@ public class ScaleRenderer extends View {
 
   protected void onDraw(@NonNull final Canvas canvas) {
     if (gauge != null && gaugeScale != null) {
+      final double startVal = gaugeScale.getStartValue();
+      final double rimWidth = gaugeScale.getRimWidth();
+      final double endVal = gaugeScale.getEndValue();
       gaugeScale.setmGauge(gauge);
 
       mCentreX = (float) gauge.getmCentreX();
@@ -76,7 +79,6 @@ public class ScaleRenderer extends View {
       mRangeFrame = gauge.getmRangeFrame();
       mRangePathWidth = (float) gauge.getmRangePathWidth();
 
-      final double rimWidth = gaugeScale.getRimWidth();
       modifMinSizeDivideBy4 = mMinSize / 4.0f;
       modifMinSizeDivideBy2 = mMinSize / 2.0f;
       modifMinSizeMultipleBy0dot75 = mMinSize * 0.75f;
@@ -85,8 +87,6 @@ public class ScaleRenderer extends View {
       modifMinSizeMultipleBy0dot375 = mMinSize * 0.375f;
       modifRimWidthDivideBy2 = (float) (rimWidth / 2.0);
 
-      final double endVal = gaugeScale.getEndValue();
-      final double startVal = gaugeScale.getStartValue();
 
       if (endVal > startVal && startVal < endVal) {
         final double totalTicks = (gaugeScale.getEndValue() - gaugeScale.getStartValue()) / gaugeScale.getInterval();
@@ -129,14 +129,14 @@ public class ScaleRenderer extends View {
   }
 
   private void onDrawLabels(@NonNull final Canvas canvas, @NonNull final Paint paint, final double totalTicks, @NonNull final GaugeScale gaugeScale) {
+    final int fractionalDigit = gaugeScale.getNumberOfDecimalDigits();
+    final String postfix = gaugeScale.getLabelPostfix();
+    final String prefix = gaugeScale.getLabelPrefix();
     double angle = gaugeScale.getStartAngle() * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;
     double tempGaugeSize = (mInnerBevelWidth - 10.0) / 2.0;
     tempGaugeSize *= 1.0 - gaugeScale.getRadiusFactor();
     String label;
 
-    final int fractionalDigit = gaugeScale.getNumberOfDecimalDigits();
-    final String postfix = gaugeScale.getLabelPostfix();
-    final String prefix = gaugeScale.getLabelPrefix();
     double startValue = gaugeScale.getStartValue();
 
     for (int j = 0; (double) j <= totalTicks; ++j) {
@@ -248,7 +248,6 @@ public class ScaleRenderer extends View {
   }
 
   private void onDrawTicks(@NonNull final Canvas canvas, @NonNull final Paint paint, final double totalTicks, @NonNull final GaugeScale gaugeScale) {
-
     final TickSettings majorSettings = gaugeScale.getMajorTickSettings();
     final double size = majorSettings.getSize();
     final double angularSpace = gaugeScale.getSweepAngle() / totalTicks * GaugeConstants.STRANGLE_MULTIPLIER_DEPENDS_ON_TICK_QUANTITY;

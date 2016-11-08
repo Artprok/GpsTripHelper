@@ -22,7 +22,6 @@ public class PointerRender extends View {
   private GaugeScale mGaugeScale;
   private boolean mEnableAnimation;
   private TripHelperGauge mGauge;
-
   private float value;
 
   //modif parameters

@@ -25,8 +25,8 @@ public class NeedlePointer extends GaugePointer {
   }
 
   public void setKnobColor(final int knobColor) {
-    this.knobColor = knobColor;
     final TripHelperGauge tripHelperGauge = getBaseGauge();
+    this.knobColor = knobColor;
     if (tripHelperGauge != null) {
       tripHelperGauge.refreshGauge();
     }
@@ -37,8 +37,8 @@ public class NeedlePointer extends GaugePointer {
   }
 
   public void setKnobRadius(final double knobRadius) {
-    this.knobRadius = knobRadius;
     final TripHelperGauge tripHelperGauge = getBaseGauge();
+    this.knobRadius = knobRadius;
     if (tripHelperGauge != null) {
       tripHelperGauge.refreshGauge();
     }
@@ -49,8 +49,8 @@ public class NeedlePointer extends GaugePointer {
   }
 
   public void setType(@NonNull final NeedleType type) {
-    this.type = type;
     final TripHelperGauge tripHelperGauge = getBaseGauge();
+    this.type = type;
     if (tripHelperGauge != null) {
       tripHelperGauge.refreshGauge();
     }
@@ -61,8 +61,8 @@ public class NeedlePointer extends GaugePointer {
   }
 
   public void setLengthFactor(final double lengthFactor) {
-    this.lengthFactor = lengthFactor;
     final TripHelperGauge tripHelperGauge = getBaseGauge();
+    this.lengthFactor = lengthFactor;
     if (tripHelperGauge != null) {
       tripHelperGauge.refreshGauge();
     }
