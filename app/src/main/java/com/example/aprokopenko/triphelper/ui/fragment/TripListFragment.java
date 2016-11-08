@@ -18,7 +18,6 @@ import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
 import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
@@ -151,9 +150,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
   @Override public void onListItemClick(@NonNull final Trip trip) {
     progressBar.setVisibility(View.VISIBLE);
-    final TripInfoContainer tripInfoContainer = new TripInfoContainer(trip.getTripDate(), trip.getDistanceTravelled(), trip.getAvgSpeed(), trip.getTimeSpentForTrip(), trip.getTimeSpentInMotion(),
-            trip.getTimeSpentOnStop(), trip.getAvgFuelConsumption(), trip.getFuelSpent(), trip.getTripID(), trip.getRoute(), trip.getMoneyOnFuelSpent(), trip.getMaxSpeed(), trip);
-    final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoContainer);
+    final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(trip);
     UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
   }
 

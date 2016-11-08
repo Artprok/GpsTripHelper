@@ -23,7 +23,7 @@ import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.Route;
-import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
+import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
@@ -119,7 +119,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   public TripInfoFragment() {
   }
 
-  public static TripInfoFragment newInstance(@NonNull final TripInfoContainer tripInfoContainer) {
+  public static TripInfoFragment newInstance(@NonNull final Trip trip) {
     if (DEBUG) {
       Log.d(LOG_TAG, "newInstance: CALLED");
     }
@@ -128,7 +128,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     final ArrayList<String> latitudeArray = new ArrayList<>();
     final ArrayList<String> longitudeArray = new ArrayList<>();
     final ArrayList<String> speedArray = new ArrayList<>();
-    final ArrayList<Route> routes = tripInfoContainer.getRoutes();
+    final ArrayList<Route> routes = trip.getRoutes();
     if (routes != null) {
       for (Route tmpRoute : routes) {
         if (tmpRoute != null) {
@@ -140,20 +140,20 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       }
     }
 
-    args.putFloat(TIME_SPENT_WITHOUT_MOTION, tripInfoContainer.getTimeSpentOnStop());
-    args.putFloat(TIME_SPENT_IN_MOTION, tripInfoContainer.getTimeSpentInMotion());
+    args.putFloat(TIME_SPENT_WITHOUT_MOTION, trip.getTimeSpentOnStop());
+    args.putFloat(TIME_SPENT_IN_MOTION, trip.getTimeSpentInMotion());
     args.putStringArrayList(LONGITUDE_ARR, longitudeArray);
     args.putStringArrayList(LATITUDE_ARR, latitudeArray);
-    args.putFloat(AVERAGE_FUEL_CONS, tripInfoContainer.getAvgFuelConsumption());
-    args.putFloat(DISTANCE_TRAVELLED, tripInfoContainer.getDistanceTravelled());
+    args.putFloat(AVERAGE_FUEL_CONS, trip.getAvgFuelConsumption());
+    args.putFloat(DISTANCE_TRAVELLED, trip.getDistanceTravelled());
     args.putStringArrayList(SPEED_ARR, speedArray);
-    args.putFloat(AVERAGE_SPEED, tripInfoContainer.getAvgSpeed());
-    args.putFloat(MONEY_SPENT, tripInfoContainer.getMoneyOnFuelSpent());
-    args.putFloat(TIME_SPENT, tripInfoContainer.getTimeSpentForTrip());
-    args.putFloat(FUEL_SPENT, tripInfoContainer.getFuelSpent());
-    args.putString(TRIP_DATE, tripInfoContainer.getDate());
-    args.putFloat(MAX_SPEED, tripInfoContainer.getMaxSpeed());
-    args.putInt(TRIP_ID, tripInfoContainer.getId());
+    args.putFloat(AVERAGE_SPEED, trip.getAvgSpeed());
+    args.putFloat(MONEY_SPENT, trip.getMoneyOnFuelSpent());
+    args.putFloat(TIME_SPENT, trip.getTimeSpentForTrip());
+    args.putFloat(FUEL_SPENT, trip.getFuelSpent());
+    args.putString(TRIP_DATE, trip.getTripDate());
+    args.putFloat(MAX_SPEED, trip.getMaxSpeed());
+    args.putInt(TRIP_ID, trip.getTripID());
 
     fragment.setArguments(args);
     return fragment;

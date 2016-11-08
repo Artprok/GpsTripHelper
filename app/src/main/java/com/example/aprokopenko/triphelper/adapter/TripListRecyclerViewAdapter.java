@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
-import com.example.aprokopenko.triphelper.datamodel.TripInfoContainer;
 import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 
@@ -38,22 +37,14 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
 
   @Override public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
     final Trip curTrip = tripList.get(position);
-    final String date = curTrip.getTripDate();
-    final int id = curTrip.getTripID();
 
-    holder.idView.setText(String.valueOf(id));
-    holder.contentView.setText(date);
+    holder.idView.setText(String.valueOf(curTrip.getTripID()));
+    holder.contentView.setText(curTrip.getTripDate());
     holder.trip = curTrip;
     holder.mView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         listFragmentInteractionListener.onListItemClick(holder.trip);
-
-        final TripInfoContainer tripInfoContainer = new TripInfoContainer(date, curTrip.getDistanceTravelled(), curTrip.getAvgSpeed(),
-                curTrip.getTimeSpentForTrip(), curTrip.getTimeSpentInMotion(), curTrip.getTimeSpentOnStop(),
-                curTrip.getAvgFuelConsumption(), curTrip.getFuelSpent(), id, curTrip.getRoute(), curTrip.getMoneyOnFuelSpent(),
-                curTrip.getMaxSpeed(), null);
-
-        final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(tripInfoContainer);
+        final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(curTrip);
         listFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
       }
     });

@@ -121,7 +121,7 @@ public class Trip implements Parcelable {
     return maxSpeed;
   }
 
-  public ArrayList<Route> getRoute() {
+  public ArrayList<Route> getRoutes() {
     return route;
   }
 

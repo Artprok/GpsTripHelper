@@ -45,7 +45,7 @@
                 android:id="@+id/fragment_item_list_timeSpentOnAllTripsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/time_spent_on_all_hint"/>
 
             <TextView
@@ -68,7 +68,7 @@
                 android:id="@+id/fragment_item_list_distanceTravelledLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/distance_travelled_hint"/>
 
             <TextView
@@ -111,7 +111,7 @@
                 android:id="@+id/fragment_item_list_maxSpeedLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/maximum_speed_hint"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -135,7 +135,7 @@
                 android:id="@+id/fragment_item_list_tripAvgSpeedLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/average_speed_hint"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -177,7 +177,7 @@
                 android:id="@+id/fragment_item_list_avgFuelConsumptionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/average_fuel_consumption_hint"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -199,7 +199,7 @@
                 android:id="@+id/fragment_item_list_moneyOnFuelSpentLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/money_on_fuel_spent_hint"/>
 
             <TextView
@@ -222,7 +222,7 @@
                 android:id="@+id/fragment_item_list_fuelSpentLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="9.5"
+                android:layout_weight="10"
                 android:text="@string/fuel_spent_hint"/>
 
             <android.support.v7.widget.AppCompatTextView
