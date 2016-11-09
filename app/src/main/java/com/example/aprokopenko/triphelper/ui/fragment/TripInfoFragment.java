@@ -195,7 +195,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     setDataToInfoFragmentFields();
   }
 
-  private void setCurrencyUnit(String curUnit) {
+  private void setCurrencyUnit(@NonNull final String curUnit) {
     if (TextUtils.equals(curUnit, "")) {
       currency_prefix = getString(R.string.grn);
     } else {
@@ -235,7 +235,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   }
 
   @OnClick(R.id.btn_mapTurnActive)
-  public void onOpenMapButtonClick(View view) {
+  public void onOpenMapButtonClick(@NonNull final View view) {
     if (drawMap) {
       if (getActivity().getResources().getConfiguration().orientation == 1) {                    //animations for portrait orientation
         if (mapOpened) {

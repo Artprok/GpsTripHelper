@@ -68,8 +68,8 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   }
 
   public static TripListFragment newInstance(@NonNull final TripData tripData) {
-    TripListFragment tripListFragment = new TripListFragment();
-    Bundle args = new Bundle();
+    final TripListFragment tripListFragment = new TripListFragment();
+    final Bundle args = new Bundle();
     args.putParcelable(TRIP_DATA, tripData);
     tripListFragment.setArguments(args);
     return tripListFragment;

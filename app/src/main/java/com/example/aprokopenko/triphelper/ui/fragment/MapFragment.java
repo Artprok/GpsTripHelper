@@ -95,20 +95,20 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   }
 
   @Override public void onDestroyView() {
-    super.onDestroyView();
+    final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.mapFragment);
     if (locationSubscriber != null) {
       locationSubscriber.unsubscribe();
     }
-    final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.mapFragment);
     if (fragment != null) {
       getChildFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
     }
+    super.onDestroyView();
   }
 
   @Override public void onDetach() {
-    super.onDetach();
     gpsHandler = null;
     context = null;
+    super.onDetach();
   }
 
   @Override public void onSaveInstanceState(@NonNull final Bundle outState) {

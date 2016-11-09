@@ -251,7 +251,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         break;
       case R.id.btn_tripList:
         if (tripProcessor.isFileNotInWriteMode()) {
-          TripData tripData = tripProcessor.getTripData();
+          final TripData tripData = tripProcessor.getTripData();
           if (tripData != null && !isButtonVisible(stopButton)) {
             if (!tripData.getTrips().isEmpty()) {
               final TripListFragment tripListFragment = TripListFragment.newInstance(tripData);
@@ -308,9 +308,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
   }
 
-  private void setAdvertInstalled(final boolean b) {
+  private void setAdvertInstalled(final boolean isAdvInstalled) {
     final SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean(getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), b);
+    editor.putBoolean(getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), isAdvInstalled);
     editor.apply();
   }
 
