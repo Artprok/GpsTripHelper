@@ -165,7 +165,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       outState.putStringArrayList("AvgSpeedList", avgStrArrList);
       outState.putParcelable("TripProcessor", tripProcessor);
 
-      configureDataHolderToStore();
       super.onSaveInstanceState(outState);
     }
   }
@@ -226,7 +225,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         setupAdvert();
         break;
       case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-        checkIfSatelitesAreStillAvailableWithInterval(ConstantValues.FIVE_MINUTES);
+        checkIfSatellitesAreStillAvailableWithInterval(ConstantValues.FIVE_MINUTES);
         break;
       case GpsStatus.GPS_EVENT_STOPPED:
         deactivateGpsStatusIcon();
@@ -255,7 +254,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
           TripData tripData = tripProcessor.getTripData();
           if (tripData != null && !isButtonVisible(stopButton)) {
             if (!tripData.getTrips().isEmpty()) {
-              final TripListFragment tripListFragment = TripListFragment.newInstance();
+              final TripListFragment tripListFragment = TripListFragment.newInstance(tripData);
               saveState();
               UtilMethods.hideFab(getActivity());
               tripListFragment.setTripData(tripData);
@@ -443,11 +442,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     tripProcessor = null;
   }
 
-  private void configureDataHolderToStore() {
-    final DataHolderFragment dataHolder = (DataHolderFragment) getActivity().getSupportFragmentManager()
-            .findFragmentByTag(ConstantValues.DATA_HOLDER_TAG);
-    dataHolder.setTripData(tripProcessor.getTripData());
-  }
+
 
   @NonNull private ArrayList<String> ConfigureAvgSpdListToStore() {
     final ArrayList<Float> avgSpeedArrayList = getAvgSpeedListFromProcessor();
@@ -492,10 +487,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     gpsFirstFixTime = System.currentTimeMillis();
   }
 
-  private void checkIfSatelitesAreStillAvailableWithInterval(final long interval) {
+  private void checkIfSatellitesAreStillAvailableWithInterval(final long interval) {
     if ((System.currentTimeMillis() - gpsFirstFixTime) > interval) {
       if (UtilMethods.checkIfGpsEnabled(context)) {
-        for (GpsSatellite satellite : getSatelitesList()) {
+        for (GpsSatellite satellite : getSatellitesList()) {
           if (satellite.usedInFix()) {
             setGpsIconActive();
             gpsFirstFixTime = System.currentTimeMillis();
@@ -509,7 +504,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
   }
 
-  private Iterable<GpsSatellite> getSatelitesList() {
+  private Iterable<GpsSatellite> getSatellitesList() {
     return getGpsStatus().getSatellites();
   }
 

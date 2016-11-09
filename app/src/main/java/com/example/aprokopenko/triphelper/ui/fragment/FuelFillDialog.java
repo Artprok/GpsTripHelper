@@ -55,13 +55,13 @@ public class FuelFillDialog extends DialogFragment {
   }
 
   @Override public void onDestroyView() {
-    super.onDestroyView();
     unbinder.unbind();
+    super.onDestroyView();
   }
 
   @Override public void onDetach() {
-    super.onDetach();
     fuelChangeAmountListener = null;
+    super.onDetach();
   }
 
   public void setFuelChangeAmountListener(@NonNull final FuelChangeAmountListener listener) {

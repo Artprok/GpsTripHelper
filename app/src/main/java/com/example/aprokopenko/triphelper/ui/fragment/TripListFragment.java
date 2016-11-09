@@ -56,6 +56,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   ProgressBar progressBar;
 
   private static final String LOG_TAG = "TripListFragment";
+  private static final String TRIP_DATA = "TripData";
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private TripData tripData;
@@ -66,20 +67,24 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   public TripListFragment() {
   }
 
-  public static TripListFragment newInstance() {
-    return new TripListFragment();
+  public static TripListFragment newInstance(@NonNull final TripData tripData) {
+    TripListFragment tripListFragment = new TripListFragment();
+    Bundle args = new Bundle();
+    args.putParcelable(TRIP_DATA, tripData);
+    tripListFragment.setArguments(args);
+    return tripListFragment;
+  }
+
+  @Override public void onCreate(@Nullable final Bundle savedInstanceState) {
+    tripData = getArguments().getParcelable(TRIP_DATA);
+    super.onCreate(savedInstanceState);
   }
 
   @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
     unbinder = ButterKnife.bind(this, view);
     if (savedInstanceState != null) {
-      tripData = savedInstanceState.getParcelable("tripData");
-      if (tripData == null) {
-        final DataHolderFragment dataHolderFragment = (DataHolderFragment) getActivity().getSupportFragmentManager()
-                .findFragmentByTag(ConstantValues.DATA_HOLDER_TAG);
-        tripData = dataHolderFragment.getTripData();
-      }
+      tripData = savedInstanceState.getParcelable(TRIP_DATA);
       if (tripData != null) {
         trips = tripData.getTrips();
       }
@@ -91,7 +96,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
   @Override public void onSaveInstanceState(@NonNull final Bundle outState) {
     if (tripData != null) {
-      outState.putParcelable("tripData", tripData);
+      outState.putParcelable(TRIP_DATA, tripData);
     }
   }
 

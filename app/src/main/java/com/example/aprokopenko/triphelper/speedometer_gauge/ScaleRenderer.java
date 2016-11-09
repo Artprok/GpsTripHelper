@@ -27,7 +27,6 @@ public class ScaleRenderer extends View {
   private Paint rangePaint;
   private final double arcAliasing;
 
-  //modif optimization
   private float modifMinSizeDivideBy4;
   private float modifMinSizeDivideBy2;
   private float modifMinSizeMultipleBy0dot75;
@@ -352,7 +351,6 @@ public class ScaleRenderer extends View {
       tickLength = modifMinSizeDivideBy2 - tempGaugeSize + size + modifTickOffsetMultByCenterX - modifArcAliasMultByRimWidth +
               modifRimWidthDivideBy2;
 
-      //modif optimization
       final double modif_x2MultByCosAngle = x2 * Math.cos(angle);
       final double modif_x2MultiplBySinAngle = x2 * Math.sin(angle);
       final double modif_x2multiplByX2CosAngle = x2 * modif1dot5MultipByCosAngle;

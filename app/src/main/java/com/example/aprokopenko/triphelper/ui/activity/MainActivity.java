@@ -17,7 +17,6 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.ui.fragment.DataHolderFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
@@ -94,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "onCreate: new fragment");
       }
       final MainFragment mainFragment = MainFragment.newInstance();
-      UtilMethods.addFragment(DataHolderFragment.newInstance(), ConstantValues.DATA_HOLDER_TAG, this);
       assert fab != null;
       setFabToMap(mainFragment);
       UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);

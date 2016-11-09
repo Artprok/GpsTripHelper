@@ -158,7 +158,7 @@
     <!--Feedback-->
     <string name="emailForFeedback" translatable="false">artyrprok@gmail.com</string>
     <string name="subjectForFeedback">Feedback for TripHelper</string>
-    <string name="extraTextInFeedback">Dear Dev, I have some sudjestions or problems with your app,</string>
+    <string name="extraTextInFeedback">Dear Dev, I have some suggestion or problems with your app,</string>
     <string name="sendWithFeedback">Send email with…?</string>
     <!--/Feedback-->
 

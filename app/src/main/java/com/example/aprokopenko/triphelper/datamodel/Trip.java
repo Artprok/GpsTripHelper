@@ -159,7 +159,7 @@ public class Trip implements Parcelable {
       final float fuelConsumption = is.readFloat();
       final float maxSpeed = is.readFloat();
 
-      trip = createTripFromData(date, distanceTravelled, avgSpeed, timeSpent, timeSpentInMotion, fuelConsumption, fuelSpent, tripID, route, moneySpent, maxSpeed);
+      trip = createTripFromData(date, route, distanceTravelled, avgSpeed, timeSpent, timeSpentInMotion, fuelConsumption, fuelSpent, tripID, moneySpent, maxSpeed);
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -239,8 +239,8 @@ public class Trip implements Parcelable {
     }
   }
 
-  private Trip createTripFromData(@NonNull final String tripDate, final float distanceTravelled, final float avgSpeed, final float timeSpent, final float timeSpentInMotion,
-                                  final float avgFuelConsumption, final float fuelSpent, final int tripID, @NonNull final ArrayList<Route> routes,
+  private Trip createTripFromData(@NonNull final String tripDate, @NonNull final ArrayList<Route> routes, final float distanceTravelled, final float avgSpeed,
+                                  final float timeSpent, final float timeSpentInMotion, final float avgFuelConsumption, final float fuelSpent, final int tripID,
                                   final float moneyOnFuelSpent, final float maxSpeed) {
     final Trip trip = new Trip();
     trip.setTripDate(tripDate);
