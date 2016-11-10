@@ -80,8 +80,8 @@ public class TripProcessor implements Parcelable {
    * @param fuelCapacityFromSettings {@link Integer} capacity of fuel tank got from settings
    */
   public TripProcessor(@NonNull final Context context, final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings) {
-    final Bundle settings = configureSettingsBundle(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
     this.context = context;
+    final Bundle settings = configureSettingsBundle(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
     setupStartingConditions(settings);
     setupLocationService();
     setupTripData();
