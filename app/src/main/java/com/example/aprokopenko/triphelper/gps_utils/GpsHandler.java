@@ -109,7 +109,7 @@ public class GpsHandler implements LocationListener, Parcelable {
   private void setupLocationObservable(@NonNull final Location location) {
     if (locationObservable == null) {
       locationObservable = Observable.create(new Observable.OnSubscribe<Location>() {
-        @Override public void call(Subscriber<? super Location> sub) {
+        @Override public void call(@NonNull final Subscriber<? super Location> sub) {
           sub.onNext(location);
         }
       });
@@ -122,7 +122,7 @@ public class GpsHandler implements LocationListener, Parcelable {
   private void setupMaxSpeedObservable(final float maxSpeed) {
     if (maxSpeedObservable == null) {
       maxSpeedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-        @Override public void call(Subscriber<? super Float> subscriber) {
+        @Override public void call(@NonNull final Subscriber<? super Float> subscriber) {
           subscriber.onNext(maxSpeed);
         }
       });
@@ -135,7 +135,7 @@ public class GpsHandler implements LocationListener, Parcelable {
   private void setupSpeedObservable(final float speed) {
     if (speedObservable == null) {
       speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-        @Override public void call(final Subscriber<? super Float> sub) {
+        @Override public void call(@NonNull final Subscriber<? super Float> sub) {
           sub.onNext(speed);
         }
       });

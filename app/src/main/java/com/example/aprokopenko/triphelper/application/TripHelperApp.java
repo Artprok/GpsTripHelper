@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.example.aprokopenko.triphelper.ApplicationComponent;
 import com.example.aprokopenko.triphelper.DaggerApplicationComponent;
+import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.dependency_injection.AppModule;
 
 public class TripHelperApp extends Application {
@@ -30,7 +31,7 @@ public class TripHelperApp extends Application {
   @Override public void onCreate() {
     super.onCreate();
     context = getApplicationContext();
-    sharedPreferences = this.getSharedPreferences("tripPreferences", Context.MODE_PRIVATE);
+    sharedPreferences = this.getSharedPreferences(getString(R.string.PREFERENCES_TAG), Context.MODE_PRIVATE);
     applicationComponent = DaggerApplicationComponent.builder().appModule(new AppModule(this)).build();
   }
 }

@@ -124,7 +124,7 @@ public class CalculationUtils {
    * @return {@link Float} value representing distance travelled
    */
   public static float calcDistTravelled(final float timeSpent, final float avgSpeed) {
-    Float distanceTravelled = avgSpeed * getTimeFromMills(timeSpent);
+    final Float distanceTravelled = avgSpeed * getTimeFromMills(timeSpent);
     if (distanceTravelled.isNaN()) {
       return (float) ConstantValues.START_VALUE;
     }

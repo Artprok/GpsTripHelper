@@ -192,7 +192,9 @@ public class UtilMethods {
 
     final FragmentTransaction fragmentTransaction = fragmentActivity.getSupportFragmentManager().beginTransaction();
     fragmentTransaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
-    fragmentTransaction.replace(R.id.fragmentContainer, fragment, fragment_tag).addToBackStack(fragment.getTag())
+    fragmentTransaction
+            .replace(R.id.fragmentContainer, fragment, fragment_tag)
+            .addToBackStack(fragment.getTag())
             .commitAllowingStateLoss();
   }
 
@@ -207,7 +209,7 @@ public class UtilMethods {
     final ValueAnimator valueAnimator = ValueAnimator.ofInt(initialValue, finalValue);
     valueAnimator.setDuration(ConstantValues.SPEEDOMETER_TEXT_ANIM_DURATION);
     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override public void onAnimationUpdate(ValueAnimator valueAnimator) {
+      @Override public void onAnimationUpdate(@NonNull final ValueAnimator valueAnimator) {
         if (textview != null) {
           textview.setText(valueAnimator.getAnimatedValue().toString());
         }
@@ -261,13 +263,12 @@ public class UtilMethods {
     builder.setTitle(context.getString(R.string.tutorialTitle));
     builder.setMessage(R.string.tutorialWantToKnowInfo).setCancelable(true)
             .setPositiveButton(R.string.tutorialNext, new DialogInterface.OnClickListener() {
-              public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                  @SuppressWarnings("unused") final int id) {
+              public void onClick(@NonNull final DialogInterface dialog, final int id) {
                 showTutorialDialog(context);
               }
             }).setNegativeButton(R.string.tutorialNo, new DialogInterface.OnClickListener() {
       @Override
-      public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+      public void onClick(@NonNull final DialogInterface dialog, final int id) {
         dialog.cancel();
       }
     });
@@ -286,8 +287,7 @@ public class UtilMethods {
     builder.setTitle(context.getString(R.string.somethingWentWrongTitle));
     builder.setMessage(R.string.somethingWentWrongMessage).setCancelable(true)
             .setPositiveButton(R.string.somethingWentWrongOk, new DialogInterface.OnClickListener() {
-              public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                  @SuppressWarnings("unused") final int id) {
+              public void onClick(@NonNull final DialogInterface dialog, final int id) {
                 dialog.cancel();
               }
             });
@@ -307,18 +307,17 @@ public class UtilMethods {
     builder.setTitle(context.getString(R.string.aboutTitle));
     builder.setMessage(R.string.aboutMainText).setCancelable(true)
             .setPositiveButton(R.string.aboutRateButton, new DialogInterface.OnClickListener() {
-              public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                  @SuppressWarnings("unused") final int id) {
+              public void onClick(@NonNull final DialogInterface dialog, final int id) {
                 rateApp(context);
               }
             }).setNegativeButton(R.string.aboutNegativeButton, new DialogInterface.OnClickListener() {
       @Override
-      public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+      public void onClick(@NonNull final DialogInterface dialog, final int id) {
         dialog.cancel();
       }
     }).setNeutralButton(R.string.aboutFeedbackButton, new DialogInterface.OnClickListener() {
       @Override
-      public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+      public void onClick(@NonNull final DialogInterface dialog, final int id) {
         Intent emailFeedback = new Intent(Intent.ACTION_SEND);
         emailFeedback.setType("text/email");
         emailFeedback.putExtra(Intent.EXTRA_EMAIL, new String[]{res.getString(R.string.emailForFeedback)});
@@ -391,17 +390,14 @@ public class UtilMethods {
    * @param context {@link Context}
    * @return {@link Boolean} value represents if allowed. True - allowed, False - no
    */
-  public static boolean isPermissionAllowed(@Nullable final Context context) {
+  public static boolean isPermissionAllowed(@NonNull final Context context) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
       return true;
     } else {
-      if (context != null) {
-        return ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat
-                .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-      }
+      return ActivityCompat.checkSelfPermission(context,
+              Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat
+              .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
-    return false;
   }
 
   /**
@@ -415,12 +411,11 @@ public class UtilMethods {
     builder.setTitle(context.getString(R.string.gps_dialog_title));
     builder.setMessage(R.string.gps_dialog_text_label).setCancelable(false)
             .setPositiveButton(R.string.gps_dialog_agree_enable, new DialogInterface.OnClickListener() {
-              public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                  @SuppressWarnings("unused") final int id) {
+              public void onClick(@NonNull final DialogInterface dialog, final int id) {
                 context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
               }
             }).setNegativeButton(R.string.gps_dialog_disagree_enable, new DialogInterface.OnClickListener() {
-      public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+      public void onClick(@NonNull final DialogInterface dialog, final int id) {
         dialog.cancel();
       }
     });
@@ -434,8 +429,7 @@ public class UtilMethods {
     builder.setTitle(context.getString(R.string.tutorialTitle));
     builder.setMessage(R.string.tutorialInfo).setCancelable(true)
             .setPositiveButton(R.string.tutorialThanks, new DialogInterface.OnClickListener() {
-              public void onClick(@SuppressWarnings("unused") final DialogInterface dialog,
-                                  @SuppressWarnings("unused") final int id) {
+              public void onClick(@NonNull final DialogInterface dialog, final int id) {
                 dialog.cancel();
               }
             });
@@ -453,7 +447,7 @@ public class UtilMethods {
 
   private static void viewInBrowser(@NonNull final Context context, @NonNull final String url) {
     final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    if (null != intent.resolveActivity(context.getPackageManager())) {
+    if (intent.resolveActivity(context.getPackageManager()) != null) {
       context.startActivity(intent);
     }
   }

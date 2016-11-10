@@ -24,7 +24,6 @@ public class PointerRender extends View {
   private TripHelperGauge mGauge;
   private float value;
 
-  //modif parameters
   private float modif_minSizeDivideBy4;
   private float modif_minSizeDivideBy2;
   private float modif_minSizeMultBy0dot75;

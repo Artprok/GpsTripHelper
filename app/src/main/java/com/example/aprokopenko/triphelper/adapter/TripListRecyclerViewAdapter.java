@@ -42,9 +42,9 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
     holder.contentView.setText(curTrip.getTripDate());
     holder.trip = curTrip;
     holder.mView.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        listFragmentInteractionListener.onListItemClick(holder.trip);
+      @Override public void onClick(@NonNull final View v) {
         final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(curTrip);
+        listFragmentInteractionListener.onListItemClick(holder.trip);
         listFragmentInteractionListener.onFragmentReplacing(tripInfoFragment);
       }
     });

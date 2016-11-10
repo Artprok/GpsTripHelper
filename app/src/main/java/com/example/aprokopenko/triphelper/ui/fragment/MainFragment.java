@@ -130,7 +130,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     unbinder = ButterKnife.bind(this, view);
     gpsIsActive = false;
 
-    if (BuildConfig.FLAVOR.contains(context.getString(R.string.paidVersion_code))) {
+    if (BuildConfig.FLAVOR.contains(getString(R.string.paidVersion_code))) {
       advertView.setVisibility(View.GONE);
     }
 
@@ -267,7 +267,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         if (tripProcessor.isFileNotInWriteMode()) {
           final FuelFillDialog dialog = FuelFillDialog.newInstance();
           dialog.setFuelChangeAmountListener(new FuelChangeAmountListener() {
-            @Override public void fuelFilled(float fuel) {
+            @Override public void fuelFilled(final float fuel) {
               fillGasTank(fuel);
             }
           });
@@ -298,7 +298,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private void setupAdvert() {
-    if (!BuildConfig.FLAVOR.contains(context.getString(R.string.paidVersion_code))) {
+    if (!BuildConfig.FLAVOR.contains(getString(R.string.paidVersion_code))) {
       if (!advertInstalled()) {
         //                AdRequest adRequest = new AdRequest.Builder().build();
         //                advertView.loadAd(adRequest);
@@ -351,10 +351,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private Location getLocationForAdvert() {
+    final Location lastKnownLocation = getLastKnownLocation();
     if (DEBUG) {
       Log.i(LOG_TAG, "getLocationForAdvert: ");
     }
-    final Location lastKnownLocation = getLastKnownLocation();
     if (lastKnownLocation != null) {
       return lastKnownLocation;
     } else {
@@ -478,7 +478,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (DEBUG) {
       Log.d(LOG_TAG, "onGpsStatusChanged: EventFirstFix");
     }
-    UtilMethods.showToast(context, context.getString(R.string.gps_first_fix_toast));
+    UtilMethods.showToast(context, getString(R.string.gps_first_fix_toast));
     setGpsIconActive();
   }
 
@@ -488,12 +488,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private void checkIfSatellitesAreStillAvailableWithInterval(final long interval) {
-    if ((System.currentTimeMillis() - gpsFirstFixTime) > interval) {
+    final long curTime = System.currentTimeMillis();
+    if ((curTime - gpsFirstFixTime) > interval) {
       if (UtilMethods.checkIfGpsEnabled(context)) {
         for (GpsSatellite satellite : getSatellitesList()) {
           if (satellite.usedInFix()) {
             setGpsIconActive();
-            gpsFirstFixTime = System.currentTimeMillis();
+            gpsFirstFixTime = curTime;
           } else {
             deactivateGpsStatusIcon();
           }
@@ -550,7 +551,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
       Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.permissionExplanation), Snackbar.LENGTH_INDEFINITE)
               .setAction("GRANT", new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override public void onClick(@NonNull final View v) {
                   requestLocationPermissions();
                 }
               }).show();
@@ -589,7 +590,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void setFirstStartToFalse(@NonNull final SharedPreferences preferences) {
     final SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean("firstStart", false);
+    editor.putBoolean(getString(R.string.FIRST_START), false);
     editor.apply();
   }
 
@@ -611,7 +612,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void getStateFromPrefs() {
     preferences = TripHelperApp.getSharedPreferences();
-    if (preferences.getBoolean("firstStart", true)) {
+    if (preferences.getBoolean(getString(R.string.FIRST_START), true)) {
       UtilMethods.firstStartTutorialDialog(context);
       setFirstStartToFalse(preferences);
     }
@@ -668,10 +669,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
     if (fragment instanceof MainFragment) {
       getContextIfNull();
-      firstStart = savedInstanceState.getBoolean("FirstStart");
+      firstStart = savedInstanceState.getBoolean(getString(R.string.FIRST_START));
       if (DEBUG) {
         Log.i(LOG_TAG, "onViewCreated: calledRestore");
-        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("FirstStart"));
+        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean(getString(R.string.FIRST_START)));
         Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
         Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
       }
@@ -730,13 +731,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   private void startTrip() {
     tripProcessor.startNewTrip();
     UtilMethods.showFab(getActivity());
-    UtilMethods.showToast(context, context.getString(R.string.trip_started_toast));
+    UtilMethods.showToast(context, getString(R.string.trip_started_toast));
     stopButtonTurnActive();
   }
 
   private void endTrip() {
     stopTracking();
-    UtilMethods.showToast(context, context.getString(R.string.trip_ended_toast));
+    UtilMethods.showToast(context, getString(R.string.trip_ended_toast));
     startButtonTurnActive();
   }
 

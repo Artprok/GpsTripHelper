@@ -52,7 +52,7 @@ public class TripData implements Parcelable {
   }
 
   public static final Creator<TripData> CREATOR = new Creator<TripData>() {
-    public TripData createFromParcel(Parcel in) {
+    public TripData createFromParcel(@NonNull final Parcel in) {
       return new TripData(in);
     }
 

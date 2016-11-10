@@ -89,22 +89,22 @@ public class MainActivity extends AppCompatActivity {
   private void proceedToFragmentCreating(@Nullable final Bundle savedInstanceState) {
     UtilMethods.hideFab(this);
     if (savedInstanceState == null) {
-      if (DEBUG) {
-        Log.i(LOG_TAG, "onCreate: new fragment");
-      }
       final MainFragment mainFragment = MainFragment.newInstance();
       assert fab != null;
       setFabToMap(mainFragment);
       UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+      if (DEBUG) {
+        Log.i(LOG_TAG, "onCreate: new fragment");
+      }
     } else {
       final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
       if (fragment instanceof MainFragment) {
-        if (DEBUG) {
-          Log.i(LOG_TAG, "onCreate: old fragment");
-        }
         assert fab != null;
         setFabToMap((MainFragment) fragment);
         UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+        if (DEBUG) {
+          Log.i(LOG_TAG, "onCreate: old fragment");
+        }
       }
       if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
         setFabToSpeedometer((MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG));
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     fab.setImageResource(R.drawable.map_black);
     UtilMethods.animateFabTransition(fab, 0);
     fab.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
+      @Override public void onClick(@NonNull final View view) {
         mainFragment.openMapFragment();
         setFabToSpeedometer(mainFragment);
       }
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     fab.setImageResource(R.drawable.road_black);
     UtilMethods.animateFabTransition(fab, fabTransitionValue);
     fab.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
+      @Override public void onClick(@NonNull final View view) {
         MainFragment mf = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
         if (mf == null || !mf.equals(mainFragment)) {
           mf = MainFragment.newInstance();

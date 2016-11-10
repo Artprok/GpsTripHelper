@@ -80,14 +80,14 @@ public class TripProcessor implements Parcelable {
    * @param fuelCapacityFromSettings {@link Integer} capacity of fuel tank got from settings
    */
   public TripProcessor(@NonNull final Context context, final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings) {
-    if (DEBUG) {
-      Log.i(LOG_TAG, "TripProcessor: IsConstructed");
-    }
-    this.context = context;
     final Bundle settings = configureSettingsBundle(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings);
+    this.context = context;
     setupStartingConditions(settings);
     setupLocationService();
     setupTripData();
+    if (DEBUG) {
+      Log.i(LOG_TAG, "TripProcessor: IsConstructed");
+    }
   }
 
   public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
@@ -410,8 +410,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private Trip readTrip(@NonNull final ObjectInputStream is) {
-    final Trip trip = new Trip();
-    return trip.readTrip(is);
+    return new Trip().readTrip(is);
   }
 
   private void setupLocationService() {
@@ -671,10 +670,10 @@ public class TripProcessor implements Parcelable {
         Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
       }
       if (gasTank + fuel <= fuelCapacity) {
-        final CharSequence resCharSequence = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
+        final CharSequence fuelFilledMessage = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
                 .getString(R.string.fuel_prefix);
         tripData.setGasTank(gasTank + fuel);
-        UtilMethods.showToast(context, resCharSequence);
+        UtilMethods.showToast(context, fuelFilledMessage);
       } else {
         UtilMethods.showToast(context, context.getString(R.string.fuel_overload_toast));
       }

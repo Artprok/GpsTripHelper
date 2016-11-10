@@ -136,7 +136,7 @@ public class Trip implements Parcelable {
    * @return {@link Trip}
    */
   public Trip readTrip(@NonNull final ObjectInputStream is) {
-    ArrayList<Route> route = new ArrayList<>();
+    final ArrayList<Route> route = new ArrayList<>();
     final int routeSize;
     Trip trip = new Trip();
     try {

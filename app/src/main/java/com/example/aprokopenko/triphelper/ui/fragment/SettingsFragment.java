@@ -71,6 +71,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   private static final String LOG_TAG = "Settings fragment";
   private static final boolean DEBUG = BuildConfig.DEBUG;
+  public static final String MEASUREMENT_UNIT = "measurementUnit";
+  public static final String MEASUREMENT_UNIT_POSITION = "measurementUnitPosition";
+  public static final String CURRENCY_UNIT = "currencyUnit";
+  public static final String CURRENCY_UNIT_POSITION = "currencyUnitPosition";
 
   private int fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
   private float fuelConsumption = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
@@ -133,7 +137,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   @OnTextChanged(R.id.editText_fuelPrice)
-  public void onFuelPriceChanged(CharSequence s) {
+  public void onFuelPriceChanged(@NonNull final CharSequence s) {
     if (DEBUG) {
       Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
     }
@@ -144,7 +148,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   @OnTextChanged(R.id.editText_fuelConsumption)
-  public void onFuelConsumptionChanged(CharSequence s) {
+  public void onFuelConsumptionChanged(@NonNull final CharSequence s) {
     if (!TextUtils.equals(s, "")) {
       fuelConsumption = (Float.valueOf(s.toString()));
       writeDataToFile();
@@ -152,7 +156,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   @OnTextChanged(R.id.editText_fuelCapacity)
-  public void onFuelCapacityChanged(CharSequence s) {
+  public void onFuelCapacityChanged(@NonNull final CharSequence s) {
     if (!TextUtils.equals(s, "")) {
       fuelTankCapacity = (Integer.valueOf(s.toString()));
       writeDataToFile();
@@ -167,23 +171,23 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     final SharedPreferences.Editor editor = preferences.edit();
     switch (position) {
       case 0://Kilometer per hour case
-        editor.putString("measurementUnit", kmh);
-        editor.putInt("measurementUnitPosition", position);
+        editor.putString(MEASUREMENT_UNIT, kmh);
+        editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
         break;
       case 1://miles per hour case
-        editor.putString("measurementUnit", mph);
-        editor.putInt("measurementUnitPosition", position);
+        editor.putString(MEASUREMENT_UNIT, mph);
+        editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
         break;
       case 2://knots per hour case
-        editor.putString("measurementUnit", knots);
-        editor.putInt("measurementUnitPosition", position);
+        editor.putString(MEASUREMENT_UNIT, knots);
+        editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
         break;
       default:
-        editor.putString("measurementUnit", kmh);
-        editor.putInt("measurementUnitPosition", position);
+        editor.putString(MEASUREMENT_UNIT, kmh);
+        editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
     }
   }
@@ -192,54 +196,58 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     final SharedPreferences.Editor editor = preferences.edit();
     switch (position) {
       case 0:
-        editor.putString("currencyUnit", grn);
-        editor.putInt("currencyUnitPosition", position);
+        editor.putString(CURRENCY_UNIT, grn);
+        editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       case 1:
-        editor.putString("currencyUnit", rub);
-        editor.putInt("currencyUnitPosition", position);
+        editor.putString(CURRENCY_UNIT, rub);
+        editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       case 2:
-        editor.putString("currencyUnit", usd);
-        editor.putInt("currencyUnitPosition", position);
+        editor.putString(CURRENCY_UNIT, usd);
+        editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       case 3:
-        editor.putString("currencyUnit", eur);
-        editor.putInt("currencyUnitPosition", position);
+        editor.putString(CURRENCY_UNIT, eur);
+        editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       default:
-        editor.putString("currencyUnit", usd);
-        editor.putInt("currencyUnitPosition", position);
+        editor.putString(CURRENCY_UNIT, usd);
+        editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
     }
   }
 
   private void setupTextFields() {
+    final String fuelCons;
+    final String fuelCost;
+    final String fuelCapacity;
+
     if (fuelConsumption == ConstantValues.FUEL_CONSUMPTION_DEFAULT) {
-      final String fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
+      fuelCons = ConstantValues.FUEL_CONSUMPTION_DEFAULT + getString(R.string.fuel_cons_prefix);
       curFuelCons.setText(fuelCons);
     } else {
-      final String fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
+      fuelCons = fuelConsumption + getString(R.string.fuel_cons_prefix);
       curFuelCons.setText(fuelCons);
     }
 
-    if (fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
-      final String fuelCost = ConstantValues.FUEL_COST_DEFAULT + currency_prefix;
+    if (this.fuelCost == ConstantValues.FUEL_COST_DEFAULT) {
+      fuelCost = ConstantValues.FUEL_COST_DEFAULT + currency_prefix;
       curFuelPrice.setText(fuelCost);
     } else {
-      final String fuelCost = this.fuelCost + currency_prefix;
+      fuelCost = this.fuelCost + currency_prefix;
       curFuelPrice.setText(fuelCost);
     }
 
     if (fuelTankCapacity == ConstantValues.FUEL_TANK_CAPACITY_DEFAULT) {
-      final String fuelCap = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
-      curFuelCapacity.setText(fuelCap);
+      fuelCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT + getString(R.string.fuel_prefix);
+      curFuelCapacity.setText(fuelCapacity);
     } else {
-      final String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
+      fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
       curFuelCapacity.setText(fuelCapacity);
     }
   }
@@ -251,7 +259,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
     measurementUnitSpinner.setAdapter(adapter);
     measurementUnitSpinner.setPrompt(getString(R.string.measurementUnitSpinnerTitle));
-    measurementUnitSpinner.setSelection(preferences.getInt("measurementUnitPosition", 0));
+    measurementUnitSpinner.setSelection(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
     measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
         setMeasurementUnit(position, getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots));
@@ -263,7 +271,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   private void setupCurrencyUnitSpinner() {
-    currency_prefix = preferences.getString("currencyUnit", "");
+    currency_prefix = preferences.getString(CURRENCY_UNIT, "");
     if (TextUtils.equals(currency_prefix, "")) {
       currency_prefix = getString(R.string.grn);
     }
@@ -274,7 +282,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
     currencyUnitSpinner.setAdapter(adapter);
     currencyUnitSpinner.setPrompt(getString(R.string.currencyUnitText));
-    currencyUnitSpinner.setSelection(preferences.getInt("currencyUnitPosition", 0));
+    currencyUnitSpinner.setSelection(preferences.getInt(CURRENCY_UNIT_POSITION, 0));
     currencyUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
         setCurrencyUnit(position, getString(R.string.grn), getString(R.string.rub), getString(R.string.usd), getString(R.string.eur));
@@ -287,7 +295,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   private void updateFuelCost() {
-    final String fuelCost = this.fuelCost + preferences.getString("currencyUnit", "");
+    final String fuelCost = this.fuelCost + preferences.getString(CURRENCY_UNIT, "");
     curFuelPrice.setText(fuelCost);
     curFuelPrice.invalidate();
   }

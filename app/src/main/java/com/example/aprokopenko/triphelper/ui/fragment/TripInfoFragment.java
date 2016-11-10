@@ -131,12 +131,10 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     final ArrayList<Route> routes = trip.getRoutes();
     if (routes != null) {
       for (Route tmpRoute : routes) {
-        if (tmpRoute != null) {
           final LatLng tempLatLang = tmpRoute.getRoutePoints();
           latitudeArray.add(String.valueOf(tempLatLang.latitude));
           longitudeArray.add(String.valueOf(tempLatLang.longitude));
           speedArray.add(String.valueOf(tmpRoute.getSpeed()));
-        }
       }
     }
 
@@ -290,7 +288,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     }
     if (DEBUG) {
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
-      Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, null));
+      Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, getResources()));
     }
 
     tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(valWithoutMotion, res));

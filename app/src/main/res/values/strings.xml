@@ -201,4 +201,6 @@
     <string name="grn_label">&#160;Uah</string>
     <string name="paidVersion_code" translatable="false">forOleg_</string>
     <string name="PREFERENCE_KEY_ADVERT_INSTALLATION" translatable="false">advertInstalled</string>
+    <string name="PREFERENCES_TAG">tripPreferences</string>
+    <string name="FIRST_START">firstStart</string>
 </resources>
