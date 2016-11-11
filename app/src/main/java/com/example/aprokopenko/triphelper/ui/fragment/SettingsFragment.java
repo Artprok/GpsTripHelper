@@ -71,10 +71,10 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   private static final String LOG_TAG = "Settings fragment";
   private static final boolean DEBUG = BuildConfig.DEBUG;
-  public static final String MEASUREMENT_UNIT = "measurementUnit";
-  public static final String MEASUREMENT_UNIT_POSITION = "measurementUnitPosition";
-  public static final String CURRENCY_UNIT = "currencyUnit";
-  public static final String CURRENCY_UNIT_POSITION = "currencyUnitPosition";
+  private static final String MEASUREMENT_UNIT = "measurementUnit";
+  private static final String MEASUREMENT_UNIT_POSITION = "measurementUnitPosition";
+  private static final String CURRENCY_UNIT = "currencyUnit";
+  private static final String CURRENCY_UNIT_POSITION = "currencyUnitPosition";
 
   private int fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
   private float fuelConsumption = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
@@ -126,9 +126,9 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         if (UtilMethods.eraseFile(context)) {
           fileEraseListener.onFileErased();
           readDataFromFile();
-          UtilMethods.showToast(context, context.getString(R.string.file_erased_toast));
+          UtilMethods.showToast(context, getString(R.string.file_erased_toast));
         } else {
-          UtilMethods.showToast(context, context.getString(R.string.file_not_erased_toast));
+          UtilMethods.showToast(context, getString(R.string.file_not_erased_toast));
         }
         break;
       default:

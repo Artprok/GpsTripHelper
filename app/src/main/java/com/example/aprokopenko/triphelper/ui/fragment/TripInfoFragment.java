@@ -79,7 +79,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   MapView mapView;
 
   private static final String LOG_TAG = "TripInfoFragment";
-  public static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private static final String TIME_SPENT_IN_MOTION = "TimeSpentOnMotion";
   private static final String TIME_SPENT_WITHOUT_MOTION = "TimeSpentOnStop";
@@ -206,10 +206,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     unbinder.unbind();
   }
 
-  @Override public void onDetach() {
-    super.onDetach();
-  }
-
   @Override public void onMapReady(@NonNull final GoogleMap googleMap) {
     if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
       final Context context = getActivity();
@@ -288,7 +284,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     }
     if (DEBUG) {
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
-      Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, getResources()));
+      Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, res));
     }
 
     tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(valWithoutMotion, res));

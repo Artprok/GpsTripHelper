@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class MapUtilMethods {
 
   private static final String LOG_TAG = "MapUtilMethods";
-  public static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final boolean DEBUG = BuildConfig.DEBUG;
 
   /**
    * Method for unwrap route from params.

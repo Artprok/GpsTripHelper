@@ -153,19 +153,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
     if (fragment instanceof MainFragment) {
       final ArrayList<String> avgStrArrList = ConfigureAvgSpdListToStore();
+      outState.putBoolean("ControlButtonVisibility", isButtonVisible(startButton));
+      outState.putBoolean("StatusImageState", gpsIsActive);
+      outState.putBoolean("FirstStart", firstStart);
+      outState.putStringArrayList("AvgSpeedList", avgStrArrList);
+      outState.putParcelable("TripProcessor", tripProcessor);
+      super.onSaveInstanceState(outState);
+
       if (DEBUG) {
         Log.i(LOG_TAG, "onSaveInstanceState: Save called");
         Log.d(LOG_TAG, "onSaveInstanceState: ControlButtons" + isButtonVisible(startButton));
         Log.d(LOG_TAG, "onSaveInstanceState: StatusIm" + gpsIsActive);
         Log.d(LOG_TAG, "onSaveInstanceState: FirstStart" + firstStart);
       }
-      outState.putBoolean("ControlButtonVisibility", isButtonVisible(startButton));
-      outState.putBoolean("StatusImageState", gpsIsActive);
-      outState.putBoolean("FirstStart", firstStart);
-      outState.putStringArrayList("AvgSpeedList", avgStrArrList);
-      outState.putParcelable("TripProcessor", tripProcessor);
-
-      super.onSaveInstanceState(outState);
     }
   }
 
@@ -442,10 +442,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     tripProcessor = null;
   }
 
-
-
   @NonNull private ArrayList<String> ConfigureAvgSpdListToStore() {
-    final ArrayList<Float> avgSpeedArrayList = getAvgSpeedListFromProcessor();
+    final ArrayList<Float> avgSpeedArrayList = tripProcessor.getAvgSpeedList();
     final ArrayList<String> avgStrArrList = new ArrayList<>();
     if (avgSpeedArrayList != null) {
       for (float avgListItem : avgSpeedArrayList) {
@@ -453,10 +451,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       }
     }
     return avgStrArrList;
-  }
-
-  private ArrayList<Float> getAvgSpeedListFromProcessor() {
-    return tripProcessor.getAvgSpeedArrayList();
   }
 
   private void restoreStateIfPossible() {
@@ -549,7 +543,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void requestPermissionWithRationale() {
     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
-      Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.permissionExplanation), Snackbar.LENGTH_INDEFINITE)
+      Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.permissionExplanation), Snackbar.LENGTH_INDEFINITE)
               .setAction("GRANT", new View.OnClickListener() {
                 @Override public void onClick(@NonNull final View v) {
                   requestLocationPermissions();

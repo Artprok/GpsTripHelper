@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
       new AlertDialog.Builder(this).setIcon(R.drawable.btn_exit).setTitle(getString(R.string.exit_dialog_title))
               .setMessage(getString(R.string.exit_dialog_string))
               .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
-                @Override public void onClick(DialogInterface dialog, int which) {
+                @Override public void onClick(@NonNull final DialogInterface dialog,final int which) {
                   performExitFromApplication((MainFragment) fragment);
                 }
               }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
-        @Override public void onClick(DialogInterface dialogInterface, int i) {
+        @Override public void onClick(@NonNull final DialogInterface dialogInterface,final int i) {
           UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
         }
       }).show();

@@ -118,12 +118,13 @@ public class CircularGaugeFactory {
   private ArrayList<TickSettings> getTicks() {
     final ArrayList<TickSettings> tickSettingArrayList = new ArrayList<>();
     final TickSettings majorTicksSettings = new TickSettings();
+    final TickSettings minorTicksSettings = new TickSettings();
+
     majorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
     majorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
     majorTicksSettings.setSize(GaugeFactorySettings.majorTickSize);
     majorTicksSettings.setWidth(GaugeFactorySettings.ticksWidth);
 
-    final TickSettings minorTicksSettings = new TickSettings();
     minorTicksSettings.setColor(Color.parseColor(GaugeFactorySettings.tickColorString));
     minorTicksSettings.setOffset(GaugeFactorySettings.ticksOffset);
     minorTicksSettings.setSize(GaugeFactorySettings.minorTickSize);
@@ -137,6 +138,7 @@ public class CircularGaugeFactory {
   private void setScale(@NonNull final TripHelperGauge gauge, @NonNull final GaugeScale scale, @NonNull final ArrayList<GaugeRange> ranges, @NonNull final ArrayList<GaugePointer> pointers,
                         @NonNull final ArrayList<TickSettings> tickSettings, final int startAngle, final int SweepAngle, final int interval, final int labelTextSize) {
     final ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
+
     scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
     scale.setStartValue(GaugeFactorySettings.startValue);
     scale.setStartAngle(startAngle);

@@ -150,9 +150,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     return new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.notification_icon_bw)
             .setOngoing(true)
-            .setContentTitle(getResources().getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
-            .setStyle(new NotificationCompat.BigTextStyle().bigText(getResources().getString(R.string.notificationContent)))
-            .setContentText(getResources().getString(R.string.notificationContent));
+            .setContentTitle(getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
+            .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.notificationContent)))
+            .setContentText(getString(R.string.notificationContent));
   }
 
   private void removeNotification() {

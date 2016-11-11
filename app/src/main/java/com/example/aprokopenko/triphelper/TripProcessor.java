@@ -100,7 +100,7 @@ public class TripProcessor implements Parcelable {
     }
   };
 
-  public ArrayList<Float> getAvgSpeedArrayList() {
+  public ArrayList<Float> getAvgSpeedList() {
     return avgSpeedArrayList;
   }
 
@@ -172,7 +172,7 @@ public class TripProcessor implements Parcelable {
    * Method for stop {@link Trip}, store all data and write it to internal storage.
    */
   public void stopTracking() {
-    final ArrayList<Float> avgArrayList = getAvgSpeedArrayList();
+    final ArrayList<Float> avgArrayList = getAvgSpeedList();
     if (DEBUG) {
       Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
       for (float f : avgArrayList) {

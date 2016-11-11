@@ -391,13 +391,7 @@ public class UtilMethods {
    * @return {@link Boolean} value represents if allowed. True - allowed, False - no
    */
   public static boolean isPermissionAllowed(@NonNull final Context context) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-      return true;
-    } else {
-      return ActivityCompat.checkSelfPermission(context,
-              Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat
-              .checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
   }
 
   /**

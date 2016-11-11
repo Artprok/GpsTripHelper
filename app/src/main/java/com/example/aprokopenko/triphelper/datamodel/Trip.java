@@ -51,7 +51,7 @@ public class Trip implements Parcelable {
    * @param tripID   {@link Integer} id of trip
    * @param tripDate {@link String} Date of trip in {@link String} format
    */
-  public Trip(int tripID, String tripDate) {
+  public Trip(final int tripID,@NonNull final String tripDate) {
     this.tripID = tripID;
     this.tripDate = tripDate;
   }
