@@ -273,8 +273,6 @@ public class TripHelperGauge extends FrameLayout {
       mGaugeHeader.requestLayout();
       mGaugeHeader.invalidate();
     }
-
-    this.invalidate();
   }
 
   protected void onSizeChanged(int w, int h, final int oldw, final int oldh) {

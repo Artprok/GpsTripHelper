@@ -164,7 +164,7 @@ public class UtilMethods {
   }
 
   /**
-   * Method for replacing current {@link Fragment}
+   * Method for replacing current {@link Fragment}.
    *
    * @param fragment         {@link Fragment} new {@link Fragment}
    * @param fragment_tag     {@link Fragment} tag of new {@link Fragment}
@@ -327,7 +327,7 @@ public class UtilMethods {
           context.startActivity(Intent.createChooser(emailFeedback, res.getString(R.string.sendWithFeedback)));
         } catch (android.content.ActivityNotFoundException exception) {
           Log.e(LOG_TAG, "onClick: Nothing to send email :(");
-          UtilMethods.showToast(context, "No email clients installed on device!");
+          UtilMethods.showToast(context, "No email clients installed on device! :( ");
         }
       }
     });

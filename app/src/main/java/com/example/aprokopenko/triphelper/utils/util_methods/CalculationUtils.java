@@ -86,7 +86,7 @@ public class CalculationUtils {
   }
 
   /**
-   * Method for calculating average speed for one {@link Trip}
+   * Method for calculating average speed for one {@link Trip}.
    *
    * @param avgSpeedArrayList {@link ArrayList<Float>} list of all speed stored during a {@link Trip}
    * @return {@link Float} average speed

@@ -195,8 +195,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
     UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
     locationManager = getLocationMangerIfNull();
-    // TODO: 07.06.2016 not working due to problems with WakeLock that calling in OnLocationChanged,whatever you do..
-    //        changeWakeLockStateAfterSettings();
     restoreStateIfPossible();
     setupFuelFields();
 

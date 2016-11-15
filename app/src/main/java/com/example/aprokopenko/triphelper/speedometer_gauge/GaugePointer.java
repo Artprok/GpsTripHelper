@@ -28,6 +28,7 @@ public class GaugePointer {
 
   /**
    * Method for setting value for pointer to point.
+   *
    * @param newValue {@link Double} new value to point
    */
   public void setValue(final double newValue) {

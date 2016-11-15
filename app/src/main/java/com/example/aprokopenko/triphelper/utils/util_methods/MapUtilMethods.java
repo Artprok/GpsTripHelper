@@ -22,7 +22,6 @@ import java.util.ArrayList;
  * Class with {@link com.example.aprokopenko.triphelper.ui.fragment.MapFragment} utils.
  */
 public class MapUtilMethods {
-
   private static final String LOG_TAG = "MapUtilMethods";
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
@@ -36,6 +35,7 @@ public class MapUtilMethods {
    */
   public static ArrayList<Route> unwrapRoute(@NonNull final ArrayList<String> latitudes, @NonNull final ArrayList<String> longitudes, @NonNull final ArrayList<String> speedArr) {
     final ArrayList<Route> routes = new ArrayList<>();
+
     for (int i = 0; i < latitudes.size(); i++) {
       routes.add(new Route(new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i))), Float.valueOf(speedArr.get(i))));
     }
@@ -59,7 +59,7 @@ public class MapUtilMethods {
   }
 
   /**
-   * Method for drawing route (path) on map from given data
+   * Method for drawing route (path) on map from given data.
    *
    * @param routes    {@link ArrayList<Route>} list of {@link Route} to get positions of path nodes
    * @param googleMap {@link GoogleMap} map itself
@@ -80,7 +80,7 @@ public class MapUtilMethods {
 
 
   /**
-   * Method for animate camera motion to current location
+   * Method for animate camera motion to current location.
    *
    * @param location  {@link Location} location
    * @param position  {@link LatLng} position to move in coordinates
