@@ -45,7 +45,6 @@ import butterknife.Unbinder;
  */
 @Singleton
 public class SettingsFragment extends android.support.v4.app.Fragment {
-
   @BindView(R.id.editText_fuelPrice)
   EditText fuelPriceEditText;
   @BindView(R.id.editText_fuelConsumption)
@@ -94,7 +93,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   }
 
   @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
     return inflater.inflate(R.layout.fragment_settings, container, false);
   }
 
@@ -103,12 +101,9 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     unbinder = ButterKnife.bind(this, view);
     preferences = TripHelperApp.getSharedPreferences();
     context = getActivity();
-//    setupEditTextFields();
     setupMeasurementUnitSpinner();
     readDataFromFile();
     setupCurrencyUnitSpinner();
-    // TODO: 07.06.2016 not working due to problems with WakeLock that called in OnLocationChanged,whatever you do..
-    //        setupBackgroundSwitch();
   }
 
   @Override public void onDestroyView() {
@@ -138,12 +133,13 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   @OnTextChanged(R.id.editText_fuelPrice)
   public void onFuelPriceChanged(@NonNull final CharSequence s) {
-    if (DEBUG) {
-      Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
-    }
     if (!TextUtils.equals(s, "")) {
       fuelCost = Float.valueOf(s.toString());
       writeDataToFile();
+    }
+
+    if (DEBUG) {
+      Log.d(LOG_TAG, "onTextChanged: + text is - " + s);
     }
   }
 
@@ -157,7 +153,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   @OnTextChanged(R.id.editText_fuelCapacity)
   public void onFuelCapacityChanged(@NonNull final CharSequence s) {
-    if (!TextUtils.equals(s, "")) {
+    if (!TextUtils.isEmpty(s)) {
       fuelTankCapacity = (Integer.valueOf(s.toString()));
       writeDataToFile();
     }
@@ -167,56 +163,56 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     this.fileEraseListener = fileEraseListener;
   }
 
-  private void setMeasurementUnit(final int position, @NonNull final String kmh, @NonNull final String mph, @NonNull final String knots) {
+  private void setMeasurementUnit(final int position) {
     final SharedPreferences.Editor editor = preferences.edit();
     switch (position) {
       case 0://Kilometer per hour case
-        editor.putString(MEASUREMENT_UNIT, kmh);
+        editor.putString(MEASUREMENT_UNIT, getString(R.string.kilometreUnit));
         editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
         break;
       case 1://miles per hour case
-        editor.putString(MEASUREMENT_UNIT, mph);
+        editor.putString(MEASUREMENT_UNIT, getString(R.string.milesUnit));
         editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
         break;
       case 2://knots per hour case
-        editor.putString(MEASUREMENT_UNIT, knots);
+        editor.putString(MEASUREMENT_UNIT, getString(R.string.knots));
         editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
         break;
       default:
-        editor.putString(MEASUREMENT_UNIT, kmh);
+        editor.putString(MEASUREMENT_UNIT, getString(R.string.kilometreUnit));
         editor.putInt(MEASUREMENT_UNIT_POSITION, position);
         editor.apply();
     }
   }
 
-  private void setCurrencyUnit(final int position, @NonNull final String grn, @NonNull final String rub, @NonNull final String usd, @NonNull final String eur) {
+  private void setCurrencyUnit(final int position) {
     final SharedPreferences.Editor editor = preferences.edit();
     switch (position) {
       case 0:
-        editor.putString(CURRENCY_UNIT, grn);
+        editor.putString(CURRENCY_UNIT, getString(R.string.grn));
         editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       case 1:
-        editor.putString(CURRENCY_UNIT, rub);
+        editor.putString(CURRENCY_UNIT, getString(R.string.rub));
         editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       case 2:
-        editor.putString(CURRENCY_UNIT, usd);
+        editor.putString(CURRENCY_UNIT, getString(R.string.usd));
         editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       case 3:
-        editor.putString(CURRENCY_UNIT, eur);
+        editor.putString(CURRENCY_UNIT, getString(R.string.eur));
         editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
         break;
       default:
-        editor.putString(CURRENCY_UNIT, usd);
+        editor.putString(CURRENCY_UNIT, getString(R.string.usd));
         editor.putInt(CURRENCY_UNIT_POSITION, position);
         editor.apply();
     }
@@ -255,14 +251,14 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   private void setupMeasurementUnitSpinner() {
     final String[] data = {getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots)};
     final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     measurementUnitSpinner.setAdapter(adapter);
     measurementUnitSpinner.setPrompt(getString(R.string.measurementUnitSpinnerTitle));
     measurementUnitSpinner.setSelection(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
     measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
-        setMeasurementUnit(position, getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots));
+        setMeasurementUnit(position);
       }
 
       @Override public void onNothingSelected(@NonNull final AdapterView<?> arg0) {
@@ -285,7 +281,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     currencyUnitSpinner.setSelection(preferences.getInt(CURRENCY_UNIT_POSITION, 0));
     currencyUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
-        setCurrencyUnit(position, getString(R.string.grn), getString(R.string.rub), getString(R.string.usd), getString(R.string.eur));
+        setCurrencyUnit(position);
         updateFuelCost();
       }
 
@@ -323,11 +319,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
     @Override protected Boolean doInBackground(@NonNull final Void... params) {
-      if (DEBUG) {
-        Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
-        Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + fuelConsumption + fuelCost + fuelTankCapacity);
-      }
-
       try {
         final FileOutputStream fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
         final ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -339,12 +330,18 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
       } catch (IOException e) {
         e.printStackTrace();
       }
+
+      if (DEBUG) {
+        Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled");
+        Log.d(LOG_TAG, "writeTripDataToFileSetting: writeCalled" + fuelConsumption + fuelCost + fuelTankCapacity);
+      }
       return true;
     }
 
     @Override protected void onPostExecute(@NonNull final Boolean result) {
       if (result) {
         updateTextFields();
+
         if (DEBUG) {
           Log.d(LOG_TAG, "file written successfully");
         }
@@ -357,6 +354,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
       if (DEBUG) {
         Log.d(LOG_TAG, "readFileSettings");
       }
+
       if (context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
         if (DEBUG) {
           Log.d(LOG_TAG, "readTripDataFromFileSettings: ");

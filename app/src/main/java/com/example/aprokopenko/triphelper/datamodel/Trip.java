@@ -51,7 +51,7 @@ public class Trip implements Parcelable {
    * @param tripID   {@link Integer} id of trip
    * @param tripDate {@link String} Date of trip in {@link String} format
    */
-  public Trip(final int tripID,@NonNull final String tripDate) {
+  public Trip(final int tripID, @NonNull final String tripDate) {
     this.tripID = tripID;
     this.tripDate = tripDate;
   }
@@ -211,9 +211,8 @@ public class Trip implements Parcelable {
     try {
       os.writeInt(route.size());
       for (Route routePoint : route) {
-        final LatLng tmpRoutePoint = routePoint.getRoutePoints();
-        os.writeDouble(tmpRoutePoint.latitude);
-        os.writeDouble(tmpRoutePoint.longitude);
+        os.writeDouble(routePoint.getLatitude());
+        os.writeDouble(routePoint.getLongitude());
         writeToStreamWithNANcheck(os, routePoint.getSpeed());
       }
       writeToStreamWithNANcheck(os, getTimeSpentInMotion());

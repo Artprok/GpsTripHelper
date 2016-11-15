@@ -32,7 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -48,7 +47,7 @@ import butterknife.Unbinder;
  */
 @Singleton
 public class TripInfoFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
-
+  public static final String CURRENCY_UNIT = "currencyUnit";
   @BindView(R.id.text_tripAvgFuelConsumption)
   TextView tripAvgFuelConsumptionView;
   @BindView(R.id.text_tripDistanceTravelled)
@@ -129,12 +128,12 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     final ArrayList<String> longitudeArray = new ArrayList<>();
     final ArrayList<String> speedArray = new ArrayList<>();
     final ArrayList<Route> routes = trip.getRoutes();
+
     if (routes != null) {
       for (Route tmpRoute : routes) {
-          final LatLng tempLatLang = tmpRoute.getRoutePoints();
-          latitudeArray.add(String.valueOf(tempLatLang.latitude));
-          longitudeArray.add(String.valueOf(tempLatLang.longitude));
-          speedArray.add(String.valueOf(tmpRoute.getSpeed()));
+        latitudeArray.add(String.valueOf(tmpRoute.getLatitude()));
+        longitudeArray.add(String.valueOf(tmpRoute.getLongitude()));
+        speedArray.add(String.valueOf(tmpRoute.getSpeed()));
       }
     }
 
@@ -163,6 +162,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       final ArrayList<String> longitudeArray = getArguments().getStringArrayList(LONGITUDE_ARR);
       final ArrayList<String> latitudeArray = getArguments().getStringArrayList(LATITUDE_ARR);
       final ArrayList<String> speedArray = getArguments().getStringArrayList(SPEED_ARR);
+
       timeSpentOnStop = getArguments().getFloat(TIME_SPENT_WITHOUT_MOTION);
       averageFuelConsumption = getArguments().getFloat(AVERAGE_FUEL_CONS);
       distTravelled = getArguments().getFloat(DISTANCE_TRAVELLED);
@@ -181,20 +181,22 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_trip_info, container, false);
+
     unbinder = ButterKnife.bind(this, view);
     setupMapView(savedInstanceState);
     return view;
   }
 
   @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+    final String curUnit = TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, "");
+
     super.onViewCreated(view, savedInstanceState);
-    final String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
     setCurrencyUnit(curUnit);
     setDataToInfoFragmentFields();
   }
 
   private void setCurrencyUnit(@NonNull final String curUnit) {
-    if (TextUtils.equals(curUnit, "")) {
+    if (!TextUtils.isEmpty(curUnit)) {
       currency_prefix = getString(R.string.grn);
     } else {
       currency_prefix = curUnit;
@@ -209,6 +211,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   @Override public void onMapReady(@NonNull final GoogleMap googleMap) {
     if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
       final Context context = getActivity();
+
       googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
       UtilMethods.isPermissionAllowed(context);
       googleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -252,6 +255,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   private float getInMotionValue() {
     final float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
     final float percentInMotion = 100 - percentWithoutMotion;
+
     return timeSpent / 100 * percentInMotion;
   }
 
@@ -282,6 +286,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         timeSpentOnStop++;
       }
     }
+
     if (DEBUG) {
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, res));
@@ -302,6 +307,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   private void animateMapOpeningForLandscape(@NonNull final View view) {
     final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, 0, view.getWidth());
+
     dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
     dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
     dataContainerAnimator.addListener(new Animator.AnimatorListener() {
@@ -309,8 +315,9 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       }
 
       @Override public void onAnimationEnd(@NonNull final Animator animation) {
-        dataContainer.setVisibility(View.INVISIBLE);
         final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, -view.getWidth(), 0);
+
+        dataContainer.setVisibility(View.INVISIBLE);
         mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         mapViewAnimator.addListener(new Animator.AnimatorListener() {
@@ -342,6 +349,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   private void animateMapClosingForLandscape(@NonNull final View view) {
     final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, 0, -view.getWidth());
+
     mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
     mapViewAnimator.setInterpolator(new AnticipateInterpolator());
     mapViewAnimator.addListener(new Animator.AnimatorListener() {
@@ -349,8 +357,9 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       }
 
       @Override public void onAnimationEnd(@NonNull final Animator animation) {
-        mapView.setVisibility(View.INVISIBLE);
         final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, view.getWidth(), 0);
+
+        mapView.setVisibility(View.INVISIBLE);
         dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         dataContainerAnimator.addListener(new Animator.AnimatorListener() {
@@ -382,6 +391,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   private void animateMapOpeningForPortrait(@NonNull final View view) {
     final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, 0, view.getHeight());
+
     dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
     dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
     dataContainerAnimator.addListener(new Animator.AnimatorListener() {
@@ -389,9 +399,10 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       }
 
       @Override public void onAnimationEnd(@NonNull final Animator animation) {
-        dataContainer.setVisibility(View.INVISIBLE);
         final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, -view.getHeight(), 0);
-        mapViewAnimator.setDuration(1500);
+
+        dataContainer.setVisibility(View.INVISIBLE);
+        mapViewAnimator.setDuration(ConstantValues.ANIMATE_MAP_OPENING_DURATION);
         mapViewAnimator.setInterpolator(new BounceInterpolator());
         mapViewAnimator.addListener(new Animator.AnimatorListener() {
           @Override public void onAnimationStart(@NonNull final Animator animation) {
@@ -422,6 +433,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   private void animateMapClosingForPortrait(@NonNull final View view) {
     final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, 0, -view.getHeight());
+
     mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
     mapViewAnimator.setInterpolator(new AnticipateInterpolator());
     mapViewAnimator.addListener(new Animator.AnimatorListener() {
@@ -429,8 +441,9 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       }
 
       @Override public void onAnimationEnd(@NonNull final Animator animation) {
-        mapView.setVisibility(View.INVISIBLE);
         final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, view.getHeight(), 0);
+
+        mapView.setVisibility(View.INVISIBLE);
         dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         dataContainerAnimator.addListener(new Animator.AnimatorListener() {

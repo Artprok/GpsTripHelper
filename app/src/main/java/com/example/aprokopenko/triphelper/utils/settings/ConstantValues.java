@@ -73,4 +73,6 @@ public class ConstantValues {
   public static final int WIDTH_DELIMETER_FOR_PORTRAIT = 6;
   public static final int WIDTH_DELIMETER_FOR_LANDSCAPE = 12;
   public static final int FIVE_MINUTES = 300000;
+
+  public static final int ANIMATE_MAP_OPENING_DURATION = 1500;
 }

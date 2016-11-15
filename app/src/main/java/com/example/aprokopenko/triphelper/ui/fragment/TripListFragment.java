@@ -36,6 +36,7 @@ import butterknife.Unbinder;
  */
 @Singleton
 public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener {
+  public static final String CURRENCY_UNIT = "currencyUnit";
   @BindView(R.id.fragment_item_list_avgFuelConsListFrag)
   TextView avgFuelConsumptionView;
   @BindView(R.id.fragment_item_list_distanceTravelledListFrag)
@@ -70,6 +71,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   public static TripListFragment newInstance(@NonNull final TripData tripData) {
     final TripListFragment tripListFragment = new TripListFragment();
     final Bundle args = new Bundle();
+
     args.putParcelable(TRIP_DATA, tripData);
     tripListFragment.setArguments(args);
     return tripListFragment;
@@ -82,6 +84,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
   @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+
     unbinder = ButterKnife.bind(this, view);
     if (savedInstanceState != null) {
       tripData = savedInstanceState.getParcelable(TRIP_DATA);
@@ -105,16 +108,17 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
     if (savedInstanceState != null) {
       state = savedInstanceState;
     }
+
     final String distance = UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
     final String avgFuelCons = UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
-    String curUnit = TripHelperApp.getSharedPreferences().getString("currencyUnit", "");
-    if (TextUtils.equals(curUnit, "")) {
-      curUnit = getString(R.string.grn);
-    }
-    final String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
     final String fuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
     final String avgSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
     final String maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
+    String curUnit = TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, "");
+    if (!TextUtils.isEmpty(curUnit)) {
+      curUnit = getString(R.string.grn);
+    }
+    final String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
 
     distanceTravelledView.setText(distance);
     avgFuelConsumptionView.setText(avgFuelCons);
@@ -132,11 +136,10 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
   @Override public void onResume() {
     if (state != null) {
-      tripData = state.getParcelable("tripData");
+      tripData = state.getParcelable(TRIP_DATA);
     }
     super.onResume();
   }
-
 
   @Override public void onDestroyView() {
     super.onDestroyView();
@@ -154,8 +157,9 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   }
 
   @Override public void onListItemClick(@NonNull final Trip trip) {
-    progressBar.setVisibility(View.VISIBLE);
     final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(trip);
+
+    progressBar.setVisibility(View.VISIBLE);
     UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
   }
 

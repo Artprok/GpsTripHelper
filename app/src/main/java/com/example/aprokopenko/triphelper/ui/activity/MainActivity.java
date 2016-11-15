@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
   private static final String LOG_TAG = "MainActivity";
   private static final boolean DEBUG = BuildConfig.DEBUG;
+
   private int fabTransitionValue;
   private Unbinder unbinder;
 
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     unbinder = ButterKnife.bind(this);
-    //        Debug.startMethodTracing("Bottlenecks");
     MobileAds.initialize(this, getString(R.string.admob_publisher_testid_forAct));
     Fabric.with(this, new Crashlytics());
     fabTransitionValue = getDataForFABanimation();
@@ -61,16 +61,16 @@ public class MainActivity extends AppCompatActivity {
       new AlertDialog.Builder(this).setIcon(R.drawable.btn_exit).setTitle(getString(R.string.exit_dialog_title))
               .setMessage(getString(R.string.exit_dialog_string))
               .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
-                @Override public void onClick(@NonNull final DialogInterface dialog,final int which) {
+                @Override public void onClick(@NonNull final DialogInterface dialog, final int which) {
                   performExitFromApplication((MainFragment) fragment);
                 }
               }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
-        @Override public void onClick(@NonNull final DialogInterface dialogInterface,final int i) {
+        @Override public void onClick(@NonNull final DialogInterface dialogInterface, final int i) {
           UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
         }
       }).show();
     } else {
-      if (fragment instanceof TripInfoFragment) {  // if we in TripInfoFragment, to prevent laggy behaviour onBackPress duplicates.
+      if (fragment instanceof TripInfoFragment) { // if we in TripInfoFragment perform super.onBack pressed, if not we willl have laggy behaviour with duplicates of backPressed.
         super.onBackPressed();
       }
       if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toMap state.
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
       assert fab != null;
       setFabToMap(mainFragment);
       UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+
       if (DEBUG) {
         Log.i(LOG_TAG, "onCreate: new fragment");
       }
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         assert fab != null;
         setFabToMap((MainFragment) fragment);
         UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
+
         if (DEBUG) {
           Log.i(LOG_TAG, "onCreate: old fragment");
         }
@@ -118,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
   private int getDataForFABanimation() {
     final Display defaultDisplay = getWindowManager().getDefaultDisplay();
     final Point sizePoint = new Point();
-    defaultDisplay.getSize(sizePoint);
 
+    defaultDisplay.getSize(sizePoint);
     return -(sizePoint.x / getDelimiterDependsOnOrientation(defaultDisplay));
   }
 

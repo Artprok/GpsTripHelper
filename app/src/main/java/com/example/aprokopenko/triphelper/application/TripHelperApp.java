@@ -13,15 +13,10 @@ public class TripHelperApp extends Application {
   private static final String LOG_TAG = "TripHelperApp";
 
   private static ApplicationComponent applicationComponent;
-  private static Context context;
   private static SharedPreferences sharedPreferences;
 
   public static ApplicationComponent getApplicationComponent() {
     return applicationComponent;
-  }
-
-  public static Context getAppContext() {
-    return context;
   }
 
   public static SharedPreferences getSharedPreferences() {
@@ -30,7 +25,6 @@ public class TripHelperApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    context = getApplicationContext();
     sharedPreferences = this.getSharedPreferences(getString(R.string.PREFERENCES_TAG), Context.MODE_PRIVATE);
     applicationComponent = DaggerApplicationComponent.builder().appModule(new AppModule(this)).build();
   }

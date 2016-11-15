@@ -64,7 +64,7 @@ import butterknife.Unbinder;
  * Main {@link Fragment} representing a {@link TripHelperGauge} and buttons for start, stop, setting, etc.
  */
 @Singleton
-public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener {
+public class MainFragment extends Fragment implements GpsStatus.Listener, FileEraseListener, SpeedChangeListener, FuelChangeAmountListener {
   @BindView(R.id.speedometerContainer)
   TripHelperGauge speedometerContainer;
   @BindView(R.id.text_SpeedometerView)
@@ -91,6 +91,14 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   private static final int LOCATION_REQUEST_CODE = 1;
   private static final boolean DEBUG = BuildConfig.DEBUG;
   private static final String LOG_TAG = "MainFragment";
+  private static final String CONTROL_BUTTON_VISIBILITY = "ControlButtonVisibility";
+  private static final String STATUS_IMAGE_STATE = "StatusImageState";
+  private static final String FIRST_START = "FirstStart";
+  private static final String AVG_SPEED_LIST = "AvgSpeedList";
+  private static final String TRIP_PROCESSOR = "TripProcessor";
+  private static final String MEASUREMENT_UNIT = "measurementUnit";
+  private static final String GRANT = "GRANT";
+  private static final String MEASUREMENT_UNIT_POSITION = "measurementUnitPosition";
 
   private static final boolean REMOVE = false;
   private static final boolean REGISTER = true;
@@ -153,11 +161,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
     if (fragment instanceof MainFragment) {
       final ArrayList<String> avgStrArrList = ConfigureAvgSpdListToStore();
-      outState.putBoolean("ControlButtonVisibility", isButtonVisible(startButton));
-      outState.putBoolean("StatusImageState", gpsIsActive);
-      outState.putBoolean("FirstStart", firstStart);
-      outState.putStringArrayList("AvgSpeedList", avgStrArrList);
-      outState.putParcelable("TripProcessor", tripProcessor);
+      outState.putBoolean(CONTROL_BUTTON_VISIBILITY, isButtonVisible(startButton));
+      outState.putBoolean(STATUS_IMAGE_STATE, gpsIsActive);
+      outState.putBoolean(FIRST_START, firstStart);
+      outState.putStringArrayList(AVG_SPEED_LIST, avgStrArrList);
+      outState.putParcelable(TRIP_PROCESSOR, tripProcessor);
       super.onSaveInstanceState(outState);
 
       if (DEBUG) {
@@ -201,6 +209,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (DEBUG) {
       Log.i(LOG_TAG, "onDetach: called");
     }
+
     super.onDetach();
   }
 
@@ -231,6 +240,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         deactivateGpsStatusIcon();
         break;
     }
+  }
+
+  @Override public void fuelFilled(float fuelFilled) {
+    fillGasTank(fuelFilled);
   }
 
   @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_settings, R.id.btn_tripList, R.id.refillButtonLayout})
@@ -266,11 +279,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       case R.id.refillButtonLayout:
         if (tripProcessor.isFileNotInWriteMode()) {
           final FuelFillDialog dialog = FuelFillDialog.newInstance();
-          dialog.setFuelChangeAmountListener(new FuelChangeAmountListener() {
-            @Override public void fuelFilled(final float fuel) {
-              fillGasTank(fuel);
-            }
-          });
+          dialog.setFuelChangeAmountListener(this);
           dialog.show(getChildFragmentManager(), "FILL_DIALOG");
         }
         break;
@@ -283,10 +292,8 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
    * Method for open map, {@link MapFragment}.
    */
   public void openMapFragment() {
-    configureMapFragment();
+    configureMapFragment(tripProcessor);
     saveState();
-    mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
-    setRoutesToMapFragment();
     UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
   }
 
@@ -445,11 +452,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   @NonNull private ArrayList<String> ConfigureAvgSpdListToStore() {
     final ArrayList<Float> avgSpeedArrayList = tripProcessor.getAvgSpeedList();
     final ArrayList<String> avgStrArrList = new ArrayList<>();
+
     if (avgSpeedArrayList != null) {
       for (float avgListItem : avgSpeedArrayList) {
         avgStrArrList.add(String.valueOf(avgListItem));
       }
     }
+
     return avgStrArrList;
   }
 
@@ -465,6 +474,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (locationManager == null) {
       locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
+
     return locationManager;
   }
 
@@ -483,6 +493,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void checkIfSatellitesAreStillAvailableWithInterval(final long interval) {
     final long curTime = System.currentTimeMillis();
+
     if ((curTime - gpsFirstFixTime) > interval) {
       if (UtilMethods.checkIfGpsEnabled(context)) {
         for (GpsSatellite satellite : getSatellitesList()) {
@@ -510,12 +521,10 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
       return locationManager.getGpsStatus(null);
     }
-
   }
 
   private TripHelperGauge createSpeedometerGauge(@NonNull final Context context, final boolean isLandscape) {
-    final CircularGaugeFactory circularGaugeFactory = new CircularGaugeFactory();
-    return circularGaugeFactory.getConfiguredSpeedometerGauge(context, preferences.getString("measurementUnit", ""), isLandscape);
+    return new CircularGaugeFactory().getConfiguredSpeedometerGauge(context, preferences.getString(MEASUREMENT_UNIT, ""), isLandscape);
   }
 
   private boolean isButtonVisible(@Nullable final Button button) {
@@ -523,7 +532,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private boolean savedStateIsCorrect(@NonNull final Bundle savedState) {
-    return savedState.containsKey("ControlButtonVisibility");
+    return savedState.containsKey(CONTROL_BUTTON_VISIBILITY);
   }
 
   private boolean landscapeOrientation() {
@@ -544,7 +553,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   private void requestPermissionWithRationale() {
     if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
       Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.permissionExplanation), Snackbar.LENGTH_INDEFINITE)
-              .setAction("GRANT", new View.OnClickListener() {
+              .setAction(GRANT, new View.OnClickListener() {
                 @Override public void onClick(@NonNull final View v) {
                   requestLocationPermissions();
                 }
@@ -584,7 +593,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void setFirstStartToFalse(@NonNull final SharedPreferences preferences) {
     final SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean(getString(R.string.FIRST_START), false);
+    editor.putBoolean(FIRST_START, false);
     editor.apply();
   }
 
@@ -606,11 +615,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void getStateFromPrefs() {
     preferences = TripHelperApp.getSharedPreferences();
-    if (preferences.getBoolean(getString(R.string.FIRST_START), true)) {
+    if (preferences.getBoolean(FIRST_START, true)) {
       UtilMethods.firstStartTutorialDialog(context);
       setFirstStartToFalse(preferences);
     }
-    CalculationUtils.setMeasurementMultiplier(preferences.getInt("measurementUnitPosition", 0));
+    CalculationUtils.setMeasurementMultiplier(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
   }
 
   private void setButtonsVisibilityDuringWriteMode(final int visibility) {
@@ -663,18 +672,19 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
     if (fragment instanceof MainFragment) {
       getContextIfNull();
-      firstStart = savedInstanceState.getBoolean(getString(R.string.FIRST_START));
+      firstStart = savedInstanceState.getBoolean(FIRST_START);
+
       if (DEBUG) {
         Log.i(LOG_TAG, "onViewCreated: calledRestore");
-        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean(getString(R.string.FIRST_START)));
-        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("ControlButtonVisibility"));
-        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean("StatusImageState"));
+        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean(FIRST_START));
+        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean(CONTROL_BUTTON_VISIBILITY));
+        Log.d(LOG_TAG, "restoreState: " + savedInstanceState.getBoolean(STATUS_IMAGE_STATE));
       }
 
-      restoreButtonsVisibility(savedInstanceState.getBoolean("ControlButtonVisibility"));
-      restoreStatus(savedInstanceState.getBoolean("StatusImageState"));
-      restoreTripProcessor((TripProcessor) savedInstanceState.getParcelable("TripProcessor"));
-      restoreAvgSpeedList(savedInstanceState.getStringArrayList("AvgSpeedList"));
+      restoreButtonsVisibility(savedInstanceState.getBoolean(CONTROL_BUTTON_VISIBILITY));
+      restoreStatus(savedInstanceState.getBoolean(STATUS_IMAGE_STATE));
+      restoreTripProcessor((TripProcessor) savedInstanceState.getParcelable(TRIP_PROCESSOR));
+      restoreAvgSpeedList(savedInstanceState.getStringArrayList(AVG_SPEED_LIST));
       restoreFuelLevel();
       restoreFuelLayoutVisibility(firstStart);
 
@@ -814,7 +824,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     speedometer.setScaleX(ConstantValues.SPEEDOMETER_WIDTH);
     speedometer.setScaleY(ConstantValues.SPEEDOMETER_HEIGHT);
     speedometerContainer.addView(speedometer);
-    speedometerTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/android_7.ttf"));
+    speedometerTextView.setTypeface(Typeface.createFromAsset(context.getAssets(), getString(R.string.speedometer_font)));
   }
 
   private void cleanAllProcess() {
@@ -830,11 +840,13 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     context = null;
   }
 
-  private void configureMapFragment() {
+  private void configureMapFragment(TripProcessor tripProcessor) {
     mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
     if (mapFragment == null) {
       mapFragment = MapFragment.newInstance();
     }
+    mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
+    setRoutesToMapFragment();
   }
 
   private void setRoutesToMapFragment() {

@@ -202,5 +202,5 @@
     <string name="paidVersion_code" translatable="false">forOleg_</string>
     <string name="PREFERENCE_KEY_ADVERT_INSTALLATION" translatable="false">advertInstalled</string>
     <string name="PREFERENCES_TAG" translatable="false">tripPreferences</string>
-    <string name="FIRST_START" translatable="false">firstStart</string>
+    <string name="speedometer_font" translatable="false">fonts/android_7.ttf</string>
 </resources>

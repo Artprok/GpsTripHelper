@@ -10,5 +10,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class})
 public interface ApplicationComponent {
-  void injectInto(final GpsHandler GpsHandler);
+  void injectInto(final GpsHandler gpsHandler);
+
+  void injectInto(final TripProcessor tripProcessor);
 }
+

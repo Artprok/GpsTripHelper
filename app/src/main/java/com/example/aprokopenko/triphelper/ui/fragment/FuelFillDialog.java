@@ -44,9 +44,12 @@ public class FuelFillDialog extends DialogFragment {
   @OnClick(R.id.btn_refill)
   public void onRefillButtonClick() {
     final String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
-    float fuel = 0f;
-    if (!TextUtils.equals(fuelToFill, "")) {
+    final float fuel;
+
+    if (!TextUtils.isEmpty(fuelToFill)) {
       fuel = Float.valueOf(fuelToFill);
+    } else {
+      fuel = 0f;
     }
     if (fuelChangeAmountListener != null) {
       fuelChangeAmountListener.fuelFilled(fuel);

@@ -21,6 +21,7 @@ import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ import rx.Subscriber;
 public class MapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
   private static final String LOG_TAG = "MAP_FRAGMENT";
   private static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final String ROUTES = "routes";
+  private static final String LOCATIONS = "locations";
+  private static final String GPS_HANDLER = "gpsHandler";
+
   private LatLng previousLocationFromData;
   private Subscriber<Location> locationSubscriber;
   private LatLng previousLocation;
@@ -81,13 +86,15 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   }
 
   @Override public void onMapReady(@NonNull final GoogleMap googleMap) {
+    final UiSettings uiSettings = googleMap.getUiSettings();
+
     googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     UtilMethods.isPermissionAllowed(context);
-    googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-    googleMap.getUiSettings().setZoomControlsEnabled(true);
-    googleMap.getUiSettings().setAllGesturesEnabled(true);
-    googleMap.getUiSettings().setMapToolbarEnabled(true);
-    googleMap.getUiSettings().setCompassEnabled(true);
+    uiSettings.setMyLocationButtonEnabled(true);
+    uiSettings.setZoomControlsEnabled(true);
+    uiSettings.setAllGesturesEnabled(true);
+    uiSettings.setMapToolbarEnabled(true);
+    uiSettings.setCompassEnabled(true);
     if (UtilMethods.isPermissionAllowed(context)) {
       googleMap.setMyLocationEnabled(true);
     }
@@ -96,6 +103,7 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
 
   @Override public void onDestroyView() {
     final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.mapFragment);
+
     if (locationSubscriber != null) {
       locationSubscriber.unsubscribe();
     }
@@ -112,18 +120,18 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   }
 
   @Override public void onSaveInstanceState(@NonNull final Bundle outState) {
-    outState.putParcelableArrayList("routes", routes);
-    outState.putParcelableArrayList("locations", locationList);
-    outState.putParcelable("gpsHandler", gpsHandler);
+    outState.putParcelableArrayList(ROUTES, routes);
+    outState.putParcelableArrayList(LOCATIONS, locationList);
+    outState.putParcelable(GPS_HANDLER, gpsHandler);
     super.onSaveInstanceState(outState);
   }
 
   @Override public void onViewStateRestored(@Nullable final Bundle savedInstanceState) {
     super.onViewStateRestored(savedInstanceState);
     if (savedInstanceState != null) {
-      routes = savedInstanceState.getParcelableArrayList("routes");
-      locationList = savedInstanceState.getParcelableArrayList("locations");
-      gpsHandler = savedInstanceState.getParcelable("gpsHandler");
+      routes = savedInstanceState.getParcelableArrayList(ROUTES);
+      locationList = savedInstanceState.getParcelableArrayList(LOCATIONS);
+      gpsHandler = savedInstanceState.getParcelable(GPS_HANDLER);
     }
   }
 
@@ -146,6 +154,7 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
 
   private LatLng getStartingPosition(@NonNull final Location location) {
     final LatLng previousLoc;
+
     if (previousLocationFromData != null) {
       previousLoc = previousLocationFromData;
       previousLocationFromData = null;
@@ -167,6 +176,7 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
 
   private void locationTracking(@NonNull final GoogleMap googleMap, @NonNull final Location location, @NonNull final Float speed) {
     final LatLng tempLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
     drawPathFromData();
     previousLocation = tempLocation;
     MapUtilMethods.addPolylineDependsOnSpeed(googleMap, getStartingPosition(location), tempLocation, speed);
@@ -210,15 +220,11 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
       if (DEBUG) {
         Log.d(LOG_TAG, "drawPathFromData: DrawFromData");
       }
-      for (int i = 0; i < routes.size(); i++) {
-        final LatLng currentLocation = (routes.get(i).getRoutePoints());
-        final LatLng tempPreviousLocation = MapUtilMethods.getPreviousLocation(routes, routes.size(), i);
+
+      for (int routeIndex = 0; routeIndex < routes.size(); routeIndex++) {
+        final LatLng currentLocation = (routes.get(routeIndex).getRoutePoints());
         setPreviousLocationPoint(currentLocation);
-        if (BuildConfig.DEBUG) {
-          MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
-        } else {
-          MapUtilMethods.addPolylineDependsOnSpeed(googleMap, tempPreviousLocation, currentLocation, routes.get(i).getSpeed());
-        }
+        MapUtilMethods.addPolylineDependsOnSpeed(googleMap, MapUtilMethods.getPreviousLocation(routes, routes.size(), routeIndex), currentLocation, routes.get(routeIndex).getSpeed());
       }
       routes = null;
     }

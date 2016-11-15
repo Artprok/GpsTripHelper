@@ -37,7 +37,6 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
 
   @Override public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
     final Trip curTrip = tripList.get(position);
-
     holder.idView.setText(String.valueOf(curTrip.getTripID()));
     holder.contentView.setText(curTrip.getTripDate());
     holder.trip = curTrip;

@@ -72,31 +72,31 @@ public class CircularGaugeFactory {
 
   private ArrayList<GaugeRange> getRanges(@NonNull final GaugeScale scale) {
     final ArrayList<GaugeRange> gaugeRangeArrayList = new ArrayList<>();
-    final GaugeRange gaugeRange1 = new GaugeRange();
-    final GaugeRange gaugeRange2 = new GaugeRange();
-    final GaugeRange gaugeRange3 = new GaugeRange();
+    final GaugeRange gaugeRangeFirst = new GaugeRange();
+    final GaugeRange gaugeRangeSecond = new GaugeRange();
+    final GaugeRange gaugeRangeThird = new GaugeRange();
 
-    gaugeRange1.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
-    gaugeRange1.setStartValue(GaugeFactorySettings.cityLimitationSpeedFrom);
-    gaugeRange1.setEndValue(GaugeFactorySettings.cityLimitationSpeedTo);
-    gaugeRange1.setWidth(GaugeFactorySettings.rangeScaleWidth);
-    gaugeRange1.setOffset(GaugeFactorySettings.rangeOffset);
+    gaugeRangeFirst.setColor(Color.parseColor(GaugeFactorySettings.cityColorString));
+    gaugeRangeFirst.setStartValue(GaugeFactorySettings.cityLimitationSpeedFrom);
+    gaugeRangeFirst.setEndValue(GaugeFactorySettings.cityLimitationSpeedTo);
+    gaugeRangeFirst.setWidth(GaugeFactorySettings.rangeScaleWidth);
+    gaugeRangeFirst.setOffset(GaugeFactorySettings.rangeOffset);
 
-    gaugeRange2.setColor(Color.parseColor(GaugeFactorySettings.outCityColorString));
-    gaugeRange2.setStartValue(GaugeFactorySettings.outOfTownLimitationSpeedFrom);
-    gaugeRange2.setEndValue(GaugeFactorySettings.outOfTownLimitationSpeedTo);
-    gaugeRange2.setWidth(GaugeFactorySettings.rangeScaleWidth);
-    gaugeRange2.setOffset(GaugeFactorySettings.rangeOffset);
+    gaugeRangeSecond.setColor(Color.parseColor(GaugeFactorySettings.outCityColorString));
+    gaugeRangeSecond.setStartValue(GaugeFactorySettings.outOfTownLimitationSpeedFrom);
+    gaugeRangeSecond.setEndValue(GaugeFactorySettings.outOfTownLimitationSpeedTo);
+    gaugeRangeSecond.setWidth(GaugeFactorySettings.rangeScaleWidth);
+    gaugeRangeSecond.setOffset(GaugeFactorySettings.rangeOffset);
 
-    gaugeRange3.setColor(Color.parseColor(GaugeFactorySettings.deniedSpeedColorString));
-    gaugeRange3.setStartValue(GaugeFactorySettings.deniedSpeedLimitationSpeedFrom);
-    gaugeRange3.setEndValue(GaugeFactorySettings.deniedSpeedLimitationSpeedTo);
-    gaugeRange3.setWidth(GaugeFactorySettings.rangeScaleWidth);
-    gaugeRange3.setOffset(GaugeFactorySettings.rangeOffset);
+    gaugeRangeThird.setColor(Color.parseColor(GaugeFactorySettings.deniedSpeedColorString));
+    gaugeRangeThird.setStartValue(GaugeFactorySettings.deniedSpeedLimitationSpeedFrom);
+    gaugeRangeThird.setEndValue(GaugeFactorySettings.deniedSpeedLimitationSpeedTo);
+    gaugeRangeThird.setWidth(GaugeFactorySettings.rangeScaleWidth);
+    gaugeRangeThird.setOffset(GaugeFactorySettings.rangeOffset);
 
-    gaugeRangeArrayList.add(0, gaugeRange1);
-    gaugeRangeArrayList.add(1, gaugeRange2);
-    gaugeRangeArrayList.add(2, gaugeRange3);
+    gaugeRangeArrayList.add(0, gaugeRangeFirst);
+    gaugeRangeArrayList.add(1, gaugeRangeSecond);
+    gaugeRangeArrayList.add(2, gaugeRangeThird);
     scale.setGaugeRanges(gaugeRangeArrayList);
     return gaugeRangeArrayList;
   }
@@ -104,6 +104,7 @@ public class CircularGaugeFactory {
   private ArrayList<GaugePointer> getPointer() {
     final ArrayList<GaugePointer> gaugePointerArrayList = new ArrayList<>();
     final NeedlePointer needlePointer = new NeedlePointer();
+
     needlePointer.setKnobColor(Color.parseColor(GaugeFactorySettings.knobNeedleColorString));
     needlePointer.setLengthFactor(GaugeFactorySettings.needleLengthFactor);
     needlePointer.setColor(GaugeFactorySettings.needleColorString);

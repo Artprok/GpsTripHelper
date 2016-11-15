@@ -57,6 +57,22 @@ public class Route implements Parcelable {
   }
 
   /**
+   * Method for getting latitude value
+   * @return {@link Long} value of latitude
+   */
+  public double getLatitude(){
+    return routePoints.latitude;
+  }
+
+  /**
+   * Method for getting longitude value
+   * @return {@link Long} value of longitude
+   */
+  public double getLongitude(){
+    return routePoints.longitude;
+  }
+
+  /**
    * Method for getting speed of {@link Route}.
    * @return {@link Float} speed
    */
