@@ -158,13 +158,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   @Override public void onSaveInstanceState(@NonNull final Bundle outState) {
-    final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
-    if (fragment instanceof MainFragment) {
-      final ArrayList<String> avgStrArrList = ConfigureAvgSpdListToStore();
+    if (getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment) {
       outState.putBoolean(CONTROL_BUTTON_VISIBILITY, isButtonVisible(startButton));
       outState.putBoolean(STATUS_IMAGE_STATE, gpsIsActive);
       outState.putBoolean(FIRST_START, firstStart);
-      outState.putStringArrayList(AVG_SPEED_LIST, avgStrArrList);
+      outState.putStringArrayList(AVG_SPEED_LIST, ConfigureAvgSpdListToStore());
       outState.putParcelable(TRIP_PROCESSOR, tripProcessor);
       super.onSaveInstanceState(outState);
 
@@ -254,31 +252,25 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
         endTrip();
         break;
       case R.id.btn_settings:
-        final SettingsFragment settingsFragment = SettingsFragment.newInstance();
         saveState();
         UtilMethods.hideFab(getActivity());
-        settingsFragment.setFileEraseListener(MainFragment.this);
-        UtilMethods.replaceFragment(settingsFragment, ConstantValues.SETTINGS_FRAGMENT_TAG, getActivity());
+        showSettingsFragment(SettingsFragment.newInstance());
         break;
       case R.id.btn_tripList:
         if (tripProcessor.isFileNotInWriteMode()) {
           final TripData tripData = tripProcessor.getTripData();
           if (tripData != null && !isButtonVisible(stopButton)) {
             if (!tripData.getTrips().isEmpty()) {
-              final TripListFragment tripListFragment = TripListFragment.newInstance(tripData);
               saveState();
               UtilMethods.hideFab(getActivity());
-              tripListFragment.setTripData(tripData);
-              UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
+              showTripListFragment(tripData, TripListFragment.newInstance(tripData));
             }
           }
         }
         break;
       case R.id.refillButtonLayout:
         if (tripProcessor.isFileNotInWriteMode()) {
-          final FuelFillDialog dialog = FuelFillDialog.newInstance();
-          dialog.setFuelChangeAmountListener(this);
-          dialog.show(getChildFragmentManager(), "FILL_DIALOG");
+          showFuelFillDialog(FuelFillDialog.newInstance());
         }
         break;
       default:
@@ -302,6 +294,21 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     cleanAllProcess();
   }
 
+  private void showFuelFillDialog(@NonNull final FuelFillDialog dialog) {
+    dialog.setFuelChangeAmountListener(this);
+    dialog.show(getChildFragmentManager(), "FILL_DIALOG");
+  }
+
+  private void showTripListFragment(@NonNull final TripData tripData, @NonNull final TripListFragment tripListFragment) {
+    tripListFragment.setTripData(tripData);
+    UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, getActivity());
+  }
+
+  private void showSettingsFragment(@NonNull final SettingsFragment settingsFragment) {
+    settingsFragment.setFileEraseListener(MainFragment.this);
+    UtilMethods.replaceFragment(settingsFragment, ConstantValues.SETTINGS_FRAGMENT_TAG, getActivity());
+  }
+
   private void setupAdvert() {
     if (!BuildConfig.FLAVOR.contains(getString(R.string.paidVersion_code))) {
       if (!advertInstalled()) {
@@ -315,8 +322,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void setAdvertInstalled(final boolean isAdvInstalled) {
     final SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean(getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), isAdvInstalled);
-    editor.apply();
+    editor.putBoolean(getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), isAdvInstalled).apply();
   }
 
   private void setupAdView(@NonNull final AdRequest request) {
@@ -345,10 +351,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   @NonNull private AdRequest setupAdRequest() {
-    final Location loc = getLocationForAdvert();
-    return new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+    return new
+            AdRequest.Builder()
+            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
             .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
-            .setGender(AdRequest.GENDER_MALE).setLocation(loc).build();
+            .setGender(AdRequest.GENDER_MALE).setLocation(getLocationForAdvert()).build();
   }
 
   private boolean advertInstalled() {
@@ -585,14 +592,12 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private void setupFuelFields() {
     setInternalSettingsToTripProcessor();
-    final String fuelLeftString = tripProcessor.getFuelLeftString(getString(R.string.distance_prefix));
-    fuelLeft.setText(fuelLeftString);
+    fuelLeft.setText(tripProcessor.getFuelLeftString(getString(R.string.distance_prefix)));
   }
 
   private void setFirstStartToFalse(@NonNull final SharedPreferences preferences) {
     final SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean(FIRST_START, false);
-    editor.apply();
+    editor.putBoolean(FIRST_START, false).apply();
   }
 
   private void getInternalSettings() {
@@ -667,8 +672,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private void restoreState(@NonNull final Bundle savedInstanceState) {
-    final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
-    if (fragment instanceof MainFragment) {
+    if (getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment) {
       getContextIfNull();
       firstStart = savedInstanceState.getBoolean(FIRST_START);
 

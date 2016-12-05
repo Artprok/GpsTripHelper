@@ -2,7 +2,6 @@ package com.example.aprokopenko.triphelper.ui.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -188,10 +187,8 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   }
 
   @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-    final String curUnit = TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, "");
-
     super.onViewCreated(view, savedInstanceState);
-    setCurrencyUnit(curUnit);
+    setCurrencyUnit(TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, ""));
     setDataToInfoFragmentFields();
   }
 
@@ -210,15 +207,13 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
   @Override public void onMapReady(@NonNull final GoogleMap googleMap) {
     if (routes != null && routes.size() != 0 && routes.get(0).getSpeed() != ConstantValues.SPEED_VALUE_WORKAROUND) {
-      final Context context = getActivity();
-
       googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-      UtilMethods.isPermissionAllowed(context);
+      UtilMethods.isPermissionAllowed(getActivity());
       googleMap.getUiSettings().setMyLocationButtonEnabled(true);
       googleMap.getUiSettings().setZoomControlsEnabled(true);
       googleMap.getUiSettings().setMapToolbarEnabled(true);
       googleMap.getUiSettings().setCompassEnabled(true);
-      if (UtilMethods.isPermissionAllowed(context)) {
+      if (UtilMethods.isPermissionAllowed(getActivity())) {
         googleMap.setMyLocationEnabled(true);
       }
       if (MapUtilMethods.drawPathFromData(routes, googleMap)) {
@@ -271,14 +266,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   }
 
   private void setDataToInfoFragmentFields() {
-    final String avgFuelCons = UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_cons_prefix);
-    final String fuelSpent = UtilMethods.formatFloatDecimalFormat(this.fuelSpent) + " " + getString(R.string.fuel_prefix);
-    final String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + currency_prefix;
-    final String avgSpeed = UtilMethods.formatFloatDecimalFormat(this.avgSpeed) + " " + getString(R.string.speed_prefix);
-    final String maxSpeed = UtilMethods.formatFloatDecimalFormat(this.maxSpeed) + " " + getString(R.string.speed_prefix);
-    final String distance = UtilMethods.formatFloatDecimalFormat(distTravelled) + " " + getString(R.string.distance_prefix);
-    final float valInMotion = getInMotionValue();
-    final float valWithoutMotion = getWithoutMotionValue(valInMotion);
     final Resources res = getResources();
 
     for (String value : speedValues) {
@@ -292,16 +279,16 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, res));
     }
 
-    tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(valWithoutMotion, res));
-    tripTimeSpentInMotionView.setText(CalculationUtils.getTimeInNormalFormat(valInMotion, res));
+    tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(getWithoutMotionValue(getInMotionValue()), res));
+    tripTimeSpentInMotionView.setText(CalculationUtils.getTimeInNormalFormat(getInMotionValue(), res));
     tripTimeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpent, res));
-    tripAvgFuelConsumptionView.setText(avgFuelCons);
-    tripMoneySpentView.setText(moneyOnFuelSpent);
-    tripDistanceTravelledView.setText(distance);
+    tripAvgFuelConsumptionView.setText(UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_cons_prefix));
+    tripMoneySpentView.setText(UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + currency_prefix);
+    tripDistanceTravelledView.setText(UtilMethods.formatFloatDecimalFormat(distTravelled) + " " + getString(R.string.distance_prefix));
     tripIdView.setText(String.valueOf(tripId));
-    tripFuelSpentView.setText(fuelSpent);
-    tripMaxSpeedView.setText(maxSpeed);
-    tripAvgSpeedView.setText(avgSpeed);
+    tripFuelSpentView.setText(UtilMethods.formatFloatDecimalFormat(this.fuelSpent) + " " + getString(R.string.fuel_prefix));
+    tripMaxSpeedView.setText(UtilMethods.formatFloatDecimalFormat(this.maxSpeed) + " " + getString(R.string.speed_prefix));
+    tripAvgSpeedView.setText(UtilMethods.formatFloatDecimalFormat(this.avgSpeed) + " " + getString(R.string.speed_prefix));
     tripDateView.setText(tripDate);
   }
 

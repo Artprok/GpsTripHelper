@@ -74,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
       }
       if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toMap state.
-        final MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG);
-        setFabToMap(mainFragment);
+        setFabToMap((MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG));
       }
       super.onBackPressed();
     }

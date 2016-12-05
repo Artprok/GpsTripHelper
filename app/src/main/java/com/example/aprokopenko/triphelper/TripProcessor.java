@@ -293,8 +293,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private Date getDateInstance() {
-    final Calendar currentCalendarInstance = Calendar.getInstance();
-    return currentCalendarInstance.getTime();
+    return Calendar.getInstance().getTime();
   }
 
   private long getTimeOfStart(@NonNull final Date date) {
@@ -683,11 +682,9 @@ public class TripProcessor implements Parcelable {
         Log.d(LOG_TAG, "fillGasTank: gasTank" + gasTank + ",fuel" + fuel + ",fuelCap" + fuelCapacity);
       }
       if (gasTank + fuel <= fuelCapacity) {
-        final CharSequence fuelFilledMessage = context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
-                .getString(R.string.fuel_prefix);
-
         tripData.setGasTank(gasTank + fuel);
-        UtilMethods.showToast(context, fuelFilledMessage);
+        UtilMethods.showToast(context, context.getString(R.string.fuel_spent_toast) + fuel + context.getResources()
+                .getString(R.string.fuel_prefix));
       } else {
         UtilMethods.showToast(context, context.getString(R.string.fuel_overload_toast));
       }
@@ -764,8 +761,6 @@ public class TripProcessor implements Parcelable {
     }
 
     @Override protected Boolean doInBackground(@Nullable final TripData... params) {
-
-
       if (DEBUG) {
         Log.d(LOG_TAG, "writeTripDataToFile: writeCalled");
         Log.d(LOG_TAG, "writeTripDataToFile: avgSpeed - " + tripData.getAvgSpeed());

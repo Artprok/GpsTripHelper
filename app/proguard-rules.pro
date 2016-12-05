@@ -21,7 +21,6 @@
 -forceprocessing
 -optimizationpasses 5
 -allowaccessmodification
--dontskipnonpubliclibraryclasses
 -repackageclasses ''
 
 -keep class android.support.v4.** { *; }

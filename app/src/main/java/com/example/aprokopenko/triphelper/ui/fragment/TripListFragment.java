@@ -109,24 +109,19 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
       state = savedInstanceState;
     }
 
-    final String distance = UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix);
-    final String avgFuelCons = UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix);
-    final String fuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix);
-    final String avgSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix);
-    final String maxSpeed = UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix);
     String curUnit = TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, "");
     if (!TextUtils.isEmpty(curUnit)) {
       curUnit = getString(R.string.grn);
     }
     final String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
 
-    distanceTravelledView.setText(distance);
-    avgFuelConsumptionView.setText(avgFuelCons);
+    distanceTravelledView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix));
+    avgFuelConsumptionView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix));
     moneyOnFuelView.setText(moneyOnFuelSpent);
-    fuelSpentView.setText(fuelSpent);
+    fuelSpentView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix));
     timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips(), getResources()));
-    avgSpeedView.setText(avgSpeed);
-    maxSpeedView.setText(maxSpeed);
+    avgSpeedView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix));
+    maxSpeedView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getMaxSpeed()) + " " + getString(R.string.speed_prefix));
   }
 
   @Override public void onPause() {
@@ -157,10 +152,8 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   }
 
   @Override public void onListItemClick(@NonNull final Trip trip) {
-    final TripInfoFragment tripInfoFragment = TripInfoFragment.newInstance(trip);
-
     progressBar.setVisibility(View.VISIBLE);
-    UtilMethods.replaceFragment(tripInfoFragment, ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
+    UtilMethods.replaceFragment(TripInfoFragment.newInstance(trip), ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
   }
 
   public void setTripData(@NonNull final TripData tripData) {
