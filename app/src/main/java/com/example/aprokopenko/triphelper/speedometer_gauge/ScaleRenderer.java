@@ -115,13 +115,13 @@ public class ScaleRenderer extends View {
     }
   }
 
-  private Paint getLabels(@NonNull final Paint paint, final int labelColor, final float labelSize) {
+  private static Paint getLabels(@NonNull final Paint paint, final int labelColor, final float labelSize) {
     paint.setColor(labelColor);
     paint.setTextSize(labelSize * TripHelperGauge.DENSITY);
     return paint;
   }
 
-  private Paint getTicks(@NonNull final Paint paint, final int majorTickColor, @NonNull final GaugeScale gaugeScale) {
+  private static Paint getTicks(@NonNull final Paint paint, final int majorTickColor, @NonNull final GaugeScale gaugeScale) {
     paint.setColor(majorTickColor);
     paint.setStrokeWidth((float) gaugeScale.getMajorTickSettings().getWidth());
     return paint;
@@ -591,7 +591,7 @@ public class ScaleRenderer extends View {
       rangePaint.setAntiAlias(true);
       rangePaint.setStyle(Paint.Style.STROKE);
 
-      for (Iterator i$ = gaugeRanges.iterator(); i$.hasNext(); canvas
+      for (final Iterator i$ = gaugeRanges.iterator(); i$.hasNext(); canvas
               .drawArc(rectF, (float) startArc, (float) endtArc, false, rangePaint)) {
         float rimWidth = (float) gauge.getmRimWidth();
         final GaugeRange gaugeRange = (GaugeRange) i$.next();
@@ -733,7 +733,7 @@ public class ScaleRenderer extends View {
     }
   }
 
-  private double getRangeAngle(double rangeValue, @NonNull final GaugeScale gaugeScale) {
+  private static double getRangeAngle(double rangeValue, @NonNull final GaugeScale gaugeScale) {
     final double startVal = gaugeScale.getStartValue();
     if (rangeValue < startVal) {
       rangeValue = startVal;
@@ -864,8 +864,8 @@ public class ScaleRenderer extends View {
     return rectF;
   }
 
-  @NonNull private RectF getRectF(final float rimSize, final float modif_centerXplusDivideBy2minusRimSize, final float modif_centerYplus0dot75minusRimSize,
-                                  final float modif_centerYminusDivideBy4plusRimSize) {
+  @NonNull private static RectF getRectF(final float rimSize, final float modif_centerXplusDivideBy2minusRimSize, final float modif_centerYplus0dot75minusRimSize,
+                                         final float modif_centerYminusDivideBy4plusRimSize) {
     return new RectF(rimSize, modif_centerYminusDivideBy4plusRimSize, modif_centerXplusDivideBy2minusRimSize,
             modif_centerYplus0dot75minusRimSize);
   }

@@ -78,7 +78,7 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     locationList = new ArrayList<>();
-    getGoogleMap();
+    getGoogleMap(this);
     if (context == null) {
       context = getActivity();
     }
@@ -230,8 +230,8 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
     }
   }
 
-  private void getGoogleMap() {
-    final SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapFragment);
-    mapFragment.getMapAsync(this);
+  private static void getGoogleMap(@NonNull final MapFragment fragment) {
+    final SupportMapFragment mapFragment = (SupportMapFragment) fragment.getChildFragmentManager().findFragmentById(R.id.mapFragment);
+    mapFragment.getMapAsync(fragment);
   }
 }

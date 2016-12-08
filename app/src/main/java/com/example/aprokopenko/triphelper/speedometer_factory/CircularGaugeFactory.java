@@ -31,13 +31,13 @@ public class CircularGaugeFactory {
    * @param isLandscape {@link Boolean} true - if gauge for Landscape, false - for portrait
    * @return configured for portrait layout {@link TripHelperGauge}
    */
-  public TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title, final boolean isLandscape) {
+  public static TripHelperGauge getConfiguredSpeedometerGauge(@NonNull final Context context, @Nullable final String title, final boolean isLandscape) {
     final TripHelperGauge speedometer = new TripHelperGauge(context);
     configureSpeedometer(speedometer, title, isLandscape);
     return speedometer;
   }
 
-  private void configureSpeedometer(@NonNull final TripHelperGauge gauge, @Nullable final String title, final boolean isLandscape) {
+  private static void configureSpeedometer(@NonNull final TripHelperGauge gauge, @Nullable final String title, final boolean isLandscape) {
     final GaugeScale gaugeScale = new GaugeScale();
     setHeader(gauge, title, !isLandscape);
     if (isLandscape) {
@@ -50,7 +50,7 @@ public class CircularGaugeFactory {
     }
   }
 
-  private void setHeader(@NonNull final TripHelperGauge gauge, @Nullable final String title, @NonNull final Boolean isLandscape) {
+  private static void setHeader(@NonNull final TripHelperGauge gauge, @Nullable final String title, @NonNull final Boolean isLandscape) {
     final ArrayList<Header> gaugeHeaders = new ArrayList<>();
     final Header circularGaugeHeader = new Header();
     if (title == null) {
@@ -70,7 +70,7 @@ public class CircularGaugeFactory {
     gauge.setHeaders(gaugeHeaders);
   }
 
-  private ArrayList<GaugeRange> getRanges(@NonNull final GaugeScale scale) {
+  private static ArrayList<GaugeRange> getRanges(@NonNull final GaugeScale scale) {
     final ArrayList<GaugeRange> gaugeRangeArrayList = new ArrayList<>();
     final GaugeRange gaugeRangeFirst = new GaugeRange();
     final GaugeRange gaugeRangeSecond = new GaugeRange();
@@ -101,7 +101,7 @@ public class CircularGaugeFactory {
     return gaugeRangeArrayList;
   }
 
-  private ArrayList<GaugePointer> getPointer() {
+  private static ArrayList<GaugePointer> getPointer() {
     final ArrayList<GaugePointer> gaugePointerArrayList = new ArrayList<>();
     final NeedlePointer needlePointer = new NeedlePointer();
 
@@ -116,7 +116,7 @@ public class CircularGaugeFactory {
     return gaugePointerArrayList;
   }
 
-  private ArrayList<TickSettings> getTicks() {
+  private static ArrayList<TickSettings> getTicks() {
     final ArrayList<TickSettings> tickSettingArrayList = new ArrayList<>();
     final TickSettings majorTicksSettings = new TickSettings();
     final TickSettings minorTicksSettings = new TickSettings();
@@ -136,8 +136,8 @@ public class CircularGaugeFactory {
     return tickSettingArrayList;
   }
 
-  private void setScale(@NonNull final TripHelperGauge gauge, @NonNull final GaugeScale scale, @NonNull final ArrayList<GaugeRange> ranges, @NonNull final ArrayList<GaugePointer> pointers,
-                        @NonNull final ArrayList<TickSettings> tickSettings, final int startAngle, final int SweepAngle, final int interval, final int labelTextSize) {
+  private static void setScale(@NonNull final TripHelperGauge gauge, @NonNull final GaugeScale scale, @NonNull final ArrayList<GaugeRange> ranges, @NonNull final ArrayList<GaugePointer> pointers,
+                               @NonNull final ArrayList<TickSettings> tickSettings, final int startAngle, final int SweepAngle, final int interval, final int labelTextSize) {
     final ArrayList<GaugeScale> gaugeScales = new ArrayList<>();
 
     scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);
@@ -157,7 +157,7 @@ public class CircularGaugeFactory {
     setupTickSettings(tickSettings, scale);
   }
 
-  private void setupTickSettings(@NonNull final ArrayList<TickSettings> tickSettings, @NonNull final GaugeScale scale) {
+  private static void setupTickSettings(@NonNull final ArrayList<TickSettings> tickSettings, @NonNull final GaugeScale scale) {
     scale.setMajorTickSettings(tickSettings.get(0));
     scale.setMinorTickSettings(tickSettings.get(1));
     scale.setMinorTicksPerInterval(GaugeFactorySettings.minorTicksPerInterval);

@@ -35,8 +35,8 @@ public class MapUtilMethods {
    */
   public static ArrayList<Route> unwrapRoute(@NonNull final ArrayList<String> latitudes, @NonNull final ArrayList<String> longitudes, @NonNull final ArrayList<String> speedArr) {
     final ArrayList<Route> routes = new ArrayList<>();
-
-    for (int i = 0; i < latitudes.size(); i++) {
+    final int routeSize = latitudes.size();
+    for (int i = 0; i < routeSize; i++) {
       routes.add(new Route(new LatLng(Float.valueOf(latitudes.get(i)), Float.valueOf(longitudes.get(i))), Float.valueOf(speedArr.get(i))));
     }
     return routes;
@@ -67,7 +67,8 @@ public class MapUtilMethods {
    */
   public static boolean drawPathFromData(@Nullable final ArrayList<Route> routes, @NonNull final GoogleMap googleMap) {
     if (routes != null) {
-      for (int i = 0; i < routes.size(); i++) {
+      final int routeSize = routes.size();
+      for (int i = 0; i < routeSize; i++) {
         if (DEBUG) {
           Log.d(LOG_TAG, "drawPathFromDataItem: +" + routes.get(i).getSpeed());
         }

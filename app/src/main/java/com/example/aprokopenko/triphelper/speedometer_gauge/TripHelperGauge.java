@@ -168,7 +168,7 @@ public class TripHelperGauge extends FrameLayout {
     mGaugeHeader.setmGauge(this);
     this.addView(mGaugeHeader);
 
-    for (ScaleRenderer scaleRenderer : mScaleRenders) {
+    for (final ScaleRenderer scaleRenderer : mScaleRenders) {
       removeScaleRen.add(scaleRenderer);
     }
 

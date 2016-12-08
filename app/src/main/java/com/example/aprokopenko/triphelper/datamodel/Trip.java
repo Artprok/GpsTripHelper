@@ -135,7 +135,7 @@ public class Trip implements Parcelable {
    * @param is {@link java.io.InputStream}
    * @return {@link Trip}
    */
-  public Trip readTrip(@NonNull final ObjectInputStream is) {
+  public static Trip readTrip(@NonNull final ObjectInputStream is) {
     final ArrayList<Route> route = new ArrayList<>();
     final int routeSize;
     Trip trip = new Trip();
@@ -210,7 +210,7 @@ public class Trip implements Parcelable {
   public void writeTrip(@NonNull final ObjectOutputStream os) {
     try {
       os.writeInt(route.size());
-      for (Route routePoint : route) {
+      for (final Route routePoint : route) {
         os.writeDouble(routePoint.getLatitude());
         os.writeDouble(routePoint.getLongitude());
         writeToStreamWithNANcheck(os, routePoint.getSpeed());
@@ -230,7 +230,7 @@ public class Trip implements Parcelable {
     }
   }
 
-  private void writeToStreamWithNANcheck(@NonNull final ObjectOutputStream os, @Nullable final Float valueToWrite) throws IOException {
+  private static void writeToStreamWithNANcheck(@NonNull final ObjectOutputStream os, @Nullable final Float valueToWrite) throws IOException {
     if (valueToWrite == null || valueToWrite.isNaN()) {
       os.writeFloat(0f);
     } else {
@@ -238,7 +238,7 @@ public class Trip implements Parcelable {
     }
   }
 
-  private Trip createTripFromData(@NonNull final String tripDate, @NonNull final ArrayList<Route> routes, final float distanceTravelled, final float avgSpeed,
+  private static Trip createTripFromData(@NonNull final String tripDate, @NonNull final ArrayList<Route> routes, final float distanceTravelled, final float avgSpeed,
                                   final float timeSpent, final float timeSpentInMotion, final float avgFuelConsumption, final float fuelSpent, final int tripID,
                                   final float moneyOnFuelSpent, final float maxSpeed) {
     final Trip trip = new Trip();

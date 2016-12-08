@@ -48,9 +48,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
   }
 
   @Override public void onConnected(@Nullable final Bundle bundle) {
-    final NotificationCompat.Builder builder = createNotification();
-    createRestartAppIntent(builder);
-    notify(builder);
+    final NotificationCompat.Builder builder = createNotification(this);
+    createRestartAppIntent(builder, this);
+    notify(builder, this);
 
     locationUpdateRunnable = new Runnable() {
       public void run() {
@@ -94,7 +94,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     super.onStartCommand(intent, flags, startId);
     gpsHandler = new GpsHandler();
     gmsLocationListener = gpsHandler;
-    setupLocRequest();
+    locationRequest = setupLocRequest();
     googleApiClient = new GoogleApiClient.Builder(this)
             .addApi(LocationServices.API)
             .addConnectionCallbacks(this)
@@ -114,7 +114,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     if (DEBUG) {
       Log.i(LOG_TAG, "service OnDestroy");
     }
-    removeNotification();
+    removeNotification(this);
     googleApiClient.disconnect();
     gmsLocationListener = null;
     locationRequest = null;
@@ -124,39 +124,38 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     super.onDestroy();
   }
 
-  private LocationRequest setupLocRequest() {
-    locationRequest = new LocationRequest();
-    locationRequest.setInterval(ConstantValues.MIN_UPDATE_TIME);
-    locationRequest.setFastestInterval(ConstantValues.MIN_UPDATE_TIME);
-    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    return locationRequest;
+  private static LocationRequest setupLocRequest() {
+    return new LocationRequest()
+            .setInterval(ConstantValues.MIN_UPDATE_TIME)
+            .setFastestInterval(ConstantValues.MIN_UPDATE_TIME)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
   }
 
-  private void notify(@NonNull final NotificationCompat.Builder builder) {
-    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+  private static void notify(@NonNull final NotificationCompat.Builder builder, @NonNull final Context context) {
+    final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     manager.notify(FM_NOTIFICATION_ID, builder.build());
   }
 
-  private void createRestartAppIntent(@NonNull final NotificationCompat.Builder builder) {
-    final Intent intent = new Intent(this, MainActivity.class);
-    final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+  private static void createRestartAppIntent(@NonNull final NotificationCompat.Builder builder, @NonNull final Context context) {
+    final Intent intent = new Intent(context, MainActivity.class);
+    final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
     intent.setAction(Intent.ACTION_MAIN);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     builder.setContentIntent(pendingIntent);
   }
 
-  private NotificationCompat.Builder createNotification() {
-    return new NotificationCompat.Builder(this)
+  private static NotificationCompat.Builder createNotification(@NonNull final Context context) {
+    return new NotificationCompat.Builder(context)
             .setSmallIcon(R.drawable.notification_icon_bw)
             .setOngoing(true)
-            .setContentTitle(getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
-            .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.notificationContent)))
-            .setContentText(getString(R.string.notificationContent));
+            .setContentTitle(context.getString(R.string.notificationTitle)).setPriority(NotificationCompat.PRIORITY_MAX)
+            .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notificationContent)))
+            .setContentText(context.getString(R.string.notificationContent));
   }
 
-  private void removeNotification() {
-    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+  private static void removeNotification(@NonNull final Context context) {
+    final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     manager.cancel(FM_NOTIFICATION_ID);
   }
 

@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     unbinder = ButterKnife.bind(this);
     MobileAds.initialize(this, getString(R.string.admob_publisher_testid_forAct));
     Fabric.with(this, new Crashlytics());
-    fabTransitionValue = getDataForFABanimation();
+    fabTransitionValue = getDataForFABanimation(this);
 
     proceedToFragmentCreating(savedInstanceState);
   }
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
               .setMessage(getString(R.string.exit_dialog_string))
               .setPositiveButton(getString(R.string.exit_dialog_yes), new DialogInterface.OnClickListener() {
                 @Override public void onClick(@NonNull final DialogInterface dialog, final int which) {
-                  performExitFromApplication((MainFragment) fragment);
+                  performExitFromApplication((MainFragment) fragment, MainActivity.this);
                 }
               }).setNegativeButton(getString(R.string.exit_dialog_no), new DialogInterface.OnClickListener() {
         @Override public void onClick(@NonNull final DialogInterface dialogInterface, final int i) {
@@ -116,15 +117,15 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  private int getDataForFABanimation() {
-    final Display defaultDisplay = getWindowManager().getDefaultDisplay();
+  private static int getDataForFABanimation(@NonNull final Activity activity) {
+    final Display defaultDisplay = activity.getWindowManager().getDefaultDisplay();
     final Point sizePoint = new Point();
 
     defaultDisplay.getSize(sizePoint);
     return -(sizePoint.x / getDelimiterDependsOnOrientation(defaultDisplay));
   }
 
-  private int getDelimiterDependsOnOrientation(@NonNull final Display defaultDisplay) {
+  private static int getDelimiterDependsOnOrientation(@NonNull final Display defaultDisplay) {
     final int rotation = defaultDisplay.getRotation();
     if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
       return ConstantValues.WIDTH_DELIMETER_FOR_LANDSCAPE;
@@ -143,11 +144,11 @@ public class MainActivity extends AppCompatActivity {
     });
   }
 
-  private void performExitFromApplication(@NonNull final MainFragment mainFragment) {
+  private static void performExitFromApplication(@NonNull final MainFragment mainFragment, @NonNull final Activity activity) {
     //        Debug.stopMethodTracing();
     mainFragment.performExit();
     mainFragment.onDetach();
-    finish();
+    activity.finish();
     System.exit(0);
   }
 

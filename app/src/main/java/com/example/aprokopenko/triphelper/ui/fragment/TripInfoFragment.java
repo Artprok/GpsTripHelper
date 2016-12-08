@@ -129,7 +129,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     final ArrayList<Route> routes = trip.getRoutes();
 
     if (routes != null) {
-      for (Route tmpRoute : routes) {
+      for (final Route tmpRoute : routes) {
         latitudeArray.add(String.valueOf(tmpRoute.getLatitude()));
         longitudeArray.add(String.valueOf(tmpRoute.getLongitude()));
         speedArray.add(String.valueOf(tmpRoute.getSpeed()));
@@ -247,14 +247,14 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     }
   }
 
-  private float getInMotionValue() {
+  private static float getInMotionValue(final float timeSpentOnStop, @NonNull final ArrayList<String> speedValues, final float timeSpent) {
     final float percentWithoutMotion = timeSpentOnStop * 100 / speedValues.size();
     final float percentInMotion = 100 - percentWithoutMotion;
 
     return timeSpent / 100 * percentInMotion;
   }
 
-  private float getWithoutMotionValue(final float timeSpentInMotion) {
+  private static float getWithoutMotionValue(final float timeSpentInMotion, final float timeSpent) {
     return timeSpent - timeSpentInMotion;
   }
 
@@ -268,7 +268,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   private void setDataToInfoFragmentFields() {
     final Resources res = getResources();
 
-    for (String value : speedValues) {
+    for (final String value : speedValues) {
       if (Float.valueOf(value) == 0) {
         timeSpentOnStop++;
       }
@@ -278,9 +278,9 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME All+" + timeSpent);
       Log.d(LOG_TAG, "setDataToInfoFragmentFields: TIME On stop+" + CalculationUtils.getTimeInNormalFormat(timeSpentOnStop, res));
     }
-
-    tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(getWithoutMotionValue(getInMotionValue()), res));
-    tripTimeSpentInMotionView.setText(CalculationUtils.getTimeInNormalFormat(getInMotionValue(), res));
+    final float timeInMotion = getInMotionValue(timeSpentOnStop, speedValues, timeSpent);
+    tripTimeSpentOnStopView.setText(CalculationUtils.getTimeInNormalFormat(getWithoutMotionValue(timeInMotion, timeSpent), res));
+    tripTimeSpentInMotionView.setText(CalculationUtils.getTimeInNormalFormat(timeInMotion, res));
     tripTimeSpentView.setText(CalculationUtils.getTimeInNormalFormat(timeSpent, res));
     tripAvgFuelConsumptionView.setText(UtilMethods.formatFloatDecimalFormat(averageFuelConsumption) + " " + getString(R.string.fuel_cons_prefix));
     tripMoneySpentView.setText(UtilMethods.formatFloatDecimalFormat(this.moneySpent) + " " + currency_prefix);

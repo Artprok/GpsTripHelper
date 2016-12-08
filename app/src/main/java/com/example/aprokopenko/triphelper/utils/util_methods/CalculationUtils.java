@@ -94,7 +94,7 @@ public class CalculationUtils {
   public static float calcAvgSpeedForOneTrip(@Nullable final ArrayList<Float> avgSpeedArrayList) {
     Float avgSpeed = 0f;
     if (avgSpeedArrayList != null) {
-      for (Float tmpSpeed : avgSpeedArrayList) {
+      for (final Float tmpSpeed : avgSpeedArrayList) {
         avgSpeed = avgSpeed + tmpSpeed;
       }
       avgSpeed = avgSpeed / avgSpeedArrayList.size();

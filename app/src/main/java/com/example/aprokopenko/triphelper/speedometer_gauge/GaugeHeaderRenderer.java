@@ -45,7 +45,7 @@ public class GaugeHeaderRenderer extends View {
       final double mCentreY = mGauge.getmCentreY();
       headerArrayList = mGauge.getHeaders();
 
-      for (Header header : headerArrayList) {
+      for (final Header header : headerArrayList) {
         final double headerTextWidth = mPaint.measureText(header.getText());
         final double textSize = header.getTextSize();
         header.setGauge(mGauge);
