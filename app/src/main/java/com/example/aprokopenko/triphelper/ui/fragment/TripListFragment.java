@@ -113,11 +113,10 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
     if (!TextUtils.isEmpty(curUnit)) {
       curUnit = getString(R.string.grn);
     }
-    final String moneyOnFuelSpent = UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit;
 
     distanceTravelledView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getDistanceTravelled()) + " " + getString(R.string.distance_prefix));
     avgFuelConsumptionView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getAvgFuelConsumption()) + " " + getString(R.string.fuel_cons_prefix));
-    moneyOnFuelView.setText(moneyOnFuelSpent);
+    moneyOnFuelView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getMoneyOnFuelSpent()) + " " + curUnit);
     fuelSpentView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getFuelSpent()) + " " + getString(R.string.fuel_prefix));
     timeSpentView.setText(CalculationUtils.getTimeInNormalFormat(tripData.getTimeSpentOnTrips(), getResources()));
     avgSpeedView.setText(UtilMethods.formatFloatDecimalFormat(tripData.getAvgSpeed()) + " " + getString(R.string.speed_prefix));

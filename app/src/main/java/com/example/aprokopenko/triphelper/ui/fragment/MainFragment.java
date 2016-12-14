@@ -205,7 +205,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (DEBUG) {
       Log.i(LOG_TAG, "onDetach: called");
     }
-
     super.onDetach();
   }
 
@@ -355,7 +354,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             AdRequest.Builder()
             .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
             .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
-            .setGender(AdRequest.GENDER_MALE).setLocation(getLocationForAdvert()).build();
+            .setGender(AdRequest.GENDER_MALE)
+            .setLocation(getLocationForAdvert())
+            .build();
   }
 
   private boolean advertInstalled() {
@@ -481,7 +482,6 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     if (locationManager == null) {
       locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
-
     return locationManager;
   }
 
@@ -599,7 +599,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private static void setFirstStartToFalse(@NonNull final SharedPreferences preferences) {
     final SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean(FIRST_START, false).apply();
+    editor
+            .putBoolean(FIRST_START, false)
+            .apply();
   }
 
   private void getInternalSettings() {
@@ -784,9 +786,9 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       @Override public void run() {
         speedometerContainer.setLayoutParams(getLayoutParams(isPortrait, speedometer));
         speedometerContainer.setVisibility(View.VISIBLE);
+        speedometerContainer.invalidate();
       }
     });
-    speedometerContainer.invalidate();
   }
 
   private static LinearLayoutCompat.LayoutParams getLayoutParams(final boolean isPortrait, @NonNull final TripHelperGauge speedometer) {

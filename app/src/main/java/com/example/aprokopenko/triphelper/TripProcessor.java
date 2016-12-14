@@ -795,7 +795,7 @@ public class TripProcessor implements Parcelable {
         writeToStreamWithNANcheck(tripData.getMaxSpeed(), os);
         os.close();
         fos.close();
-      } catch (IOException e) {
+      } catch (@NonNull final IOException e) {
         e.printStackTrace();
       }
 

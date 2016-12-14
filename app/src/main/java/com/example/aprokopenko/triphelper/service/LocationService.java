@@ -138,11 +138,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
   private static void createRestartAppIntent(@NonNull final NotificationCompat.Builder builder, @NonNull final Context context) {
     final Intent intent = new Intent(context, MainActivity.class);
-    final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
     intent.setAction(Intent.ACTION_MAIN);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
-    builder.setContentIntent(pendingIntent);
+    builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
   }
 
   private static NotificationCompat.Builder createNotification(@NonNull final Context context) {

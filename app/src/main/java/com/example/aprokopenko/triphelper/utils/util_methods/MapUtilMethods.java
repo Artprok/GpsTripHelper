@@ -76,7 +76,9 @@ public class MapUtilMethods {
       }
       MapUtilMethods.animateCamera(null, MapUtilMethods.getPositionForCamera(routes), googleMap);
       return true;
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
 

@@ -175,11 +175,9 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   }
 
   private void locationTracking(@NonNull final GoogleMap googleMap, @NonNull final Location location, @NonNull final Float speed) {
-    final LatLng tempLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
     drawPathFromData();
-    previousLocation = tempLocation;
-    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, getStartingPosition(location), tempLocation, speed);
+    previousLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    MapUtilMethods.addPolylineDependsOnSpeed(googleMap, getStartingPosition(location), previousLocation, speed);
   }
 
   private void setupSubscribers() {

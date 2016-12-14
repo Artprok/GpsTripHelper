@@ -229,14 +229,14 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   @OnClick(R.id.btn_mapTurnActive)
   public void onOpenMapButtonClick(@NonNull final View view) {
     if (drawMap) {
-      if (getActivity().getResources().getConfiguration().orientation == 1) {                    //animations for portrait orientation
+      if (getActivity().getResources().getConfiguration().orientation == 1) {//animations for portrait orientation
         if (mapOpened) {
           animateMapClosingForPortrait(view);
         } else {
           animateMapOpeningForPortrait(view);
         }
       } else {
-        if (mapOpened) {                         //animations for landscape orientation
+        if (mapOpened) {//animations for landscape orientation
           animateMapClosingForLandscape(view);
         } else {
           animateMapOpeningForLandscape(view);

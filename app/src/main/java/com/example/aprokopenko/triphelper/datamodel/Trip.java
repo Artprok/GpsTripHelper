@@ -138,7 +138,6 @@ public class Trip implements Parcelable {
   public static Trip readTrip(@NonNull final ObjectInputStream is) {
     final ArrayList<Route> route = new ArrayList<>();
     final int routeSize;
-    Trip trip = new Trip();
     try {
       routeSize = is.readInt();
       for (int i = 0; i < routeSize; i++) {
@@ -159,11 +158,11 @@ public class Trip implements Parcelable {
       final float fuelConsumption = is.readFloat();
       final float maxSpeed = is.readFloat();
 
-      trip = createTripFromData(date, route, distanceTravelled, avgSpeed, timeSpent, timeSpentInMotion, fuelConsumption, fuelSpent, tripID, moneySpent, maxSpeed);
+      return createTripFromData(date, route, distanceTravelled, avgSpeed, timeSpent, timeSpentInMotion, fuelConsumption, fuelSpent, tripID, moneySpent, maxSpeed);
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
-    return trip;
+    return new Trip();
   }
 
   public int getTripID() {
