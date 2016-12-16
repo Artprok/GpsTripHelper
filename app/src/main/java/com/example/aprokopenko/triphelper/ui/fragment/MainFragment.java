@@ -142,14 +142,15 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       advertView.setVisibility(View.GONE);
     }
 
-    state = getSavedStateInstanceIfPossible(savedInstanceState);
     getContextIfNull();
-    getInternalSettings();
     getStateFromPrefs();
-
     setupSpeedometerView();
-    setupTripProcessor();
     visualizeSpeedometer();
+    visualizeSpeedometer();
+    getInternalSettings();
+
+    state = getSavedStateInstanceIfPossible(savedInstanceState);
+    setupTripProcessor();
   }
 
   @Override public void onAttach(@NonNull final Context context) {
@@ -777,16 +778,16 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private void visualizeSpeedometer() {
-    setSpeedometerLayoutParams(!landscapeOrientation());
-    speedometerContainer.setVisibility(View.VISIBLE);
+    setSpeedometerLayoutParams();
   }
 
-  private void setSpeedometerLayoutParams(final boolean isPortrait) {
-    fuel_left_layout.post(new Runnable() {
+  private void setSpeedometerLayoutParams() {
+    speedometerContainer.post(new Runnable() {
       @Override public void run() {
-        speedometerContainer.setLayoutParams(getLayoutParams(isPortrait, speedometer));
-        speedometerContainer.setVisibility(View.VISIBLE);
+        speedometerContainer.setLayoutParams(getLayoutParams(!landscapeOrientation(), speedometer));
         speedometerContainer.invalidate();
+        speedometerContainer.postInvalidate();
+        speedometerContainer.setVisibility(View.VISIBLE);
       }
     });
   }
@@ -878,9 +879,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   }
 
   private static void updateSpeedometerTextField(final float speed, @NonNull final TextView speedometerTextView) {
-    final String formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
-    UtilMethods.animateTextView(Integer.valueOf(speedometerTextView.getText().toString()), Integer.valueOf(formattedSpeed), speedometerTextView);
-    speedometerTextView.setText(formattedSpeed);
+    if (speedometerTextView != null) {
+      final String formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
+      UtilMethods.animateTextView(Integer.valueOf(speedometerTextView.getText().toString()), Integer.valueOf(formattedSpeed), speedometerTextView);
+      speedometerTextView.setText(formattedSpeed);
+    }
   }
 
   private class ReadInternalFile extends AsyncTask<String, Void, Boolean> {

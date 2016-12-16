@@ -57,9 +57,9 @@
     <com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge
         android:id="@+id/speedometerContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_SpeedometerView"

@@ -24,7 +24,6 @@ public class ConstantValues {
   public static final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
   public static final String MAIN_FRAGMENT_TAG = "MAIN_FRAGMENT";
   public static final String MAP_FRAGMENT_TAG = "MAP_FRAGMENT";
-  public static final String DATA_HOLDER_TAG = "DATA_HOLDER";
 
   public static final float SPEEDOMETER_HEIGHT = 1f;
   public static final float SPEEDOMETER_WIDTH = 1f;

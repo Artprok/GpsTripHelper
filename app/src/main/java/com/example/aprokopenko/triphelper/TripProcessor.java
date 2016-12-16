@@ -189,7 +189,7 @@ public class TripProcessor implements Parcelable {
 
     updateAvgAndMaxSpeedInTrip(avgArrayList);
     endTrip();
-    setMetricFieldsToTripData(fuelPrice, getTripData(), getCurrentTrip());
+    setMetricFieldsToTripData(fuelPrice, tripData, getCurrentTrip());
     writeDataToFile();
     currentTripId = ConstantValues.START_VALUE;
     avgArrayList.clear();
@@ -272,6 +272,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private void addTripToOverallTripsData(@NonNull final Trip trip) {
+    Log.d(LOG_TAG, "NEED: tr" + trip.getTripID() + "spd " + trip.getAvgSpeed() + tripData.toString());
     tripData.addTrip(trip);
   }
 
@@ -584,7 +585,7 @@ public class TripProcessor implements Parcelable {
     trip.writeTrip(os);
   }
 
-  private static void setMetricFieldsToTripData(final float fuelPriceFromSettings, @NonNull final TripData tripData, @NonNull final Trip currentTrip) {
+  private static void setMetricFieldsToTripData(final float fuelPriceFromSettings, @NonNull TripData tripData, @NonNull final Trip currentTrip) {
     final ArrayList<Trip> allTrips = tripData.getTrips();
     final float startVal = ConstantValues.START_VALUE;
     Float fuelSpent = startVal;
@@ -627,12 +628,12 @@ public class TripProcessor implements Parcelable {
 
   private void updateAvgAndMaxSpeedInTrip(@NonNull final ArrayList<Float> avgArrayList) {
     final Trip trip = getCurrentTripFromTripData(tripData, currentTripId);
-
-    trip.setAvgSpeed(CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList));
+    averageSpeed = CalculationUtils.calcAvgSpeedForOneTrip(avgArrayList);
+    trip.setAvgSpeed(averageSpeed);
     trip.setMaxSpeed(maxSpeedVal);
   }
 
-  private static Trip getCurrentTripFromTripData(@NonNull final TripData tripData, final int currentTripId) {
+  private Trip getCurrentTripFromTripData(@NonNull final TripData tripData, final int currentTripId) {
     return tripData.getTrip(currentTripId);
   }
 
@@ -865,7 +866,7 @@ public class TripProcessor implements Parcelable {
 
           is.close();
           fis.close();
-        } catch (IOException e) {
+        } catch (@NonNull final IOException e) {
           e.printStackTrace();
           tripData = new TripData();
         }
