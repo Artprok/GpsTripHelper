@@ -18,7 +18,7 @@ import com.example.aprokopenko.triphelper.adapter.TripListRecyclerViewAdapter;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.listeners.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -36,7 +36,6 @@ import butterknife.Unbinder;
  */
 @Singleton
 public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener {
-  public static final String CURRENCY_UNIT = "currencyUnit";
   @BindView(R.id.fragment_item_list_avgFuelConsListFrag)
   TextView avgFuelConsumptionView;
   @BindView(R.id.fragment_item_list_distanceTravelledListFrag)
@@ -56,12 +55,13 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
   @BindView(R.id.fragment_item_list_progressBar)
   ProgressBar progressBar;
 
-  private static final String LOG_TAG = "TripListFragment";
+  private static final String CURRENCY_UNIT = "currencyUnit";
   private static final String TRIP_DATA = "TripData";
+  private static final String LOG_TAG = "TripListFragment";
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
-  private TripData tripData;
   private ArrayList<Trip> trips;
+  private TripData tripData;
   private Unbinder unbinder;
   private Bundle state;
 

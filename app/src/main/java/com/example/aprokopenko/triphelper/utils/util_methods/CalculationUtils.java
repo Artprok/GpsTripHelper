@@ -16,7 +16,7 @@ import java.util.Calendar;
  * Class with different util math methods.
  */
 public class CalculationUtils {
-  private static float measurementUnitMultiplier = ConstantValues.KMH_MULTIPLIER;   //default val for KM/H
+  private static float measurementUnitMultiplier;   //default val for KM/H
 
   /**
    * Method for getting speed in appropriate measurement units (kmh,mph,knots).

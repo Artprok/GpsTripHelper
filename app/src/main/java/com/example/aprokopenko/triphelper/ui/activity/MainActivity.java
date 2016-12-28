@@ -10,10 +10,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.BuildConfig;
@@ -38,9 +38,12 @@ import io.fabric.sdk.android.Fabric;
 public class MainActivity extends AppCompatActivity {
   @BindView(R.id.btn_fab)
   FloatingActionButton fab;
+  @BindView(R.id.spashScreen)
+  ImageView splashScreen;
 
   private static final String LOG_TAG = "MainActivity";
   private static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final int SPLASH_DELAY = 2300;
 
   private int fabTransitionValue;
   private Unbinder unbinder;
@@ -92,10 +95,14 @@ public class MainActivity extends AppCompatActivity {
       final MainFragment mainFragment = MainFragment.newInstance();
       assert fab != null;
       setFabToMap(mainFragment);
-      UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-
-      if (DEBUG) {
-        Log.i(LOG_TAG, "onCreate: new fragment");
+      if (splashScreen != null) {
+        splashScreen.setVisibility(View.VISIBLE);
+        splashScreen.postDelayed(new Runnable() {
+          @Override public void run() {
+            splashScreen.setVisibility(View.GONE);
+            UtilMethods.replaceFragment(mainFragment, ConstantValues.MAIN_FRAGMENT_TAG, MainActivity.this);
+          }
+        }, SPLASH_DELAY);
       }
     } else {
       final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
@@ -103,10 +110,6 @@ public class MainActivity extends AppCompatActivity {
         assert fab != null;
         setFabToMap((MainFragment) fragment);
         UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-
-        if (DEBUG) {
-          Log.i(LOG_TAG, "onCreate: old fragment");
-        }
       }
       if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
         setFabToSpeedometer((MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG));

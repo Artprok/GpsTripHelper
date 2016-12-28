@@ -1,5 +1,6 @@
 package com.example.aprokopenko.triphelper.ui.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,9 +14,9 @@ import android.view.ViewGroup;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.datamodel.LocationEmittableItem;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.MapUtilMethods;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +43,7 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   private static final String GPS_HANDLER = "gpsHandler";
 
   private LatLng previousLocationFromData;
-  private Subscriber<Location> locationSubscriber;
+  private Subscriber<LocationEmittableItem> locationSubscriber;
   private LatLng previousLocation;
   private ArrayList<Location> locationList;
   private GoogleMap googleMap;
@@ -71,17 +72,21 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
     }
   }
 
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    locationList = new ArrayList<>();
+    if (context == null) {
+      context = getActivity();
+    }
+  }
+
   @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_map, container, false);
   }
 
   @Override public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    locationList = new ArrayList<>();
     getGoogleMap(this);
-    if (context == null) {
-      context = getActivity();
-    }
     fragmentVisible = true;
   }
 
@@ -185,29 +190,32 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
   }
 
   private void setupLocationSubscriber() {
-    locationSubscriber = new Subscriber<Location>() {
+    locationSubscriber = new Subscriber<LocationEmittableItem>() {
       @Override public void onCompleted() {
       }
 
       @Override public void onError(@NonNull final Throwable e) {
       }
 
-      @Override public void onNext(@NonNull final Location location) {
-        locationList.add(location);
+      @Override public void onNext(@NonNull final LocationEmittableItem locationEmittableItem) {
+        locationList.add(locationEmittableItem.getLocation());
         if (fragmentVisible) {
           final float speed;
           if (BuildConfig.DEBUG) {
             speed = UtilMethods.generateRandomSpeed();
           } else {
-            speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
+            speed = locationEmittableItem.getSpeed();
           }
 
-          getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-              locationTracking(googleMap, location, speed);
-              MapUtilMethods.animateCamera(location, null, googleMap);
-            }
-          });
+          final Activity activity = getActivity();
+          if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+              @Override public void run() {
+                locationTracking(googleMap, locationEmittableItem.getLocation(), speed);
+                MapUtilMethods.animateCamera(locationEmittableItem.getLocation(), null, googleMap);
+              }
+            });
+          }
         }
       }
     };

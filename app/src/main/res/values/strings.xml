@@ -199,7 +199,7 @@
     <string name="rub_label">&#160;Rub</string>
     <string name="usd_label">&#160;Dollar</string>
     <string name="grn_label">&#160;Uah</string>
-    <string name="paidVersion_code" translatable="false">forOleg_</string>
+    <string name="paidVersion_code" translatable="false">PaidVersionCode00</string>
     <string name="PREFERENCE_KEY_ADVERT_INSTALLATION" translatable="false">advertInstalled</string>
     <string name="PREFERENCES_TAG" translatable="false">tripPreferences</string>
     <string name="speedometer_font" translatable="false">fonts/android_7.ttf</string>

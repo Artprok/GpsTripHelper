@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
-import com.example.aprokopenko.triphelper.listener.ListFragmentInteractionListener;
+import com.example.aprokopenko.triphelper.listeners.ListFragmentInteractionListener;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
   @Override public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
     final Trip curTrip = tripList.get(position);
     holder.idView.setText(String.valueOf(curTrip.getTripID()));
-    holder.contentView.setText(curTrip.getTripDate());
+    holder.tripDate.setText(curTrip.getTripDate());
     holder.trip = curTrip;
     holder.mView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(@NonNull final View v) {
@@ -56,8 +56,8 @@ public class TripListRecyclerViewAdapter extends RecyclerView.Adapter<TripListRe
   class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.text_id)
     TextView idView;
-    @BindView(R.id.text_content)
-    TextView contentView;
+    @BindView(R.id.trip_date)
+    TextView tripDate;
 
     private final View mView;
     private Trip trip;

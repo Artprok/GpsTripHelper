@@ -1,4 +1,5 @@
 <android.support.v7.widget.LinearLayoutCompat
+    android:id="@+id/fragment_main_layout"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -57,9 +58,9 @@
     <com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge
         android:id="@+id/speedometerContainer"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_height="wrap_content"/>
+        android:layout_marginRight="5dp"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text_SpeedometerView"

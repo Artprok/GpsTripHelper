@@ -94,6 +94,13 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   private static final String MAX_SPEED = "MaxSpeed";
   private static final String TRIP_ID = "TripId";
 
+  private ArrayList<String> speedValues;
+  private ArrayList<Route> routes;
+  private Unbinder unbinder;
+  private String currency_prefix;
+  private String tripDate;
+  private boolean mapOpened;
+  private boolean drawMap;
   private float averageFuelConsumption;
   private float timeSpentOnStop;
   private float distTravelled;
@@ -102,25 +109,12 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
   private float timeSpent;
   private float avgSpeed;
   private float maxSpeed;
-  private String tripDate;
   private int tripId;
-  private boolean drawMap;
-  private Unbinder unbinder;
-  private String currency_prefix;
-
-  private ArrayList<String> speedValues;
-  private ArrayList<Route> routes;
-
-  private boolean mapOpened;
-
 
   public TripInfoFragment() {
   }
 
   public static TripInfoFragment newInstance(@NonNull final Trip trip) {
-    if (DEBUG) {
-      Log.d(LOG_TAG, "newInstance: CALLED");
-    }
     final TripInfoFragment fragment = new TripInfoFragment();
     final Bundle args = new Bundle();
     final ArrayList<String> latitudeArray = new ArrayList<>();

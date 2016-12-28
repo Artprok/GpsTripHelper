@@ -1,4 +1,5 @@
 <android.support.v7.widget.LinearLayoutCompat
+    android:id="@+id/fragment_main_layout"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

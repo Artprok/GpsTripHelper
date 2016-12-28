@@ -159,7 +159,7 @@ public class Trip implements Parcelable {
       final float maxSpeed = is.readFloat();
 
       return createTripFromData(date, route, distanceTravelled, avgSpeed, timeSpent, timeSpentInMotion, fuelConsumption, fuelSpent, tripID, moneySpent, maxSpeed);
-    } catch (IOException | ClassNotFoundException e) {
+    } catch (@NonNull final IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
     return new Trip();
@@ -212,24 +212,24 @@ public class Trip implements Parcelable {
       for (final Route routePoint : route) {
         os.writeDouble(routePoint.getLatitude());
         os.writeDouble(routePoint.getLongitude());
-        writeToStreamWithNANcheck(os, routePoint.getSpeed());
+        writeFloatToStreamWithNANcheck(os, routePoint.getSpeed());
       }
-      writeToStreamWithNANcheck(os, getTimeSpentInMotion());
-      writeToStreamWithNANcheck(os, getDistanceTravelled());
-      writeToStreamWithNANcheck(os, getFuelSpent());
-      writeToStreamWithNANcheck(os, getTimeSpentForTrip());
+      writeFloatToStreamWithNANcheck(os, getTimeSpentInMotion());
+      writeFloatToStreamWithNANcheck(os, getDistanceTravelled());
+      writeFloatToStreamWithNANcheck(os, getFuelSpent());
+      writeFloatToStreamWithNANcheck(os, getTimeSpentForTrip());
       os.writeInt(tripID);
       os.writeObject(tripDate);
-      writeToStreamWithNANcheck(os, getAvgSpeed());
-      writeToStreamWithNANcheck(os, getMoneyOnFuelSpent());
-      writeToStreamWithNANcheck(os, getAvgFuelConsumption());
-      writeToStreamWithNANcheck(os, getMaxSpeed());
-    } catch (IOException | NullPointerException e) {
+      writeFloatToStreamWithNANcheck(os, getAvgSpeed());
+      writeFloatToStreamWithNANcheck(os, getMoneyOnFuelSpent());
+      writeFloatToStreamWithNANcheck(os, getAvgFuelConsumption());
+      writeFloatToStreamWithNANcheck(os, getMaxSpeed());
+    } catch (@NonNull final IOException | NullPointerException e) {
       e.printStackTrace();
     }
   }
 
-  private static void writeToStreamWithNANcheck(@NonNull final ObjectOutputStream os, @Nullable final Float valueToWrite) throws IOException {
+  private static void writeFloatToStreamWithNANcheck(@NonNull final ObjectOutputStream os, @Nullable final Float valueToWrite) throws IOException {
     if (valueToWrite == null || valueToWrite.isNaN()) {
       os.writeFloat(0f);
     } else {
@@ -238,8 +238,8 @@ public class Trip implements Parcelable {
   }
 
   private static Trip createTripFromData(@NonNull final String tripDate, @NonNull final ArrayList<Route> routes, final float distanceTravelled, final float avgSpeed,
-                                  final float timeSpent, final float timeSpentInMotion, final float avgFuelConsumption, final float fuelSpent, final int tripID,
-                                  final float moneyOnFuelSpent, final float maxSpeed) {
+                                         final float timeSpent, final float timeSpentInMotion, final float avgFuelConsumption, final float fuelSpent, final int tripID,
+                                         final float moneyOnFuelSpent, final float maxSpeed) {
     final Trip trip = new Trip();
     trip.setTripDate(tripDate);
     trip.setDistanceTravelled(distanceTravelled);

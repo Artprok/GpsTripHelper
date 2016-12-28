@@ -6,12 +6,11 @@ import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.example.aprokopenko.triphelper.datamodel.LocationEmittableItem;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.google.android.gms.location.LocationListener;
 
 import javax.inject.Inject;
@@ -33,21 +32,13 @@ public class GpsHandler implements LocationListener, Parcelable {
   private static final String LOG_TAG = "GPSHandler";
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
+  private Observable<LocationEmittableItem> locationObservable;
+  private Observer<LocationEmittableItem> locationSubscriber;
+  private LocationEmittableItem locationEmittableItem;
   private float maxSpeed = ConstantValues.START_VALUE;
-  private Observer<Location> locationSubscriber;
-  private Observer<Float> maxSpeedSubscriber;
-  private Observer<Float> speedSubscriber;
-  private Thread locationThread;
-  private Observable<Location> locationObservable;
-  private Observable<Float> maxSpeedObservable;
-  private Observable<Float> speedObservable;
 
   public GpsHandler() {
     TripHelperApp.getApplicationComponent().injectInto(this);
-    if (DEBUG) {
-      Log.d(LOG_TAG, "GpsHandler: created,context - " + context);
-      Log.d(LOG_TAG, "GpsHandler: created,locationManger - " + locationManager);
-    }
   }
 
   private GpsHandler(@NonNull final Parcel in) {
@@ -65,10 +56,14 @@ public class GpsHandler implements LocationListener, Parcelable {
   };
 
   @Override public void onLocationChanged(@NonNull final Location location) {
-    final float speed = CalculationUtils.getSpeedInKilometerPerHour(location.getSpeed());
-    setupLocationObservable(location);
-    getMaxSpeedAndSetupObservable(speed);
-    setupSpeedObservable(speed);
+    if (locationEmittableItem == null) {
+      locationEmittableItem = new LocationEmittableItem(location);
+    } else {
+      locationEmittableItem.setLocation(location);
+      locationEmittableItem.setSpeed(location.getSpeed());
+      locationEmittableItem.setMaxSpeed(maxSpeed);
+    }
+    setupLocationObservable(locationEmittableItem);
   }
 
   @Override public int describeContents() {
@@ -84,84 +79,29 @@ public class GpsHandler implements LocationListener, Parcelable {
    *
    * @param locationSubscriber {@link Subscriber}
    */
-  public void setLocationSubscriber(@NonNull final Subscriber<Location> locationSubscriber) {
+  public void setLocationSubscriber(@NonNull final Subscriber<LocationEmittableItem> locationSubscriber) {
     this.locationSubscriber = locationSubscriber;
   }
 
-  /**
-   * Method for adding a {@link Subscriber} for listening for {@link Float} maxSpeed.
-   *
-   * @param maxSpeedSubscriber {@link Subscriber}
-   */
-  public void setMaxSpeedSubscriber(@NonNull final Subscriber<Float> maxSpeedSubscriber) {
-    this.maxSpeedSubscriber = maxSpeedSubscriber;
-  }
-
-  /**
-   * Method for adding a {@link Subscriber} for listening for {@link Float} speed.
-   *
-   * @param speedSubscriber {@link Subscriber}
-   */
-  public void setSpeedSubscriber(@NonNull final Subscriber<Float> speedSubscriber) {
-    this.speedSubscriber = speedSubscriber;
-  }
-
-  private void setupLocationObservable(@NonNull final Location location) {
+  private void setupLocationObservable(@NonNull final LocationEmittableItem locationEmittableItem) {
     if (locationObservable == null) {
-      locationObservable = Observable.create(new Observable.OnSubscribe<Location>() {
-        @Override public void call(@NonNull final Subscriber<? super Location> sub) {
-          sub.onNext(location);
+      locationObservable = Observable.create(new Observable.OnSubscribe<LocationEmittableItem>() {
+        @Override public void call(@NonNull final Subscriber<? super LocationEmittableItem> sub) {
+          sub.onNext(locationEmittableItem);
         }
-      });
-      locationObservable.subscribe(locationSubscriber);
+      })
+              .observeOn(Schedulers.immediate());
     } else {
-      locationSubscriber.onNext(location);
+      locationSubscriber.onNext(locationEmittableItem);
     }
-  }
-
-  private void setupMaxSpeedObservable(final float maxSpeed) {
-    if (maxSpeedObservable == null) {
-      maxSpeedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-        @Override public void call(@NonNull final Subscriber<? super Float> subscriber) {
-          subscriber.onNext(maxSpeed);
-        }
-      });
-      maxSpeedObservable.subscribe(maxSpeedSubscriber);
-    } else {
-      maxSpeedSubscriber.onNext(maxSpeed);
-    }
-  }
-
-  private void setupSpeedObservable(final float speed) {
-    if (speedObservable == null) {
-      speedObservable = Observable.create(new Observable.OnSubscribe<Float>() {
-        @Override public void call(@NonNull final Subscriber<? super Float> sub) {
-          sub.onNext(speed);
-        }
-      });
-      speedObservable.observeOn(Schedulers.immediate()).subscribe(speedSubscriber);
-    } else {
-      speedSubscriber.onNext(speed);
-    }
-  }
-
-  private void getMaxSpeedAndSetupObservable(final float speed) {
-    maxSpeed = CalculationUtils.findMaxSpeed(speed, maxSpeed);
-    setupMaxSpeedObservable(maxSpeed);
   }
 
   /**
    * Method for performing exit, interrupt threads and safe ending of all process.
    */
   public void performExit() {
-    if (locationThread != null) {
-      locationThread.interrupt();
-      locationThread = null;
-    }
     context = null;
     locationManager = null;
     locationSubscriber = null;
-    speedSubscriber = null;
-    maxSpeedSubscriber = null;
   }
 }

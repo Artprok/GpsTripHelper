@@ -15,11 +15,14 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
+import com.example.aprokopenko.triphelper.datamodel.LocationEmittableItem;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
-import com.example.aprokopenko.triphelper.listener.SpeedChangeListener;
+import com.example.aprokopenko.triphelper.listeners.FileEraseListener;
+import com.example.aprokopenko.triphelper.listeners.SpeedChangeListener;
+import com.example.aprokopenko.triphelper.listeners.TripStateListener;
 import com.example.aprokopenko.triphelper.service.LocationService;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
@@ -43,56 +46,46 @@ import rx.Subscriber;
 /**
  * Class in which all logic happens.
  */
-public class TripProcessor implements Parcelable {
+public class TripProcessor implements Parcelable, FileEraseListener, TripStateListener {
   @Inject Context context;
 
   private static final String LOG_TAG = "TripProcessor";
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
-  private ArrayList<Float> avgSpeedArrayList;
-  private boolean fileIsInReadMode;
-  private boolean fileIsInWriteMode;
-  private ServiceConnection serviceConnection;
-  private LocationService locationService;
-  private long tripStartTime;
-  private int currentTripId;
-  private Intent serviceIntent;
-  private float averageSpeed;
-  private boolean serviceBound;
-  private float maxSpeedVal;
+  private Subscriber<LocationEmittableItem> locationSubscriber;
+  private SpeedChangeListener speedChangeListener;
   private GpsHandler gpsHandler;
   private TripData tripData;
+  private ArrayList<Float> avgSpeedArrayList;
   private ArrayList<Route> routes;
-
+  private ServiceConnection serviceConnection;
+  private LocationService locationService;
+  private Intent serviceIntent;
+  private boolean fileIsInReadMode;
+  private boolean fileIsInWriteMode;
+  private boolean serviceBound;
+  private float averageSpeed;
+  private float maxSpeedVal;
   private float fuelConsFromSettings;
-  private int fuelCapacity;
   private float fuelPrice;
-
-  private Subscriber<Location> locationSubscriber;
-  private Subscriber<Float> maxSpeedSubscriber;
-  private Subscriber<Float> speedSubscriber;
-
-  private SpeedChangeListener speedChangeListener;
+  private long tripStartTime;
+  private int currentTripId;
+  private int fuelCapacity;
 
   /**
    * Default constructor with some settings.
    *
-   * @param context                  {@link Context}
    * @param fuelConsFromSettings     {@link Float} fuel consumption got from settings
    * @param fuelPriceFromSettings    {@link Float} fuel price got from settings
    * @param fuelCapacityFromSettings {@link Integer} capacity of fuel tank got from settings
    */
-  public TripProcessor(@NonNull final Context context, final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings) {
+  public TripProcessor(final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings, @NonNull final SpeedChangeListener speedChangeListener) {
     TripHelperApp.getApplicationComponent().injectInto(this);
-    this.context = context;
+    this.speedChangeListener = speedChangeListener;
     final Bundle settings = configureSettingsBundle(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings, context);
     setupStartingConditions(settings);
     setupLocationService();
     setupTripData();
-
-    if (DEBUG) {
-      Log.i(LOG_TAG, "TripProcessor: IsConstructed");
-    }
   }
 
   public static final Creator<TripProcessor> CREATOR = new Creator<TripProcessor>() {
@@ -126,12 +119,8 @@ public class TripProcessor implements Parcelable {
    */
   public String getFuelLeftString(@NonNull final String distancePrefix) {
     final float fuelLeftVal = getFuelLeft(tripData);
-
-    if (DEBUG) {
-      Log.d(LOG_TAG, "getFuelLeftString: fuel written" + fuelLeftVal);
-    }
     return (UtilMethods.formatFloatDecimalFormat(fuelLeftVal) + " (~" + UtilMethods
-            .formatFloatDecimalFormat(getLeftDistanceToDrive(fuelLeftVal, getTripData(), fuelConsFromSettings)) + distancePrefix + ")");
+            .formatFloatDecimalFormat(getLeftDistanceToDrive(fuelLeftVal, tripData, fuelConsFromSettings)) + distancePrefix + ")");
   }
 
   /**
@@ -141,7 +130,7 @@ public class TripProcessor implements Parcelable {
    * @param prefix {@link String} appropriate prefix (litres)
    * @return {@link} fuel level
    */
-  public String getFuelLevel(final float fuel, @NonNull final String prefix) {
+  public String fillGasTankAndGetFuelLevel(final float fuel, @NonNull final String prefix) {
     fillGasTank(fuel);
     return getFuelLeftString(prefix);
   }
@@ -158,7 +147,7 @@ public class TripProcessor implements Parcelable {
     return tripData;
   }
 
-  public void setFuelConsFromSettings(final float fuelConsFromSettings) {
+  public void setFuelConsumption(final float fuelConsFromSettings) {
     this.fuelConsFromSettings = fuelConsFromSettings;
   }
 
@@ -170,48 +159,32 @@ public class TripProcessor implements Parcelable {
     this.fuelPrice = fuelPrice;
   }
 
-  public void setSpeedChangeListener(@Nullable final SpeedChangeListener speedChangeListener) {
+  private void setSpeedChangeListener(@Nullable final SpeedChangeListener speedChangeListener) {
     this.speedChangeListener = speedChangeListener;
   }
 
-  /**
-   * Method for stop {@link Trip}, store all data and write it to internal storage.
-   */
-  public void stopTracking() {
+  private void stopTracking() {
     final ArrayList<Float> avgArrayList = getAvgSpeedList();
-
-    if (DEBUG) {
-      Log.d(LOG_TAG, "stopTracking: +" + avgArrayList.size());
-      for (final float f : avgArrayList) {
-        Log.d(LOG_TAG, "stopTracking: " + f);
-      }
-    }
-
     updateAvgAndMaxSpeedInTrip(avgArrayList);
     endTrip();
     setMetricFieldsToTripData(fuelPrice, tripData, getCurrentTrip());
     writeDataToFile();
+
     currentTripId = ConstantValues.START_VALUE;
     avgArrayList.clear();
   }
 
-  /**
-   * Method to start new {@link Trip}, add it to overall trip data.
-   */
-  public void startNewTrip() {
+  private void startNewTrip() {
     final Date date = getDateInstance();
     final Trip trip = getNewTrip(date);
     avgSpeedArrayList = getEmptyArrayList_float();
     routes = getEmptyArrayList_route();
     tripStartTime = getTimeOfStart(date);
     setRoutesToTrip(trip);
-    addTripToOverallTripsData(trip);
+    tripData.addTrip(trip);
   }
 
-  /**
-   * Method for erasing overall tripData.
-   */
-  public void eraseTripData() {
+  private void rewriteTripData() {
     tripData = new TripData();
   }
 
@@ -227,6 +200,12 @@ public class TripProcessor implements Parcelable {
         avgSpeedArrayList.add(Float.valueOf(restoredAvgSpdValue));
       }
       setAvgSpeedArrayList(avgSpeedArrayList);
+    }
+  }
+
+  public void onResume() {
+    if (locationSubscriber != null) {
+      gpsHandler.setLocationSubscriber(locationSubscriber);
     }
   }
 
@@ -252,7 +231,7 @@ public class TripProcessor implements Parcelable {
 
   private TripProcessor(@NonNull final Parcel in) {
     context = setupTripProcessorFromParcel(in);
-    setupSubscribers();
+    setupLocationSubscriber();
   }
 
   private Context setupTripProcessorFromParcel(@NonNull final Parcel in) {
@@ -269,11 +248,6 @@ public class TripProcessor implements Parcelable {
     fuelCapacity = in.readInt();
     fuelPrice = in.readFloat();
     return context;
-  }
-
-  private void addTripToOverallTripsData(@NonNull final Trip trip) {
-    Log.d(LOG_TAG, "NEED: tr" + trip.getTripID() + "spd " + trip.getAvgSpeed() + tripData.toString());
-    tripData.addTrip(trip);
   }
 
   private void setRoutesToTrip(@NonNull final Trip trip) {
@@ -301,11 +275,11 @@ public class TripProcessor implements Parcelable {
     return date.getTime();
   }
 
-  @NonNull private static ArrayList<Route> getEmptyArrayList_route() {
+  @NonNull private ArrayList<Route> getEmptyArrayList_route() {
     return new ArrayList<>();
   }
 
-  @NonNull private static ArrayList<Float> getEmptyArrayList_float() {
+  @NonNull private ArrayList<Float> getEmptyArrayList_float() {
     return new ArrayList<>();
   }
 
@@ -333,9 +307,7 @@ public class TripProcessor implements Parcelable {
   }
 
   private void unsubscribeRx() {
-    maxSpeedSubscriber.unsubscribe();
     locationSubscriber.unsubscribe();
-    speedSubscriber.unsubscribe();
   }
 
   private static TripData createTripData(@NonNull final ArrayList<Trip> trips, final float avgFuelConsumption, final float fuelSpent, final float distanceTravelled,
@@ -358,19 +330,11 @@ public class TripProcessor implements Parcelable {
   }
 
   private static float getLeftDistanceToDrive(final float fuelLeftVal, @Nullable final TripData tripData, final float fuelConsFromSettings) {
-    return getDistanceLeftToDrive(fuelLeftVal, tripData, fuelConsFromSettings);
-  }
-
-  private static float getDistanceLeftToDrive(final float fuelLeftVal, @Nullable final TripData tripData, final float fuelConsFromSettings) {
     if (tripData != null) {
-      return getDistLeftFromAvgSpeed(fuelLeftVal, fuelConsFromSettings, tripData);
+      return calculateDistanceLeftToDrive(fuelLeftVal, fuelConsFromSettings, tripData);
     } else {
       return 0f;
     }
-  }
-
-  private static float getDistLeftFromAvgSpeed(final float fuelLeftVal, final float fuelConsFromSettings, @NonNull final TripData tripData) {
-    return calculateDistanceLeftToDrive(fuelLeftVal, fuelConsFromSettings, tripData);
   }
 
   private static float getAverageSpeedFromOverallTrips(@NonNull final TripData tripData) {
@@ -425,9 +389,6 @@ public class TripProcessor implements Parcelable {
     if (serviceConnection == null && !serviceBound) {
       setupAndStartLocationService();
     } else {
-      if (DEBUG) {
-        Log.i(LOG_TAG, "onServiceConnected: service already exist");
-      }
       configureGpsHandler();
     }
     bindService();
@@ -458,18 +419,10 @@ public class TripProcessor implements Parcelable {
         serviceBound = true;
         locationService = binder.getService();
         configureGpsHandler();
-
-        if (DEBUG) {
-          Log.i(LOG_TAG, "onServiceConnected: bounded");
-        }
       }
 
       @Override public void onServiceDisconnected(@NonNull final ComponentName arg0) {
         serviceBound = false;
-
-        if (DEBUG) {
-          Log.i(LOG_TAG, "onServiceConnected: unbounded");
-        }
       }
     };
   }
@@ -489,22 +442,13 @@ public class TripProcessor implements Parcelable {
     context.getApplicationContext().unbindService(serviceConnection);
   }
 
-  private void setupSubscribers() {
-    setupLocationSubscriber();
-    setupMaxSpeedSubscriber();
-    setupSpeedSubscriber();
-  }
-
   private void configureGpsHandler() {
-    setupSubscribers();
+    setupLocationSubscriber();
     setSubscribersToGpsHandler();
   }
 
   private void setupTripData() {
     if (tripData == null) {
-      if (DEBUG) {
-        Log.i(LOG_TAG, "TripProcessor: Reading data from file...");
-      }
       tripData = readDataFromFile();
     }
   }
@@ -520,38 +464,25 @@ public class TripProcessor implements Parcelable {
 
   private void setSubscribersToGpsHandler() {
     gpsHandler = locationService.getGpsHandler();
-    gpsHandler.setSpeedSubscriber(speedSubscriber);
     gpsHandler.setLocationSubscriber(locationSubscriber);
-    gpsHandler.setMaxSpeedSubscriber(maxSpeedSubscriber);
   }
 
   private void setupLocationSubscriber() {
     if (locationSubscriber == null) {
-      locationSubscriber = new Subscriber<Location>() {
+      locationSubscriber = new Subscriber<LocationEmittableItem>() {
         @Override public void onCompleted() {
         }
 
         @Override public void onError(@NonNull final Throwable e) {
         }
 
-        @Override public void onNext(@NonNull final Location location) {
-          addPointToRouteList(location);
-        }
-      };
-    }
-  }
-
-  private void setupMaxSpeedSubscriber() {
-    if (maxSpeedSubscriber == null) {
-      maxSpeedSubscriber = new Subscriber<Float>() {
-        @Override public void onCompleted() {
-        }
-
-        @Override public void onError(@NonNull final Throwable e) {
-        }
-
-        @Override public void onNext(@NonNull final Float speed) {
-          setMaxSpeed(speed);
+        @Override public void onNext(@NonNull final LocationEmittableItem locationEmittableItem) {
+          addPointToRouteList(locationEmittableItem.getLocation());
+          addSpeedTick(locationEmittableItem.getSpeed());
+          setMaxSpeed(locationEmittableItem.getMaxSpeed());
+          if (speedChangeListener != null) {
+            speedChangeListener.onSpeedChanged(locationEmittableItem.getSpeed());
+          }
         }
       };
     }
@@ -559,26 +490,6 @@ public class TripProcessor implements Parcelable {
 
   private void setMaxSpeed(@NonNull final Float speed) {
     maxSpeedVal = speed;
-  }
-
-  private void setupSpeedSubscriber() {
-    if (speedSubscriber == null) {
-      speedSubscriber = new Subscriber<Float>() {
-        @Override public void onCompleted() {
-        }
-
-        @Override public void onError(@NonNull final Throwable e) {
-          if (DEBUG) {
-            Log.e(LOG_TAG, "addPointToRouteList: speed in frag - ERROR" + e.toString());
-          }
-        }
-
-        @Override public void onNext(@NonNull final Float speed) {
-          addSpeedTick(speed);
-          speedChangeListener.speedChanged(speed);
-        }
-      };
-    }
   }
 
   private static void writeTrip(@NonNull final Trip trip, @NonNull final ObjectOutputStream os) {
@@ -693,11 +604,8 @@ public class TripProcessor implements Parcelable {
   }
 
   private void updateTrip(@NonNull final Trip trip) {
-    if (DEBUG) {
-      Log.d(LOG_TAG, "updateTrip: called");
-    }
     trip.setAvgSpeed(averageSpeed);
-    if (routes.size() == 0 || routes == null) {
+    if (routes.size() == 0) {
       routes.add(new Route(ConstantValues.BERMUDA_COORDINATES, ConstantValues.SPEED_VALUE_WORKAROUND));
     }
     setRoutesToTrip(trip);
@@ -729,10 +637,6 @@ public class TripProcessor implements Parcelable {
     trip.setAvgFuelConsumption(fuelConsumption);
     updateTripState();
     setTripFieldsToStartState();
-
-    if (DEBUG) {
-      Log.d(LOG_TAG, "endTrip: end trip called");
-    }
   }
 
   @Override public int describeContents() {
@@ -752,6 +656,18 @@ public class TripProcessor implements Parcelable {
     parcel.writeFloat(fuelConsFromSettings);
     parcel.writeInt(fuelCapacity);
     parcel.writeFloat(fuelPrice);
+  }
+
+  @Override public void onFileErased() {
+    rewriteTripData();
+  }
+
+  @Override public void onTripStarted() {
+    startNewTrip();
+  }
+
+  @Override public void onTripEnded() {
+    stopTracking();
   }
 
   private class WriteFileTask extends AsyncTask<TripData, Void, Boolean> {
@@ -799,10 +715,6 @@ public class TripProcessor implements Parcelable {
       } catch (@NonNull final IOException e) {
         e.printStackTrace();
       }
-
-      if (DEBUG) {
-        Log.d(LOG_TAG, "writeTripDataToFile: " + tripData.getTrips().toString());
-      }
       return true;
     }
 
@@ -815,9 +727,6 @@ public class TripProcessor implements Parcelable {
 
     @Override protected void onPostExecute(@NonNull final Boolean result) {
       if (result) {
-        if (DEBUG) {
-          Log.d(LOG_TAG, "file written successfully");
-        }
         fileIsInWriteMode = false;
       }
     }
@@ -825,16 +734,9 @@ public class TripProcessor implements Parcelable {
 
   private class ReadFileTask extends AsyncTask<String, Integer, TripData> {
     @Override protected TripData doInBackground(@Nullable final String... params) {
-      if (DEBUG) {
-        Log.d(LOG_TAG, "readFile");
-      }
-
       fileIsInReadMode = true;
       if (context.getFileStreamPath(ConstantValues.FILE_NAME).exists()) {
         final ArrayList<Trip> trips = new ArrayList<>();
-        if (DEBUG) {
-          Log.d(LOG_TAG, "readTripDataFromFile: ");
-        }
         try {
           final FileInputStream fis = context.openFileInput(ConstantValues.FILE_NAME);
           final ObjectInputStream is = new ObjectInputStream(fis);
@@ -871,9 +773,6 @@ public class TripProcessor implements Parcelable {
           tripData = new TripData();
         }
       } else {
-        if (DEBUG) {
-          Log.d(LOG_TAG, "TripProcessor: file is empty");
-        }
         tripData = new TripData();
       }
       return tripData;

@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.listener.FuelChangeAmountListener;
+import com.example.aprokopenko.triphelper.listeners.FuelChangeAmountListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,9 +47,9 @@ public class FuelFillDialog extends DialogFragment {
 
     if (fuelChangeAmountListener != null) {
       if (!TextUtils.isEmpty(fuelToFill)) {
-        fuelChangeAmountListener.fuelFilled(Float.valueOf(fuelToFill));
+        fuelChangeAmountListener.onFuelFilled(Float.valueOf(fuelToFill));
       } else {
-        fuelChangeAmountListener.fuelFilled(0f);
+        fuelChangeAmountListener.onFuelFilled(0f);
       }
     }
     dismiss();

@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.example.aprokopenko.triphelper.listener.FileEraseListener;
+import com.example.aprokopenko.triphelper.listeners.FileEraseListener;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
@@ -80,7 +80,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   private float fuelCost = ConstantValues.FUEL_COST_DEFAULT;
   private FileEraseListener fileEraseListener;
   private SharedPreferences preferences;
-  private Context context;
   private Unbinder unbinder;
   private String currency_prefix;
 
@@ -100,7 +99,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     super.onViewCreated(view, savedInstanceState);
     unbinder = ButterKnife.bind(this, view);
     preferences = TripHelperApp.getSharedPreferences();
-    context = getActivity();
     setupMeasurementUnitSpinner();
     readDataFromFile();
     setupCurrencyUnitSpinner();
@@ -115,15 +113,15 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   public void onClickButton(@NonNull final View view) {
     switch (view.getId()) {
       case R.id.btn_about:
-        UtilMethods.buildAndShowAboutDialog(getActivity());
+        UtilMethods.buildAndShowAboutDialog(getContext());
         break;
       case R.id.btn_erase:
-        if (UtilMethods.eraseFile(context)) {
+        if (UtilMethods.eraseFile(getContext())) {
           fileEraseListener.onFileErased();
           readDataFromFile();
-          UtilMethods.showToast(context, getString(R.string.file_erased_toast));
+          UtilMethods.showToast(getContext(), getString(R.string.file_erased_toast));
         } else {
-          UtilMethods.showToast(context, getString(R.string.file_not_erased_toast));
+          UtilMethods.showToast(getContext(), getString(R.string.file_not_erased_toast));
         }
         break;
       default:
@@ -250,7 +248,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
   private void setupMeasurementUnitSpinner() {
     final String[] data = {getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots)};
-    final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
+    final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
 
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     measurementUnitSpinner.setAdapter(adapter);
@@ -273,7 +271,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     }
 
     final String[] data = {getString(R.string.grn_label), getString(R.string.rub_label), getString(R.string.usd_label), getString(R.string.eur_label)};
-    final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, data);
+    final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     currencyUnitSpinner.setAdapter(adapter);
@@ -320,7 +318,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
   private class WriteInternalFile extends AsyncTask<Void, Void, Boolean> {
     @Override protected Boolean doInBackground(@NonNull final Void... params) {
       try {
-        final FileOutputStream fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
+        final FileOutputStream fos = getContext().openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
         final ObjectOutputStream os = new ObjectOutputStream(fos);
         os.writeFloat(fuelConsumption);
         os.writeFloat(fuelCost);
@@ -355,12 +353,12 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         Log.d(LOG_TAG, "readFileSettings");
       }
 
-      if (context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
+      if (getContext().getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
         if (DEBUG) {
           Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
         }
         try {
-          final FileInputStream fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
+          final FileInputStream fis = getContext().openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
           final ObjectInputStream is = new ObjectInputStream(fis);
 
           fuelConsumption = is.readFloat();

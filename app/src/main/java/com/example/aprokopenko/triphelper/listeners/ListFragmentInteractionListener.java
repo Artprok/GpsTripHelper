@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.listener;
+package com.example.aprokopenko.triphelper.listeners;
 
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;

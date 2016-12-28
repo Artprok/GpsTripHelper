@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.listener;
+package com.example.aprokopenko.triphelper.listeners;
 
 public interface FileEraseListener {
   void onFileErased();

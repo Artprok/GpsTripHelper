@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:layout_weight="1.5"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_calendarIcon"
@@ -20,12 +21,14 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/calendar_icon"/>
+        android:background="@drawable/calendar_icon"
+        android:layout_weight="0.3"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/text_content"
+        android:id="@+id/trip_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:layout_weight="8.2"/>
 </android.support.v7.widget.LinearLayoutCompat>
