@@ -339,10 +339,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
     @Override protected void onPostExecute(@NonNull final Boolean result) {
       if (result) {
         updateTextFields();
-
-        if (DEBUG) {
-          Log.d(LOG_TAG, "file written successfully");
-        }
       }
     }
   }

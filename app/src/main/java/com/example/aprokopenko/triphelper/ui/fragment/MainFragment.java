@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
@@ -59,6 +60,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.SETTINGS_FRAGMENT_TAG;
+import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.TRIP_LIST_TAG;
 
 /**
  * Main {@link Fragment} representing a {@link TripHelperGauge} and buttons for start, stop, setting, etc.
@@ -119,6 +123,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
   private boolean firstStart = true;
   private boolean fileErased;
   private boolean gpsIsActive;
+  private FragmentActivity mActivity;
 
   public static MainFragment newInstance() {
     return new MainFragment();
@@ -185,17 +190,24 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     super.onResume();
   }
 
+  @Override public void onAttach(@NonNull final Context context) {
+    mActivity = getActivity();
+    super.onAttach(context);
+
+  }
+
   @Override public void onDestroyView() {
     unbinder.unbind();
     super.onDestroyView();
   }
 
   @Override public void onSpeedChanged(final float speed) {
-    animateSpeedUpdate(speed, speedometer, speedometerTextView, this);
+    animateSpeedUpdate(speed);
   }
 
   @Override public void onFileErased() {
     fileErased = true;
+    tripProcessor.onFileErased();
   }
 
   @Override public void onGpsStatusChanged(final int event) {
@@ -229,7 +241,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
       case R.id.btn_settings:
         saveState();
         UtilMethods.hideFab(getActivity());
-        showSettingsFragment(SettingsFragment.newInstance(), this);
+        if (getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG) != null) {
+          showSettingsFragment((SettingsFragment) getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG), this);
+        } else {
+          showSettingsFragment(SettingsFragment.newInstance(), this);
+        }
         break;
       case R.id.btn_tripList:
         if (tripProcessor.isFileNotInWriteMode()) {
@@ -238,7 +254,11 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
             if (!tripData.getTrips().isEmpty()) {
               saveState();
               UtilMethods.hideFab(getActivity());
-              showTripListFragment(tripData, TripListFragment.newInstance(tripData), this);
+              if (getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG) != null) {
+                showTripListFragment(tripData, (TripListFragment) getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG), this);
+              } else {
+                showTripListFragment(tripData, TripListFragment.newInstance(tripData), this);
+              }
             }
           }
         }
@@ -281,7 +301,7 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
 
   private static void showSettingsFragment(@NonNull final SettingsFragment settingsFragment, @NonNull final Fragment fragment) {
     settingsFragment.setFileEraseListener((MainFragment) fragment);
-    UtilMethods.replaceFragment(settingsFragment, ConstantValues.SETTINGS_FRAGMENT_TAG, fragment.getActivity());
+    UtilMethods.replaceFragment(settingsFragment, SETTINGS_FRAGMENT_TAG, fragment.getActivity());
   }
 
   private void setupAdvert() {
@@ -800,23 +820,23 @@ public class MainFragment extends Fragment implements GpsStatus.Listener, FileEr
     }
   }
 
-  private static void animateSpeedUpdate(final float speed, @NonNull final TripHelperGauge speedometer, @NonNull final TextView speedometerTextView, @NonNull final Fragment fragment) {
-    fragment.getActivity().runOnUiThread(new Runnable() {
+  private void animateSpeedUpdate(final float speed) {
+    mActivity.runOnUiThread(new Runnable() {
       @Override public void run() {
-        updateSpeedometerNeedleLocation(speed, speedometer);
-        updateSpeedometerTextField(speed, speedometerTextView);
+        updateSpeedometerNeedleLocation(speed);
+        updateSpeedometerTextField(speed);
       }
     });
   }
 
-  private static void updateSpeedometerNeedleLocation(final float speed, @NonNull final TripHelperGauge speedometer) {
+  private void updateSpeedometerNeedleLocation(final float speed) {
     final GaugePointer pointer = speedometer.getGaugeScales().get(0).getGaugePointers().get(0);
     if (pointer != null) {
       pointer.setValue(speed);
     }
   }
 
-  private static void updateSpeedometerTextField(final float speed, @Nullable final TextView speedometerTextView) {
+  private void updateSpeedometerTextField(final float speed) {
     if (speedometerTextView != null) {
       final String formattedSpeed = UtilMethods.formatFloatToIntFormat(speed);
       UtilMethods.animateTextView(Integer.valueOf(speedometerTextView.getText().toString()), Integer.valueOf(formattedSpeed), speedometerTextView);

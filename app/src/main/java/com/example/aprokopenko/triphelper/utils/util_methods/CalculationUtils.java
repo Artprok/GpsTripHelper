@@ -28,6 +28,10 @@ public class CalculationUtils {
     return (speed * measurementUnitMultiplier);
   }
 
+  public static float getMeasurementUnitMultiplier(){
+    return measurementUnitMultiplier;
+  }
+
   /**
    * Method for calculating money spent depends on fuel spent and cost.
    *

@@ -195,6 +195,7 @@ public class UtilMethods {
     fragmentTransaction
             .replace(R.id.fragmentContainer, fragment, fragment_tag)
             .addToBackStack(fragment.getTag())
+            .attach(fragment)
             .commitAllowingStateLoss();
   }
 

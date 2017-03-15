@@ -21,6 +21,7 @@ import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.ui.fragment.MainFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
 import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
+import com.example.aprokopenko.triphelper.ui.fragment.TripListFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.ads.MobileAds;
@@ -110,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
         assert fab != null;
         setFabToMap((MainFragment) fragment);
         UtilMethods.replaceFragment(fragment, ConstantValues.MAIN_FRAGMENT_TAG, this);
-      }
-      if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
+      } else if (fragment instanceof MapFragment) { // if we in MapFragment, set FAB toSpeedometer state.
         setFabToSpeedometer((MainFragment) getSupportFragmentManager().findFragmentByTag(ConstantValues.MAIN_FRAGMENT_TAG));
         fab.setVisibility(View.VISIBLE);
       } else {
