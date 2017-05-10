@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.listeners.FuelChangeAmountListener;
+import com.example.aprokopenko.triphelper.ui.main_screen.MainContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,49 +23,52 @@ import butterknife.Unbinder;
  * Class extends {@link  DialogFragment} responsible for showing a dialog with form that asks for amount fuel to fill.
  */
 public class FuelFillDialog extends DialogFragment {
-  @BindView(R.id.btn_refill)
-  Button fillButton;
-  @BindView(R.id.editText_fuelToFill)
-  EditText fuelToFill;
+    @BindView(R.id.btn_refill)
+    Button fillButton;
+    @BindView(R.id.editText_fuelToFill)
+    EditText fuelToFill;
 
-  private FuelChangeAmountListener fuelChangeAmountListener;
-  private Unbinder unbinder;
+    private MainContract.UserActionListener fuelChangeAmountListener;
+    private Unbinder unbinder;
 
-  static FuelFillDialog newInstance() {
-    return new FuelFillDialog();
-  }
-
-  @Override public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-    final View view = inflater.inflate(R.layout.fragment_fuel_fill_dialog, container, false);
-    unbinder = ButterKnife.bind(this, view);
-    return view;
-  }
-
-  @OnClick(R.id.btn_refill)
-  public void onRefillButtonClick() {
-    final String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
-
-    if (fuelChangeAmountListener != null) {
-      if (!TextUtils.isEmpty(fuelToFill)) {
-        fuelChangeAmountListener.onFuelFilled(Float.valueOf(fuelToFill));
-      } else {
-        fuelChangeAmountListener.onFuelFilled(0f);
-      }
+    public static FuelFillDialog newInstance() {
+        return new FuelFillDialog();
     }
-    dismiss();
-  }
 
-  @Override public void onDestroyView() {
-    unbinder.unbind();
-    super.onDestroyView();
-  }
+    @Override
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_fuel_fill_dialog, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
 
-  @Override public void onDetach() {
-    fuelChangeAmountListener = null;
-    super.onDetach();
-  }
+    @OnClick(R.id.btn_refill)
+    public void onRefillButtonClick() {
+        final String fuelToFill = FuelFillDialog.this.fuelToFill.getText().toString();
 
-  public void setFuelChangeAmountListener(@NonNull final FuelChangeAmountListener listener) {
-    fuelChangeAmountListener = listener;
-  }
+        if (fuelChangeAmountListener != null) {
+            if (!TextUtils.isEmpty(fuelToFill)) {
+                fuelChangeAmountListener.onFuelFilled(Float.valueOf(fuelToFill));
+            } else {
+                fuelChangeAmountListener.onFuelFilled(0f);
+            }
+        }
+        dismiss();
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        fuelChangeAmountListener = null;
+        super.onDetach();
+    }
+
+    public void setFuelChangeAmountListener(@NonNull final MainContract.UserActionListener listener) {
+        fuelChangeAmountListener = listener;
+    }
 }
