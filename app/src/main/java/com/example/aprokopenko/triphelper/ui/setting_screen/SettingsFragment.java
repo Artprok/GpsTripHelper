@@ -1,14 +1,11 @@
 package com.example.aprokopenko.triphelper.ui.setting_screen;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +22,6 @@ import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.ui.main_screen.MainContract;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.inject.Singleton;
 
@@ -83,7 +74,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     private MainContract.UserActionListener fileEraseListener;
     private Unbinder unbinder;
     private String currency_prefix;
-    private SettingsPresenter settingsPresenter;
     private SettingsContract.UserActionListener userActionListener;
 
     public SettingsFragment() {
@@ -104,9 +94,8 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
         preferences = TripHelperApp.getSharedPreferences();
-        settingsPresenter = new SettingsPresenter(this, preferences, fileEraseListener);
-
-        settingsPresenter.start();
+        userActionListener = new SettingsPresenter(this, preferences, getContext());
+        userActionListener.start();
         setupMeasurementUnitSpinner();
         setupCurrencyUnitSpinner();
     }
@@ -121,10 +110,16 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     public void onClickButton(@NonNull final View view) {
         switch (view.getId()) {
             case R.id.btn_about:
-                userActionListener.aboutButtonCliked();
+                UtilMethods.buildAndShowAboutDialog(getActivity());
                 break;
             case R.id.btn_erase:
-                userActionListener.eraseButtonCliked();
+                if (UtilMethods.eraseFile(getContext())) {
+                    fileEraseListener.onFileErased();
+                    userActionListener.fileSuccessfullyErased();
+                    UtilMethods.showToast(getContext(), getString(R.string.file_erased_toast));
+                } else {
+                    UtilMethods.showToast(getContext(), getString(R.string.file_not_erased_toast));
+                }
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -144,69 +139,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     @OnTextChanged(R.id.editText_fuelCapacity)
     public void onFuelCapacityChanged(@NonNull final CharSequence s) {
         userActionListener.onFuelCapacityChanged(s);
-    }
-
-    private void setupMeasurementUnitSpinner() {
-        final String[] data = {getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots)};
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        measurementUnitSpinner.setAdapter(adapter);
-        measurementUnitSpinner.setPrompt(getString(R.string.measurementUnitSpinnerTitle));
-
-        measurementUnitSpinner.setSelection(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
-        measurementUnitSpinner.setSelection(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
-        measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
-                userActionListener.setMeasurementUnit(position);
-            }
-
-            @Override
-            public void onNothingSelected(@NonNull final AdapterView<?> arg0) {
-            }
-        });
-    }
-
-    public void setFileEraseListener(@NonNull final MainContract.UserActionListener fileEraseListener) {
-        this.fileEraseListener = fileEraseListener;
-    }
-
-    public void setPresenter(@NonNull final SettingsContract.UserActionListener presenter) {
-        userActionListener = presenter;
-    }
-
-    private void setupCurrencyUnitSpinner() {
-        currency_prefix = preferences.getString(CURRENCY_UNIT, "");
-        if (TextUtils.equals(currency_prefix, "")) {
-            currency_prefix = getString(R.string.grn);
-        }
-
-        final String[] data = {getString(R.string.grn_label), getString(R.string.rub_label), getString(R.string.usd_label), getString(R.string.eur_label)};
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        currencyUnitSpinner.setAdapter(adapter);
-        currencyUnitSpinner.setPrompt(getString(R.string.currencyUnitText));
-        currencyUnitSpinner.setSelection(preferences.getInt(CURRENCY_UNIT_POSITION, 0));
-        currencyUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
-                userActionListener.setCurrencyUnit(position);
-                updateFuelCost();
-            }
-
-            @Override
-            public void onNothingSelected(@NonNull final AdapterView<?> arg0) {
-            }
-        });
-    }
-
-    private void updateFuelCost() {
-        final String fuelCost = this.fuelCost + preferences.getString(CURRENCY_UNIT, "");
-        curFuelPrice.setText(fuelCost);
-        curFuelPrice.invalidate();
     }
 
     @Override
@@ -250,5 +182,68 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
 
         final String fuelCapacity = fuelTankCapacity + getString(R.string.fuel_prefix);
         curFuelCapacity.setText(fuelCapacity);
+    }
+
+    public void setFileEraseListener(@NonNull final MainContract.UserActionListener fileEraseListener) {
+        this.fileEraseListener = fileEraseListener;
+    }
+
+    public void setPresenter(@NonNull final SettingsContract.UserActionListener presenter) {
+        userActionListener = presenter;
+    }
+
+    private void setupMeasurementUnitSpinner() {
+        final String[] data = {getString(R.string.kilometreUnit), getString(R.string.milesUnit), getString(R.string.knots)};
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        measurementUnitSpinner.setAdapter(adapter);
+        measurementUnitSpinner.setPrompt(getString(R.string.measurementUnitSpinnerTitle));
+
+        measurementUnitSpinner.setSelection(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
+        measurementUnitSpinner.setSelection(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
+        measurementUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
+                userActionListener.setMeasurementUnit(position);
+            }
+
+            @Override
+            public void onNothingSelected(@NonNull final AdapterView<?> arg0) {
+            }
+        });
+    }
+
+    private void setupCurrencyUnitSpinner() {
+        currency_prefix = preferences.getString(CURRENCY_UNIT, "");
+        if (TextUtils.equals(currency_prefix, "")) {
+            currency_prefix = getString(R.string.grn);
+        }
+
+        final String[] data = {getString(R.string.grn_label), getString(R.string.rub_label), getString(R.string.usd_label), getString(R.string.eur_label)};
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        currencyUnitSpinner.setAdapter(adapter);
+        currencyUnitSpinner.setPrompt(getString(R.string.currencyUnitText));
+        currencyUnitSpinner.setSelection(preferences.getInt(CURRENCY_UNIT_POSITION, 0));
+        currencyUnitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(@NonNull final AdapterView<?> parent, @NonNull final View view, final int position, final long id) {
+                userActionListener.setCurrencyUnit(position);
+                updateFuelCost();
+            }
+
+            @Override
+            public void onNothingSelected(@NonNull final AdapterView<?> arg0) {
+            }
+        });
+    }
+
+    private void updateFuelCost() {
+        final String fuelCost = this.fuelCost + preferences.getString(CURRENCY_UNIT, "");
+        curFuelPrice.setText(fuelCost);
+        curFuelPrice.invalidate();
     }
 }

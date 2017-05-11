@@ -10,19 +10,13 @@ import android.util.Log;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.application.TripHelperApp;
-
-import com.example.aprokopenko.triphelper.ui.main_screen.MainContract;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
-import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import butterknife.Unbinder;
 
 public class SettingsPresenter implements SettingsContract.UserActionListener {
 
@@ -36,18 +30,16 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
     private int fuelTankCapacity = ConstantValues.FUEL_TANK_CAPACITY_DEFAULT;
     private float fuelConsumption = ConstantValues.FUEL_CONSUMPTION_DEFAULT;
     private float fuelCost = ConstantValues.FUEL_COST_DEFAULT;
-    private MainContract.UserActionListener fileEraseListener;
-    private SharedPreferences preferences;
-    private Unbinder unbinder;
-    private String currency_prefix;
-    private SettingsFragment settingsFragment;
-    private SettingsContract.View view;
 
-    public SettingsPresenter(SettingsFragment settingsFragment, SharedPreferences preferences, MainContract.UserActionListener fileEraseListener) {
-        this.settingsFragment = settingsFragment;
+    private SharedPreferences preferences;
+    private SettingsContract.View view;
+    private Context context;
+
+    public SettingsPresenter(SettingsContract.View view, SharedPreferences preferences, Context context) {
+        this.view = view;
+        this.context = context;
         this.preferences = preferences;
-        this.fileEraseListener = fileEraseListener;
-        settingsFragment.setPresenter(this);
+        view.setPresenter(this);
     }
 
     public void start() {
@@ -63,35 +55,30 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
         final SharedPreferences.Editor editor = preferences.edit();
         switch (position) {
             case 0:
-                editor.putString(CURRENCY_UNIT, settingsFragment.getString(R.string.grn));
+                editor.putString(CURRENCY_UNIT, context.getString(R.string.grn));
                 editor.putInt(CURRENCY_UNIT_POSITION, position);
                 editor.apply();
                 break;
             case 1:
-                editor.putString(CURRENCY_UNIT, settingsFragment.getString(R.string.rub));
+                editor.putString(CURRENCY_UNIT, context.getString(R.string.rub));
                 editor.putInt(CURRENCY_UNIT_POSITION, position);
                 editor.apply();
                 break;
             case 2:
-                editor.putString(CURRENCY_UNIT, settingsFragment.getString(R.string.usd));
+                editor.putString(CURRENCY_UNIT, context.getString(R.string.usd));
                 editor.putInt(CURRENCY_UNIT_POSITION, position);
                 editor.apply();
                 break;
             case 3:
-                editor.putString(CURRENCY_UNIT, settingsFragment.getString(R.string.eur));
+                editor.putString(CURRENCY_UNIT, context.getString(R.string.eur));
                 editor.putInt(CURRENCY_UNIT_POSITION, position);
                 editor.apply();
                 break;
             default:
-                editor.putString(CURRENCY_UNIT, settingsFragment.getString(R.string.usd));
+                editor.putString(CURRENCY_UNIT, context.getString(R.string.usd));
                 editor.putInt(CURRENCY_UNIT_POSITION, position);
                 editor.apply();
         }
-    }
-
-    @Override
-    public void aboutButtonCliked() {
-        UtilMethods.buildAndShowAboutDialog(settingsFragment.getContext());
     }
 
     @Override
@@ -123,36 +110,30 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
     }
 
     @Override
-    public void eraseButtonCliked() {
-        if (UtilMethods.eraseFile(settingsFragment.getContext())) {
-            fileEraseListener.onFileErased();
-            readDataFromFile();
-            UtilMethods.showToast(settingsFragment.getContext(), settingsFragment.getString(R.string.file_erased_toast));
-        } else {
-            UtilMethods.showToast(settingsFragment.getContext(), settingsFragment.getString(R.string.file_not_erased_toast));
-        }
+    public void fileSuccessfullyErased() {
+        readDataFromFile();
     }
 
     public void setMeasurementUnit(final int position) {
         final SharedPreferences.Editor editor = preferences.edit();
         switch (position) {
             case 0://Kilometer per hour case
-                editor.putString(MEASUREMENT_UNIT, settingsFragment.getString(R.string.kilometreUnit));
+                editor.putString(MEASUREMENT_UNIT, context.getString(R.string.kilometreUnit));
                 editor.putInt(MEASUREMENT_UNIT_POSITION, position);
                 editor.apply();
                 break;
             case 1://miles per hour case
-                editor.putString(MEASUREMENT_UNIT, settingsFragment.getString(R.string.milesUnit));
+                editor.putString(MEASUREMENT_UNIT, context.getString(R.string.milesUnit));
                 editor.putInt(MEASUREMENT_UNIT_POSITION, position);
                 editor.apply();
                 break;
             case 2://knots per hour case
-                editor.putString(MEASUREMENT_UNIT, settingsFragment.getString(R.string.knots));
+                editor.putString(MEASUREMENT_UNIT, context.getString(R.string.knots));
                 editor.putInt(MEASUREMENT_UNIT_POSITION, position);
                 editor.apply();
                 break;
             default:
-                editor.putString(MEASUREMENT_UNIT, settingsFragment.getString(R.string.kilometreUnit));
+                editor.putString(MEASUREMENT_UNIT, context.getString(R.string.kilometreUnit));
                 editor.putInt(MEASUREMENT_UNIT_POSITION, position);
                 editor.apply();
         }
@@ -167,7 +148,7 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
         @Override
         protected Boolean doInBackground(@NonNull final Void... params) {
             try {
-                final FileOutputStream fos = settingsFragment.getContext().openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
+                final FileOutputStream fos = context.openFileOutput(ConstantValues.INTERNAL_SETTING_FILE_NAME, Context.MODE_PRIVATE);
                 final ObjectOutputStream os = new ObjectOutputStream(fos);
                 os.writeFloat(fuelConsumption);
                 os.writeFloat(fuelCost);
@@ -200,12 +181,12 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
                 Log.d(LOG_TAG, "readFileSettings");
             }
 
-            if (settingsFragment.getContext().getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
+            if (context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
                 if (DEBUG) {
                     Log.d(LOG_TAG, "readTripDataFromFileSettings: ");
                 }
                 try {
-                    final FileInputStream fis = settingsFragment.getContext().openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
+                    final FileInputStream fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
                     final ObjectInputStream is = new ObjectInputStream(fis);
 
                     fuelConsumption = is.readFloat();
@@ -225,7 +206,6 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
             }
             return true;
         }
-
 
 
         @Override

@@ -34,6 +34,8 @@ public interface MainContract {
         void showFuelFillDialog();
 
         void setSpeedometerValue(final float speed);
+
+        void setPresenter(MainContract.UserActionListener userActionListener);
     }
 
     interface UserActionListener {

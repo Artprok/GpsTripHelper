@@ -25,11 +25,14 @@ import android.widget.TextView;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
+import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.speedometer_factory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
 import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.ui.fragment.FuelFillDialog;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
+import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsContract;
+import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.ads.AdListener;
@@ -41,6 +44,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.SETTINGS_FRAGMENT_TAG;
 
 /**
  * Main {@link Fragment} representing a {@link TripHelperGauge} and buttons for start, stop, setting, etc.
@@ -77,9 +82,10 @@ public class MainFragment extends Fragment implements MainContract.View {
     private static final int LOCATION_REQUEST_CODE = 1;
 
     private Unbinder unbinder;
-    private MainPresenter mainPresenter;
     private TripHelperGauge speedometer;
+    private MainContract.UserActionListener userActionListener;
     private GaugePointer pointer;
+    private MapFragment mapFragment;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -97,28 +103,26 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         unbinder = ButterKnife.bind(this, view);
-        mainPresenter = new MainPresenter(this);
-        mainPresenter.start(savedInstanceState);
+        userActionListener = new MainPresenter(this, getContext());
+        userActionListener.start(savedInstanceState);
         visualizeSpeedometer();
 
         if (BuildConfig.FLAVOR.contains(getString(R.string.paidVersion_code))) {
             advertView.setVisibility(View.GONE);
         }
-
-        mainPresenter.start(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull final Bundle outState) {
         if (getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment) {
-            mainPresenter.onSave(outState);
+            userActionListener.onSave(outState);
             super.onSaveInstanceState(outState);
         }
     }
 
     @Override
     public void onPause() {
-        mainPresenter.onPause();
+        userActionListener.onPause();
         super.onPause();
     }
 
@@ -130,7 +134,7 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     @Override
     public void onResume() {
-        mainPresenter.onResume();
+        userActionListener.onResume();
         super.onResume();
     }
 
@@ -172,19 +176,24 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void onClickButton(@NonNull final View view) {
         switch (view.getId()) {
             case R.id.btn_start:
-                mainPresenter.onStartClick();
+                userActionListener.onStartClick();
                 break;
             case R.id.btn_stop:
-                mainPresenter.onStopClick();
+                userActionListener.onStopClick();
                 break;
             case R.id.btn_settings:
-                mainPresenter.onSettingsClick();
+                userActionListener.onSettingsClick();
+                if (getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG) != null) {
+                    showSettingsFragment((SettingsFragment) getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG), view);
+                } else {
+                    showSettingsFragment(SettingsFragment.newInstance(), view);
+                }
                 break;
             case R.id.btn_tripList:
-                mainPresenter.onTripListClick();
+                userActionListener.onTripListClick();
                 break;
             case R.id.refillButtonLayout:
-                mainPresenter.onRefillClick();
+                userActionListener.onRefillClick();
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -195,14 +204,16 @@ public class MainFragment extends Fragment implements MainContract.View {
      * Method for open map, {@link MapFragment}.
      */
     public void openMapFragment() {
-        mainPresenter.onOpenMapFragment();
+        userActionListener.onOpenMapFragment();
+        configureMapFragment(tripProcessor);
+        UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, view.getActivity());
     }
 
     /**
      * Method form safe exit with cleaning all services, process, etc.
      */
     public void performExit() {
-        mainPresenter.cleanAllProcess();
+        userActionListener.cleanAllProcess();
     }
 
     public void showFuelFillDialog() {
@@ -210,7 +221,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     private void showFuelFillDialog(@NonNull final FuelFillDialog dialog, @NonNull final MainFragment fragment) {
-        dialog.setFuelChangeAmountListener(mainPresenter);
+        dialog.setFuelChangeAmountListener(userActionListener);
         dialog.show(fragment.getChildFragmentManager(), "FILL_DIALOG");
     }
 
@@ -249,11 +260,25 @@ public class MainFragment extends Fragment implements MainContract.View {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_REQUEST_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                mainPresenter.configureTripProcessor();
+                userActionListener.configureTripProcessor();
             } else {
                 requestPermissionWithRationale();
             }
         }
+    }
+
+    private void configureMapFragment(@NonNull final TripProcessor tripProcessor) {
+        mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
+            mapFragment = MapFragment.newInstance();
+        }
+        mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
+        setRoutesToMapFragment();
+    }
+
+    private void showSettingsFragment(@NonNull final SettingsFragment settingsFragment, @NonNull final Fragment fragment) {
+        settingsFragment.setFileEraseListener(this);
+        UtilMethods.replaceFragment(settingsFragment, SETTINGS_FRAGMENT_TAG, fragment.getActivity());
     }
 
     private void visualizeSpeedometer() {
@@ -298,7 +323,7 @@ public class MainFragment extends Fragment implements MainContract.View {
                     .setAction(GRANT, new View.OnClickListener() {
                         @Override
                         public void onClick(@NonNull final View v) {
-                            mainPresenter.requestLocationPermissions();
+                            userActionListener.requestLocationPermissions();
                         }
                     }).show();
         } else {
@@ -381,7 +406,7 @@ public class MainFragment extends Fragment implements MainContract.View {
         }
     }
 
-    public void setPresenter(MainPresenter mainPresenter) {
-        this.mainPresenter = mainPresenter;
+    public void setPresenter(@NonNull final MainContract.UserActionListener presenter) {
+        this.userActionListener = presenter;
     }
 }

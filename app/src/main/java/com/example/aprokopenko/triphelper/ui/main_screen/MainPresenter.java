@@ -41,7 +41,6 @@ import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.S
 import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.TRIP_LIST_TAG;
 
 public class MainPresenter implements MainContract.UserActionListener, GpsStatus.Listener {
-    private com.example.aprokopenko.triphelper.ui.main_screen.MainFragment view;
     private static final String MEASUREMENT_UNIT_POSITION = "measurementUnitPosition";
     private static final String CONTROL_BUTTON_VISIBILITY = "ControlButtonVisibility";
     private static final String LOG_TAG = "MainFragment";
@@ -54,10 +53,10 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private static final boolean REGISTER = true;
     private static final int LOCATION_REQUEST_CODE = 1;
 
+    private MainContract.View view;
     private TripProcessor tripProcessor;
     private LocationManager locationManager;
     private SharedPreferences preferences;
-    private TripHelperGauge speedometer;
     private MapFragment mapFragment;
     private Bundle state;
 
@@ -68,9 +67,11 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private boolean firstStart = true;
     private boolean fileErased;
     private boolean gpsIsActive;
+    private Context context;
 
-    public MainPresenter(com.example.aprokopenko.triphelper.ui.main_screen.MainFragment mainFragment) {
-        view = mainFragment;
+    public MainPresenter(MainContract.View view, Context context) {
+        this.context = context;
+        this.view = view;
         view.setPresenter(this);
     }
 
@@ -120,18 +121,11 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     public void onSettingsClick() {
         saveState();
         view.hideFab();
-        if (view.getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG) != null) {
-            showSettingsFragment((SettingsFragment) view.getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG), view);
-        } else {
-            showSettingsFragment(SettingsFragment.newInstance(), view);
-        }
     }
 
     @Override
     public void onOpenMapFragment() {
-        configureMapFragment(tripProcessor);
         saveState();
-        UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, view.getActivity());
     }
 
     @Override
@@ -201,7 +195,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     public void onResume() {
         locationManager = getLocationMangerIfNull();
         tripProcessor.onResume();
-        UtilMethods.checkIfGpsEnabledAndShowDialogs(view.getActivity());
+        UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
         locationManager = getLocationMangerIfNull();
         restoreStateIfPossible();
         setupFuelFields();
@@ -220,16 +214,6 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
                 LOCATION_REQUEST_CODE);
     }
 
-
-    private void configureMapFragment(@NonNull final TripProcessor tripProcessor) {
-        mapFragment = (MapFragment) view.getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
-        if (mapFragment == null) {
-            mapFragment = MapFragment.newInstance();
-        }
-        mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
-        setRoutesToMapFragment();
-    }
-
     private void setRoutesToMapFragment() {
         if (tripProcessor.getRoutes() != null) {
             mapFragment.setRoutes(tripProcessor.getRoutes());
@@ -241,14 +225,9 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, fragment.getActivity());
     }
 
-    private void showSettingsFragment(@NonNull final SettingsFragment settingsFragment, @NonNull final Fragment fragment) {
-        settingsFragment.setFileEraseListener(this);
-        UtilMethods.replaceFragment(settingsFragment, SETTINGS_FRAGMENT_TAG, fragment.getActivity());
-    }
-
     private void endTrip() {
         stopTracking();
-        UtilMethods.showToast(view.getActivity(), view.getString(R.string.trip_ended_toast));
+        UtilMethods.showToast(context, view.getString(R.string.trip_ended_toast));
         view.startButtonTurnActive();
     }
 
@@ -265,7 +244,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private void startTrip() {
         tripProcessor.onTripStarted();
         view.showFab();
-        UtilMethods.showToast(view.getActivity(), view.getString(R.string.trip_started_toast));
+        UtilMethods.showToast(context, view.getString(R.string.trip_started_toast));
         view.stopButtonTurnActive();
     }
 
@@ -273,8 +252,8 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         final long curTime = System.currentTimeMillis();
 
         if ((curTime - gpsFirstFixTime) > interval) {
-            if (UtilMethods.checkIfGpsEnabled(view.getActivity())) {
-                for (final GpsSatellite satellite : getSatellitesList(view.getActivity(), locationManager)) {
+            if (UtilMethods.checkIfGpsEnabled(context)) {
+                for (final GpsSatellite satellite : getSatellitesList(context, locationManager)) {
                     if (satellite.usedInFix()) {
                         setGpsIconActive();
                         gpsFirstFixTime = curTime;
@@ -404,7 +383,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     private void performGpsInitialFix() {
-        UtilMethods.showToast(view.getActivity(), view.getString(R.string.gps_first_fix_toast));
+        UtilMethods.showToast(context, view.getString(R.string.gps_first_fix_toast));
         setGpsIconActive();
     }
 
@@ -448,7 +427,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     private void turnOffGpsIfAdapterDisabled() {
-        if (!UtilMethods.checkIfGpsEnabled(view.getActivity())) {
+        if (!UtilMethods.checkIfGpsEnabled(context)) {
             setGpsIconNotActive();
         }
     }
@@ -475,7 +454,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private void getStateFromPrefs() {
         preferences = TripHelperApp.getSharedPreferences();
         if (preferences.getBoolean(FIRST_START, true)) {
-            UtilMethods.firstStartTutorialDialog(view.getActivity());
+            UtilMethods.firstStartTutorialDialog(context);
             setFirstStartToFalse(preferences);
         }
         CalculationUtils.setMeasurementMultiplier(preferences.getInt(MEASUREMENT_UNIT_POSITION, 0));
@@ -524,7 +503,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
             } else {
                 tripProcessor = new TripProcessor(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings, this);
             }
-            if (UtilMethods.isPermissionAllowed(view.getContext())) {
+            if (UtilMethods.isPermissionAllowed(context)) {
                 gpsStatusListener(REGISTER);
             } else {
                 requestLocationPermissions();
@@ -535,7 +514,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private void gpsStatusListener(final boolean register) {
         locationManager = getLocationMangerIfNull();
         if (register) {
-            if (UtilMethods.isPermissionAllowed(view.getContext())) {
+            if (UtilMethods.isPermissionAllowed(context)) {
                 locationManager.addGpsStatusListener(this);
             } else {
                 requestLocationPermissions();
@@ -548,7 +527,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
 
     private LocationManager getLocationMangerIfNull() {
         if (locationManager == null) {
-            locationManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
         return locationManager;
     }
@@ -615,12 +594,12 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
             if (DEBUG) {
                 Log.i(LOG_TAG, "readFileSettings");
             }
-            if (view.getActivity().getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
+            if (context.getFileStreamPath(ConstantValues.INTERNAL_SETTING_FILE_NAME).exists()) {
                 if (DEBUG) {
                     Log.i(LOG_TAG, "readTripDataFromFileSettings: ");
                 }
                 try {
-                    final FileInputStream fis = view.getActivity().openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
+                    final FileInputStream fis = context.openFileInput(ConstantValues.INTERNAL_SETTING_FILE_NAME);
                     final ObjectInputStream is = new ObjectInputStream(fis);
                     final float consumption = is.readFloat();
                     final float fuelPrice = is.readFloat();
