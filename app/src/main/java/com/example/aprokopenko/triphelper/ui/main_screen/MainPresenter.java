@@ -1,6 +1,5 @@
 package com.example.aprokopenko.triphelper.ui.main_screen;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.GpsSatellite;
@@ -13,20 +12,14 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
-import com.example.aprokopenko.triphelper.ui.fragment.TripListFragment;
-import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -36,9 +29,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-
-import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.SETTINGS_FRAGMENT_TAG;
-import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.TRIP_LIST_TAG;
 
 public class MainPresenter implements MainContract.UserActionListener, GpsStatus.Listener {
     private static final String MEASUREMENT_UNIT_POSITION = "measurementUnitPosition";
@@ -51,7 +41,6 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private static final boolean DEBUG = BuildConfig.DEBUG;
     private static final boolean REMOVE = false;
     private static final boolean REGISTER = true;
-    private static final int LOCATION_REQUEST_CODE = 1;
 
     private MainContract.View view;
     private TripProcessor tripProcessor;
@@ -82,13 +71,8 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     @Override
-    public void onSpeedChanged(final float speed) {
-        animateSpeedUpdate(speed);
-    }
-
-    @Override
     public void onFuelFilled(final float fuelFilled) {
-        view.setFuelLeft(tripProcessor.fillGasTankAndGetFuelLevel(fuelFilled, view.getString(R.string.distance_prefix)));
+        view.setFuelLeft(tripProcessor.fillGasTankAndGetFuelLevel(fuelFilled, context.getString(R.string.distance_prefix)));
     }
 
     @Override
@@ -118,29 +102,37 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     @Override
-    public void onSettingsClick() {
-        saveState();
+    public void onSettingsClick(boolean buttonVisible) {
+        saveState(buttonVisible);
         view.hideFab();
     }
 
     @Override
-    public void onOpenMapFragment() {
-        saveState();
+    public void onOpenMapFragment(boolean buttonVisible) {
+        saveState(buttonVisible);
     }
 
     @Override
-    public void onTripListClick() {
+    public void onConfigureMapFragment(@NonNull final MapFragment mapFragment) {
+        mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
+        setRoutesToMapFragment();
+    }
+
+    private void setRoutesToMapFragment() {
+        if (tripProcessor.getRoutes() != null) {
+            mapFragment.setRoutes(tripProcessor.getRoutes());
+        }
+    }
+
+    @Override
+    public void onTripListClick(boolean buttonVisible) {
         if (tripProcessor.isFileNotInWriteMode()) {
             final TripData tripData = tripProcessor.getTripData();
-            if (tripData != null && !isButtonVisible(view.stopButton)) {
+            if (tripData != null && buttonVisible) {
                 if (!tripData.getTrips().isEmpty()) {
-                    saveState();
+                    saveState(buttonVisible);
                     view.hideFab();
-                    if (view.getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG) != null) {
-                        showTripListFragment(tripData, (TripListFragment) view.getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG), view);
-                    } else {
-                        showTripListFragment(tripData, TripListFragment.newInstance(tripData), view);
-                    }
+                    view.showTripListFragment(tripData);
                 }
             }
         }
@@ -154,8 +146,8 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     @Override
-    public void cleanAllProcess() {
-        if (isButtonVisible(view.stopButton)) {
+    public void cleanAllProcess(boolean buttonVisible) {
+        if (buttonVisible) {
             stopTracking();
         }
         tripProcessor.performExit();
@@ -167,37 +159,42 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     @Override
-    public void onSave(final Bundle outState) {
-        outState.putBoolean(CONTROL_BUTTON_VISIBILITY, isButtonVisible(view.startButton));
+    public void onSave(final Bundle outState, boolean buttonVisible) {
+        outState.putBoolean(CONTROL_BUTTON_VISIBILITY, buttonVisible);
         outState.putBoolean(STATUS_IMAGE_STATE, gpsIsActive);
         outState.putBoolean(FIRST_START, firstStart);
         outState.putStringArrayList(AVG_SPEED_LIST, ConfigureAvgSpdListToStore(tripProcessor));
         outState.putParcelable(TRIP_PROCESSOR, tripProcessor);
     }
 
-    public void onPause() {
-        final Fragment fragment = view.getFragmentManager().findFragmentById(R.id.fragmentContainer);
+    @Override
+    public void onSpeedChanged(float speed) {
+        Log.d("MPRESENTER", "onSpeedChanged: "+speed);
+        view.onSpeedChanged(speed);
+    }
+
+    public void onPause(final boolean buttonVisible, final boolean isMainFragment) {
         view.pauseAdvert();
-        if (fragment != null && fragment instanceof MainFragment) {
+        if (isMainFragment) {
             turnOffGpsIfAdapterDisabled();
-            saveState();
+            saveState(buttonVisible);
         }
     }
 
-    public void start(final Bundle savedInstanceState) {
+    public void start(final Bundle savedInstanceState, boolean isMainFragment, boolean buttonVisible) {
         view.resumeAdvert();
         gpsIsActive = false;
         state = getSavedStateInstanceIfPossible(savedInstanceState);
         getStateFromPrefs();
-        setupTripProcessor();
+        setupTripProcessor(isMainFragment, buttonVisible);
     }
 
-    public void onResume() {
+    public void onResume(boolean isMainFragment, boolean isButtonVisible) {
         locationManager = getLocationMangerIfNull();
         tripProcessor.onResume();
         UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
         locationManager = getLocationMangerIfNull();
-        restoreStateIfPossible();
+        restoreStateIfPossible(isMainFragment, isButtonVisible);
         setupFuelFields();
         turnOffGpsIfAdapterDisabled();
     }
@@ -209,25 +206,9 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         gpsStatusListener(REGISTER);
     }
 
-    public void requestLocationPermissions() {
-        view.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,},
-                LOCATION_REQUEST_CODE);
-    }
-
-    private void setRoutesToMapFragment() {
-        if (tripProcessor.getRoutes() != null) {
-            mapFragment.setRoutes(tripProcessor.getRoutes());
-        }
-    }
-
-    private static void showTripListFragment(@NonNull final TripData tripData, @NonNull final TripListFragment tripListFragment, @NonNull final Fragment fragment) {
-        tripListFragment.setTripData(tripData);
-        UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, fragment.getActivity());
-    }
-
     private void endTrip() {
         stopTracking();
-        UtilMethods.showToast(context, view.getString(R.string.trip_ended_toast));
+        view.showEndTripToast();
         view.startButtonTurnActive();
     }
 
@@ -238,13 +219,13 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
             firstStart = false;
         }
 
-        view.setFuelLeft(tripProcessor.getFuelLeftString(view.getString(R.string.distance_prefix)));
+        view.setFuelLeft(tripProcessor.getFuelLeftString(context.getString(R.string.distance_prefix)));
     }
 
     private void startTrip() {
         tripProcessor.onTripStarted();
         view.showFab();
-        UtilMethods.showToast(context, view.getString(R.string.trip_started_toast));
+        view.showStartTripToast();
         view.stopButtonTurnActive();
     }
 
@@ -286,7 +267,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     private void setupAdvert() {
-        if (!BuildConfig.FLAVOR.contains(view.getString(R.string.paidVersion_code))) {
+        if (!BuildConfig.FLAVOR.contains(context.getString(R.string.paidVersion_code))) {
             if (!advertInstalled()) {
                 //                AdRequest adRequest = new AdRequest.Builder().build();
                 //                advertView.loadAd(adRequest);
@@ -298,7 +279,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
 
     private void setAdvertInstalled(final boolean isAdvInstalled) {
         final SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(view.getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), isAdvInstalled).apply();
+        editor.putBoolean(context.getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), isAdvInstalled).apply();
     }
 
     @NonNull
@@ -379,15 +360,15 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     private boolean advertInstalled() {
-        return preferences.getBoolean(view.getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), false);
+        return preferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_ADVERT_INSTALLATION), false);
     }
 
     private void performGpsInitialFix() {
-        UtilMethods.showToast(context, view.getString(R.string.gps_first_fix_toast));
+        view.showSatellitesConnectedToast();
         setGpsIconActive();
     }
 
-    public void setGpsIconActive() {
+    private void setGpsIconActive() {
         gpsIsActive = true;
         gpsFirstFixTime = System.currentTimeMillis();
         view.setGpsIconActive();
@@ -400,7 +381,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
 
     private void setupFuelFields() {
         setInternalSettingsToTripProcessor();
-        view.setFuelLeft(tripProcessor.getFuelLeftString(view.getString(R.string.distance_prefix)));
+        view.setFuelLeft(tripProcessor.getFuelLeftString(context.getString(R.string.distance_prefix)));
         view.showFab();
     }
 
@@ -411,19 +392,19 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         tripProcessor.setFuelPrice(fuelPriceFromSettings);
     }
 
-    private void restoreStateIfPossible() {
+    private void restoreStateIfPossible(final boolean isMainFragment, final boolean isButtonVisible) {
         if (state != null && !fileErased) {
-            restoreState(state);
+            restoreState(state, isMainFragment, isButtonVisible);
         } else {
             fileErased = false;
         }
     }
 
-    private void saveState() {
+    private void saveState(boolean buttonVisible) {
         if (state == null) {
             state = new Bundle();
         }
-        onSave(state);
+        onSave(state, buttonVisible);
     }
 
     private void turnOffGpsIfAdapterDisabled() {
@@ -486,27 +467,17 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         return savedState.containsKey(CONTROL_BUTTON_VISIBILITY);
     }
 
-    private void animateSpeedUpdate(final float speed) {
-        view.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                view.setSpeedometerValue(speed);
-                view.updateSpeedometerTextField(speed);
-            }
-        });
-    }
-
-    private void setupTripProcessor() {
+    private void setupTripProcessor(boolean isMainFragment, boolean buttonVisible) {
         if (tripProcessor == null) {
             if (state != null) {
-                restoreState(state);
+                restoreState(state, isMainFragment, buttonVisible);
             } else {
                 tripProcessor = new TripProcessor(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings, this);
             }
             if (UtilMethods.isPermissionAllowed(context)) {
                 gpsStatusListener(REGISTER);
             } else {
-                requestLocationPermissions();
+                view.requestLocationPermissions();
             }
         }
     }
@@ -517,7 +488,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
             if (UtilMethods.isPermissionAllowed(context)) {
                 locationManager.addGpsStatusListener(this);
             } else {
-                requestLocationPermissions();
+                view.requestLocationPermissions();
                 locationManager.addGpsStatusListener(this);
             }
         } else {
@@ -532,8 +503,9 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         return locationManager;
     }
 
-    private void restoreState(@NonNull final Bundle savedInstanceState) {
-        if (view.getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment) {
+    private void restoreState(@NonNull final Bundle savedInstanceState, final boolean isMainFramgnet, final boolean isButtonVisible) {
+        if (isMainFramgnet) {
+            Log.d("maiP", "restoreState: state restore!");
             firstStart = savedInstanceState.getBoolean(FIRST_START);
 
             restoreButtonsVisibility(savedInstanceState);
@@ -541,14 +513,10 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
             restoreTripProcessor(savedInstanceState);
 
             restoreFuelLayoutVisibility(firstStart);
-            if (isButtonVisible(view.stopButton)) {
+            if (isButtonVisible) {
                 view.showFab();
             }
         }
-    }
-
-    private static boolean isButtonVisible(@Nullable final Button button) {
-        return button != null && (button.getVisibility() == View.VISIBLE);
     }
 
     private void restoreFuelLayoutVisibility(final boolean firstState) {
@@ -570,7 +538,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     private String getFuelString() {
-        return tripProcessor.getFuelLeftString(view.getString(R.string.distance_prefix));
+        return tripProcessor.getFuelLeftString(context.getString(R.string.distance_prefix));
     }
 
     private void restoreButtonsVisibility(@NonNull final Bundle savedState) {

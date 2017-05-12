@@ -3,6 +3,8 @@ package com.example.aprokopenko.triphelper.ui.main_screen;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.example.aprokopenko.triphelper.datamodel.TripData;
+import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
 import com.google.android.gms.ads.AdRequest;
 
 public interface MainContract {
@@ -36,6 +38,20 @@ public interface MainContract {
         void setSpeedometerValue(final float speed);
 
         void setPresenter(MainContract.UserActionListener userActionListener);
+
+        void restoreFuelLevel(final String fuelAmount);
+
+        void showTripListFragment(final TripData tripData);
+
+        void showEndTripToast();
+
+        void showStartTripToast();
+
+        void showSatellitesConnectedToast();
+
+        void onSpeedChanged(final float speed);
+
+        void requestLocationPermissions();
     }
 
     interface UserActionListener {
@@ -43,32 +59,32 @@ public interface MainContract {
 
         void onFuelFilled(final float fuelFilled);
 
-        void onSpeedChanged(final float speed);
+        void onSave(Bundle saveInstanceStateBundle, boolean buttonVisible);
 
-        void onSave(Bundle saveInstanceStateBundle);
+        void onPause(boolean buttonVisible, boolean isMainFragment);
 
-        void onPause();
+        void start(final Bundle savedInstanceState, boolean isMainFragment, boolean buttonVisible);
 
-        void start(final Bundle savedInstanceState);
-
-        void onResume();
+        void onResume(boolean isMainFragment, boolean isButtonVisible);
 
         void onStartClick();
 
         void onStopClick();
 
-        void onSettingsClick();
+        void onSettingsClick(boolean buttonVisible);
 
-        void onTripListClick();
+        void onTripListClick(boolean buttonVisible);
+
+        void onSpeedChanged(final float speed);
 
         void onRefillClick();
 
         void configureTripProcessor();
 
-        void onOpenMapFragment();
+        void onOpenMapFragment(boolean buttonVisible);
 
-        void cleanAllProcess();
+        void cleanAllProcess(boolean buttonVisible);
 
-        void requestLocationPermissions();
+        void onConfigureMapFragment(MapFragment mapFragment);
     }
 }

@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +26,13 @@ import android.widget.TextView;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.TripProcessor;
+import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.speedometer_factory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
 import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.ui.fragment.FuelFillDialog;
 import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
-import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsContract;
+import com.example.aprokopenko.triphelper.ui.fragment.TripListFragment;
 import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -46,6 +47,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.SETTINGS_FRAGMENT_TAG;
+import static com.example.aprokopenko.triphelper.utils.settings.ConstantValues.TRIP_LIST_TAG;
 
 /**
  * Main {@link Fragment} representing a {@link TripHelperGauge} and buttons for start, stop, setting, etc.
@@ -96,6 +98,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
@@ -104,7 +112,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         unbinder = ButterKnife.bind(this, view);
         userActionListener = new MainPresenter(this, getContext());
-        userActionListener.start(savedInstanceState);
+        userActionListener.start(savedInstanceState, getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment, isButtonVisible(stopButton));
         visualizeSpeedometer();
 
         if (BuildConfig.FLAVOR.contains(getString(R.string.paidVersion_code))) {
@@ -115,15 +123,46 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public void onSaveInstanceState(@NonNull final Bundle outState) {
         if (getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment) {
-            userActionListener.onSave(outState);
-            super.onSaveInstanceState(outState);
+            userActionListener.onSave(outState, isButtonVisible(startButton));
         }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onPause() {
-        userActionListener.onPause();
+        final Fragment fragment = getFragmentManager().findFragmentById(R.id.fragmentContainer);
+        userActionListener.onPause(isButtonVisible(startButton), (fragment != null && fragment instanceof MainFragment));
         super.onPause();
+    }
+
+    @Override
+    public void showEndTripToast() {
+        UtilMethods.showToast(getContext(), getString(R.string.trip_ended_toast));
+    }
+
+    @Override
+    public void showStartTripToast() {
+        UtilMethods.showToast(getContext(), getString(R.string.trip_started_toast));
+    }
+
+    @Override
+    public void showSatellitesConnectedToast() {
+        UtilMethods.showToast(getContext(), getString(R.string.gps_first_fix_toast));
+    }
+
+    @Override
+    public void onSpeedChanged(final float speed) {
+        Log.d("spd", "onSpeedChanged: " + this + " " + userActionListener);
+        if (getActivity() != null) {
+            Log.d("spd", "onSpeedChanged: WHERE");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setSpeedometerValue(speed);
+                    updateSpeedometerTextField(speed);
+                }
+            });
+        }
     }
 
     public void pauseAdvert() {
@@ -134,7 +173,8 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     @Override
     public void onResume() {
-        userActionListener.onResume();
+        userActionListener.onResume(getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment, isButtonVisible(stopButton));
+        pointer = speedometer.getGaugeScales().get(0).getGaugePointers().get(0);
         super.onResume();
     }
 
@@ -154,11 +194,6 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     @Override
-    public void onAttach(@NonNull final Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onDestroyView() {
         unbinder.unbind();
         super.onDestroyView();
@@ -172,6 +207,15 @@ public class MainFragment extends Fragment implements MainContract.View {
         UtilMethods.showFab(getActivity());
     }
 
+    @Override
+    public void showTripListFragment(final TripData tripData) {
+        if (getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG) != null) {
+            showTripListFragment(tripData, (TripListFragment) getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG), this);
+        } else {
+            showTripListFragment(tripData, TripListFragment.newInstance(tripData), this);
+        }
+    }
+
     @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_settings, R.id.btn_tripList, R.id.refillButtonLayout})
     public void onClickButton(@NonNull final View view) {
         switch (view.getId()) {
@@ -182,15 +226,15 @@ public class MainFragment extends Fragment implements MainContract.View {
                 userActionListener.onStopClick();
                 break;
             case R.id.btn_settings:
-                userActionListener.onSettingsClick();
+                userActionListener.onSettingsClick(isButtonVisible(startButton));
                 if (getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG) != null) {
-                    showSettingsFragment((SettingsFragment) getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG), view);
+                    showSettingsFragment((SettingsFragment) getChildFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG), this);
                 } else {
-                    showSettingsFragment(SettingsFragment.newInstance(), view);
+                    showSettingsFragment(SettingsFragment.newInstance(), this);
                 }
                 break;
             case R.id.btn_tripList:
-                userActionListener.onTripListClick();
+                userActionListener.onTripListClick(isButtonVisible(stopButton));
                 break;
             case R.id.refillButtonLayout:
                 userActionListener.onRefillClick();
@@ -204,16 +248,17 @@ public class MainFragment extends Fragment implements MainContract.View {
      * Method for open map, {@link MapFragment}.
      */
     public void openMapFragment() {
-        userActionListener.onOpenMapFragment();
-        configureMapFragment(tripProcessor);
-        UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, view.getActivity());
+        userActionListener.onOpenMapFragment(isButtonVisible(startButton));
+        configureMapFragment();
+        userActionListener.onConfigureMapFragment(mapFragment);
+        UtilMethods.replaceFragment(mapFragment, ConstantValues.MAP_FRAGMENT_TAG, getActivity());
     }
 
     /**
      * Method form safe exit with cleaning all services, process, etc.
      */
     public void performExit() {
-        userActionListener.cleanAllProcess();
+        userActionListener.cleanAllProcess(isButtonVisible(stopButton));
     }
 
     public void showFuelFillDialog() {
@@ -223,6 +268,10 @@ public class MainFragment extends Fragment implements MainContract.View {
     private void showFuelFillDialog(@NonNull final FuelFillDialog dialog, @NonNull final MainFragment fragment) {
         dialog.setFuelChangeAmountListener(userActionListener);
         dialog.show(fragment.getChildFragmentManager(), "FILL_DIALOG");
+    }
+
+    private static boolean isButtonVisible(@Nullable final Button button) {
+        return button != null && (button.getVisibility() == View.VISIBLE);
     }
 
     public void setupAdView(@NonNull final AdRequest request) {
@@ -267,23 +316,27 @@ public class MainFragment extends Fragment implements MainContract.View {
         }
     }
 
-    private void configureMapFragment(@NonNull final TripProcessor tripProcessor) {
+    private void configureMapFragment() {
+        userActionListener.onConfigureMapFragment(mapFragment);
         mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
         if (mapFragment == null) {
             mapFragment = MapFragment.newInstance();
         }
-        mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
-        setRoutesToMapFragment();
     }
 
     private void showSettingsFragment(@NonNull final SettingsFragment settingsFragment, @NonNull final Fragment fragment) {
-        settingsFragment.setFileEraseListener(this);
+        settingsFragment.setFileEraseListener(userActionListener);
         UtilMethods.replaceFragment(settingsFragment, SETTINGS_FRAGMENT_TAG, fragment.getActivity());
     }
 
     private void visualizeSpeedometer() {
         setupSpeedometerView();
         setSpeedometerLayoutParams();
+    }
+
+    private static void showTripListFragment(@NonNull final TripData tripData, @NonNull final TripListFragment tripListFragment, @NonNull final Fragment fragment) {
+        tripListFragment.setTripData(tripData);
+        UtilMethods.replaceFragment(tripListFragment, ConstantValues.TRIP_LIST_TAG, fragment.getActivity());
     }
 
     private void setSpeedometerLayoutParams() {
@@ -323,12 +376,17 @@ public class MainFragment extends Fragment implements MainContract.View {
                     .setAction(GRANT, new View.OnClickListener() {
                         @Override
                         public void onClick(@NonNull final View v) {
-                            userActionListener.requestLocationPermissions();
+                            requestLocationPermissions();
                         }
                     }).show();
         } else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
         }
+    }
+
+    public void requestLocationPermissions() {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,},
+                LOCATION_REQUEST_CODE);
     }
 
     private void setButtonsVisibility(final int visibility) {

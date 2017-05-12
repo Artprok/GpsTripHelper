@@ -80,6 +80,7 @@ public class TripProcessor implements Parcelable {
      */
     public TripProcessor(final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings, @NonNull final MainContract.UserActionListener speedChangeListener) {
         TripHelperApp.getApplicationComponent().injectInto(this);
+        Log.d("TRP", "TripProcessor: set"+speedChangeListener);
         this.speedChangeListener = speedChangeListener;
         final Bundle settings = configureSettingsBundle(fuelConsFromSettings, fuelPriceFromSettings, fuelCapacityFromSettings, context);
         setupStartingConditions(settings);
