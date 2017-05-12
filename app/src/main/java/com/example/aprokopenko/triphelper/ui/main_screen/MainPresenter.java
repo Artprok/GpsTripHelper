@@ -115,10 +115,10 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     @Override
     public void onConfigureMapFragment(@NonNull final MapFragment mapFragment) {
         mapFragment.setGpsHandler(tripProcessor.getGpsHandler());
-        setRoutesToMapFragment();
+        setRoutesToMapFragment(mapFragment);
     }
 
-    private void setRoutesToMapFragment() {
+    private void setRoutesToMapFragment(@NonNull final MapFragment mapFragment) {
         if (tripProcessor.getRoutes() != null) {
             mapFragment.setRoutes(tripProcessor.getRoutes());
         }

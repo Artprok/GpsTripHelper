@@ -103,6 +103,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
     public static TripInfoFragment newInstance(@NonNull final Trip trip) {
         final TripInfoFragment fragment = new TripInfoFragment();
+        fragment.setUserActionListener();
 
         final Bundle args = new Bundle();
         final ArrayList<String> latitudeArray = new ArrayList<>();
@@ -137,6 +138,12 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         return fragment;
     }
 
+    private void setUserActionListener() {
+        if (userActionListener == null) {
+            userActionListener = new TripInfoPresenter(this);
+        }
+    }
+
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,9 +164,6 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setCurrencyUnit(TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, ""));
-        if (userActionListener == null) {
-            userActionListener = new TripInfoPresenter(this);
-        }
         userActionListener.onViewCreated();
     }
 

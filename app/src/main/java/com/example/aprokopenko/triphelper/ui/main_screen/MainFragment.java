@@ -89,7 +89,15 @@ public class MainFragment extends Fragment implements MainContract.View {
     private MapFragment mapFragment;
 
     public static MainFragment newInstance() {
-        return new MainFragment();
+        final MainFragment mainFragment = new MainFragment();
+        mainFragment.setUserActionListener();
+        return mainFragment;
+    }
+
+    private void setUserActionListener() {
+        if (userActionListener == null) {
+            userActionListener = new MainPresenter(this, getContext());
+        }
     }
 
     public MainFragment() {
@@ -110,9 +118,6 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         unbinder = ButterKnife.bind(this, view);
-        if (userActionListener == null) {
-            userActionListener = new MainPresenter(this, getContext());
-        }
         userActionListener.start(savedInstanceState, getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment, isButtonVisible(stopButton));
         visualizeSpeedometer();
 
@@ -232,7 +237,7 @@ public class MainFragment extends Fragment implements MainContract.View {
                 }
                 break;
             case R.id.btn_tripList:
-                userActionListener.onTripListClick(isButtonVisible(stopButton));
+                userActionListener.onTripListClick(isButtonVisible(startButton));
                 break;
             case R.id.refillButtonLayout:
                 userActionListener.onRefillClick();
@@ -315,11 +320,11 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     private void configureMapFragment() {
-        userActionListener.onConfigureMapFragment(mapFragment);
         mapFragment = (MapFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ConstantValues.MAP_FRAGMENT_TAG);
         if (mapFragment == null) {
             mapFragment = MapFragment.newInstance();
         }
+        userActionListener.onConfigureMapFragment(mapFragment);
     }
 
     private void showSettingsFragment(@NonNull final SettingsFragment settingsFragment, @NonNull final Fragment fragment) {

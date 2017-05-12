@@ -72,7 +72,14 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
         args.putParcelable(TRIP_DATA, tripData);
         tripListFragment.setArguments(args);
+        tripListFragment.setUserActionListener();
         return tripListFragment;
+    }
+
+    private void setUserActionListener() {
+        if (userActionListener == null) {
+            userActionListener = new TripListPresenter(this);
+        }
     }
 
     @Override
@@ -86,9 +93,6 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
         final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         unbinder = ButterKnife.bind(this, view);
-        if (userActionListener == null) {
-            userActionListener = new TripListPresenter(this);
-        }
         if (savedInstanceState != null) {
             userActionListener.onCreateView(savedInstanceState.getParcelable(TRIP_DATA));
         }

@@ -39,7 +39,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapCont
     }
 
     public static MapFragment newInstance() {
+        final MapFragment mapFragment = new MapFragment();
+        mapFragment.setUserActionListener();
         return new MapFragment();
+    }
+
+    private void setUserActionListener() {
+        if (userActionListener == null) {
+            userActionListener = new MapPresenter(this);
+        }
     }
 
     @Override
@@ -56,9 +64,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapCont
     @Override
     public void onViewCreated(@NonNull final android.view.View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (userActionListener == null) {
-            userActionListener = new MapPresenter(this);
-        }
         getGoogleMap(this);
     }
 
