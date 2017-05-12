@@ -94,7 +94,9 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
         preferences = TripHelperApp.getSharedPreferences();
-        userActionListener = new SettingsPresenter(this, preferences, getContext());
+        if (userActionListener == null) {
+            userActionListener = new SettingsPresenter(this, preferences, getContext());
+        }
         userActionListener.start();
         setupMeasurementUnitSpinner();
         setupCurrencyUnitSpinner();

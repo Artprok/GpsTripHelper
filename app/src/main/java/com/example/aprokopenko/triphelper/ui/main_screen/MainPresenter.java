@@ -19,7 +19,7 @@ import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.TripProcessor;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
+import com.example.aprokopenko.triphelper.ui.map.MapFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -58,7 +58,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private boolean gpsIsActive;
     private Context context;
 
-    public MainPresenter(MainContract.View view, Context context) {
+    MainPresenter(@NonNull final MainContract.View view, @NonNull final Context context) {
         this.context = context;
         this.view = view;
         view.setPresenter(this);
@@ -125,7 +125,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     }
 
     @Override
-    public void onTripListClick(boolean buttonVisible) {
+    public void onTripListClick(final boolean buttonVisible) {
         if (tripProcessor.isFileNotInWriteMode()) {
             final TripData tripData = tripProcessor.getTripData();
             if (tripData != null && buttonVisible) {
@@ -169,7 +169,7 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
 
     @Override
     public void onSpeedChanged(float speed) {
-        Log.d("MPRESENTER", "onSpeedChanged: "+speed);
+        Log.d("MPRESENTER", "onSpeedChanged: " + speed);
         view.onSpeedChanged(speed);
     }
 
@@ -192,7 +192,6 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     public void onResume(boolean isMainFragment, boolean isButtonVisible) {
         locationManager = getLocationMangerIfNull();
         tripProcessor.onResume();
-        UtilMethods.checkIfGpsEnabledAndShowDialogs(context);
         locationManager = getLocationMangerIfNull();
         restoreStateIfPossible(isMainFragment, isButtonVisible);
         setupFuelFields();

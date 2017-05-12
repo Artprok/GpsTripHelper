@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.example.aprokopenko.triphelper.datamodel.TripData;
-import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
+import com.example.aprokopenko.triphelper.ui.map.MapFragment;
 import com.google.android.gms.ads.AdRequest;
 
 public interface MainContract {

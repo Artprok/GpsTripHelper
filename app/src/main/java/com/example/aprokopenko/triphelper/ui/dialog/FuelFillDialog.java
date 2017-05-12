@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.ui.fragment;
+package com.example.aprokopenko.triphelper.ui.dialog;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

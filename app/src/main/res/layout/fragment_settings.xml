@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.aprokopenko.triphelper.ui.fragment.SettingsFragment">
+    tools:context="com.example.aprokopenko.triphelper.ui.dialog.SettingsFragment">
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/btn_erase"

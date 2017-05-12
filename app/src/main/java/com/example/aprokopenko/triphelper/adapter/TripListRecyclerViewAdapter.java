@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.listeners.ListFragmentInteractionListener;
-import com.example.aprokopenko.triphelper.ui.fragment.TripInfoFragment;
+import com.example.aprokopenko.triphelper.ui.trip_info.TripInfoFragment;
 
 import java.util.ArrayList;
 

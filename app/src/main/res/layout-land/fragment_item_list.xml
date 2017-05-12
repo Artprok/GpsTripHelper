@@ -252,7 +252,7 @@
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             app:layoutManager="LinearLayoutManager"
-            tools:context=".ui.fragment.TripListFragment"
+            tools:context=".ui.dialog.TripListFragment"
             tools:listitem="@layout/fragment_item"/>
     </android.support.v7.widget.LinearLayoutCompat>
 

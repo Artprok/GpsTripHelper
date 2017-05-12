@@ -15,7 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,10 @@ import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.speedometer_factory.CircularGaugeFactory;
 import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
 import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
-import com.example.aprokopenko.triphelper.ui.fragment.FuelFillDialog;
-import com.example.aprokopenko.triphelper.ui.fragment.MapFragment;
-import com.example.aprokopenko.triphelper.ui.fragment.TripListFragment;
+import com.example.aprokopenko.triphelper.ui.dialog.FuelFillDialog;
+import com.example.aprokopenko.triphelper.ui.map.MapFragment;
 import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsFragment;
+import com.example.aprokopenko.triphelper.ui.trip_list.TripListFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 import com.google.android.gms.ads.AdListener;
@@ -111,7 +110,9 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         unbinder = ButterKnife.bind(this, view);
-        userActionListener = new MainPresenter(this, getContext());
+        if (userActionListener == null) {
+            userActionListener = new MainPresenter(this, getContext());
+        }
         userActionListener.start(savedInstanceState, getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment, isButtonVisible(stopButton));
         visualizeSpeedometer();
 
@@ -152,17 +153,13 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     @Override
     public void onSpeedChanged(final float speed) {
-        Log.d("spd", "onSpeedChanged: " + this + " " + userActionListener);
-        if (getActivity() != null) {
-            Log.d("spd", "onSpeedChanged: WHERE");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setSpeedometerValue(speed);
-                    updateSpeedometerTextField(speed);
-                }
-            });
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setSpeedometerValue(speed);
+                updateSpeedometerTextField(speed);
+            }
+        });
     }
 
     public void pauseAdvert() {
@@ -173,8 +170,9 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     @Override
     public void onResume() {
-        userActionListener.onResume(getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment, isButtonVisible(stopButton));
+        UtilMethods.checkIfGpsEnabledAndShowDialogs(getContext());
         pointer = speedometer.getGaugeScales().get(0).getGaugePointers().get(0);
+        userActionListener.onResume(getFragmentManager().findFragmentById(R.id.fragmentContainer) instanceof MainFragment, isButtonVisible(stopButton));
         super.onResume();
     }
 
