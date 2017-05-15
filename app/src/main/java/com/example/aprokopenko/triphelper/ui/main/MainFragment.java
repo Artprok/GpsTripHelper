@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +60,8 @@ public class MainFragment extends Fragment implements MainContract.View {
     TextView speedometerTextView;
     @BindView(R.id.refillButtonLayout)
     LinearLayoutCompat refillButtonLayout;
+    @BindView(R.id.fuel_left_layout)
+    LinearLayoutCompat fuel_left_layout;
     @BindView(R.id.btn_tripList)
     ImageButton tripListButton;
     @BindView(R.id.image_statusView)
@@ -67,16 +70,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     Button startButton;
     @BindView(R.id.btn_stop)
     Button stopButton;
-    @BindView(R.id.fuel_left_layout)
-    LinearLayoutCompat fuel_left_layout;
     @BindView(R.id.text_fuelLeftView)
     TextView fuelLeft;
     @BindView(R.id.btn_settings)
     ImageButton settingsButton;
     @BindView(R.id.advView)
     com.google.android.gms.ads.AdView advertView;
-    @BindView(R.id.fragment_main_layout)
-    LinearLayoutCompat fragment_main_layout;
 
     private static final String GRANT = "GRANT";
     private static final String MEASUREMENT_UNIT = "measurementUnit";
@@ -350,9 +349,9 @@ public class MainFragment extends Fragment implements MainContract.View {
         speedometerContainer.post(new Runnable() {
             @Override
             public void run() {
-                speedometerContainer.setLayoutParams(MainFragment.getLayoutParams(!landscapeOrientation(), speedometer));
-                speedometerContainer.invalidate();
-                speedometerContainer.setVisibility(View.VISIBLE);
+                speedometerContainer.setLayoutParams(getLayoutParams(landscapeOrientation(), speedometerContainer.getLayoutParams()));
+                speedometerContainer.requestLayout();
+                speedometerTextView.requestLayout();
             }
         });
     }
@@ -448,18 +447,15 @@ public class MainFragment extends Fragment implements MainContract.View {
         }
     }
 
-    public static LinearLayoutCompat.LayoutParams getLayoutParams(final boolean isPortrait, @NonNull final TripHelperGauge speedometer) {
-        final LinearLayoutCompat.LayoutParams layoutParams;
+    private ViewGroup.LayoutParams getLayoutParams(final boolean isLandscape, @NonNull final ViewGroup.LayoutParams layoutParams) {
         final int dimension;
-        if (isPortrait) {
-            dimension = speedometer.getWidth();
-            layoutParams = new LinearLayoutCompat.LayoutParams(dimension, dimension);
-            layoutParams.setMargins(2, 2, 2, 2);
+        if(isLandscape){
+            dimension = speedometerContainer.getHeight();
         } else {
-            dimension = speedometer.getHeight();
-            layoutParams = new LinearLayoutCompat.LayoutParams(dimension, dimension);
-            layoutParams.setMargins(2, 2, 2, 2);
+            dimension = speedometerContainer.getWidth();
         }
+        layoutParams.width = dimension;
+        layoutParams.height = dimension;
         return layoutParams;
     }
 

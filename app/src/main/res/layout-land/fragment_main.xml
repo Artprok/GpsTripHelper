@@ -1,14 +1,13 @@
-<android.support.v7.widget.LinearLayoutCompat
-    android:id="@+id/fragment_main_layout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:keepScreenOn="true"
     android:orientation="vertical"
-    tools:context=".ui.dialog.MainFragment">
+    tools:context=".ui.main.MainFragment">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/advView"
@@ -16,154 +15,156 @@
         android:layout_height="wrap_content"
         android:background="@color/colorOfBlock"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/admob_publisher_testid"/>
+        ads:adUnitId="@string/admob_publisher_testid" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_statusView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/advView"
+        android:layout_marginBottom="@dimen/margin_between_elements"
+        android:layout_marginLeft="@dimen/margin_outer"
+        android:layout_marginStart="@dimen/margin_outer"
+        android:layout_marginTop="@dimen/margin_outer"
+        android:background="@drawable/red_satellite" />
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/fuel_left_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_statusView"
+        android:layout_marginLeft="@dimen/margin_outer"
+        android:layout_marginStart="@dimen/margin_outer">
 
-        <android.support.v7.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_fuelIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/gas_station_icon" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/image_statusView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="@dimen/margin_between_elements"
-                android:layout_marginLeft="@dimen/margin_outer"
-                android:layout_marginTop="@dimen/margin_outer"
-                android:background="@drawable/red_satellite"/>
-
-            <android.support.v7.widget.LinearLayoutCompat
-                android:id="@+id/fuel_left_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_outer">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/image_fuelIcon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/gas_station_icon"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fuelLeftHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/fuel_left_label"
-                    android:textSize="@dimen/metricsTextSize"
-                    android:textStyle="bold|italic"
-                    android:typeface="sans"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_fuelLeftView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/testVal"
-                    android:textSize="@dimen/metricPortraitTextSize"/>
-            </android.support.v7.widget.LinearLayoutCompat>
-
-            <android.support.v7.widget.LinearLayoutCompat
-                android:id="@+id/refillButtonLayout"
-                android:layout_width="135dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="3dp"
-                android:layout_marginLeft="@dimen/margin_outer"
-                android:layout_marginTop="@dimen/margin_outer"
-                android:background="@drawable/btn_background"
-                android:padding="4dp">
-
-                <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/btn_refill"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/btn_refill"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/refill_hint"
-                    android:textSize="@dimen/metricsTextSize"
-                    android:textStyle="bold|italic"
-                    android:typeface="sans"/>
-            </android.support.v7.widget.LinearLayoutCompat>
-
-            <RelativeLayout
-                android:layout_width="135dp"
-                android:layout_height="45dp"
-                android:layout_margin="@dimen/margin_outer"
-                android:background="@drawable/btn_background">
-
-                <Button
-                    android:id="@+id/btn_stop"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="@dimen/margin_outer"
-                    android:background="@android:color/transparent"
-                    android:text="@string/stop"
-                    android:visibility="invisible"/>
-
-                <Button
-                    android:id="@+id/btn_start"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="@dimen/margin_outer"
-                    android:background="@android:color/transparent"
-                    android:text="@string/start"/>
-            </RelativeLayout>
-        </android.support.v7.widget.LinearLayoutCompat>
-
-        <android.support.v7.widget.LinearLayoutCompat
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_fuelLeftHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/fuel_left_label"
+            android:textSize="@dimen/metricsTextSize"
+            android:textStyle="bold|italic"
+            android:typeface="sans" />
 
-            <com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge
-                android:id="@+id/speedometerContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_SpeedometerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="-50dp"
-                android:text="@string/initial_speedometer_val"
-                android:textSize="@dimen/speedometerTextViewSize"
-                tools:text="0"/>
-        </android.support.v7.widget.LinearLayoutCompat>
-
-        <android.support.v7.widget.LinearLayoutCompat
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_fuelLeftView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/btn_settings"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="@dimen/margin_between_elements"
-                android:background="@drawable/btn_background"
-                android:src="@drawable/btn_settings"/>
-
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/btn_tripList"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/btn_background"
-                android:src="@drawable/btn_triplist"/>
-        </android.support.v7.widget.LinearLayoutCompat>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/testVal"
+            android:textSize="@dimen/metricPortraitTextSize" />
     </android.support.v7.widget.LinearLayoutCompat>
-</android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/refillButtonLayout"
+        android:layout_width="135dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/fuel_left_layout"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="@dimen/margin_outer"
+        android:layout_marginStart="@dimen/margin_outer"
+        android:layout_marginTop="@dimen/margin_outer"
+        android:background="@drawable/btn_background"
+        android:padding="4dp">
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_refill"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/btn_refill" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:text="@string/refill_hint"
+            android:textSize="@dimen/metricsTextSize"
+            android:textStyle="bold|italic"
+            android:typeface="sans" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <RelativeLayout
+        android:layout_width="135dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/refillButtonLayout"
+        android:layout_margin="@dimen/margin_outer"
+        android:background="@drawable/btn_background">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_stop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin_outer"
+            android:background="@android:color/transparent"
+            android:text="@string/stop"
+            android:visibility="invisible" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin_outer"
+            android:background="@android:color/transparent"
+            android:text="@string/start" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/advView"
+        android:layout_toEndOf="@id/fuel_left_layout"
+        android:layout_toRightOf="@id/fuel_left_layout">
+
+        <com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge
+            android:id="@+id/speedometerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_SpeedometerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/speedometerContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-50dp"
+            android:text="@string/initial_speedometer_val"
+            android:textSize="@dimen/speedometerTextViewSize"
+            tools:text="0" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/btn_settings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/advView"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="@dimen/margin_between_elements"
+        android:background="@drawable/btn_background"
+        android:src="@drawable/btn_settings" />
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/btn_tripList"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@id/btn_settings"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/btn_settings"
+        android:layout_toStartOf="@id/btn_settings"
+        android:background="@drawable/btn_background"
+        android:src="@drawable/btn_triplist" />
+</RelativeLayout>

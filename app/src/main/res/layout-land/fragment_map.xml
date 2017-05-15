@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:keepScreenOn="true"
-    tools:context="com.example.aprokopenko.triphelper.ui.dialog.MapFragment">
+    tools:context="com.example.aprokopenko.triphelper.ui.map.MapFragment">
 
     <fragment
         android:id="@+id/mapFragment"

@@ -1,162 +1,140 @@
-<android.support.v7.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.aprokopenko.triphelper.ui.dialog.SettingsFragment">
+    tools:context="com.example.aprokopenko.triphelper.ui.setting.SettingsFragment">
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/btn_erase"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="end"
         android:layout_margin="5dp"
         android:background="@drawable/btn_background"
-        android:src="@drawable/btn_erase"/>
+        android:src="@drawable/btn_erase" />
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/editText_fuelPrice"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="5dp">
+        android:layout_below="@id/btn_erase"
+        android:hint="@string/fuel_price"
+        android:inputType="numberDecimal"
+        android:maxLength="4" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_curFuelPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_fuelPrice"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="22" />
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/editText_fuelPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/fuel_price"
-                android:inputType="numberDecimal"
-                android:maxLength="4"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/editText_fuelConsumption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_fuelPrice"
+        android:hint="@string/fuel_consumption"
+        android:inputType="numberDecimal"
+        android:maxLength="3" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_curFuelPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                tools:text="22"/>
-        </FrameLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_curFuelCons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_fuelConsumption"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="203" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/editText_fuelCapacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_curFuelCons"
+        android:hint="@string/fuel_capacity"
+        android:inputType="number"
+        android:maxLength="3" />
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/editText_fuelConsumption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/fuel_consumption"
-                android:inputType="numberDecimal"
-                android:maxLength="3"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_curFuelCapacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_fuelCapacity"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="1023" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_curFuelCons"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"/>
-        </FrameLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_measurementUnitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_fuelCapacity"
+        android:layout_margin="5dp"
+        android:text="@string/measurementUnitText"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/metricPortraitTextSize" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/settings_fragment_measurements_unit_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/text_measurementUnitLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dialog" />
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/editText_fuelCapacity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/fuel_capacity"
-                android:inputType="number"
-                android:maxLength="3"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_currencyUnitLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_measurementUnitLabel"
+        android:layout_margin="5dp"
+        android:text="@string/currencyUnitSpinnerTitle"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/metricPortraitTextSize" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_curFuelCapacity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"/>
-        </FrameLayout>
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/settings_fragment_currency_unit_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/text_currencyUnitLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:spinnerMode="dialog" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_measurementUnitLabel"
+        android:text="@string/workInBackGround"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/metricPortraitTextSize"
+        android:visibility="gone" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_measurementUnitLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/measurementUnitText"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/metricPortraitTextSize"/>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/settings_fragment_measurements_unit_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_margin="5dp"
-                android:spinnerMode="dialog"/>
-        </FrameLayout>
-
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_currencyUnitLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/currencyUnitSpinnerTitle"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/metricPortraitTextSize"/>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/settings_fragment_currency_unit_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_margin="5dp"
-                android:spinnerMode="dialog"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="@string/workInBackGround"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/metricPortraitTextSize"
-                android:visibility="invisible"/>
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/backgroundSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_margin="5dp"
-                android:showText="true"
-                android:textOff="@string/switchOff"
-                android:textOn="@string/switchOn"
-                android:visibility="invisible"/>
-        </FrameLayout>
-    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/backgroundSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_margin="5dp"
+        android:showText="true"
+        android:textOff="@string/switchOff"
+        android:textOn="@string/switchOn"
+        android:visibility="gone" />
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/btn_about"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="right"
         android:layout_margin="5dp"
-        android:background="@drawable/btn_about"
-        android:layout_gravity="right"/>
-</android.support.v7.widget.LinearLayoutCompat>
+        android:background="@drawable/btn_about" />
+</RelativeLayout>
