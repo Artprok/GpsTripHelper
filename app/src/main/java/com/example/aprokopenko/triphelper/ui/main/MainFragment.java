@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.ui.main_screen;
+package com.example.aprokopenko.triphelper.ui.main;
 
 import android.Manifest;
 import android.content.Context;
@@ -31,7 +31,7 @@ import com.example.aprokopenko.triphelper.speedometer_gauge.GaugePointer;
 import com.example.aprokopenko.triphelper.speedometer_gauge.TripHelperGauge;
 import com.example.aprokopenko.triphelper.ui.dialog.FuelFillDialog;
 import com.example.aprokopenko.triphelper.ui.map.MapFragment;
-import com.example.aprokopenko.triphelper.ui.setting_screen.SettingsFragment;
+import com.example.aprokopenko.triphelper.ui.setting.SettingsFragment;
 import com.example.aprokopenko.triphelper.ui.trip_list.TripListFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
@@ -89,14 +89,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     private MapFragment mapFragment;
 
     public static MainFragment newInstance() {
-        final MainFragment mainFragment = new MainFragment();
-        mainFragment.setUserActionListener();
-        return mainFragment;
+        return new MainFragment();
     }
 
-    private void setUserActionListener() {
+    public void setupUserActionListener(@NonNull final MainContract.View view) {
         if (userActionListener == null) {
-            userActionListener = new MainPresenter(this, getContext());
+            userActionListener = new MainPresenter(view, getContext());
         }
     }
 
@@ -107,6 +105,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
+        setupUserActionListener(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -212,10 +211,15 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     @Override
     public void showTripListFragment(final TripData tripData) {
+        final TripListFragment tripListFragment;
         if (getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG) != null) {
-            showTripListFragment(tripData, (TripListFragment) getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG), this);
+            tripListFragment = (TripListFragment) getChildFragmentManager().findFragmentByTag(TRIP_LIST_TAG);
+            tripListFragment.setupUserActionListener(tripListFragment);
+            showTripListFragment(tripData, tripListFragment, this);
         } else {
-            showTripListFragment(tripData, TripListFragment.newInstance(tripData), this);
+            tripListFragment = TripListFragment.newInstance(tripData);
+            tripListFragment.setupUserActionListener(tripListFragment);
+            showTripListFragment(tripData, tripListFragment, this);
         }
     }
 

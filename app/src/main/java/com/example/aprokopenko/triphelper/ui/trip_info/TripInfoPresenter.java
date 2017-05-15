@@ -12,7 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 
-public class TripInfoPresenter implements TripInfoContract.userActionListener {
+public class TripInfoPresenter implements TripInfoContract.UserActionListener {
     private static final String LOG_TAG = "TripInfoFragment";
     private static final boolean DEBUG = BuildConfig.DEBUG;
 
@@ -44,9 +44,9 @@ public class TripInfoPresenter implements TripInfoContract.userActionListener {
     private float avgSpeed;
     private float maxSpeed;
     private int tripId;
-    private TripInfoContract.view view;
+    private TripInfoContract.View view;
 
-    public TripInfoPresenter(TripInfoContract.view view) {
+    public TripInfoPresenter(TripInfoContract.View view) {
         this.view = view;
         view.setPresenter(this);
     }

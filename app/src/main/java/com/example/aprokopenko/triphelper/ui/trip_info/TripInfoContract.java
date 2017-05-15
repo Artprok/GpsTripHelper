@@ -1,11 +1,12 @@
 package com.example.aprokopenko.triphelper.ui.trip_info;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
 
 interface TripInfoContract {
-    interface userActionListener {
+    interface UserActionListener {
 
         void onCreate(Bundle arguments);
 
@@ -16,7 +17,9 @@ interface TripInfoContract {
         boolean onMapReady();
     }
 
-    interface view {
+    interface View {
+
+        void setupUserActionListener(@NonNull final TripInfoContract.View view);
 
         void setPresenter(TripInfoPresenter tripInfoPresenter);
 

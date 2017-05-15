@@ -1,5 +1,4 @@
-<android.support.v7.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -13,7 +12,7 @@
         android:layout_gravity="center"
         android:hint="@string/fuel_filled_val"
         android:inputType="number"
-        android:maxLength="3"/>
+        android:maxLength="3" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_refill"
@@ -24,5 +23,5 @@
         android:background="@drawable/btn_shape"
         android:padding="10dp"
         android:text="@string/fill_fuel_tank"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 </android.support.v7.widget.LinearLayoutCompat>

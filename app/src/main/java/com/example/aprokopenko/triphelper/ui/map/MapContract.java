@@ -6,12 +6,16 @@ import android.os.Bundle;
 import com.example.aprokopenko.triphelper.datamodel.LocationEmittableItem;
 import com.example.aprokopenko.triphelper.datamodel.Route;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
+import com.example.aprokopenko.triphelper.ui.main.MainContract;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 
 public interface MapContract {
     interface View {
+
+        void setupUserActionListener(MapContract.View view);
+
         void setMapPresenter(UserActionListener userActionListener);
 
         void onNewLocation(LocationEmittableItem locationEmittableItem, float speed);

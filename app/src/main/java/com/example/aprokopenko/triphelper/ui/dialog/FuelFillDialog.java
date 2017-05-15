@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.ui.main_screen.MainContract;
+import com.example.aprokopenko.triphelper.ui.main.MainContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.ui.setting_screen;
+package com.example.aprokopenko.triphelper.ui.setting;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.application.TripHelperApp;
-import com.example.aprokopenko.triphelper.ui.main_screen.MainContract;
+import com.example.aprokopenko.triphelper.ui.main.MainContract;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;
 
@@ -81,15 +81,19 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     }
 
     public static SettingsFragment newInstance() {
-        final SettingsFragment settingsFragment = new SettingsFragment();
-        settingsFragment.setUserActionListener();
-        return settingsFragment;
+        return new SettingsFragment();
     }
 
-    private void setUserActionListener() {
+    public void setupUserActionListener(@NonNull final SettingsContract.View view) {
         if (userActionListener == null) {
             userActionListener = new SettingsPresenter(this, preferences, getContext());
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setupUserActionListener(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override

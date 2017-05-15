@@ -11,7 +11,7 @@ import com.example.aprokopenko.triphelper.listeners.ListFragmentInteractionListe
 
 import java.util.ArrayList;
 
-public class TripListPresenter implements TripListContract.userActionListener {
+public class TripListPresenter implements TripListContract.UserActionListener {
     private static final String CURRENCY_UNIT = "currencyUnit";
     private static final String TRIP_DATA = "TripData";
     private static final String LOG_TAG = "TripListFragment";
@@ -19,9 +19,9 @@ public class TripListPresenter implements TripListContract.userActionListener {
 
     private ArrayList<Trip> trips;
     private TripData tripData;
-    private TripListContract.view view;
+    private TripListContract.View view;
 
-    public TripListPresenter(TripListContract.view view) {
+    public TripListPresenter(TripListContract.View view) {
         this.view = view;
     }
 

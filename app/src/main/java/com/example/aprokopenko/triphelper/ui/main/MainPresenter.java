@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.ui.main_screen;
+package com.example.aprokopenko.triphelper.ui.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;

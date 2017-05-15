@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.ui.main_screen;
+package com.example.aprokopenko.triphelper.ui.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import com.google.android.gms.ads.AdRequest;
 
 public interface MainContract {
     interface View {
+
+        void setupUserActionListener(@NonNull final MainContract.View view);
+
         void setFuelLeft(final String fuelLeft);
 
         void resumeAdvert();

@@ -1,9 +1,12 @@
-package com.example.aprokopenko.triphelper.ui.setting_screen;
+package com.example.aprokopenko.triphelper.ui.setting;
 
 import android.support.annotation.NonNull;
 
 public class SettingsContract {
     public interface View{
+
+        void setupUserActionListener(@NonNull final SettingsContract.View view);
+
         void setupTextFields(float consumption, float price, float fuelTank);
 
         void updateTextFields(float consumption, float price, float fuelTank);

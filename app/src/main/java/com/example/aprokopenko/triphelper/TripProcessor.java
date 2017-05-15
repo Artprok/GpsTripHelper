@@ -21,7 +21,7 @@ import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.gps_utils.GpsHandler;
 import com.example.aprokopenko.triphelper.service.LocationService;
-import com.example.aprokopenko.triphelper.ui.main_screen.MainContract;
+import com.example.aprokopenko.triphelper.ui.main.MainContract;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 import com.example.aprokopenko.triphelper.utils.util_methods.UtilMethods;

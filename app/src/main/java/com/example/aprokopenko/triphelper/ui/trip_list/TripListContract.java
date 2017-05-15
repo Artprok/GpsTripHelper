@@ -1,14 +1,14 @@
 package com.example.aprokopenko.triphelper.ui.trip_list;
 
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
-import com.example.aprokopenko.triphelper.datamodel.Trip;
 import com.example.aprokopenko.triphelper.datamodel.TripData;
 import com.example.aprokopenko.triphelper.listeners.ListFragmentInteractionListener;
 
 public interface TripListContract {
-    interface userActionListener{
+    interface UserActionListener {
 
         void onCreate(Parcelable parcelable);
 
@@ -27,7 +27,10 @@ public interface TripListContract {
         void onDetach();
     }
 
-    interface view{
+    interface View {
+
+        void setupUserActionListener(@NonNull final TripListContract.View view);
+
         void setDistanceTravelledValue(float distanceTravelled);
 
         void setAvgFuelConsumptionValue(float avgFuelConsumption);

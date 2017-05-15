@@ -1,4 +1,4 @@
-package com.example.aprokopenko.triphelper.ui.setting_screen;
+package com.example.aprokopenko.triphelper.ui.setting;
 
 import android.content.Context;
 import android.content.SharedPreferences;

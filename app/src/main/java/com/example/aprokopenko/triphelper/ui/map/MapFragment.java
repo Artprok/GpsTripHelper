@@ -39,20 +39,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapCont
     }
 
     public static MapFragment newInstance() {
-        final MapFragment mapFragment = new MapFragment();
-        mapFragment.setUserActionListener();
         return new MapFragment();
     }
 
-    private void setUserActionListener() {
+    public void setupUserActionListener(@NonNull final MapContract.View view) {
         if (userActionListener == null) {
-            userActionListener = new MapPresenter(this);
+            userActionListener = new MapPresenter(view);
         }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupUserActionListener(this);
         userActionListener.onCreate();
     }
 

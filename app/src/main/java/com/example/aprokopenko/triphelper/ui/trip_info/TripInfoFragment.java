@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
@@ -39,10 +38,10 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
- * Class representing a {@link View} populated with {@link com.example.aprokopenko.triphelper.datamodel.TripData}.
+ * Class representing a {@link android.view.View} populated with {@link com.example.aprokopenko.triphelper.datamodel.TripData}.
  */
 @Singleton
-public class TripInfoFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback, TripInfoContract.view {
+public class TripInfoFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback, TripInfoContract.View {
     public static final String CURRENCY_UNIT = "currencyUnit";
     @BindView(R.id.text_tripAvgFuelConsumption)
     TextView tripAvgFuelConsumptionView;
@@ -96,14 +95,13 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     private boolean mapOpened;
     private boolean drawMap;
 
-    private TripInfoContract.userActionListener userActionListener;
+    private TripInfoContract.UserActionListener userActionListener;
 
     public TripInfoFragment() {
     }
 
     public static TripInfoFragment newInstance(@NonNull final Trip trip) {
         final TripInfoFragment fragment = new TripInfoFragment();
-        fragment.setUserActionListener();
 
         final Bundle args = new Bundle();
         final ArrayList<String> latitudeArray = new ArrayList<>();
@@ -138,7 +136,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         return fragment;
     }
 
-    private void setUserActionListener() {
+    public void setupUserActionListener(TripInfoContract.View view) {
         if (userActionListener == null) {
             userActionListener = new TripInfoPresenter(this);
         }
@@ -147,21 +145,22 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupUserActionListener(this);
         if (getArguments() != null) {
             userActionListener.onCreate(getArguments());
         }
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_trip_info, container, false);
+    public android.view.View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        final android.view.View view = inflater.inflate(R.layout.fragment_trip_info, container, false);
         unbinder = ButterKnife.bind(this, view);
         setupMapView(savedInstanceState);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final android.view.View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setCurrencyUnit(TripHelperApp.getSharedPreferences().getString(CURRENCY_UNIT, ""));
         userActionListener.onViewCreated();
@@ -203,7 +202,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     }
 
     @OnClick(R.id.btn_mapTurnActive)
-    public void onOpenMapButtonClick(@NonNull final View view) {
+    public void onOpenMapButtonClick(@NonNull final android.view.View view) {
         if (drawMap) {
             if (getActivity().getResources().getConfiguration().orientation == 1) {//animations for portrait orientation
                 if (mapOpened) {
@@ -285,8 +284,8 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         mapView.onResume();
     }
 
-    private void animateMapOpeningForLandscape(@NonNull final View view) {
-        final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, 0, view.getWidth());
+    private void animateMapOpeningForLandscape(@NonNull final android.view.View view) {
+        final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, android.view.View.TRANSLATION_X, 0, view.getWidth());
 
         dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
@@ -297,15 +296,15 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
             @Override
             public void onAnimationEnd(@NonNull final Animator animation) {
-                final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, -view.getWidth(), 0);
+                final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, android.view.View.TRANSLATION_X, -view.getWidth(), 0);
 
-                dataContainer.setVisibility(View.INVISIBLE);
+                dataContainer.setVisibility(android.view.View.INVISIBLE);
                 mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 mapViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 mapViewAnimator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(@NonNull final Animator animation) {
-                        mapView.setVisibility(View.VISIBLE);
+                        mapView.setVisibility(android.view.View.VISIBLE);
                         mapOpened = true;
                     }
 
@@ -335,8 +334,8 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         dataContainerAnimator.start();
     }
 
-    private void animateMapClosingForLandscape(@NonNull final View view) {
-        final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_X, 0, -view.getWidth());
+    private void animateMapClosingForLandscape(@NonNull final android.view.View view) {
+        final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, android.view.View.TRANSLATION_X, 0, -view.getWidth());
 
         mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AnticipateInterpolator());
@@ -347,15 +346,15 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
             @Override
             public void onAnimationEnd(@NonNull final Animator animation) {
-                final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_X, view.getWidth(), 0);
+                final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, android.view.View.TRANSLATION_X, view.getWidth(), 0);
 
-                mapView.setVisibility(View.INVISIBLE);
+                mapView.setVisibility(android.view.View.INVISIBLE);
                 dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 dataContainerAnimator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(@NonNull final Animator animation) {
-                        dataContainer.setVisibility(View.VISIBLE);
+                        dataContainer.setVisibility(android.view.View.VISIBLE);
                         mapOpened = false;
                     }
 
@@ -385,8 +384,8 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         mapViewAnimator.start();
     }
 
-    private void animateMapOpeningForPortrait(@NonNull final View view) {
-        final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, 0, view.getHeight());
+    private void animateMapOpeningForPortrait(@NonNull final android.view.View view) {
+        final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, android.view.View.TRANSLATION_Y, 0, view.getHeight());
 
         dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         dataContainerAnimator.setInterpolator(new AnticipateInterpolator());
@@ -397,15 +396,15 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
             @Override
             public void onAnimationEnd(@NonNull final Animator animation) {
-                final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, -view.getHeight(), 0);
+                final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, android.view.View.TRANSLATION_Y, -view.getHeight(), 0);
 
-                dataContainer.setVisibility(View.INVISIBLE);
+                dataContainer.setVisibility(android.view.View.INVISIBLE);
                 mapViewAnimator.setDuration(ConstantValues.ANIMATE_MAP_OPENING_DURATION);
                 mapViewAnimator.setInterpolator(new BounceInterpolator());
                 mapViewAnimator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(@NonNull final Animator animation) {
-                        mapView.setVisibility(View.VISIBLE);
+                        mapView.setVisibility(android.view.View.VISIBLE);
                         mapOpened = true;
                     }
 
@@ -435,8 +434,8 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         dataContainerAnimator.start();
     }
 
-    private void animateMapClosingForPortrait(@NonNull final View view) {
-        final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, View.TRANSLATION_Y, 0, -view.getHeight());
+    private void animateMapClosingForPortrait(@NonNull final android.view.View view) {
+        final ObjectAnimator mapViewAnimator = ObjectAnimator.ofFloat(mapView, android.view.View.TRANSLATION_Y, 0, -view.getHeight());
 
         mapViewAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
         mapViewAnimator.setInterpolator(new AnticipateInterpolator());
@@ -447,15 +446,15 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
 
             @Override
             public void onAnimationEnd(@NonNull final Animator animation) {
-                final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, View.TRANSLATION_Y, view.getHeight(), 0);
+                final ObjectAnimator dataContainerAnimator = ObjectAnimator.ofFloat(dataContainer, android.view.View.TRANSLATION_Y, view.getHeight(), 0);
 
-                mapView.setVisibility(View.INVISIBLE);
+                mapView.setVisibility(android.view.View.INVISIBLE);
                 dataContainerAnimator.setDuration(ConstantValues.TEXT_ANIM_DURATION);
                 dataContainerAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 dataContainerAnimator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(@NonNull final Animator animation) {
-                        dataContainer.setVisibility(View.VISIBLE);
+                        dataContainer.setVisibility(android.view.View.VISIBLE);
                         mapOpened = false;
                     }
 

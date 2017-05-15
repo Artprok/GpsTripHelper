@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.ImageView;
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.BuildConfig;
 import com.example.aprokopenko.triphelper.R;
-import com.example.aprokopenko.triphelper.ui.main_screen.MainFragment;
+import com.example.aprokopenko.triphelper.ui.main.MainFragment;
 import com.example.aprokopenko.triphelper.ui.map.MapFragment;
 import com.example.aprokopenko.triphelper.ui.trip_info.TripInfoFragment;
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
   @BindView(R.id.btn_fab)
   FloatingActionButton fab;
   @BindView(R.id.spashScreen)
-  ImageView splashScreen;
+  AppCompatImageView splashScreen;
 
   private static final String LOG_TAG = "MainActivity";
   private static final boolean DEBUG = BuildConfig.DEBUG;

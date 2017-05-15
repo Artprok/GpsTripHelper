@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -12,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:textSize="@dimen/metricsTextSize"/>
+        android:textSize="@dimen/metricsTextSize" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image_calendarIcon"
@@ -20,10 +19,11 @@
         android:layout_height="30dp"
         android:layout_alignBottom="@+id/text_id"
         android:layout_gravity="center_vertical"
+        android:layout_marginEnd="5dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="5dp"
         android:layout_weight="0.1"
-        android:background="@drawable/calendar_icon"/>
+        android:background="@drawable/calendar_icon" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/trip_date"
@@ -31,5 +31,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="8"
-        android:textSize="@dimen/metricsTextSize"/>
+        android:textSize="@dimen/metricsTextSize" />
 </android.support.v7.widget.LinearLayoutCompat>

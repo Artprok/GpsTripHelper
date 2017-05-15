@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,7 +32,7 @@ import butterknife.Unbinder;
  * Class representing a list populated with {@link Trip}.
  */
 @Singleton
-public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener, TripListContract.view {
+public class TripListFragment extends android.support.v4.app.Fragment implements ListFragmentInteractionListener, TripListContract.View {
     @BindView(R.id.fragment_item_list_avgFuelConsListFrag)
     TextView avgFuelConsumptionView;
     @BindView(R.id.fragment_item_list_distanceTravelledListFrag)
@@ -60,7 +59,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
     private Unbinder unbinder;
     private Bundle state;
-    private TripListContract.userActionListener userActionListener;
+    private TripListContract.UserActionListener userActionListener;
     private String curUnit;
 
     public TripListFragment() {
@@ -72,11 +71,10 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
         args.putParcelable(TRIP_DATA, tripData);
         tripListFragment.setArguments(args);
-        tripListFragment.setUserActionListener();
         return tripListFragment;
     }
 
-    private void setUserActionListener() {
+    public void setupUserActionListener(@NonNull final TripListContract.View view) {
         if (userActionListener == null) {
             userActionListener = new TripListPresenter(this);
         }
@@ -84,13 +82,14 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
+        setupUserActionListener(this);
         userActionListener.onCreate(getArguments().getParcelable(TRIP_DATA));
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+    public android.view.View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        final android.view.View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         unbinder = ButterKnife.bind(this, view);
         if (savedInstanceState != null) {
@@ -110,7 +109,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final android.view.View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
             state = savedInstanceState;
@@ -197,7 +196,7 @@ public class TripListFragment extends android.support.v4.app.Fragment implements
 
     @Override
     public void onListItemClick(@NonNull final Trip trip) {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(android.view.View.VISIBLE);
         UtilMethods.replaceFragment(TripInfoFragment.newInstance(trip), ConstantValues.TRIP_INFO_FRAGMENT_TAG, getActivity());
     }
 
