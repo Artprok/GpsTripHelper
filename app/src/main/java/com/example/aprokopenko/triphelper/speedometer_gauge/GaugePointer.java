@@ -1,6 +1,7 @@
 package com.example.aprokopenko.triphelper.speedometer_gauge;
 
 import android.animation.ObjectAnimator;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 
 /**
@@ -25,6 +26,7 @@ public class GaugePointer {
   public double getValue() {
     return value;
   }
+
 
   /**
    * Method for setting value for pointer to point.

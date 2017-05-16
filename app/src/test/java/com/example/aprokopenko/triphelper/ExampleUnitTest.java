@@ -1,10 +1,5 @@
 package com.example.aprokopenko.triphelper;
 
-import android.hardware.display.DisplayManager;
-import android.view.Display;
-import android.view.Surface;
-import android.view.WindowManager;
-
 import com.example.aprokopenko.triphelper.utils.settings.ConstantValues;
 import com.example.aprokopenko.triphelper.utils.util_methods.CalculationUtils;
 

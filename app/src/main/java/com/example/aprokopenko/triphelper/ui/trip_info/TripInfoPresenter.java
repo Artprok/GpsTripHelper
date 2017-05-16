@@ -44,7 +44,7 @@ public class TripInfoPresenter implements TripInfoContract.UserActionListener {
     private float avgSpeed;
     private float maxSpeed;
     private int tripId;
-    private TripInfoContract.View view;
+    private final TripInfoContract.View view;
 
     public TripInfoPresenter(TripInfoContract.View view) {
         this.view = view;

@@ -134,7 +134,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_gravity="right"
         android:layout_margin="5dp"
         android:background="@drawable/btn_about" />
 </RelativeLayout>

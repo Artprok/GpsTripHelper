@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 /**
- * Class with {@link com.example.aprokopenko.triphelper.ui.dialog.MapFragment} utils.
+ * Class with {@link com.example.aprokopenko.triphelper.ui.map.MapFragment} utils.
  */
 public class MapUtilMethods {
   private static final String LOG_TAG = "MapUtilMethods";

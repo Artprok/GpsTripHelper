@@ -161,10 +161,6 @@ public class TripProcessor implements Parcelable {
         this.fuelPrice = fuelPrice;
     }
 
-    private void setSpeedChangeListener(@Nullable final MainContract.UserActionListener speedChangeListener) {
-        this.speedChangeListener = speedChangeListener;
-    }
-
     private void stopTracking() {
         final ArrayList<Float> avgArrayList = getAvgSpeedList();
         updateAvgAndMaxSpeedInTrip(avgArrayList);
@@ -219,7 +215,6 @@ public class TripProcessor implements Parcelable {
         unregisterServiceConnection();
         killLocationService();
         killGpsHandler();
-        killSpeedChangeListener();
     }
 
     private static Bundle configureSettingsBundle(final float fuelConsFromSettings, final float fuelPriceFromSettings, final int fuelCapacityFromSettings, @NonNull final Context context) {
@@ -286,10 +281,6 @@ public class TripProcessor implements Parcelable {
     @NonNull
     private ArrayList<Float> getEmptyArrayList_float() {
         return new ArrayList<>();
-    }
-
-    private void killSpeedChangeListener() {
-        setSpeedChangeListener(null);
     }
 
     private void killGpsHandler() {

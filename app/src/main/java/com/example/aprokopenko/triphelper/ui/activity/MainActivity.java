@@ -14,7 +14,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.aprokopenko.triphelper.BuildConfig;

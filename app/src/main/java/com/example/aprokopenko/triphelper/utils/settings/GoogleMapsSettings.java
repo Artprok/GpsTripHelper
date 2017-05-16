@@ -3,7 +3,7 @@ package com.example.aprokopenko.triphelper.utils.settings;
 import android.graphics.Color;
 
 /**
- * Class for storing settings for {@link com.example.aprokopenko.triphelper.ui.dialog.MapFragment}.
+ * Class for storing settings for {@link com.example.aprokopenko.triphelper.ui.map.MapFragment}.
  */
 public class GoogleMapsSettings {
   public static final int polylineColorOutOfCity = Color.parseColor("#FBC02D");//yellow, speed still allowed

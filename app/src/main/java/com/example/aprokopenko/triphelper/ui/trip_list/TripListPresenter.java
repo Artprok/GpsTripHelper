@@ -19,7 +19,7 @@ public class TripListPresenter implements TripListContract.UserActionListener {
 
     private ArrayList<Trip> trips;
     private TripData tripData;
-    private TripListContract.View view;
+    private final TripListContract.View view;
 
     public TripListPresenter(TripListContract.View view) {
         this.view = view;

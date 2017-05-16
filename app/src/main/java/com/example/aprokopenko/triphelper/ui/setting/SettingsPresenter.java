@@ -35,7 +35,7 @@ public class SettingsPresenter implements SettingsContract.UserActionListener {
     private SettingsContract.View view;
     private Context context;
 
-    public SettingsPresenter(SettingsContract.View view, SharedPreferences preferences, Context context) {
+    SettingsPresenter(SettingsContract.View view, SharedPreferences preferences, Context context) {
         this.view = view;
         this.context = context;
         this.preferences = preferences;

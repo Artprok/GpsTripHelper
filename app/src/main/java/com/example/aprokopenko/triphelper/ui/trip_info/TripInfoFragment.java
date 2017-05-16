@@ -13,6 +13,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.aprokopenko.triphelper.BuildConfig;
@@ -63,8 +64,8 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
     TextView tripMaxSpeedView;
     @BindView(R.id.btn_mapTurnActive)
     ImageButton openMapButton;
-    @BindView(R.id.textDataContainer)
-    LinearLayoutCompat dataContainer;
+    @BindView(R.id.dataContainer)
+    RelativeLayout dataContainer;
     @BindView(R.id.text_tripDate)
     TextView tripDateView;
     @BindView(R.id.text_tripId)
@@ -136,7 +137,7 @@ public class TripInfoFragment extends android.support.v4.app.Fragment implements
         return fragment;
     }
 
-    public void setupUserActionListener(TripInfoContract.View view) {
+    public void setupUserActionListener(@NonNull final TripInfoContract.View view) {
         if (userActionListener == null) {
             userActionListener = new TripInfoPresenter(this);
         }

@@ -46,7 +46,6 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
     private TripProcessor tripProcessor;
     private LocationManager locationManager;
     private SharedPreferences preferences;
-    private MapFragment mapFragment;
     private Bundle state;
 
     private float fuelPriceFromSettings;
@@ -154,7 +153,6 @@ public class MainPresenter implements MainContract.UserActionListener, GpsStatus
         gpsStatusListener(REMOVE);
         locationManager = null;
         tripProcessor = null;
-        mapFragment = null;
         preferences = null;
     }
 

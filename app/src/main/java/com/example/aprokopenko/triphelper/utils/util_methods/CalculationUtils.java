@@ -3,7 +3,6 @@ package com.example.aprokopenko.triphelper.utils.util_methods;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.aprokopenko.triphelper.R;
 import com.example.aprokopenko.triphelper.datamodel.Trip;
