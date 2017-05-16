@@ -37,7 +37,7 @@
         android:id="@+id/editText_fuelConsumption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editText_fuelPrice"
+        android:layout_below="@id/text_curFuelPrice"
         android:hint="@string/fuel_consumption"
         android:inputType="numberDecimal"
         android:maxLength="3" />
